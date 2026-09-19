@@ -1,0 +1,3 @@
+# Source templates must not be hidden by a global ctags ignore.
+!/layouts/_partials/tags/
+!/layouts/_partials/tags/**
