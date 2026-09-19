@@ -10,19 +10,19 @@
         <a class="home-link" href="{{ site.Home.RelPermalink }}"{{ if .IsHome }} aria-current="page"{{ end }}>Overview</a>
         <h2 class="nav-heading">Collections</h2>
         <ul class="collection-nav">
-          {{ range (where site.Pages "Kind" "section").ByTitle }}
-            {{ if .Params.collection }}
+          {{- range (where site.Pages "Kind" "section").ByTitle -}}
+            {{- if .Params.collection -}}
               <li><a href="{{ .RelPermalink }}"{{ if eq . $owner }} aria-current="{{ if eq . $ }}page{{ else }}location{{ end }}"{{ end }}><span>{{ .Title }}</span><small>{{ .Params.collection }}</small></a></li>
-            {{ end }}
-          {{ end }}
+            {{- end -}}
+          {{- end -}}
         </ul>
         <h2 class="nav-heading">Pages</h2>
         <ul class="page-nav">
-          {{ range site.RegularPages.ByTitle }}
-            {{ if not (partial "collection-owner.html" .) }}
+          {{- range site.RegularPages.ByTitle -}}
+            {{- if not (partial "collection-owner.html" .) -}}
               <li><a href="{{ .RelPermalink }}"{{ if eq . $ }} aria-current="page"{{ end }}>{{ .Title }}</a></li>
-            {{ end }}
-          {{ end }}
+            {{- end -}}
+          {{- end -}}
         </ul>
       </nav>
       {{ if and $owner (eq $owner.Params.collection "notebook") }}
@@ -36,7 +36,7 @@
           {{ partial "tags/tree.html" (dict "owner" $owner "model" $model "parent" $parent) }}
           {{ if $parent }}<p class="nav-hint">Subtags of {{ $parent }}. Use All tags for the full notebook.</p>{{ end }}
         </nav>
-      {{ end }}
+      {{- end -}}
     </div>
   </details>
 </aside>
