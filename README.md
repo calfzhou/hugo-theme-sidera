@@ -8,8 +8,11 @@ P2-A establishes a responsive reading shell over the verified Hugo collection
 proof: peer collection navigation, notebook tag hierarchy, shared article/list/tag
 surfaces and native pagination. It is a reviewable visual foundation, not a complete
 publishing theme or an official Stellar port. P2-B adds dark/light/system appearance
-and ordinary reading refinements. Final font distribution remains open; no search
-or comment control is supplied for unimplemented features.
+and ordinary reading refinements; P2-C supplies native English/Chinese UI. P2-D
+consolidates the supported contract and readiness evidence, without a redesign.
+No further P2 runtime change is currently indicated; final user visual approval
+and distribution licensing remain separate gates. No search/comment control is
+supplied for unimplemented features, and no font bundling is planned in P2.
 
 ## Visual foundation and provenance
 
@@ -79,7 +82,10 @@ Templates live in `layouts/`; `content/_content.gotmpl` generates notebook tag
 sections through Hugo's native theme content mount. Site content, collection
 settings, date/permalink policy and pagination configuration remain site-owned.
 No Go module, symlink, sibling checkout, or site-local implementation is required.
-See the showcase README for the tested content/configuration contract and checks.
+See [CONTRACT.md](CONTRACT.md) for the self-contained supported content/configuration
+contract, required site policies versus defaults, prerequisites and build commands.
+The [showcase repository](https://github.com/calfzhou/sidera-showcase) contains the
+synthetic fixtures and regression harness; it is not a hidden sibling dependency.
 
 The current adapter reads local site `content/` TOML/YAML Markdown metadata.
 Fresh successful builds into new destinations remain the verified workflow;
