@@ -4,16 +4,17 @@ Sidera — A Hugo theme for blogs, notebooks, and connected knowledge. Inspired 
 
 ## Development status
 
-P2-A adds the first dark, responsive reading shell to the verified Hugo collection
+P2-A establishes a responsive reading shell over the verified Hugo collection
 proof: peer collection navigation, notebook tag hierarchy, shared article/list/tag
 surfaces and native pagination. It is a reviewable visual foundation, not a complete
-publishing theme or an official Stellar port. Light mode and final font distribution
-remain open; there is no nonfunctional mode/search/comment control.
+publishing theme or an official Stellar port. P2-B adds dark/light/system appearance
+and ordinary reading refinements. Final font distribution remains open; no search
+or comment control is supplied for unimplemented features.
 
 ## Visual foundation and provenance
 
 - Native CSS in `assets/css/sidera.css`: ink/slate surfaces, mint links, readable
-  metadata, 18px prose and bounded content width. Local WenKai/Iowan/Georgia reading
+  metadata, 18px prose and a 65ch maximum prose measure. Local WenKai/Iowan/Georgia reading
   stack, Avenir/Trebuchet UI and Source Code Pro/Menlo code; no font downloads.
 - One responsive rail, sticky/scrollable on desktop, an in-flow native disclosure
   below 900px. A tiny `navigation.js` sets its initial breakpoint state and handles
@@ -33,6 +34,32 @@ icons, images, fonts, EJS or Stylus have been copied. Stellar's MIT copyright no
 (2021 xaoxuu) must accompany any actual reuse in a later slice. This repository does
 not yet specify a distribution license; resolve that before external distribution.
 No additional build or runtime dependency has been introduced.
+
+## Appearance and ordinary reading
+
+The initial/default appearance is **dark**, irrespective of OS preference. The
+native labeled Appearance select is in the collection navigation (open “Browse
+collections” on mobile). Dark and Light are explicit choices; System follows live
+`prefers-color-scheme` changes. A small script inlined from `assets/js/appearance.js`
+runs before the stylesheet/body, then installs the control after DOM readiness.
+It remembers a valid choice in the origin's `sidera-appearance` localStorage key.
+Denied storage leaves the choice usable for that document, with dark restored on
+navigation if no stored value can be read. No JavaScript: readable dark, open native
+navigation, and no appearance control. No animation or framework is needed.
+
+The inline head script is deliberate to avoid a separate request before palette
+selection. A deployment with a restrictive CSP must authorize its generated hash
+(or use an appropriate site override); if scripting is blocked, the readable dark
+fallback remains. CSP deployment configuration is not provided or tested here.
+
+Native Hugo/Chroma code highlighting uses a small render hook with palette-aware
+classes, preserving ordinary fenced-code options and avoiding fixed inline theme
+colors. Comments, keywords, strings/numbers and ordinary text reuse readable tokens;
+advanced code-file tooling and special renderers remain outside this slice. Native
+figures/captions keep full mobile width; transparent images keep their neutral pale
+backing in both palettes. Wide code/tables use native local scrolling, not widgets.
+The dependency-free font stacks remain local/system fallbacks; no fonts are bundled.
+
 
 ## Use and develop
 

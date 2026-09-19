@@ -6,6 +6,14 @@
   <details class="site-menu" open>
     <summary>Browse collections{{ if and $owner (eq $owner.Params.collection "notebook") }} &amp; tags{{ end }}</summary>
     <div class="navigation-content">
+      <div class="appearance" hidden>
+        <label for="appearance">Appearance</label>
+        <select id="appearance" name="appearance">
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="system">System</option>
+        </select>
+      </div>
       <nav aria-label="Site">
         <a class="home-link" href="{{ site.Home.RelPermalink }}"{{ if .IsHome }} aria-current="page"{{ end }}>Overview</a>
         <h2 class="nav-heading">Collections</h2>

@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <title>{{ .Title }} | {{ site.Title }}</title>
+  {{ $appearance := resources.Get "js/appearance.js" | minify }}
+  <script>{{ $appearance.Content | safeJS }}</script>
   {{ $css := resources.Get "css/sidera.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{ $js := resources.Get "js/navigation.js" | minify | fingerprint }}
