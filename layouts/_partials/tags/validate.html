@@ -3,7 +3,7 @@
 {{- $owners := where (where site.Pages "Kind" "section") "Params.collection" "notebook" -}}
 {{- range $owners -}}
   {{- $owner := . -}}
-  {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relURL -}}
+  {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relLangURL -}}
   {{- if ne .RelPermalink $expected -}}
     {{- errorf "P1B notebook route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
   {{- end -}}

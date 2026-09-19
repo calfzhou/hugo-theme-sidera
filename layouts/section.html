@@ -2,13 +2,13 @@
   {{ $owner := partial "collection-owner.html" . }}
   <header class="view-header">
     {{ with $owner }}
-      <nav aria-label="Collection"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ .Params.collection }}</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" .Params.collection) }}</span></nav>
     {{ end }}
     <h1>{{ .Title }}</h1>
     <div class="intro prose">{{ .Content }}</div>
     {{ if and $owner (eq $owner.Params.collection "notebook") }}
       {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-      <nav class="view-tools" aria-label="Notebook tags"><a href="{{ $hub.RelPermalink }}">Browse tags →</a></nav>
+      <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>
     {{ end }}
   </header>
   {{ $pages := slice }}
@@ -19,12 +19,12 @@
   {{ end }}
   {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages) }}
   {{ if eq . $owner }}
-    <aside class="recent-panel" aria-label="Recent updates">
-      <h2 class="section-heading">Recent updates</h2>
-      <p class="muted">Across this collection, independent of pins.</p>
+    <aside class="recent-panel" aria-label="{{ T "recent_updates" }}">
+      <h2 class="section-heading">{{ T "recent_updates" }}</h2>
+      <p class="muted">{{ T "recent_explanation" }}</p>
       <ul id="recent-updates">
         {{ range first 5 (partial "lists/order.html" (dict "pages" $pages "order" "modification" "pins" false)) }}
-          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a><span>{{ if .Lastmod.IsZero }}undated{{ else }}{{ .Lastmod.Format "2006-01-02" }}{{ end }}</span></li>
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a><span>{{ if .Lastmod.IsZero }}{{ T "undated" }}{{ else }}{{ time.Format ":date_medium" .Lastmod }}{{ end }}</span></li>
         {{ end }}
       </ul>
     </aside>

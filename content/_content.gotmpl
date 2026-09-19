@@ -1,8 +1,9 @@
+{{- .EnableAllLanguages -}}
 {{- $nodes := newScratch -}}
 {{- $nodes.Set "routes" dict -}}
 {{- partial "tags/discover.html" (dict "owner" "" "nodes" $nodes "dir" "content") -}}
 {{- range $route, $node := $nodes.Get "routes" -}}
-  {{- $title := "Tags" -}}
+  {{- $title := T "tags" -}}
   {{- with $node.key -}}{{- $title = . -}}{{- end -}}
   {{- $.AddPage (dict "kind" "section" "path" $route "title" $title
     "layout" "notebook-tags"

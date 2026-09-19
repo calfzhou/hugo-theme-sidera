@@ -3,7 +3,9 @@
 {{- $owner := .owner -}}
 {{- $nodes := .nodes -}}
 {{- $dir := .dir -}}
-{{- with $file := path.Join $dir "_index.md" -}}
+{{- $local := partial "tags/files.html" $dir -}}
+{{- with index $local.files "_index.md" -}}
+  {{- $file := path.Join $dir . -}}
   {{- if os.FileExists $file -}}
     {{- $fm := partial "tags/frontmatter.html" $file -}}
     {{- with $fm.params.collection -}}
@@ -15,6 +17,9 @@
         {{- end -}}
         {{- range os.ReadDir $dir -}}
           {{- $name := lower .Name -}}
+          {{- range $logical, $physical := $local.files -}}
+            {{- if eq (lower $physical) $name -}}{{- $name = lower $logical -}}{{- end -}}
+          {{- end -}}
           {{- if in (slice "tags" "tags.md" "page" "page.md") $name -}}
             {{- errorf "P1B reserved notebook source namespace: %s" (path.Join $dir .Name) -}}
           {{- end -}}
@@ -29,14 +34,18 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- $leaf := os.FileExists (path.Join $dir "index.md") -}}
+{{- $leaf := $local.leaf -}}
 {{- range os.ReadDir $dir -}}
   {{- $file := path.Join $dir .Name -}}
   {{- if .IsDir -}}
     {{- if not $leaf -}}
       {{- partial "tags/discover.html" (dict "owner" $owner "nodes" $nodes "dir" $file) -}}
     {{- end -}}
-  {{- else if and $owner (strings.HasSuffix .Name ".md") (ne .Name "_index.md") (or (not $leaf) (eq .Name "index.md")) -}}
+  {{- end -}}
+{{- end -}}
+{{- range $name, $physical := $local.files -}}
+  {{- $file := path.Join $dir $physical -}}
+  {{- if and $owner (ne $name "_index.md") (or (not $leaf) (eq $name "index.md")) -}}
     {{- $fm := partial "tags/frontmatter.html" $file -}}
     {{- $tags := slice -}}
     {{- if isset ($fm.params | default dict) "tags" -}}{{- $tags = $fm.params.tags -}}{{- end -}}

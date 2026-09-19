@@ -1,10 +1,10 @@
 {{- /* Accept a Pager, not a Page: no .Paginator/.Paginate here. */ -}}
-<nav aria-label="Pagination" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
-  {{ if .TotalNumberOfElements }}<span>Page {{ .PageNumber }} of {{ .TotalPages }}</span>{{ else }}<span>No articles in this result.</span>{{ end }}
+<nav class="pagination" aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
+  {{ if .TotalNumberOfElements }}<span>{{ T "page_summary" (dict "current" (lang.FormatNumber 0 .PageNumber) "total" (lang.FormatNumber 0 .TotalPages)) }}</span>{{ else }}<span>{{ T "no_articles" }}</span>{{ end }}
   {{ if gt .TotalPages 1 }}
-    <a data-page-link="first" href="{{ .First.URL }}">First</a>
-    {{ with .Prev }}<a data-page-link="previous" rel="prev" href="{{ .URL }}">Previous</a>{{ end }}
-    {{ with .Next }}<a data-page-link="next" rel="next" href="{{ .URL }}">Next</a>{{ end }}
-    <a data-page-link="last" href="{{ .Last.URL }}">Last</a>
+    <a data-page-link="first" href="{{ .First.URL }}">{{ T "page_first" }}</a>
+    {{ with .Prev }}<a data-page-link="previous" rel="prev" href="{{ .URL }}">{{ T "page_previous" }}</a>{{ end }}
+    {{ with .Next }}<a data-page-link="next" rel="next" href="{{ .URL }}">{{ T "page_next" }}</a>{{ end }}
+    <a data-page-link="last" href="{{ .Last.URL }}">{{ T "page_last" }}</a>
   {{ end }}
 </nav>

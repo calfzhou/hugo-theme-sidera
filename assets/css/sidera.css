@@ -93,9 +93,9 @@ p { margin: 0 0 1rem; }
 .pin-label { display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--pin); margin-bottom: .5rem; }
 .card-dates, .article-dates { display: flex; gap: .25rem 1rem; flex-wrap: wrap; font-size: .7rem; color: var(--muted); }
 .card-dates { padding-top: .75rem; border-top: 1px solid var(--line); }
-nav[aria-label="Pagination"] { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .8rem; padding: .5rem 0 1.5rem; }
-nav[aria-label="Pagination"] span { color: var(--muted); margin-right: auto; }
-nav[aria-label="Pagination"] a { display: inline-block; padding: .5rem .7rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .8rem; padding: .5rem 0 1.5rem; }
+.pagination span { color: var(--muted); margin-right: auto; }
+.pagination a { display: inline-block; padding: .5rem .7rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
 .recent-panel { border-top: 1px solid var(--line); margin-top: 1rem; }
 .muted { font-size: .8rem; color: var(--muted); }
 #recent-updates { list-style: none; margin: 0; padding: 0; }

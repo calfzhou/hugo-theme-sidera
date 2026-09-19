@@ -4,18 +4,18 @@
 {{ $ordered := partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}
 {{ $pager := .page.Paginate $ordered $policy.size }}
 <div class="list-meta">
-  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ $pager.TotalNumberOfElements }} articles</p>
-  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ index (dict "publication" "Newest published" "modification" "Last updated" "title" "By title") $policy.order }} · Pins first</p>
+  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ T "article_count" (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}</p>
+  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ T (printf "order_%s" $policy.order) }}</p>
 </div>
 <ul id="articles" class="article-list">
   {{ range $pager.Pages }}
     <li class="article-card">
-      {{ if .Params.pinned }}<span class="pin-label">Pinned</span>{{ end }}
+      {{ if .Params.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
       <div class="card-dates">
-        <span>Published {{ if .PublishDate.IsZero }}undated{{ else }}<time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "2006-01-02" }}</time>{{ end }}</span>
-        <span>Modified {{ if .Lastmod.IsZero }}undated{{ else }}<time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Lastmod.Format "2006-01-02" }}</time>{{ end }}</span>
+        <span>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</span>
+        <span>{{ partial "date.html" (dict "date" .Lastmod "kind" "modified") }}</span>
       </div>
     </li>
   {{ end }}

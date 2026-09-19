@@ -1,0 +1,153 @@
+# Sidera UI. Plain text only; interpolation values are escaped by Hugo.
+[skip_content]
+other = "跳至正文"
+
+[built_with]
+other = "由 Hugo · Sidera 构建"
+
+[collection_overview]
+other = "合集概览"
+
+[collections]
+other = "合集"
+
+[standalone_pages]
+other = "独立页面"
+
+[standalone_page]
+other = "独立页面"
+
+[collection_blog]
+other = "博客"
+
+[collection_notebook]
+other = "笔记本"
+
+[collection]
+other = "所属合集"
+
+[notebook_tags]
+other = "笔记本标签"
+
+[all_tags_in]
+other = "浏览「{{ .title }}」的全部标签"
+
+[on_this_page]
+other = "本页目录"
+
+[browse_tags]
+other = "浏览标签 →"
+
+[recent_updates]
+other = "最近更新"
+
+[recent_explanation]
+other = "此合集的最近更新，不受置顶影响。"
+
+[undated]
+other = "日期不详"
+
+[tags]
+other = "标签"
+
+[tag_ancestors]
+other = "标签层级路径"
+
+[all_tags]
+other = "全部标签"
+
+[site_navigation]
+other = "网站导航"
+
+[browse_collections]
+other = "浏览合集"
+
+[browse_collections_tags]
+other = "浏览合集与标签"
+
+[appearance]
+other = "外观"
+
+[appearance_dark]
+other = "深色"
+
+[appearance_light]
+other = "浅色"
+
+[appearance_system]
+other = "跟随系统"
+
+[site]
+other = "网站"
+
+[overview]
+other = "概览"
+
+[pages]
+other = "页面"
+
+[tag_hierarchy]
+other = "标签树"
+
+[collection_tags]
+other = "{{ .title }} · 标签"
+
+[subtags_hint]
+other = "当前显示「{{ .tag }}」的子标签。选择「全部标签」可浏览整个笔记本。"
+
+[order_publication]
+other = "按发表时间降序 · 置顶优先"
+
+[order_modification]
+other = "按更新时间降序 · 置顶优先"
+
+[order_title]
+other = "按标题排序 · 置顶优先"
+
+[pinned]
+other = "置顶"
+
+[date_published]
+other = "发表于 {{ .date }}"
+
+[date_updated]
+other = "更新于 {{ .date }}"
+
+[date_modified]
+other = "修改于 {{ .date }}"
+
+[published_undated]
+other = "发表日期不详"
+
+[modified_undated]
+other = "修改日期不详"
+
+[pagination]
+other = "分页导航"
+
+[page_summary]
+other = "第 {{ .current }} 页，共 {{ .total }} 页"
+
+[no_articles]
+other = "此结果中暂无文章。"
+
+[page_first]
+other = "首页"
+
+[page_previous]
+other = "上一页"
+
+[page_next]
+other = "下一页"
+
+[page_last]
+other = "末页"
+
+[article_count]
+other = "{{ .number }} 篇文章"
+
+[notes_all]
+other = "共 {{ .number }} 篇笔记（含未标记标签的笔记）。"
+
+[notes_subtags]
+other = "共 {{ .number }} 篇笔记（含子标签）。"

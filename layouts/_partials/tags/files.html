@@ -1,0 +1,24 @@
+{{- /* Local Markdown translation-by-filename selection, not a second content loader.
+       Unsuffixed files belong to the default language; an explicit language file
+       wins for that language. A leaf in ANY language makes its Markdown resources
+       resources, even where the bundle has no translated index. */ -}}
+{{- $files := dict -}}
+{{- $leaf := false -}}
+{{- $languages := slice -}}
+{{- range hugo.Sites -}}{{- $languages = $languages | append .Language.Name -}}{{- end -}}
+{{- range os.ReadDir . -}}
+  {{- if and (not .IsDir) (strings.HasSuffix .Name ".md") -}}
+    {{- $stem := strings.TrimSuffix ".md" .Name -}}
+    {{- $suffix := strings.TrimPrefix "." (path.Ext $stem) -}}
+    {{- $explicit := in $languages $suffix -}}
+    {{- $name := .Name -}}
+    {{- if $explicit -}}{{- $name = printf "%s.md" (strings.TrimSuffix (printf ".%s" $suffix) $stem) -}}{{- end -}}
+    {{- if eq $name "index.md" -}}{{- $leaf = true -}}{{- end -}}
+    {{- if or (and $explicit (eq $suffix site.Language.Name)) (and (not $explicit) site.Language.IsDefault) -}}
+      {{- if or $explicit (not (isset $files $name)) -}}
+        {{- $files = merge $files (dict $name .Name) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "files" $files "leaf" $leaf) -}}

@@ -86,3 +86,12 @@ Fresh successful builds into new destinations remain the verified workflow;
 known incremental/publication limitations are not repaired by this packaging.
 Drafts must still use valid metadata. Broader content-loader support and final
 production compatibility are not claimed.
+
+## English and Chinese UI
+
+P2-C localizes every theme-owned visible/accessibility label through native Hugo
+i18n. English and Simplified Chinese catalogs, locale-aware dates/counts, native
+site overrides and a bounded filename-translated bilingual content fixture are
+verified. There is no automatic body/title/tag translation or fake language switcher.
+See [I18N.md](I18N.md) for configuration, the full key inventory, extension guidance,
+escaping/fallback semantics and the explicit content-loader boundary.

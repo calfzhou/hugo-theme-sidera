@@ -1,0 +1,6 @@
+{{- /* Complete localized message inside time; native timestamp stays unchanged. */ -}}
+{{- if .date.IsZero -}}
+  {{- T (printf "%s_undated" .kind) -}}
+{{- else -}}
+  <time class="{{ .kind }}" datetime="{{ .date.Format "2006-01-02T15:04:05Z07:00" }}">{{ T (printf "date_%s" .kind) (dict "date" (time.Format ":date_medium" .date)) }}</time>
+{{- end -}}

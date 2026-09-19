@@ -3,22 +3,22 @@
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
     {{ with $owner }}
-      <nav aria-label="Collection"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ .Params.collection }}</span></nav>
-    {{ else }}<p class="eyebrow">Standalone page</p>{{ end }}
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" .Params.collection) }}</span></nav>
+    {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}
     <h1>{{ .Title }}</h1>
     {{ with .Params.byline }}<p class="byline">{{ . }}</p>{{ end }}
     <div class="article-dates">
       {{ if not .PublishDate.IsZero }}
-        <p>Published <time class="published" datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "2006-01-02" }}</time></p>
+        <p>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</p>
       {{ end }}
       {{ if and .Params.show_updated (not .Lastmod.IsZero) }}
-        <p>Updated <time class="updated" datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Lastmod.Format "2006-01-02" }}</time></p>
+        <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
       {{ end }}
     </div>
     {{ if and $owner (eq $owner.Params.collection "notebook") }}
       {{ $model := partialCached "tags/model.html" $owner $owner.Path }}
       {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-      <nav class="article-tag-hub" aria-label="Notebook tags"><a href="{{ $hub.RelPermalink }}">All tags in {{ $owner.Title }}</a></nav>
+      <nav class="article-tag-hub" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "all_tags_in" (dict "title" $owner.Title) }}</a></nav>
       <ul id="assigned-tags" class="tag-chips">
         {{ range index $model.assigned .Path }}
           {{ $tag := partial "tags/page.html" (dict "owner" $owner "slug" .slug) }}
@@ -28,7 +28,7 @@
     {{ end }}
     </header>
     {{ if strings.Contains .TableOfContents "<li>" }}
-      <details class="article-toc" open><summary>On this page</summary>{{ .TableOfContents | replaceRE `<nav id="TableOfContents">` `<nav id="TableOfContents" aria-label="On this page">` | safeHTML }}</details>
+      <details class="article-toc" open><summary id="toc-heading">{{ T "on_this_page" }}</summary>{{ .TableOfContents | replaceRE `<nav id="TableOfContents">` `<nav id="TableOfContents" aria-labelledby="toc-heading">` | safeHTML }}</details>
     {{ end }}
     <div class="prose">{{ .Content }}</div>
   </article>

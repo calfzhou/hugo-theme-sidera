@@ -4,10 +4,10 @@
   {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
   <section data-tag-view="{{ .Params.tag_key }}" data-collection="{{ $owner.RelPermalink }}">
     <header class="view-header">
-      <nav aria-label="Collection"><a href="{{ $owner.RelPermalink }}">{{ $owner.Title }}</a> <span class="eyebrow">/ notebook</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ $owner.RelPermalink }}">{{ $owner.Title }}</a> <span class="eyebrow">/ {{ T "collection_notebook" }}</span></nav>
       <h1>{{ .Title }}</h1>
-      <nav class="breadcrumbs" aria-label="Tag ancestors">
-        <a href="{{ $hub.RelPermalink }}"{{ if not .Params.tag_key }} aria-current="page"{{ end }}>All tags</a>
+      <nav class="breadcrumbs" aria-label="{{ T "tag_ancestors" }}">
+        <a href="{{ $hub.RelPermalink }}"{{ if not .Params.tag_key }} aria-current="page"{{ end }}>{{ T "all_tags" }}</a>
         {{ $keys := split .Params.tag_key "/" }}
         {{ $slugs := split .Params.tag_slug "/" }}
         {{ if .Params.tag_key }}
@@ -22,7 +22,7 @@
         {{ $notes = slice }}
         {{ with index $model.nodes . }}{{ $notes = .notes }}{{ end }}
       {{ end }}
-      <p class="intro" data-note-count="{{ len $notes }}">{{ len $notes }} notes{{ if not .Params.tag_key }}, including untagged notes{{ else }}, including subtags{{ end }}.</p>
+      <p class="intro" data-note-count="{{ len $notes }}">{{ T (cond (not .Params.tag_key) "notes_all" "notes_subtags") (dict "count" (len $notes) "number" (lang.FormatNumber 0 (len $notes))) }}</p>
     </header>
     {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $notes) }}
   </section>

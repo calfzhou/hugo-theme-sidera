@@ -1,0 +1,156 @@
+# Sidera UI. Plain text only; interpolation values are escaped by Hugo.
+[skip_content]
+other = "Skip to content"
+
+[built_with]
+other = "Built with Hugo · Sidera"
+
+[collection_overview]
+other = "Collection overview"
+
+[collections]
+other = "Collections"
+
+[standalone_pages]
+other = "Standalone pages"
+
+[standalone_page]
+other = "Standalone page"
+
+[collection_blog]
+other = "blog"
+
+[collection_notebook]
+other = "notebook"
+
+[collection]
+other = "Collection"
+
+[notebook_tags]
+other = "Notebook tags"
+
+[all_tags_in]
+other = "All tags in {{ .title }}"
+
+[on_this_page]
+other = "On this page"
+
+[browse_tags]
+other = "Browse tags →"
+
+[recent_updates]
+other = "Recent updates"
+
+[recent_explanation]
+other = "Across this collection, independent of pins."
+
+[undated]
+other = "undated"
+
+[tags]
+other = "Tags"
+
+[tag_ancestors]
+other = "Tag ancestors"
+
+[all_tags]
+other = "All tags"
+
+[site_navigation]
+other = "Site navigation"
+
+[browse_collections]
+other = "Browse collections"
+
+[browse_collections_tags]
+other = "Browse collections & tags"
+
+[appearance]
+other = "Appearance"
+
+[appearance_dark]
+other = "Dark"
+
+[appearance_light]
+other = "Light"
+
+[appearance_system]
+other = "System"
+
+[site]
+other = "Site"
+
+[overview]
+other = "Overview"
+
+[pages]
+other = "Pages"
+
+[tag_hierarchy]
+other = "Tag hierarchy"
+
+[collection_tags]
+other = "{{ .title }} · Tags"
+
+[subtags_hint]
+other = "Subtags of {{ .tag }}. Use All tags for the full notebook."
+
+[order_publication]
+other = "Newest published · Pins first"
+
+[order_modification]
+other = "Last updated · Pins first"
+
+[order_title]
+other = "By title · Pins first"
+
+[pinned]
+other = "Pinned"
+
+[date_published]
+other = "Published {{ .date }}"
+
+[date_updated]
+other = "Updated {{ .date }}"
+
+[date_modified]
+other = "Modified {{ .date }}"
+
+[published_undated]
+other = "Published: undated"
+
+[modified_undated]
+other = "Modified: undated"
+
+[pagination]
+other = "Pagination"
+
+[page_summary]
+other = "Page {{ .current }} of {{ .total }}"
+
+[no_articles]
+other = "No articles in this result."
+
+[page_first]
+other = "First"
+
+[page_previous]
+other = "Previous"
+
+[page_next]
+other = "Next"
+
+[page_last]
+other = "Last"
+
+[article_count]
+one = "{{ .number }} article"
+other = "{{ .number }} articles"
+
+[notes_all]
+one = "{{ .number }} note, including untagged notes."
+other = "{{ .number }} notes, including untagged notes."
+
+[notes_subtags]
+one = "{{ .number }} note, including subtags."
+other = "{{ .number }} notes, including subtags."
