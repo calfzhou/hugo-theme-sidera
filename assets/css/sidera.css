@@ -114,7 +114,8 @@ article[data-renderer] { padding: 2rem; background: var(--surface); border: 1px 
 .article-toc { padding: .8rem 1rem; margin-bottom: 1.5rem; border: 1px solid var(--line); border-radius: 8px; font-size: .8rem; }
 summary { cursor: pointer; }
 .article-toc ul { padding-left: 1.2rem; }
-.prose { max-width: 65ch; margin-inline: auto; font-family: var(--reading); font-size: 1rem; line-height: 1.85; }
+article[data-renderer] .prose { max-width: 65ch; margin-inline: auto; }
+.prose { font-family: var(--reading); font-size: 1rem; line-height: 1.85; }
 .prose :is(h2, h3, h4, h5, h6) { font-family: var(--ui); margin-top: 2em; scroll-margin-top: 1.5rem; }
 .prose :is(ul, ol) { padding-left: 1.5rem; }
 .prose li + li { margin-top: .3rem; }
