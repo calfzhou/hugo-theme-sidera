@@ -1,14 +1,16 @@
 {{ define "main" }}
   {{ $owner := partial "collection-owner.html" . }}
-  <h1>{{ .Title }}</h1>
-  {{ with $owner }}
-    <nav aria-label="Collection"><a href="{{ .RelPermalink }}">{{ .Title }}</a> — {{ .Params.collection }}</nav>
-  {{ end }}
-  {{ if and $owner (eq $owner.Params.collection "notebook") }}
-    {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-    <nav aria-label="Notebook tags"><a href="{{ $hub.RelPermalink }}">Browse tags</a></nav>
-  {{ end }}
-  {{ .Content }}
+  <header class="view-header">
+    {{ with $owner }}
+      <nav aria-label="Collection"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ .Params.collection }}</span></nav>
+    {{ end }}
+    <h1>{{ .Title }}</h1>
+    <div class="intro prose">{{ .Content }}</div>
+    {{ if and $owner (eq $owner.Params.collection "notebook") }}
+      {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
+      <nav class="view-tools" aria-label="Notebook tags"><a href="{{ $hub.RelPermalink }}">Browse tags →</a></nav>
+    {{ end }}
+  </header>
   {{ $pages := slice }}
   {{ range .RegularPagesRecursive }}
     {{ if eq (partial "collection-owner.html" .) $owner }}
@@ -17,12 +19,12 @@
   {{ end }}
   {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages) }}
   {{ if eq . $owner }}
-    <aside aria-label="Recent updates">
-      <h2>Recent updates</h2>
-      <p>Up to five articles from the whole collection, by last modification; pins ignored.</p>
+    <aside class="recent-panel" aria-label="Recent updates">
+      <h2 class="section-heading">Recent updates</h2>
+      <p class="muted">Across this collection, independent of pins.</p>
       <ul id="recent-updates">
         {{ range first 5 (partial "lists/order.html" (dict "pages" $pages "order" "modification" "pins" false)) }}
-          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — {{ if .Lastmod.IsZero }}undated{{ else }}{{ .Lastmod.Format "2006-01-02" }}{{ end }}</li>
+          <li><a href="{{ .RelPermalink }}">{{ .Title }}</a><span>{{ if .Lastmod.IsZero }}undated{{ else }}{{ .Lastmod.Format "2006-01-02" }}{{ end }}</span></li>
         {{ end }}
       </ul>
     </aside>

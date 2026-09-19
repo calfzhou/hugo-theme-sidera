@@ -5,10 +5,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title>{{ .Title }} | {{ site.Title }}</title>
+  {{ $css := resources.Get "css/sidera.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{ $js := resources.Get "js/navigation.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 </head>
 <body>
-  <header><a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a></header>
-  <main>{{ block "main" . }}{{ end }}</main>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site-shell">
+    {{ partial "sidebar.html" . }}
+    <div class="reading-column">
+      <main id="main" tabindex="-1">{{ block "main" . }}{{ end }}</main>
+      <footer class="site-footer">Built with Hugo · Sidera</footer>
+    </div>
+  </div>
 </body>
 </html>

@@ -3,13 +3,20 @@
 {{ $policy := partial "lists/policy.html" .owner }}
 {{ $ordered := partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}
 {{ $pager := .page.Paginate $ordered $policy.size }}
-<p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">Order: {{ $policy.order }}; pins first, once; {{ $policy.size }} articles per page.</p>
-<p data-total="{{ $pager.TotalNumberOfElements }}">{{ $pager.TotalNumberOfElements }} articles in this result.</p>
-<ul id="articles">
+<div class="list-meta">
+  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ $pager.TotalNumberOfElements }} articles</p>
+  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ index (dict "publication" "Newest published" "modification" "Last updated" "title" "By title") $policy.order }} · Pins first</p>
+</div>
+<ul id="articles" class="article-list">
   {{ range $pager.Pages }}
-    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ if .Params.pinned }} — pinned{{ end }}
-      — published: {{ if .PublishDate.IsZero }}undated{{ else }}{{ .PublishDate.Format "2006-01-02" }}{{ end }};
-      modified: {{ if .Lastmod.IsZero }}undated{{ else }}{{ .Lastmod.Format "2006-01-02" }}{{ end }}
+    <li class="article-card">
+      {{ if .Params.pinned }}<span class="pin-label">Pinned</span>{{ end }}
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
+      <div class="card-dates">
+        <span>Published {{ if .PublishDate.IsZero }}undated{{ else }}<time datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "2006-01-02" }}</time>{{ end }}</span>
+        <span>Modified {{ if .Lastmod.IsZero }}undated{{ else }}<time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Lastmod.Format "2006-01-02" }}</time>{{ end }}</span>
+      </div>
     </li>
   {{ end }}
 </ul>

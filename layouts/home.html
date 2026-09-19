@@ -1,16 +1,23 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  <h2>Collections</h2>
-  <ul id="collections">
+  <header class="view-header">
+    <p class="eyebrow">Collection overview</p>
+    <h1>{{ .Title }}</h1>
+    <div class="intro prose">{{ .Content }}</div>
+  </header>
+  <h2 class="section-heading">Collections</h2>
+  <ul id="collections" class="collection-grid">
     {{ range (where site.Pages "Kind" "section").ByTitle }}
       {{ if .Params.collection }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — {{ .Params.collection }}</li>
+        <li class="collection-card">
+          <span class="eyebrow">{{ .Params.collection }}</span>
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <p>{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
+        </li>
       {{ end }}
     {{ end }}
   </ul>
-  <h2>Standalone pages</h2>
-  <ul id="standalone">
+  <h2 class="section-heading">Standalone pages</h2>
+  <ul id="standalone" class="standalone-list">
     {{ range site.RegularPages.ByTitle }}
       {{ if not (partial "collection-owner.html" .) }}
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
