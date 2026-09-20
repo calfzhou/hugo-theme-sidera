@@ -3,7 +3,7 @@
 {{- $size := 10 -}}
 {{- with . -}}
   {{- if eq .Params.collection "blog" -}}{{- $order = "publication" -}}{{- end -}}
-  {{- if eq .Params.collection "notebook" -}}{{- $order = "modification" -}}{{- end -}}
+  {{- if eq (partial "collection-kind.html" .Params.collection) "notebook" -}}{{- $order = "modification" -}}{{- end -}}
   {{- if isset .Params "list_order" -}}
     {{- if or (ne (printf "%T" .Params.list_order) "string") (not (in (slice "publication" "modification" "title") .Params.list_order)) -}}
       {{- errorf "P1C list_order must be publication, modification or title: %s" .Path -}}

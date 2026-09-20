@@ -10,7 +10,7 @@
     {{- $fm := partial "tags/frontmatter.html" $file -}}
     {{- with $fm.params.collection -}}
       {{- $owner = "" -}}
-      {{- if eq . "notebook" -}}
+      {{- if eq (partial "collection-kind.html" .) "notebook" -}}
         {{- $owner = strings.TrimPrefix "content/" $dir -}}
         {{- if not (findRE `^[a-z0-9-]+(/[a-z0-9-]+)*$` $owner) -}}
           {{- errorf "P1B notebook content path must use lowercase ASCII slug segments: %s" $owner -}}

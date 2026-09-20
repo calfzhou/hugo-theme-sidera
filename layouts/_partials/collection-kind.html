@@ -1,0 +1,5 @@
+{{- /* Compatibility boundary: public notes, historical internal notebook. */ -}}
+{{- $kind := . | default "" -}}
+{{- if eq $kind "notes" -}}{{- $kind = "notebook" -}}{{- end -}}
+{{- if eq $kind "wiki" -}}{{- $kind = "docs" -}}{{- end -}}
+{{- return $kind -}}

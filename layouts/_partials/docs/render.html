@@ -1,0 +1,21 @@
+{{ $policy := partial "docs/policy.html" . }}
+{{ $children := partial "docs/children.html" . }}
+{{ $pager := false }}
+{{ if and $policy.list $children }}{{ $pager = .Paginate $children $policy.size }}{{ end }}
+<nav aria-label="{{ T "docs_ancestors" }}" class="view-tools">
+  {{ range .Ancestors.Reverse }}{{ $ancestor := . }}{{ with partial "collection-owner.html" . }}{{ if eq (partial "collection-kind.html" .Params.collection) "docs" }}<a href="{{ $ancestor.RelPermalink }}">{{ $ancestor.Title }}</a> / {{ end }}{{ end }}{{ end }}
+  <a href="{{ .RelPermalink }}" aria-current="page">{{ .Title }}</a>
+</nav>
+{{ $body := true }}{{ with $pager }}{{ $body = eq .PageNumber 1 }}{{ end }}
+{{ partial "article.html" (dict "page" . "body" $body) }}
+{{ if not $body }}<p><a href="{{ .RelPermalink }}">{{ T "docs_full_page" }}</a></p>{{ end }}
+{{ with $pager }}
+  <section aria-labelledby="children-heading">
+    <h2 id="children-heading" class="section-heading">{{ T "docs_children" }}</h2>
+    <p data-doc-total="{{ .TotalNumberOfElements }}">{{ T "docs_count" (dict "count" .TotalNumberOfElements "number" (lang.FormatNumber 0 .TotalNumberOfElements)) }}</p>
+    <ul id="doc-children" class="article-list">
+      {{ range .Pages }}<li class="article-card"><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p></li>{{ end }}
+    </ul>
+    {{ partial "lists/navigation.html" . }}
+  </section>
+{{ end }}

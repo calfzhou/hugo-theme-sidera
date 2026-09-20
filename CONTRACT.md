@@ -1,6 +1,6 @@
 # Supported site contract
 
-Sidera is an independent Hugo-native theme for peer blogs and notebooks, with
+Sidera is an independent Hugo-native theme for peer blogs, notes and docs, with
 shared article rendering. Stellar is a visual reference, not a configuration or
 feature-compatibility API. This guide describes the implemented P2 boundary, not
 all Hugo inputs or a production migration guarantee.
@@ -78,7 +78,7 @@ root is a branch section (`_index.md`), not a leaf article (`index.md`):
 +++
 title = 'My notebook'
 [params]
-collection = 'notebook' # blog | notebook; root only, never cascade this marker
+collection = 'notebook' # blog | notes | notebook | docs | wiki; root only, never cascade
 # Optional owner-local settings; do not cascade them:
 list_order = 'modification' # publication | modification | title
 page_size = 10             # positive integer
@@ -160,3 +160,12 @@ site override. Rich source features (links/backlinks, code-file tools, search,
 math/diagrams/embeds, comments/feeds) remain P3, not a promised P2 compatibility layer.
 Distribution licensing is unresolved; local development readiness is not permission
 to publish/distribute. See [README.md](README.md) for provenance and appearance details.
+
+## Docs extension (P2-W)
+
+[DOCS.md](DOCS.md) defines the proven body-bearing page tree, parent-local ordering,
+optional direct-child pagination, compatibility aliases and opt-in theme sample.
+It supersedes the earlier arbitrary-mount exclusion only for the two tested optional
+docs namespaces. Notes metadata discovery remains local-site-content scoped.
+Shared article presentation now lives in `layouts/_partials/article.html`; normal
+`layouts/page.html` is a wrapper, and docs sections use the same partial.

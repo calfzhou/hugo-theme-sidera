@@ -4,7 +4,7 @@
     <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
   </header>
   <details class="site-menu" open>
-    <summary>{{ if and $owner (eq $owner.Params.collection "notebook") }}{{ T "browse_collections_tags" }}{{ else }}{{ T "browse_collections" }}{{ end }}</summary>
+    <summary>{{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}{{ T "browse_collections_tags" }}{{ else }}{{ T "browse_collections" }}{{ end }}</summary>
     <div class="navigation-content">
       <div class="appearance" hidden>
         <label for="appearance">{{ T "appearance" }}</label>
@@ -20,7 +20,7 @@
         <ul class="collection-nav">
           {{- range (where site.Pages "Kind" "section").ByTitle -}}
             {{- if .Params.collection -}}
-              <li><a href="{{ .RelPermalink }}"{{ if eq . $owner }} aria-current="{{ if eq . $ }}page{{ else }}location{{ end }}"{{ end }}><span>{{ .Title }}</span><small>{{ T (printf "collection_%s" .Params.collection) }}</small></a></li>
+              <li><a href="{{ .RelPermalink }}"{{ if eq . $owner }} aria-current="{{ if eq . $ }}page{{ else }}location{{ end }}"{{ end }}><span>{{ .Title }}</span><small>{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</small></a></li>
             {{- end -}}
           {{- end -}}
         </ul>
@@ -33,7 +33,7 @@
           {{- end -}}
         </ul>
       </nav>
-      {{ if and $owner (eq $owner.Params.collection "notebook") }}
+      {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}
         {{ $model := partialCached "tags/model.html" $owner $owner.Path }}
         {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
         <nav class="tag-navigation" aria-label="{{ T "tag_hierarchy" }}">
@@ -45,6 +45,13 @@
           {{ if $parent }}<p class="nav-hint">{{ T "subtags_hint" (dict "tag" $parent) }}</p>{{ end }}
         </nav>
       {{- end -}}
+      {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "docs") }}
+        <nav class="docs-navigation tag-navigation" aria-label="{{ T "docs_tree" }}">
+          <h2 class="nav-heading">{{ T "docs_tree" }}</h2>
+          <a href="{{ $owner.RelPermalink }}"{{ if eq . $owner }} aria-current="page"{{ end }}>{{ $owner.Title }}</a>
+          {{ partial "docs/tree.html" (dict "node" $owner "current" .) }}
+        </nav>
+      {{ end }}
     </div>
   </details>
 </aside>

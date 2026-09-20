@@ -1,12 +1,15 @@
 {{ define "main" }}
   {{ $owner := partial "collection-owner.html" . }}
+  {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "docs") }}
+    {{ partial "docs/render.html" . }}
+  {{ else }}
   <header class="view-header">
     {{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" .Params.collection) }}</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</span></nav>
     {{ end }}
     <h1>{{ .Title }}</h1>
     <div class="intro prose">{{ .Content }}</div>
-    {{ if and $owner (eq $owner.Params.collection "notebook") }}
+    {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}
       {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
       <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>
     {{ end }}
@@ -28,5 +31,6 @@
         {{ end }}
       </ul>
     </aside>
+  {{ end }}
   {{ end }}
 {{ end }}

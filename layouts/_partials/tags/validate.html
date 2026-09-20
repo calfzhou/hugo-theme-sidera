@@ -1,6 +1,6 @@
 {{- /* Validate once after Hugo has assembled Pages. Adapter discovery separately
        guards source namespace collisions before AddPage can shadow content. */ -}}
-{{- $owners := where (where site.Pages "Kind" "section") "Params.collection" "notebook" -}}
+{{- $owners := where (where site.Pages "Kind" "section") "Params.collection" "in" (slice "notebook" "notes") -}}
 {{- range $owners -}}
   {{- $owner := . -}}
   {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relLangURL -}}

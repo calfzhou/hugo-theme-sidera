@@ -21,13 +21,13 @@ other = "Standalone page"
 other = "blog"
 
 [collection_notebook]
-other = "notebook"
+other = "notes"
 
 [collection]
 other = "Collection"
 
 [notebook_tags]
-other = "Notebook tags"
+other = "Notes tags"
 
 [all_tags_in]
 other = "All tags in {{ .title }}"
@@ -154,3 +154,22 @@ other = "{{ .number }} notes, including untagged notes."
 [notes_subtags]
 one = "{{ .number }} note, including subtags."
 other = "{{ .number }} notes, including subtags."
+
+[collection_docs]
+other = "Docs"
+
+[docs_tree]
+other = "Documentation tree"
+
+[docs_ancestors]
+other = "Documentation ancestors"
+
+[docs_children]
+other = "Child pages"
+
+[docs_full_page]
+other = "Read the full document"
+
+[docs_count]
+one = "{{ .number }} child page"
+other = "{{ .number }} child pages"

@@ -1,0 +1,71 @@
+{{- /* The tree and list share this exact native immediate-child sequence. */ -}}
+{{- $parent := . -}}
+{{- $owner := partial "collection-owner.html" . -}}
+{{- $policy := partial "docs/policy.html" . -}}
+{{- /* Hugo silently coalesces foo.md with foo/_index.md before Pages exist.
+     Guard only companions of this native source Page, not a parallel tree loader. */ -}}
+{{- with .File -}}
+  {{- $dir := path.Dir .Filename -}}
+  {{- $suffixes := slice (printf ".%s.md" $parent.Site.Language.Name) -}}
+  {{- if $parent.Site.Language.IsDefault -}}{{- $suffixes = $suffixes | append ".md" -}}{{- end -}}
+  {{- range $suffixes -}}
+    {{- $suffix := . -}}
+    {{- $companions := slice (path.Join $dir (printf "index%s" .)) -}}
+    {{- /* A mount root's physical sibling is outside that mounted source. */ -}}
+    {{- with $parent.Parent.File -}}
+      {{- if eq (path.Dir .Filename) (path.Dir $dir) -}}{{- $companions = $companions | append (printf "%s%s" $dir $suffix) -}}{{- end -}}
+    {{- end -}}
+    {{- range $companions -}}
+      {{- if os.FileExists (strings.TrimPrefix (printf "%s/" hugo.WorkingDir) .) -}}{{- errorf "P2W ambiguous docs node: %s conflicts with %s" $parent.Path . -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $eligible := slice -}}
+{{- $byName := dict -}}
+{{- range .Pages -}}
+  {{- if and (eq (partial "collection-owner.html" .) $owner) .RelPermalink -}}
+    {{- $name := strings.TrimPrefix (printf "%s/" $parent.Path) .Path -}}
+    {{- if strings.Contains $name "/" -}}
+      {{- errorf "P2W docs require a branch _index.md at each intermediate directory: %s (parent %s)" .Path $parent.Path -}}
+    {{- end -}}
+    {{- if isset $byName $name -}}{{- errorf "P2W ambiguous direct child %q: %s" $name $parent.Path -}}{{- end -}}
+    {{- $byName = merge $byName (dict $name .) -}}
+    {{- $eligible = $eligible | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Stable ascending logical path breaks title ties; weight is irrelevant. */ -}}
+{{- $eligible = sort $eligible "Path" "asc" -}}
+{{- if eq $policy.sort "title" -}}{{- $eligible = sort $eligible "Title" "asc" -}}{{- end -}}
+{{- $ordered := slice -}}{{- $seen := slice -}}
+{{- range $policy.order -}}
+  {{- $name := . -}}
+  {{- if or (ne (printf "%T" .) "string") (not (findRE `^[^./\\][^/\\]*$` (string .))) (in (slice "." "..") .) -}}
+    {{- errorf "P2W children.order requires direct-child logical names, not titles, URLs or filenames: %s (%v)" $parent.Path . -}}
+  {{- else if in $seen $name -}}
+    {{- errorf "P2W duplicate children.order entry %q: %s" $name $parent.Path -}}
+  {{- else -}}
+    {{- $seen = $seen | append $name -}}
+    {{- $path := path.Join $parent.Path $name -}}
+    {{- $child := $parent.Site.GetPage $path -}}
+    {{- if not $child -}}
+      {{- /* Distinguish a known other-language node without inventing a translation. */ -}}
+      {{- range hugo.Sites -}}
+        {{- with .GetPage $path -}}{{- if eq .Path $path -}}{{- $child = . -}}{{- break -}}{{- end -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if not $child -}}
+      {{- errorf "P2W unknown children.order child %q: %s (not found in any configured language; check spelling)" $name $parent.Path -}}
+    {{- else if or (ne $child.Path $path) (ne $child.Parent.Path $parent.Path) (ne (partial "collection-owner.html" $child).Path $owner.Path) -}}
+      {{- errorf "P2W children.order target is not a direct child of this collection: %s -> %s" $parent.Path $name -}}
+    {{- else -}}
+      {{- if $child.IsSection -}}{{- $valid := partial "docs/children.html" $child -}}{{- end -}}
+      {{- with index $byName $name -}}{{- $ordered = $ordered | append . -}}{{- end -}}
+      {{- /* Known but excluded/untranslated: valid reference, no list or tree entry. */ -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range $eligible -}}
+  {{- $name := strings.TrimPrefix (printf "%s/" $parent.Path) .Path -}}
+  {{- if not (in $seen $name) -}}{{- $ordered = $ordered | append . -}}{{- end -}}
+{{- end -}}
+{{- return $ordered -}}
