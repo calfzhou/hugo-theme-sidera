@@ -156,7 +156,7 @@ one = "{{ .number }} note, including subtags."
 other = "{{ .number }} notes, including subtags."
 
 [collection_docs]
-other = "Docs"
+other = "docs"
 
 [docs_tree]
 other = "Documentation tree"

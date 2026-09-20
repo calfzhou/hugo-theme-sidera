@@ -186,7 +186,8 @@ branch source companions for this collision in the tested local Markdown layout.
 This is a bounded guard, not a universal virtual-filesystem collision auditor.
 Do not combine leaf and branch index files for the same node.
 
-The showcase commits a separate site-owned Workshop handbook and opts in to this
-small theme-owned sample. They are inspection fixtures, not a complete Sidera
+The showcase commits a separate site-owned Workshop handbook, published by default.
+Its optional `docs-on.toml` configuration opts in to this small theme-owned sample;
+the ordinary showcase configuration leaves it off. They are inspection fixtures, not a complete Sidera
 manual or claims of unimplemented features. Tree/sidebar/list/card polish and
 customization remain P2-E–I work after model review.
