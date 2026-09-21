@@ -1,0 +1,4 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+  {{- if where $page.Site.Pages "Params.collection" "!=" nil -}}
+    <nav aria-label="{{ T "collections" }}"><h2 class="nav-heading">{{ T "collections" }}</h2>{{ partial "sidera/collections.html" . }}</nav>
+  {{- end -}}

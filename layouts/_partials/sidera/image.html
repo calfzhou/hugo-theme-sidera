@@ -1,0 +1,14 @@
+{{- $url := "" -}}{{- $path := .path -}}
+{{- if $path -}}
+  {{- if or (findRE `[:?#\\]` $path) (hasPrefix $path "//") (in (split $path "/") "..") -}}{{- errorf "Sidera %s: image must be a local resource/path: %q" .Page.Path $path -}}
+  {{- else -}}
+    {{- $resource := .Page.Resources.Get $path -}}
+    {{- if not $resource -}}{{- with .Owner -}}{{- $resource = .Resources.Get $path -}}{{- end -}}{{- end -}}
+    {{- if not $resource -}}{{- $resource = resources.Get (strings.TrimPrefix "/" $path) -}}{{- end -}}
+    {{- if $resource -}}{{- $url = $resource.RelPermalink -}}
+    {{- else if fileExists (printf "static/%s" (strings.TrimPrefix "/" $path)) -}}{{- $url = relURL (strings.TrimPrefix "/" $path) -}}
+    {{- else -}}{{- errorf "Sidera %s: missing local image %q (page/owner resources, assets or static)" .Page.Path $path -}}{{- end -}}
+    {{- if not (in (slice ".svg" ".png" ".jpg" ".jpeg" ".webp" ".gif" ".avif") (lower (path.Ext $path))) -}}{{- errorf "Sidera %s: unsupported image extension %q" .Page.Path $path -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $url -}}

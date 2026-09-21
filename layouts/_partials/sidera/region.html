@@ -1,0 +1,8 @@
+{{- $ctx := . -}}
+{{- range index .Settings .Region -}}
+  {{- $content := partial "sidera/component.html" (merge $ctx (dict "Name" .)) -}}
+  {{- if strings.TrimSpace $content -}}<div class="region-component" data-component="{{ . }}">{{ $content }}</div>{{- end -}}
+{{- end -}}
+{{- if index .Settings .Region -}}
+  {{- if eq .Region "left" -}}{{- partial "sidera/left-extra.html" . -}}{{- else -}}{{- partial "sidera/right-extra.html" . -}}{{- end -}}
+{{- end -}}

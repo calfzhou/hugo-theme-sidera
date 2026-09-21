@@ -59,9 +59,6 @@ other = "全部标签"
 [site_navigation]
 other = "网站导航"
 
-[browse_collections]
-other = "浏览合集"
-
 [browse_collections_tags]
 other = "浏览合集与标签"
 
@@ -83,17 +80,11 @@ other = "网站"
 [overview]
 other = "概览"
 
-[pages]
-other = "页面"
-
 [tag_hierarchy]
 other = "标签树"
 
 [collection_tags]
 other = "{{ .title }} · 标签"
-
-[subtags_hint]
-other = "当前显示「{{ .tag }}」的子标签。选择「全部标签」可浏览整个笔记本。"
 
 [order_publication]
 other = "按发表时间降序 · 置顶优先"
@@ -169,3 +160,14 @@ other = "阅读完整文档"
 
 [docs_count]
 other = "{{ .number }} 篇子文档"
+
+[categories]
+other = "分类"
+[all_blogs]
+other = "全部博客"
+[recent_global]
+other = "全站最近更新，不受置顶影响。"
+[toggle_branch]
+other = "展开或收起{{ .title }}"
+[page_context]
+other = "本页目录与相关内容"

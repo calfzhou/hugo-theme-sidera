@@ -1,0 +1,6 @@
+{{- $identity := .Settings.identity -}}
+<header class="site-heading">
+  {{- with $identity.image -}}<img class="identity-image" src="{{ partial "sidera/image.html" (dict "Page" $.Page.Site.Home "Owner" false "path" .) }}" alt="" width="44" height="44">{{- end -}}
+  <div><a class="brand"{{ if and (isset $identity "title") (not $identity.title) }} aria-label="{{ T "overview" }}"{{ end }} href="{{ .Page.Site.Home.RelPermalink }}">{{ if isset $identity "title" }}{{ if $identity.title }}{{ $identity.title }}{{ else }}{{ if $.Settings.icons }}{{ partial "sidera/icon.html" "home" }}{{ else }}{{ T "overview" }}{{ end }}{{ end }}{{ else }}{{ .Page.Site.Title }}{{ end }}</a>
+  {{ with $identity.subtitle }}<p class="subtitle">{{ . }}</p>{{ end }}</div>
+</header>

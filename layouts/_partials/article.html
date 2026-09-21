@@ -28,9 +28,7 @@
       </ul>
     {{ end }}
     </header>
-    {{ if and $showBody (strings.Contains .TableOfContents "<li>") }}
-      <details class="article-toc" open><summary id="toc-heading">{{ T "on_this_page" }}</summary>{{ .TableOfContents | replaceRE `<nav id="TableOfContents">` `<nav id="TableOfContents" aria-labelledby="toc-heading">` | safeHTML }}</details>
-    {{ end }}
+    {{ .Store.Set "sidera-body" $showBody }}
     {{ if $showBody }}<div class="prose">{{ .Content }}</div>{{ end }}
   </article>
   {{ end }}

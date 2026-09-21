@@ -13,15 +13,10 @@
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{ $js := resources.Get "js/navigation.js" | minify | fingerprint }}
   <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{ partial "sidera/head-extra.html" (dict "Page" . "Owner" (partial "collection-owner.html" .) "Region" "head" "Settings" (partialCached "sidera/settings.html" . .Path)) }}
 </head>
 <body>
   <a class="skip-link" href="#main">{{ T "skip_content" }}</a>
-  <div class="site-shell">
-    {{ partial "sidebar.html" . }}
-    <div class="reading-column">
-      <main id="main" tabindex="-1">{{ block "main" . }}{{ end }}</main>
-      <footer class="site-footer">{{ T "built_with" }}</footer>
-    </div>
-  </div>
+  {{ block "main" . }}{{ end }}
 </body>
 </html>

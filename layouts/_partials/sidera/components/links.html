@@ -1,0 +1,2 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+  {{- with $s.links_menu -}}{{- partial "sidera/menu.html" (merge $ctx (dict "Name" .)) -}}{{- end -}}

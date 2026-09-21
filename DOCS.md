@@ -191,3 +191,10 @@ Its optional `docs-on.toml` configuration opts in to this small theme-owned samp
 the ordinary showcase configuration leaves it off. They are inspection fixtures, not a complete Sidera
 manual or claims of unimplemented features. Tree/sidebar/list/card polish and
 customization remain P2-E–I work after model review.
+
+## P2-F shell integration
+
+The ordered tree is now a configurable `docs-tree` region component, with distinct
+parent links and native disclosures opening the active branch. See [SHELL.md](SHELL.md).
+Child/body/paginator order remains unchanged; no TOC is emitted on later child
+pagers without the body. Normal theme activation still does not publish these docs.

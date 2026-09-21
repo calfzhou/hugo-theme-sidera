@@ -1,0 +1,10 @@
+{{- $ctx := . -}}{{- $page := .Page -}}{{- $name := .Name -}}
+{{- with index $page.Site.Menus $name -}}
+<nav class="native-menu" aria-label="{{ T "site_navigation" }}">
+<ul>
+{{- range . -}}
+  {{- partial "sidera/menu-entry.html" (dict "Entry" . "Context" $ctx "Depth" 1) -}}
+{{- end -}}
+</ul>
+</nav>
+{{- end -}}

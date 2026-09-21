@@ -1,3 +1,4 @@
 {{ define "main" }}
-  {{ partial "article.html" (dict "page" . "body" true) }}
+  {{ $content := partial "views/page.html" . }}
+  {{ partial "sidera/shell.html" (dict "Page" . "Content" $content) }}
 {{ end }}

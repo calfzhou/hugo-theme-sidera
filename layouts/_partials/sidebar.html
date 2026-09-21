@@ -1,57 +1,7 @@
-{{ $owner := partial "collection-owner.html" . }}
-<aside class="sidebar" aria-label="{{ T "site_navigation" }}">
-  <header class="site-heading">
-    <a href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
-  </header>
-  <details class="site-menu" open>
-    <summary>{{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}{{ T "browse_collections_tags" }}{{ else }}{{ T "browse_collections" }}{{ end }}</summary>
-    <div class="navigation-content">
-      <div class="appearance" hidden>
-        <label for="appearance">{{ T "appearance" }}</label>
-        <select id="appearance" name="appearance">
-          <option value="dark">{{ T "appearance_dark" }}</option>
-          <option value="light">{{ T "appearance_light" }}</option>
-          <option value="system">{{ T "appearance_system" }}</option>
-        </select>
-      </div>
-      <nav aria-label="{{ T "site" }}">
-        <a class="home-link" href="{{ site.Home.RelPermalink }}"{{ if .IsHome }} aria-current="page"{{ end }}>{{ T "overview" }}</a>
-        <h2 class="nav-heading">{{ T "collections" }}</h2>
-        <ul class="collection-nav">
-          {{- range (where site.Pages "Kind" "section").ByTitle -}}
-            {{- if .Params.collection -}}
-              <li><a href="{{ .RelPermalink }}"{{ if eq . $owner }} aria-current="{{ if eq . $ }}page{{ else }}location{{ end }}"{{ end }}><span>{{ .Title }}</span><small>{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</small></a></li>
-            {{- end -}}
-          {{- end -}}
-        </ul>
-        <h2 class="nav-heading">{{ T "pages" }}</h2>
-        <ul class="page-nav">
-          {{- range site.RegularPages.ByTitle -}}
-            {{- if not (partial "collection-owner.html" .) -}}
-              <li><a href="{{ .RelPermalink }}"{{ if eq . $ }} aria-current="page"{{ end }}>{{ .Title }}</a></li>
-            {{- end -}}
-          {{- end -}}
-        </ul>
-      </nav>
-      {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}
-        {{ $model := partialCached "tags/model.html" $owner $owner.Path }}
-        {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-        <nav class="tag-navigation" aria-label="{{ T "tag_hierarchy" }}">
-          <h2 class="nav-heading">{{ T "collection_tags" (dict "title" $owner.Title) }}</h2>
-          <a class="all-tags" href="{{ $hub.RelPermalink }}">{{ T "all_tags" }}</a>
-          {{ $parent := "" }}
-          {{ if .Params.tag_view }}{{ $parent = .Params.tag_key }}{{ end }}
-          {{ partial "tags/tree.html" (dict "owner" $owner "model" $model "parent" $parent) }}
-          {{ if $parent }}<p class="nav-hint">{{ T "subtags_hint" (dict "tag" $parent) }}</p>{{ end }}
-        </nav>
-      {{- end -}}
-      {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "docs") }}
-        <nav class="docs-navigation tag-navigation" aria-label="{{ T "docs_tree" }}">
-          <h2 class="nav-heading">{{ T "docs_tree" }}</h2>
-          <a href="{{ $owner.RelPermalink }}"{{ if eq . $owner }} aria-current="page"{{ end }}>{{ $owner.Title }}</a>
-          {{ partial "docs/tree.html" (dict "node" $owner "current" .) }}
-        </nav>
-      {{ end }}
-    </div>
-  </details>
-</aside>
+    <aside class="sidebar left-region" aria-label="{{ T "site_navigation" }}">
+      {{ partial "sidera/identity.html" .Context }}
+      <details class="site-menu" open>
+        <summary>{{ T "browse_collections_tags" }}</summary>
+        <div class="navigation-content">{{ .Content }}{{ partial "sidera/appearance.html" . }}</div>
+      </details>
+    </aside>

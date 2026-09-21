@@ -59,9 +59,6 @@ other = "All tags"
 [site_navigation]
 other = "Site navigation"
 
-[browse_collections]
-other = "Browse collections"
-
 [browse_collections_tags]
 other = "Browse collections & tags"
 
@@ -83,17 +80,11 @@ other = "Site"
 [overview]
 other = "Overview"
 
-[pages]
-other = "Pages"
-
 [tag_hierarchy]
 other = "Tag hierarchy"
 
 [collection_tags]
 other = "{{ .title }} · Tags"
-
-[subtags_hint]
-other = "Subtags of {{ .tag }}. Use All tags for the full notebook."
 
 [order_publication]
 other = "Newest published · Pins first"
@@ -173,3 +164,14 @@ other = "Read the full document"
 [docs_count]
 one = "{{ .number }} child page"
 other = "{{ .number }} child pages"
+
+[categories]
+other = "Categories"
+[all_blogs]
+other = "All blogs"
+[recent_global]
+other = "Across this site, independent of pins."
+[toggle_branch]
+other = "Expand or collapse {{ .title }}"
+[page_context]
+other = "On this page & context"

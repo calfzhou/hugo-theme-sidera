@@ -1,0 +1,8 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+  {{- $links := slice -}}
+  {{- range $s.blog_taxonomies -}}
+    {{- with $page.Site.GetPage (printf "/blog_%s" .) -}}
+      {{- if eq .Kind "taxonomy" -}}{{- $links = $links | append (dict "Page" . "Label" (T (cond (eq .Data.Plural "blog_tags") "tags" "categories"))) -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with $links -}}<nav class="taxonomy-navigation" aria-label="{{ T "all_blogs" }}"><h2 class="nav-heading">{{ T "all_blogs" }}</h2><ul>{{ range . }}<li><a href="{{ .Page.RelPermalink }}"{{ if eq .Page $page }} aria-current="page"{{ else if .Page.IsAncestor $page }} aria-current="location"{{ end }}>{{ if $s.icons }}{{ partial "sidera/icon.html" "tag" }}{{ end }}{{ .Label }}</a></li>{{ end }}</ul></nav>{{- end -}}

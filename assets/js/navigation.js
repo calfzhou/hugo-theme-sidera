@@ -1,9 +1,12 @@
-// A disclosure, not a modal: native keyboard behavior and no focus trap.
-// With JavaScript unavailable the server-rendered navigation stays open.
-const menu = document.querySelector('.site-menu');
-const desktop = window.matchMedia('(min-width: 900px)');
-function setNavigationLayout() {
-  menu.open = desktop.matches;
+// In-flow native disclosures. No script leaves every region reachable and open.
+for (const [selector, query] of [
+  ['.site-menu', '(min-width: 761px)'],
+  ['.context-menu', '(min-width: 1231px)']
+]) {
+  const disclosure = document.querySelector(selector);
+  if (!disclosure) continue;
+  const wide = matchMedia(query);
+  const update = () => { disclosure.open = wide.matches; };
+  update();
+  wide.addEventListener('change', update);
 }
-setNavigationLayout();
-desktop.addEventListener('change', setNavigationLayout);

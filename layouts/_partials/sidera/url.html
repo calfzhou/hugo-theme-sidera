@@ -1,0 +1,6 @@
+{{- $url := .url -}}
+{{- if or (ne (printf "%T" $url) "string") (not $url) -}}{{- errorf "Sidera %s: destination must be a nonempty URL" .source -}}
+{{- else if or (findRE `[\x00-\x20\\]` $url) (hasPrefix $url "//") (and (findRE `^[^/?#]*:` $url) (not (findRE `(?i)^(https?://|mailto:)` $url))) -}}
+  {{- errorf "Sidera %s: unsafe URL %q; use a local URL, http, https or mailto" .source $url -}}
+{{- end -}}
+{{- return $url -}}

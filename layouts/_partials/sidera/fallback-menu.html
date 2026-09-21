@@ -1,0 +1,11 @@
+<nav aria-label="{{ T "site" }}" class="fallback-menu">
+  <a class="home-link" href="{{ .Page.Site.Home.RelPermalink }}"{{ if .Page.IsHome }} aria-current="page"{{ end }}>{{ if .Settings.icons }}{{ partial "sidera/icon.html" "home" }}{{ end }}{{ T "overview" }}</a>
+  {{ partial "sidera/collections.html" . }}
+  <ul class="page-nav">
+    {{- range .Page.Site.RegularPages.ByTitle -}}
+      {{- if not (partial "collection-owner.html" .) -}}
+        <li><a href="{{ .RelPermalink }}"{{ if eq . $.Page }} aria-current="page"{{ end }}>{{ if $.Settings.icons }}{{ partial "sidera/icon.html" "page" }}{{ end }}{{ .Title }}</a></li>
+      {{- end -}}
+    {{- end -}}
+  </ul>
+</nav>

@@ -1,0 +1,11 @@
+{{- $current := .current -}}
+{{- with partial "docs/children.html" .node -}}
+<ul>
+{{- range . -}}
+  {{- $children := partial "docs/children.html" . -}}
+  <li class="tree-node"><div class="tree-row"><a data-doc-path="{{ .Path }}" href="{{ .RelPermalink }}"{{ if eq . $current }} aria-current="page"{{ else if .IsAncestor $current }} aria-current="location"{{ end }}>{{ .Title }}</a></div>
+    {{- if $children -}}<details class="tree-branch"{{ if or (eq . $current) (.IsAncestor $current) }} open{{ end }}><summary aria-label="{{ T "toggle_branch" (dict "title" .Title) }}"><span aria-hidden="true">›</span></summary>{{ partial "sidera/docs-tree.html" (dict "node" . "current" $current) }}</details>{{- end -}}
+  </li>
+{{- end -}}
+</ul>
+{{- end -}}

@@ -1,0 +1,17 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+{{- $kind := "" -}}{{- with $owner -}}{{- $kind = partial "collection-kind.html" .Params.collection -}}{{- end -}}
+  {{- $pages := $page.Site.RegularPages -}}
+  {{- with $owner -}}
+    {{- $pages = slice -}}{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+    {{- if eq $kind "docs" -}}
+      {{- range $page.Site.Pages -}}{{- if and .IsSection (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- with first (int $s.recent_count) (partial "lists/order.html" (dict "pages" $pages "order" "modification" "pins" false)) -}}
+    <section class="recent-panel" aria-label="{{ T "recent_updates" }}"><h2 class="section-heading nav-heading">{{ T "recent_updates" }}</h2>
+      <p class="muted recent-scope">{{ if $owner }}{{ T "recent_explanation" }}{{ else }}{{ T "recent_global" }}{{ end }}</p>
+      <ul id="recent-updates{{ if eq $ctx.Region "right" }}-right{{ end }}" data-recent>
+        {{- range . -}}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a><span>{{ if .Lastmod.IsZero }}{{ T "undated" }}{{ else }}{{ time.Format ":date_medium" .Lastmod }}{{ end }}</span></li>{{- end -}}
+      </ul>
+    </section>
+  {{- end -}}

@@ -1,0 +1,12 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+  {{- with $s.profile -}}
+    {{- $menu := "" -}}{{- with .menu -}}{{- $menu = partial "sidera/menu.html" (merge $ctx (dict "Name" .)) -}}{{- end -}}
+    {{- if or .title .text .image (strings.TrimSpace $menu) -}}
+      <section class="profile">
+        {{ with .image }}<img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="" width="64" height="64">{{ end }}
+        {{ with .title }}<h2 class="nav-heading">{{ . }}</h2>{{ end }}
+        {{ with .text }}<div class="authored-text">{{ $page.RenderString (dict "display" "block") . }}</div>{{ end }}
+        {{ $menu }}
+      </section>
+    {{- end -}}
+  {{- end -}}

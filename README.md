@@ -4,32 +4,30 @@ Sidera — A Hugo theme for blogs, notebooks, and connected knowledge. Inspired 
 
 ## Development status
 
-P2-A establishes a responsive reading shell over the verified Hugo collection
-proof: peer collection navigation, notebook tag hierarchy, shared article/list/tag
-surfaces and native pagination. It is a reviewable visual foundation, not a complete
-publishing theme or an official Stellar port. P2-B adds dark/light/system appearance
-and ordinary reading refinements; P2-C supplies native English/Chinese UI. P2-D
-consolidates the supported contract and readiness evidence, without a redesign.
-P2 still needs substantive Stellar-referenced visual work and native theme
-customization; earlier technical checks do not establish visual completion.
-P2-W adds the native docs/page-tree proof and optional sample described in
-[DOCS.md](DOCS.md). Distribution licensing remains a separate gate. No search/comment control is
-supplied for unimplemented features, and no font bundling is planned in P2.
+P2-F implements the approved recognizable shell and native customization baseline:
+left-anchored soft-glass identity/navigation, bounded compact main, optional right
+region, complete notes/docs trees, native menus and scoped components. See
+[SHELL.md](SHELL.md) for the **implemented** settings and extensions. P2-A–W's
+organization, appearance, localization and opt-in docs foundations remain intact.
+Cards/taxonomy browsing and full configurable footers are still G/H work; this is
+not whole-theme completion, a production migration or an official Stellar port.
+Distribution licensing is a separate unresolved gate.
 
 ## Visual foundation and provenance
 
-- Native CSS in `assets/css/sidera.css`: ink/slate surfaces, mint links, readable
-  metadata, 18px prose and a 65ch maximum prose measure. Local WenKai/Iowan/Georgia reading
-  stack, Avenir/Trebuchet UI and Source Code Pro/Menlo code; no font downloads.
-- One responsive rail, sticky/scrollable on desktop, an in-flow native disclosure
-  below 900px. A tiny `navigation.js` sets its initial breakpoint state and handles
-  breakpoint changes; without JS the menu stays open. No modal or focus trap.
-- Main article, collection cards, plain-text list excerpts, scoped tag ancestors,
-  native TOC when headings exist, recent updates and one native paginator. Transparent
-  article images have a neutral pale backing, not automatic theme-aware inversion.
-- Site owns content, titles, collections, policies and routes. The theme consumes
-  existing Page/owner/tag helpers unchanged. Visual tokens are implementation values,
-  not a new settings API. Ordinary Hugo site-template/asset overrides remain possible.
+- Native CSS: neutral charcoal surfaces, cyan hierarchy, 18px prose in a 696px
+  main region (656px inner prose), local WenKai UI/reading and explicit portable
+  Helvetica Neue/PingFang/Arial fallback. Local Source Code Pro/Menlo code.
+- Optional 288px left and independent right regions. In-flow right disclosure
+  below 1231px, left below 761px. No-JS leaves navigation open; no focus trap.
+- Original fixed inline icons and optional local identity/profile images. No
+  font/icon framework, downloads, remote backgrounds or integration placeholders.
+- Site/language → nearest owner → Page presence semantics are documented with
+  native cascade caveats; ordered region arrays/maps replace completely. Same
+  full shell for standalone pages; compact is an explicit override.
+- Shared ordinary reading, local wide-code/table scrolling, native TOC, meaningful
+  current/ancestor navigation and one paginator per applicable list. Card/date/
+  footer finishing work is explicitly not considered complete in F.
 
 Stellar 1.44.0 is a **visual reference**: sidebar/main composition, layered cards,
 notebook classification navigation. GoCalf's configuration confirms dark presentation,
@@ -43,8 +41,8 @@ No additional build or runtime dependency has been introduced.
 ## Appearance and ordinary reading
 
 The initial/default appearance is **dark**, irrespective of OS preference. The
-native labeled Appearance select is in the collection navigation (open “Browse
-collections” on mobile). Dark and Light are explicit choices; System follows live
+native labeled Appearance select is in the left navigation (open “Browse
+collections & tags” on mobile), or the compact header when left is absent. Dark and Light are explicit choices; System follows live
 `prefers-color-scheme` changes. A small script inlined from `assets/js/appearance.js`
 runs before the stylesheet/body, then installs the control after DOM readiness.
 It remembers a valid choice in the origin's `sidera-appearance` localStorage key.

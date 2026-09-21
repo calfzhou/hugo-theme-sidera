@@ -22,8 +22,9 @@ use its `.nvmrc` Node 24.12.0 and installed Chrome (override `CHROME_BIN` if nee
 The collection overview supplied by `layouts/home.html` demonstrates peers; it
 is **not** a decision about a real site's final homepage. Overrides should preserve
 native UI translations, one paginator per list, ownership and namespace checks.
-CSS tokens are implementation values, not a promised settings API. There is no
-widget registry, theme-specific global configuration framework or custom menu API.
+The implemented [shell contract](SHELL.md) adds native menu selection, scoped fixed
+components, CSS tokens and small native override hooks. No widget registry or
+parallel menu engine is introduced.
 
 ## Required site policy versus theme defaults
 
@@ -103,7 +104,7 @@ Publication uses native PublishDate descending, modification uses Lastmod descen
 ties use Title then logical Path ascending. Title order uses Title/Path. Boolean
 article `params.pinned = true` partitions the selected result before pagination;
 pins consume slots, spill when necessary, and appear once across the pager chain.
-Recent updates is a separate whole-collection top five by Lastmod/Title/Path,
+Recent updates is a configurable region component, default top five by Lastmod/Title/Path,
 independent of pins and current pager. Counts always cover the complete union.
 There are no numeric pin ranks or repeated-pin quotas.
 
@@ -154,7 +155,8 @@ not established. Do not silently adopt those limits as real-site authoring chang
 
 English/Chinese light/dark desktop/mobile checks and keyboard/no-JS/storage/System
 fallbacks are Chromium/macOS evidence, not full accessibility/browser certification.
-Fonts are only local/system stacks; no fonts, icons or vendor libraries are bundled.
+Fonts are local/system stacks; no fonts or vendor libraries are bundled. F includes
+original geometric inline icons and a small optional original SVG mark.
 Restrictive CSP must allow the generated inline appearance script hash or use a
 site override. Rich source features (links/backlinks, code-file tools, search,
 math/diagrams/embeds, comments/feeds) remain P3, not a promised P2 compatibility layer.

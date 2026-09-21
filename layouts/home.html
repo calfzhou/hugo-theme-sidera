@@ -1,27 +1,4 @@
 {{ define "main" }}
-  <header class="view-header">
-    <p class="eyebrow">{{ T "collection_overview" }}</p>
-    <h1>{{ .Title }}</h1>
-    <div class="intro prose">{{ .Content }}</div>
-  </header>
-  <h2 class="section-heading">{{ T "collections" }}</h2>
-  <ul id="collections" class="collection-grid">
-    {{ range (where site.Pages "Kind" "section").ByTitle }}
-      {{ if .Params.collection }}
-        <li class="collection-card">
-          <span class="eyebrow">{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</span>
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <p>{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
-        </li>
-      {{ end }}
-    {{ end }}
-  </ul>
-  <h2 class="section-heading">{{ T "standalone_pages" }}</h2>
-  <ul id="standalone" class="standalone-list">
-    {{ range site.RegularPages.ByTitle }}
-      {{ if not (partial "collection-owner.html" .) }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-      {{ end }}
-    {{ end }}
-  </ul>
+  {{ $content := partial "views/home.html" . }}
+  {{ partial "sidera/shell.html" (dict "Page" . "Content" $content) }}
 {{ end }}

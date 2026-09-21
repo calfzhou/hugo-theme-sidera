@@ -1,0 +1,22 @@
+{{- $page := .Page -}}
+{{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings -}}
+{{- $left := partial "sidera/region.html" (merge $ctx (dict "Region" "left")) -}}
+{{- $right := partial "sidera/region.html" (merge $ctx (dict "Region" "right")) -}}
+{{- $hasLeft := ne (strings.TrimSpace $left) "" -}}{{- $hasRight := ne (strings.TrimSpace $right) "" -}}
+<div class="site-shell{{ if $hasLeft }} has-left{{ end }}{{ if $hasRight }} has-right{{ end }}">
+  {{ if $hasLeft }}
+    {{ partial "sidebar.html" (dict "Context" $ctx "Content" $left) }}
+  {{ else }}
+    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ partial "sidera/appearance.html" . }}</div>
+  {{ end }}
+  {{ if $hasRight }}
+    <aside class="right-region" aria-label="{{ T "page_context" }}">
+      <details class="context-menu" open><summary>{{ T "page_context" }}</summary><div class="navigation-content">{{ $right }}</div></details>
+    </aside>
+  {{ end }}
+  <div class="reading-column">
+    <main id="main" tabindex="-1">{{ .Content }}</main>
+    <footer class="site-footer">{{ T "built_with" }}</footer>
+  </div>
+</div>
