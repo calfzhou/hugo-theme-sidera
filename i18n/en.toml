@@ -27,7 +27,7 @@ other = "notes"
 other = "Collection"
 
 [notebook_tags]
-other = "Notes tags"
+other = "Tags"
 
 [all_tags_in]
 other = "All tags in {{ .title }}"
@@ -83,9 +83,6 @@ other = "Overview"
 [tag_hierarchy]
 other = "Tag hierarchy"
 
-[collection_tags]
-other = "{{ .title }} · Tags"
-
 [order_publication]
 other = "Newest published · Pins first"
 
@@ -138,14 +135,6 @@ other = "Last"
 one = "{{ .number }} article"
 other = "{{ .number }} articles"
 
-[notes_all]
-one = "{{ .number }} note, including untagged notes."
-other = "{{ .number }} notes, including untagged notes."
-
-[notes_subtags]
-one = "{{ .number }} note, including subtags."
-other = "{{ .number }} notes, including subtags."
-
 [collection_docs]
 other = "docs"
 
@@ -167,11 +156,15 @@ other = "{{ .number }} child pages"
 
 [categories]
 other = "Categories"
-[all_blogs]
-other = "All blogs"
 [recent_global]
 other = "Across this site, independent of pins."
 [toggle_branch]
 other = "Expand or collapse {{ .title }}"
 [page_context]
 other = "On this page & context"
+
+[all_content]
+other = "All content"
+[taxonomy_count]
+one = "{{ .number }} page"
+other = "{{ .number }} pages"

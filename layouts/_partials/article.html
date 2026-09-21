@@ -16,16 +16,20 @@
         <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
       {{ end }}
     </div>
-    {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "notebook") }}
-      {{ $model := partialCached "tags/model.html" $owner $owner.Path }}
-      {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-      <nav class="article-tag-hub" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "all_tags_in" (dict "title" $owner.Title) }}</a></nav>
-      <ul id="assigned-tags" class="tag-chips">
-        {{ range index $model.assigned .Path }}
-          {{ $tag := partial "tags/page.html" (dict "owner" $owner "slug" .slug) }}
-          <li><a href="{{ $tag.RelPermalink }}">{{ .key }}</a></li>
-        {{ end }}
-      </ul>
+    {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
+    {{ range $taxonomy := slice "tags" "categories" }}
+      {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}
+      {{ $direct := index $model.assigned $.page.Path }}
+      {{ if or $direct (and $owner (eq $taxonomy "tags")) }}
+        {{ $hub := false }}{{ with $owner }}{{ $hub = .Site.GetPage (printf "%s/%s" .Path $taxonomy) }}{{ end }}
+        {{ with $hub }}<nav class="article-tag-hub" aria-label="{{ if eq $taxonomy "tags" }}{{ T "notebook_tags" }}{{ else }}{{ T "categories" }}{{ end }}"><a href="{{ .RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ T "all_tags_in" (dict "title" $owner.Title) }}{{ else }}{{ $owner.Title }} · {{ T "categories" }}{{ end }}</a></nav>{{ end }}
+        <ul id="assigned-{{ $taxonomy }}" class="tag-chips">
+          {{ range $direct }}
+            {{ $target := partial "taxonomies/page.html" (dict "owner" (cond (not $hub) false $owner) "taxonomy" $taxonomy "key" .key "slug" .slug) }}
+            <li><a href="{{ $target.RelPermalink }}">{{ .key }}</a></li>
+          {{ end }}
+        </ul>
+      {{ end }}
     {{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}

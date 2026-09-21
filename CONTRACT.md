@@ -39,7 +39,13 @@ defaultContentLanguage = 'en'
 title = 'My site'
 timeZone = 'Asia/Shanghai'      # choose intentionally for source timestamps
 theme = 'sidera'
-disableKinds = ['taxonomy', 'term', 'RSS']
+disableKinds = ['RSS']
+[taxonomies]
+tag = 'tags'
+category = 'categories'
+[permalinks.term]
+tags = '/tags/:slug/'
+categories = '/categories/:slug/'
 
 [frontmatter]
 date = ['date', 'publishDate', 'pubdate', 'published']
@@ -52,8 +58,8 @@ disableAliases = true
 ```
 
 - `page` is a fixed reserved pagination namespace in the current validators.
-  Disabling aliases and global taxonomies/RSS matches the tested output contract;
-  notebook tag sections are **not** native taxonomy pages. Feed integration is not
+  Disabling pagination aliases and RSS matches the tested output contract; native tags/categories are enabled.
+  Collection-scoped taxonomy sections are projections over the same native assignments. Feed integration is not
   implemented. These are site policies, not theme defaults or claims that all
   other Hugo settings are invalid.
 - Date chains are site-owned, metadata-only: no Git/mtime/build-clock dates.
@@ -105,14 +111,14 @@ Recent updates is a configurable region component, default top five by Lastmod/T
 independent of pins and current pager. Counts always cover the complete union.
 There are no numeric pin ranks or repeated-pin quotas.
 
-## Notebook tags and routes
+## Native tags/categories and collection routes
 
-Write literal article `params.sidera.tags = ['science/quantum', 'science/experiments']`.
+Write literal article `tags = ['science/quantum', 'science/experiments']`.
 No per-article notebook ID, repeated ancestor tags, tag registry or generated-page
-authoring is required. Empty/missing tags are allowed; blogs have no scoped tag UI.
+authoring is required. Empty/missing assignments are allowed in every collection kind. [TAXONOMIES.md](TAXONOMIES.md) defines the shared native authoring, global/scoped views and hierarchy choices.
 
 - Slash separates hierarchy; lowercasing, trimming and collapsed spaces define
-  identity. Ancestors union/deduplicate notes within the nearest notebook only.
+  identity. Hierarchy (enabled by default) unions/deduplicates Pages globally or within the nearest collection; flat mode uses direct assignments.
 - Empty segments, `.`/`..`, backslashes, control characters, non-string elements,
   non-array tags, empty slugs and slug `page` are rejected. Slug collisions include
   implicit ancestors (`a b` vs `a-b`, `C++` vs `C#`).
@@ -120,7 +126,7 @@ authoring is required. Empty/missing tags are allowed; blogs have no scoped tag 
   normalization/transliteration is performed. Renaming a tag can change its URL.
 - Notebook paths use lowercase ASCII slug segments; roots follow content paths
   plus native language/baseURL prefixes, not custom root URL/slug overrides.
-- `<notebook>/tags/` and `<notebook>/page/` are reserved; `page/` is reserved under
+- `<collection>/tags/`, `<collection>/categories/` and `<collection>/page/` are reserved; `page/` is reserved under
   every paginated section. Authored routes, aliases and local static collisions
   fail validation. `params.sidera.tag_view`, `params.sidera.tag_key`, `params.sidera.tag_slug` are generated metadata, not an
   authoring API. Draft status never exempts invalid structural metadata.
@@ -176,3 +182,7 @@ All Sidera-defined fields now live under `params.sidera`, including menu-entry
 stay native. No old flat-field readers or aliases remain. Site-owned unrelated
 custom params are allowed; this namespace rule is about fields Sidera defines.
 See SHELL.md for migration of article defaults out of the old cascade examples.
+
+The shared native taxonomy follow-up supersedes earlier notes-only assignment and
+blog-only taxonomy recommendations. `tags`/`categories` are native fields, not
+Sidera params. [TAXONOMIES.md](TAXONOMIES.md) is the current taxonomy contract.

@@ -1,11 +1,22 @@
 {{- .EnableAllLanguages -}}
 {{- $nodes := newScratch -}}
-{{- $nodes.Set "routes" dict -}}
+{{- range slice "routes" "native" "identities" "native_collisions" -}}{{- $nodes.Set . dict -}}{{- end -}}
 {{- partial "tags/discover.html" (dict "owner" "" "nodes" $nodes "dir" "content") -}}
+{{- range $path, $conflict := $nodes.Get "native_collisions" -}}{{- errorf "Sidera native taxonomy path collision at %s: %s" $path $conflict -}}{{- end -}}
 {{- range $route, $node := $nodes.Get "routes" -}}
-  {{- $title := T "tags" -}}
-  {{- with $node.key -}}{{- $title = . -}}{{- end -}}
-  {{- $.AddPage (dict "kind" "section" "path" $route "title" $title
-    "layout" "notebook-tags"
-    "params" (dict "sidera" (dict "tag_view" true "tag_key" $node.key "tag_slug" $node.slug))) -}}
+  {{- $title := T $node.taxonomy -}}{{- with $node.key -}}{{- $title = . -}}{{- end -}}
+  {{- $.AddPage (dict "kind" "section" "path" $route "title" $title "layout" "taxonomy-scope"
+    "params" (dict "sidera" (dict "tag_view" true "tag_key" $node.key "tag_slug" $node.slug "tag_taxonomy" $node.taxonomy))) -}}
+{{- end -}}
+{{- range $path, $term := $nodes.Get "native" -}}
+  {{- /* Native authored term pages take precedence; don't shadow source content. */ -}}
+  {{- $nativePath := lower (replaceRE `\s` "-" $path) -}}
+  {{- if not (or (and site.Language.IsDefault (os.FileExists (printf "content/%s/_index.md" $nativePath))) (os.FileExists (printf "content/%s/_index.%s.md" $nativePath site.Language.Name))) -}}
+    {{- $page := dict "kind" "term" "path" (printf "%s/%s" $term.taxonomy $term.raw) "title" $term.raw "slug" (strings.TrimPrefix (printf "%s/" $term.taxonomy) $path) "params" (dict "sidera" (dict "inferred_term" true "term_key" (index (partial "tags/normalize.html" (dict "tags" (slice $term.raw) "source" $path)) 0).key)) -}}
+    {{- if findRE `[^\x00-\x7F]` $term.raw -}}
+      {{- $slugs := slice -}}{{- range split $term.raw "/" -}}{{- $slugs = $slugs | append (printf "u-%x" .) -}}{{- end -}}
+      {{- $page = merge $page (dict "slug" (delimit $slugs "/")) -}}
+    {{- end -}}
+    {{- $.AddPage $page -}}
+  {{- end -}}
 {{- end -}}

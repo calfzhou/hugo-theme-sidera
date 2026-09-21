@@ -4,7 +4,7 @@
   {{- with $owner -}}
     {{- $pages = slice -}}{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
     {{- if eq $kind "docs" -}}
-      {{- range $page.Site.Pages -}}{{- if and .IsSection (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+      {{- range $page.Site.Pages -}}{{- if and .IsSection (not .Params.sidera.tag_view) (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
     {{- end -}}
   {{- end -}}
   {{- with first (int $s.recent_count) (partial "lists/order.html" (dict "pages" $pages "order" "modification" "pins" false)) -}}

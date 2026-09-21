@@ -1,0 +1,24 @@
+{{ $taxonomy := .Data.Plural }}
+{{ $model := partialCached "taxonomies/model.html" (dict "owner" false "taxonomy" $taxonomy) "global" $taxonomy }}
+{{ $policy := partial "taxonomies/policy.html" false }}
+<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ .Content }}</div></header>
+{{ if eq .Kind "taxonomy" }}
+  {{ $roots := where (sort $model.nodes "key") "parent" "" }}
+  {{ $rootPages := slice }}{{ range $roots }}{{ $rootPages = $rootPages | append (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug)) }}{{ end }}
+  {{ $pager := .Paginate $rootPages $policy.size }}
+  <ul class="article-list taxonomy-index">
+    {{ range $pager.Pages }}
+      {{ $target := . }}{{ with index $model.nodes (partial "taxonomies/key.html" .) }}
+      <li class="article-card"><h2><a href="{{ $target.RelPermalink }}">{{ $target.Title }}</a></h2><p data-term-count="{{ len .pages }}">{{ T "taxonomy_count" (dict "count" (len .pages) "number" (lang.FormatNumber 0 (len .pages))) }}</p>
+      <div class="navigation-content">{{ partial "sidera/taxonomy-tree.html" (dict "Context" (dict "Page" $ "Owner" false "Region" "index" "Settings" (partialCached "sidera/settings.html" $ $.Path)) "model" $model "parent" .key) }}</div></li>
+    {{ end }}{{ end }}
+  </ul>
+  {{ partial "lists/navigation.html" $pager }}
+{{ else }}
+  {{ $key := partial "taxonomies/key.html" . }}
+  {{ $pages := slice }}{{ with index $model.nodes $key }}{{ $pages = .pages }}{{ end }}
+  <nav class="view-tools" aria-label="{{ T "tag_ancestors" }}"><a href="{{ (site.GetPage (printf "/%s" $taxonomy)).RelPermalink }}">{{ T $taxonomy }}</a>
+    {{ if $model.nested }}{{ $parts := split $key "/" }}{{ range seq (sub (len $parts) 1) }}{{ $ancestor := delimit (first . $parts) "/" }}{{ with index $model.nodes $ancestor }} / <a href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug)).RelPermalink }}">{{ $ancestor }}</a>{{ end }}{{ end }}{{ end }}
+  </nav>
+  {{ partial "lists/render.html" (dict "page" . "owner" false "pages" $pages "policy" (dict "order" "publication" "size" $policy.size) "show_owner" true "count_label" "taxonomy_count") }}
+{{ end }}

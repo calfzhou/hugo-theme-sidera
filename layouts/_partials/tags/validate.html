@@ -1,14 +1,18 @@
+{{- range $taxonomy := slice "tags" "categories" -}}
+  {{- if not (site.GetPage (printf "/%s" $taxonomy)) -}}{{- errorf "Sidera requires native %s taxonomy output; enable tag=tags/category=categories and remove taxonomy/term from disableKinds" $taxonomy -}}{{- end -}}
+{{- end -}}
 {{- /* Validate once after Hugo has assembled Pages. Adapter discovery separately
        guards source namespace collisions before AddPage can shadow content. */ -}}
-{{- $owners := where (where site.Pages "Kind" "section") "Params.sidera.collection" "in" (slice "notebook" "notes") -}}
+{{- $owners := where (where site.Pages "Kind" "section") "Params.sidera.collection" "in" (slice "blog" "notebook" "notes" "docs" "wiki") -}}
 {{- range $owners -}}
   {{- $owner := . -}}
   {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relLangURL -}}
-  {{- if ne .RelPermalink $expected -}}
+  {{- if and (eq (partial "collection-kind.html" .Params.sidera.collection) "notebook") (ne .RelPermalink $expected) -}}
     {{- errorf "P1B notebook route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
   {{- end -}}
-  {{- range slice "tags" "page" -}}
+  {{- range slice "tags" "categories" "page" -}}
     {{- $namespace := printf "%s%s/" $owner.RelPermalink . -}}
+    {{- if ne . "page" -}}{{- with site.GetPage (printf "%s/%s" $owner.Path .) -}}{{- $namespace = .RelPermalink -}}{{- end -}}{{- end -}}
     {{- range site.Pages -}}
       {{- if and .Params.sidera.tag_view .File (not .File.IsContentAdapter) -}}
         {{- errorf "P1B tag_view is reserved for generated pages: %s" .Path -}}
@@ -24,11 +28,11 @@
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- $model := partialCached "tags/model.html" . .Path -}}
-  {{- range $model.nodes -}}
-    {{- $page := partial "tags/page.html" (dict "owner" $owner "slug" .slug) -}}
-    {{- if ne $page.Params.sidera.tag_key .key -}}
-      {{- errorf "P1B rendered tag collision: %s (%s)" .key $owner.Path -}}
+  {{- range $taxonomy := slice "tags" "categories" -}}
+    {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $owner.Path $taxonomy -}}
+    {{- range $model.nodes -}}
+      {{- $page := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" .key "slug" .slug) -}}
+      {{- if ne $page.Params.sidera.tag_key .key -}}{{- errorf "P1B rendered tag collision: %s (%s)" .key $owner.Path -}}{{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

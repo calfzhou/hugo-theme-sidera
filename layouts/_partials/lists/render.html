@@ -1,10 +1,11 @@
 {{- /* Sole paginator creation site. Selection/sort/pins are complete BEFORE
        this first (cached) call. Navigation receives the Pager, never the Page. */ -}}
-{{ $policy := partial "lists/policy.html" .owner }}
+{{ $policy := partial "lists/policy.html" .owner }}{{ with .policy }}{{ $policy = . }}{{ end }}
 {{ $ordered := partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}
+{{ $countLabel := "article_count" }}{{ with .count_label }}{{ $countLabel = . }}{{ end }}
 {{ $pager := .page.Paginate $ordered $policy.size }}
 <div class="list-meta">
-  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ T "article_count" (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}</p>
+  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ T $countLabel (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}</p>
   <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ T (printf "order_%s" $policy.order) }}</p>
 </div>
 <ul id="articles" class="article-list">
@@ -12,6 +13,7 @@
     <li class="article-card">
       {{ if .Params.sidera.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      {{ if $.show_owner }}{{ with partial "collection-owner.html" . }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}{{ end }}
       <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
       <div class="card-dates">
         <span>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</span>

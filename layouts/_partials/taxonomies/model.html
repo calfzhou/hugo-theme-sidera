@@ -1,0 +1,42 @@
+{{- /* Native published Pages + direct assignments, never a term's recursive .Pages.
+      Hugo's parent term .Pages may contain duplicates or leak children in flat mode. */ -}}
+{{- $owner := .owner -}}{{- $taxonomy := .taxonomy -}}
+{{- $policy := partial "taxonomies/policy.html" $owner -}}
+{{- $nested := in $policy.hierarchy $taxonomy -}}
+{{- $nodes := dict -}}{{- $assigned := dict -}}{{- $all := slice -}}
+{{- range site.Pages -}}
+  {{- $page := . -}}
+  {{- if and (in (slice "page" "section") .Kind) (not .Params.sidera.tag_view) -}}
+    {{- $belongs := or (not $owner) (eq (partial "collection-owner.html" .) $owner) -}}
+    {{- if $belongs -}}
+      {{- $values := slice -}}{{- if isset .Params $taxonomy -}}{{- $values = index .Params $taxonomy -}}{{- end -}}
+      {{- $direct := partial "tags/normalize.html" (dict "tags" $values "source" .Path) -}}
+      {{- if or .IsPage $direct (and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "docs") (ne . $owner)) -}}
+        {{- $all = $all | append . -}}
+      {{- end -}}
+      {{- $assigned = merge $assigned (dict .Path $direct) -}}
+      {{- range $direct -}}
+        {{- $keys := split .key "/" -}}{{- $slugs := split .slug "/" -}}
+        {{- $depths := slice (len $keys) -}}{{- if $nested -}}{{- $depths = seq (len $keys) -}}{{- end -}}
+        {{- range $depths -}}
+          {{- $key := delimit (first . $keys) "/" -}}{{- $slug := delimit (first . $slugs) "/" -}}
+          {{- $parent := "" -}}{{- if $nested -}}{{- $parent = delimit (first (sub . 1) $keys) "/" -}}{{- end -}}
+          {{- $node := dict "key" $key "slug" $slug "parent" $parent "pages" slice -}}
+          {{- with index $nodes $key -}}{{- $node = . -}}{{- end -}}
+          {{- $nodes = merge $nodes (dict $key (merge $node (dict "pages" ($node.pages | append $page | uniq)))) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Native authored empty terms are legitimate, not made-up destinations. */ -}}
+{{- if not $owner -}}
+  {{- range where site.Pages "Kind" "term" -}}
+    {{- if and (eq .Data.Plural $taxonomy) .File (not .File.IsContentAdapter) -}}
+      {{- range partial "tags/normalize.html" (dict "tags" (slice .Data.Term) "source" .Path) -}}
+        {{- if not (isset $nodes .key) -}}{{- $nodes = merge $nodes (dict .key (dict "key" .key "slug" .slug "parent" "" "pages" slice)) -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "nodes" $nodes "assigned" $assigned "pages" $all "taxonomy" $taxonomy "nested" $nested) -}}

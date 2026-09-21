@@ -4,6 +4,7 @@
 {{- $policy := partial "docs/policy.html" . -}}
 {{- /* Hugo silently coalesces foo.md with foo/_index.md before Pages exist.
      Guard only companions of this native source Page, not a parallel tree loader. */ -}}
+{{- if .IsSection -}}
 {{- with .File -}}
   {{- $dir := path.Dir .Filename -}}
   {{- $suffixes := slice (printf ".%s.md" $parent.Site.Language.Name) -}}
@@ -20,10 +21,11 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
+{{- end -}}
 {{- $eligible := slice -}}
 {{- $byName := dict -}}
 {{- range .Pages -}}
-  {{- if and (eq (partial "collection-owner.html" .) $owner) .RelPermalink -}}
+  {{- if and (not .Params.sidera.tag_view) (eq (partial "collection-owner.html" .) $owner) .RelPermalink -}}
     {{- $name := strings.TrimPrefix (printf "%s/" $parent.Path) .Path -}}
     {{- if strings.Contains $name "/" -}}
       {{- errorf "P2W docs require a branch _index.md at each intermediate directory: %s (parent %s)" .Path $parent.Path -}}
@@ -55,7 +57,7 @@
     {{- end -}}
     {{- if not $child -}}
       {{- errorf "P2W unknown children.order child %q: %s (not found in any configured language; check spelling)" $name $parent.Path -}}
-    {{- else if or (ne $child.Path $path) (ne $child.Parent.Path $parent.Path) (ne (partial "collection-owner.html" $child).Path $owner.Path) -}}
+    {{- else if or $child.Params.sidera.tag_view (ne $child.Path $path) (ne $child.Parent.Path $parent.Path) (ne (partial "collection-owner.html" $child).Path $owner.Path) -}}
       {{- errorf "P2W children.order target is not a direct child of this collection: %s -> %s" $parent.Path $name -}}
     {{- else -}}
       {{- if $child.IsSection -}}{{- $valid := partial "docs/children.html" $child -}}{{- end -}}

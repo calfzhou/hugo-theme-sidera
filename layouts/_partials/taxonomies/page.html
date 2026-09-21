@@ -1,0 +1,10 @@
+{{- $taxonomy := .taxonomy -}}{{- $page := false -}}
+{{- if .owner -}}
+  {{- $path := printf "%s/%s" .owner.Path $taxonomy -}}{{- with .slug -}}{{- $path = printf "%s/%s" $path . -}}{{- end -}}
+  {{- $page = site.GetPage $path -}}
+{{- else if not .key -}}{{- $page = site.GetPage (printf "/%s" $taxonomy) -}}
+{{- else -}}
+  {{- $page = index (partialCached "taxonomies/targets.html" $taxonomy $taxonomy) .key -}}
+{{- end -}}
+{{- if not $page -}}{{- errorf "Sidera missing %s view (%s); ancestor discovery currently requires local literal TOML/YAML content" $taxonomy (.key | default .slug) -}}{{- end -}}
+{{- return $page -}}

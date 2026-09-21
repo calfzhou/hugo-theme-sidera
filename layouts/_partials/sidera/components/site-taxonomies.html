@@ -1,0 +1,4 @@
+{{- $ctx := . -}}
+{{- $links := slice -}}
+{{- range .Settings.taxonomy_navigation -}}{{- with $ctx.Page.Site.GetPage (printf "/%s" .) -}}{{- if eq .Kind "taxonomy" -}}{{- $links = $links | append . -}}{{- end -}}{{- end -}}{{- end -}}
+{{- with $links -}}<nav class="taxonomy-navigation" aria-label="{{ T "all_content" }}"><h2 class="nav-heading">{{ T "all_content" }}</h2><ul>{{ range . }}<li><a href="{{ .RelPermalink }}"{{ if eq . $ctx.Page }} aria-current="page"{{ else if .IsAncestor $ctx.Page }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ partial "sidera/icon.html" "tag" }}{{ end }}{{ T .Data.Plural }}</a></li>{{ end }}</ul></nav>{{- end -}}

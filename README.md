@@ -9,7 +9,7 @@ left-anchored soft-glass identity/navigation, bounded compact main, optional rig
 region, complete notes/docs trees, native menus and scoped components. See
 [SHELL.md](SHELL.md) for the **implemented** settings and extensions. P2-A–W's
 organization, appearance, localization and opt-in docs foundations remain intact.
-Cards/taxonomy browsing and full configurable footers are still G/H work; this is
+Finished cards and full configurable footers are still G/H work; this is
 not whole-theme completion, a production migration or an official Stellar port.
 Distribution licensing is a separate unresolved gate.
 
@@ -110,3 +110,10 @@ fields outright; there are no compatibility readers. Native Hugo fields and
 non-Sidera site params stay native. Byline/update defaults belong on the collection
 root (Page → owner → Site resolution), avoiding native cascade table replacement
 when a note authors its own tags. See [CONTRACT.md](CONTRACT.md) and [SHELL.md](SHELL.md).
+
+## Shared native taxonomies
+
+[Tags and categories](TAXONOMIES.md) now use the same native top-level fields for
+blogs, notes, docs and standalone pages. Global/scoped views, configurable hierarchy,
+counts, pagination and article links are implemented. A regular page/bundle can move
+between collection folders without rewriting its taxonomy metadata.

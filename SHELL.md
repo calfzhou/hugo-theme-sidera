@@ -2,14 +2,13 @@
 
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
 configuration API. The collection-overview home remains the default. Cards,
-selected-collection home, blog taxonomy index/result templates and configurable
-article/site footers are later P2 work—not installed settings in this guide.
+selected-collection home and configurable article/site footers are later P2 work—not installed settings in this guide.
 
 ## Defaults and configuration
 
 All **Sidera-defined parameters** use `params.sidera`, in site/language configuration,
 page front matter, native cascades and native menu-entry extension params. This
-includes collection markers, notes tags, list policies, pins, article metadata,
+includes collection markers, list policies, pins, article metadata,
 `children` and private generated tag metadata (see CONTRACT.md / DOCS.md).
 There are no legacy aliases or dual readers. Native Hugo metadata, menus and
 native taxonomy assignments remain native; unrelated site-owned params need not
@@ -19,21 +18,21 @@ use Sidera's namespace. `notes`/`notebook` and `docs`/`wiki` remain kind synonym
 | --- | --- |
 | `byline` | `''`; escaped text, Page → nearest owner → current-language Site |
 | `show_updated` | `false`; boolean, same per-key fallback, explicit false preserved |
-| `left` | Notes: `['menu','notes-tags','recent']`; blog: `['menu','blog-taxonomies','recent']`; docs: `['menu','docs-tree']`; other: `['menu','profile']` |
+| `left` | Notes/blog: `['menu','taxonomies','recent']`; docs: `['menu','docs-tree','taxonomies']`; other: `['menu','profile']` |
 | `right` | `['toc']`; disappears unless a rendered reading body has headings |
-| `menu` | `'primary'`; a missing/empty native menu gets Home + discovered collections + ownerless regular pages; `''` clears it |
+| `menu` | `'primary'`; a missing/empty native menu gets Home + discovered collections + ownerless regular pages + global taxonomy links; `''` clears it |
 | `links_menu` | `''`; name of a native menu; absent/empty menu emits nothing |
 | `text` | `''`; authored Markdown via native Page.RenderString |
 | `profile` | `{}`; optional `title`, `text` (Markdown), `image`, `menu` strings; replaced as a whole map |
 | `identity` | `{}`; site/language only: optional `title` (otherwise native site title), `subtitle`, local `image` |
 | `recent_count` | `5`; integer 1–10, never zero-as-default |
-| `blog_taxonomies` | `['tags','categories']`; reorders/hides navigation to actual native `blog_tags` / `blog_categories` taxonomy Pages |
+| `taxonomy_navigation` | `['tags','categories']`; reorders/hides native/scoped taxonomy navigation, not assignments |
 | `icons` | `true`; `false` hides decorative icons, not text |
 | `icon` | Optional fixed icon name on a collection Page, used in auto/native navigation |
-| `tag_icons` | `{}`; normalized full notes-tag keys mapped to fixed icon names; whole-map replacement |
+| `tag_icons` | `{}`; normalized full taxonomy keys mapped to fixed icon names; whole-map replacement |
 
-Fixed region components: `menu`, `collections`, `notes-tags`, `docs-tree`,
-`blog-taxonomies`, `toc`, `recent`, `profile`, `text`, `links`. Unknown names,
+Fixed region components: `menu`, `collections`, `taxonomies`, `docs-tree`,
+`site-taxonomies`, `toc`, `recent`, `profile`, `text`, `links`. Unknown names,
 duplicates **within one list**, malformed settings and invalid counts diagnose.
 Deliberately placing a component in both regions is valid; generated IDs stay unique.
 Components with no data emit nothing. A region with no rendered component/hook
@@ -69,7 +68,7 @@ Each key resolves independently from:
 4. Theme page-kind default.
 
 Arrays replace, never append. `false` and `[]` disable a region (also supported for
-`blog_taxonomies`); `true` is invalid. Empty strings clear text/menu settings.
+`taxonomy_navigation`); `true` is invalid. Empty strings clear text/menu settings.
 Maps replace entirely at the resolver boundary; `{}` clears a profile. Identity
 is deliberately site/language-owned. Native language-config merging happens before
 this resolver; it does not reconstruct the origin of native merged params.
@@ -81,7 +80,7 @@ ownership is not a cascade firewall. Prefer settings on the owning root, with
 page-local exceptions. Source-local `children.order` remains the separate proven
 P2-W exception; the shell never reparses page source to invent inheritance.
 
-**Namespace migration:** a note's local `sidera.tags` table also replaces a cascaded
+**Namespace migration:** a note's local `sidera` table also replaces a cascaded
 `sidera` table. Put collection-wide `byline`/`show_updated` defaults directly on the
 marked owner's `params.sidera`; the existing per-key resolver supplies them without
 duplicating defaults on each article. Site values work for standalone pages. This
@@ -94,7 +93,7 @@ still work on pages without a replacing table, and for unrelated native fields.
 ```toml
 # Collection root front matter; keep its existing native/custom fields.
 [params.sidera]
-left = ['menu', 'notes-tags']
+left = ['menu', 'taxonomies']
 right = ['recent', 'profile']
 recent_count = 3
 [params.sidera.profile]
@@ -145,11 +144,10 @@ features. `links`/profile menus are absent when the selected menu is absent.
 - **TOC:** native headings, only with the rendered article/docs body; no TOC on
   later docs child pagers whose body is intentionally omitted. Full standalone
   support. A right disclosure moves in flow above main content on narrow screens.
-- **Blog taxonomy navigation:** links only to actual native taxonomy Pages;
-  ordinary site menus can also point to actual native terms. F does not install
-  G's taxonomy index/result templates, assignments validation, counts or pagers.
-  Enabling taxonomies now requires site-owned templates; do not mistake navigation
-  support for completion of blog-taxonomy browsing. The showcase remains default-off.
+- **Native taxonomies:** shared `tags`/`categories` on every content kind, global
+  native indexes/results plus owner-scoped projections. See [TAXONOMIES.md](TAXONOMIES.md)
+  for hierarchy/flat policy, deduplicated counts and pagination. These are now
+  functional pages, not only navigation to future taxonomy templates.
 
 ## Assets, escaping and extensions
 
@@ -198,3 +196,8 @@ Desktop at 1440: left x32/w288, main x384/w696, optional right x1112.
 Below 1231px right becomes an in-flow native disclosure; below 761px left does too.
 No JS leaves navigation open and dark readable; appearance controls stay hidden.
 No modal/focus trap, fake search, remote background or persistent review server.
+
+Native top-level `tags` and `categories` are assignments, not custom settings.
+Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
+are site/owner choices described in TAXONOMIES.md; individual article exceptions
+do not change the identity/membership rules of their owner’s taxonomy views.

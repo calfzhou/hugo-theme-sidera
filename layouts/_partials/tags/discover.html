@@ -1,67 +1,54 @@
-{{- /* Walk local Markdown metadata, respecting leaf bundles and marked owners.
-       Never read Site.Pages here: content adapters run before it is available. */ -}}
-{{- $owner := .owner -}}
-{{- $nodes := .nodes -}}
-{{- $dir := .dir -}}
+{{- $owner := .owner -}}{{- $nodes := .nodes -}}{{- $dir := .dir -}}
 {{- $local := partial "tags/files.html" $dir -}}
 {{- with index $local.files "_index.md" -}}
-  {{- $file := path.Join $dir . -}}
-  {{- if os.FileExists $file -}}
-    {{- $fm := partial "tags/frontmatter.html" $file -}}
-    {{- with $fm.params.sidera.collection -}}
-      {{- $owner = "" -}}
-      {{- if eq (partial "collection-kind.html" .) "notebook" -}}
-        {{- $owner = strings.TrimPrefix "content/" $dir -}}
-        {{- if not (findRE `^[a-z0-9-]+(/[a-z0-9-]+)*$` $owner) -}}
-          {{- errorf "P1B notebook content path must use lowercase ASCII slug segments: %s" $owner -}}
-        {{- end -}}
-        {{- range os.ReadDir $dir -}}
-          {{- $name := lower .Name -}}
-          {{- range $logical, $physical := $local.files -}}
-            {{- if eq (lower $physical) $name -}}{{- $name = lower $logical -}}{{- end -}}
-          {{- end -}}
-          {{- if in (slice "tags" "tags.md" "page" "page.md") $name -}}
-            {{- errorf "P1B reserved notebook source namespace: %s" (path.Join $dir .Name) -}}
-          {{- end -}}
-        {{- end -}}
-        {{- range slice "tags" "page" -}}
-          {{- if os.FileExists (printf "static/%s/%s" $owner .) -}}
-            {{- errorf "P1B reserved notebook static namespace: static/%s/%s" $owner . -}}
-          {{- end -}}
-        {{- end -}}
-        {{- $nodes.SetInMap "routes" (printf "%s/tags" $owner) (dict "key" "" "slug" "") -}}
-      {{- end -}}
+  {{- $fm := partial "tags/frontmatter.html" (path.Join $dir .) -}}
+  {{- with $fm.params.sidera.collection -}}
+    {{- $owner = strings.TrimPrefix "content/" $dir -}}
+    {{- if and (eq (partial "collection-kind.html" .) "notebook") (not (findRE `^[a-z0-9-]+(/[a-z0-9-]+)*$` $owner)) -}}{{- errorf "P1B notebook content path must use lowercase ASCII slug segments: %s" $owner -}}{{- end -}}
+    {{- range os.ReadDir $dir -}}
+      {{- $name := lower .Name -}}
+      {{- range $logical, $physical := $local.files -}}{{- if eq (lower $physical) $name -}}{{- $name = lower $logical -}}{{- end -}}{{- end -}}
+      {{- if in (slice "tags" "tags.md" "categories" "categories.md" "page" "page.md") $name -}}{{- errorf "P1B reserved notebook source namespace: %s" (path.Join $dir .Name) -}}{{- end -}}
     {{- end -}}
+    {{- range slice "tags" "categories" "page" -}}
+      {{- if os.FileExists (printf "static/%s/%s" $owner .) -}}{{- errorf "P1B reserved notebook static namespace: static/%s/%s" $owner . -}}{{- end -}}
+    {{- end -}}
+    {{- range slice "tags" "categories" -}}{{- $nodes.SetInMap "routes" (printf "%s/%s" $owner .) (dict "key" "" "slug" "" "taxonomy" .) -}}{{- end -}}
   {{- end -}}
 {{- end -}}
-{{- $leaf := $local.leaf -}}
 {{- range os.ReadDir $dir -}}
-  {{- $file := path.Join $dir .Name -}}
-  {{- if .IsDir -}}
-    {{- if not $leaf -}}
-      {{- partial "tags/discover.html" (dict "owner" $owner "nodes" $nodes "dir" $file) -}}
-    {{- end -}}
-  {{- end -}}
+  {{- if and .IsDir (not $local.leaf) -}}{{- partial "tags/discover.html" (dict "owner" $owner "nodes" $nodes "dir" (path.Join $dir .Name)) -}}{{- end -}}
 {{- end -}}
 {{- range $name, $physical := $local.files -}}
-  {{- $file := path.Join $dir $physical -}}
-  {{- if and $owner (ne $name "_index.md") (or (not $leaf) (eq $name "index.md")) -}}
-    {{- $fm := partial "tags/frontmatter.html" $file -}}
-    {{- $tags := slice -}}
-    {{- if isset ($fm.params.sidera | default dict) "tags" -}}{{- $tags = $fm.params.sidera.tags -}}{{- end -}}
-    {{- range partial "tags/normalize.html" (dict "tags" $tags "source" $file) -}}
-      {{- $keys := split .key "/" -}}
-      {{- $slugs := split .slug "/" -}}
-      {{- range seq (len $keys) -}}
-        {{- $key := delimit (first . $keys) "/" -}}
-        {{- $slug := delimit (first . $slugs) "/" -}}
-        {{- $route := printf "%s/tags/%s" $owner $slug -}}
-        {{- with index ($nodes.Get "routes") $route -}}
-          {{- if ne .key $key -}}
-            {{- errorf "P1B tag slug collision at %s: %q and %q (%s)" $route .key $key $file -}}
+  {{- if or (not $local.leaf) (eq $name "index.md") -}}
+    {{- $file := path.Join $dir $physical -}}{{- $fm := partial "tags/frontmatter.html" $file -}}
+    {{- range $taxonomy := slice "tags" "categories" -}}
+      {{- $terms := slice -}}{{- if isset $fm $taxonomy -}}{{- $terms = index $fm $taxonomy -}}{{- end -}}
+      {{- $normalized := partial "tags/normalize.html" (dict "tags" $terms "source" $file) -}}
+      {{- /* Generate native direct/ancestor term Pages; only Unicode publication paths
+             are ASCII encoded to avoid macOS composed/decomposed file collisions. */ -}}
+      {{- range $terms -}}
+        {{- if eq (printf "%T" .) "string" -}}
+          {{- $parts := split . "/" -}}
+          {{- range seq (len $parts) -}}
+            {{- $raw := delimit (first . $parts) "/" -}}
+            {{- $nativePath := lower (replaceRE `\s` "-" (printf "%s/%s" $taxonomy $raw)) -}}
+            {{- $key := (index (partial "tags/normalize.html" (dict "tags" (slice $raw) "source" $file)) 0).key -}}
+            {{- with index ($nodes.Get "native") $nativePath -}}{{- if ne .key $key -}}{{- $nodes.SetInMap "native_collisions" $nativePath (printf "%s / %s" .key $key) -}}{{- end -}}{{- end -}}
+            {{- $nodes.SetInMap "native" $nativePath (dict "taxonomy" $taxonomy "raw" $raw "key" $key) -}}
           {{- end -}}
         {{- end -}}
-        {{- $nodes.SetInMap "routes" $route (dict "key" $key "slug" $slug) -}}
+      {{- end -}}
+      {{- range $normalized -}}
+        {{- $keys := split .key "/" -}}{{- $slugs := split .slug "/" -}}
+        {{- range seq (len $keys) -}}
+          {{- $key := delimit (first . $keys) "/" -}}{{- $slug := delimit (first . $slugs) "/" -}}
+          {{- /* Same normalized scope-safe identities for every content kind. */ -}}
+          {{- $identity := printf "%s/%s/%s" $owner $taxonomy $slug -}}
+          {{- with index ($nodes.Get "identities") $identity -}}{{- if ne . $key -}}{{- errorf "P1B tag slug collision at %s: %q and %q (%s)" $identity . $key $file -}}{{- end -}}{{- end -}}
+          {{- $nodes.SetInMap "identities" $identity $key -}}
+          {{- if $owner -}}{{- $nodes.SetInMap "routes" (printf "%s/%s/%s" $owner $taxonomy $slug) (dict "key" $key "slug" $slug "taxonomy" $taxonomy) -}}{{- end -}}
+        {{- end -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

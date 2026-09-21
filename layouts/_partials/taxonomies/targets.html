@@ -1,0 +1,5 @@
+{{- $taxonomy := . -}}{{- $targets := dict -}}
+{{- range where site.Pages "Kind" "term" -}}
+  {{- if eq .Data.Plural $taxonomy -}}{{- $key := partial "taxonomies/key.html" . -}}{{- if not (isset $targets $key) -}}{{- $targets = merge $targets (dict $key .) -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- return $targets -}}

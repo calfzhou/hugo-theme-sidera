@@ -1,4 +1,4 @@
 {{ define "main" }}
-  {{ $content := partial "views/notebook-tags.html" . }}
+  {{ $content := partial "views/taxonomy.html" . }}
   {{ partial "sidera/shell.html" (dict "Page" . "Content" $content) }}
 {{ end }}

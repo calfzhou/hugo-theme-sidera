@@ -27,7 +27,7 @@ other = "笔记"
 other = "所属合集"
 
 [notebook_tags]
-other = "笔记标签"
+other = "标签"
 
 [all_tags_in]
 other = "浏览「{{ .title }}」的全部标签"
@@ -83,9 +83,6 @@ other = "概览"
 [tag_hierarchy]
 other = "标签树"
 
-[collection_tags]
-other = "{{ .title }} · 标签"
-
 [order_publication]
 other = "按发表时间降序 · 置顶优先"
 
@@ -137,12 +134,6 @@ other = "末页"
 [article_count]
 other = "{{ .number }} 篇文章"
 
-[notes_all]
-other = "共 {{ .number }} 篇笔记（含未标记标签的笔记）。"
-
-[notes_subtags]
-other = "共 {{ .number }} 篇笔记（含子标签）。"
-
 [collection_docs]
 other = "文档"
 
@@ -163,11 +154,14 @@ other = "{{ .number }} 篇子文档"
 
 [categories]
 other = "分类"
-[all_blogs]
-other = "全部博客"
 [recent_global]
 other = "全站最近更新，不受置顶影响。"
 [toggle_branch]
 other = "展开或收起{{ .title }}"
 [page_context]
 other = "本页目录与相关内容"
+
+[all_content]
+other = "全站内容"
+[taxonomy_count]
+other = "{{ .number }} 个页面"

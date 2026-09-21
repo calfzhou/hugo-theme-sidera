@@ -1,200 +1,127 @@
-# Docs/page-tree proof
+# hugo-theme-sidera
+Sidera — A Hugo theme for blogs, notebooks, and connected knowledge. Inspired by Stellar.
 
-P2-W, tested on Hugo **0.166.0**. This is a native content-model proof, not the
-finished docs visual design. No series, collaborative editing, version history,
-search or backlink feature is implied.
 
-## Names and ownership
+## Development status
 
-Public vocabulary is **blog / notes / docs** (博客 / 笔记 / 文档). A notebook is
-still an ordinary collection title; wiki is a conceptual synonym for docs.
-`params.sidera.collection` accepts `blog`, `notes`, `notebook`, `docs`, `wiki`.
-The small normalization boundary keeps **notebook** as the internal notes marker
-for compatibility, and normalizes `notes → notebook`, `wiki → docs`. Existing
-notebook content, layout names and translation keys remain valid. Collection
-names, titles and folders are arbitrary, with multiple/nested independent owners.
-Never cascade the collection marker. There is no universal content schema.
+P2-F implements the approved recognizable shell and native customization baseline:
+left-anchored soft-glass identity/navigation, bounded compact main, optional right
+region, complete notes/docs trees, native menus and scoped components. See
+[SHELL.md](SHELL.md) for the **implemented** settings and extensions. P2-A–W's
+organization, appearance, localization and opt-in docs foundations remain intact.
+Finished cards and full configurable footers are still G/H work; this is
+not whole-theme completion, a production migration or an official Stellar port.
+Distribution licensing is a separate unresolved gate.
 
-## Author a body-bearing tree
+## Visual foundation and provenance
 
-```text
-content/handbook/
-  _index.md
-  intro/_index.md
-  intro/setup/_index.md
-  reference/_index.md
-```
+- Native CSS: neutral charcoal surfaces, cyan hierarchy, 18px prose in a 696px
+  main region (656px inner prose), local WenKai UI/reading and explicit portable
+  Helvetica Neue/PingFang/Arial fallback. Local Source Code Pro/Menlo code.
+- Optional 288px left and independent right regions. In-flow right disclosure
+  below 1231px, left below 761px. No-JS leaves navigation open; no focus trap.
+- Original fixed inline icons and optional local identity/profile images. No
+  font/icon framework, downloads, remote backgrounds or integration placeholders.
+- Site/language → nearest owner → Page presence semantics are documented with
+  native cascade caveats; ordered region arrays/maps replace completely. Same
+  full shell for standalone pages; compact is an explicit override.
+- Shared ordinary reading, local wide-code/table scrolling, native TOC, meaningful
+  current/ancestor navigation and one paginator per applicable list. Card/date/
+  footer finishing work is explicitly not considered complete in F.
 
-Each `_index.md` is an ordinary authored document with a body and URL, represented
-by Hugo as a **section Page**, not an empty folder. Use a branch even for today's
-childless chapter: adding a child later preserves its identity and URL. A normal
-`index.md` is a leaf bundle and cannot acquire independently published children.
-Regular `.md`/leaf documents can be final children too, but cannot paginate children.
+Stellar 1.44.0 is a **visual reference**: sidebar/main composition, layered cards,
+notebook classification navigation. GoCalf's configuration confirms dark presentation,
+18px WenKai text and a glass sidebar. New Sidera CSS, navigation JS and presentation
+markup are independently authored over this project's P1 templates; no Stellar code,
+icons, images, fonts, EJS or Stylus have been copied. Stellar's MIT copyright notice
+(2021 xaoxuu) must accompany any actual reuse in a later slice. This repository does
+not yet specify a distribution license; resolve that before external distribution.
+No additional build or runtime dependency has been introduced.
 
-Put `_index.md` at intermediate directories. Sidera rejects flattened regular
-children from unmarked storage directories within docs, rather than pretending
-those directories are native nodes. Non-page resources such as SVGs belong to
-branch bundles; companion Markdown is **content**, not a downloadable Markdown
-resource as it is inside a leaf bundle.
+## Appearance and ordinary reading
 
-Only the root needs `params.sidera.collection = 'docs'`. Each Page's native `.Pages`,
-`.Parent`, `.Ancestors` and nearest owner determine membership. Nested marked
-collections are independent: the outer tree/list does not absorb them. They
-remain available in the collection navigation. No docs adapter or source tree
-loader creates these Pages; the existing adapter remains notes-only.
+The initial/default appearance is **dark**, irrespective of OS preference. The
+native labeled Appearance select is in the left navigation (open “Browse
+collections & tags” on mobile), or the compact header when left is absent. Dark and Light are explicit choices; System follows live
+`prefers-color-scheme` changes. A small script inlined from `assets/js/appearance.js`
+runs before the stylesheet/body, then installs the control after DOM readiness.
+It remembers a valid choice in the origin's `sidera-appearance` localStorage key.
+Denied storage leaves the choice usable for that document, with dark restored on
+navigation if no stored value can be read. No JavaScript: readable dark, open native
+navigation, and no appearance control. No animation or framework is needed.
 
-## Parent-owned ordering and optional child lists
+The inline head script is deliberate to avoid a separate request before palette
+selection. A deployment with a restrictive CSP must authorize its generated hash
+(or use an appropriate site override); if scripting is blocked, the readable dark
+fallback remains. CSP deployment configuration is not provided or tested here.
 
-Example root `_index.md` (TOML; equivalent lowercase YAML keys also work):
+Native Hugo/Chroma code highlighting uses a small render hook with palette-aware
+classes, preserving ordinary fenced-code options and avoiding fixed inline theme
+colors. Comments, keywords, strings/numbers and ordinary text reuse readable tokens;
+advanced code-file tooling and special renderers remain outside this slice. Native
+figures/captions keep full mobile width; transparent images keep their neutral pale
+backing in both palettes. Wide code/tables use native local scrolling, not widgets.
+The dependency-free font stacks remain local/system fallbacks; no fonts are bundled.
 
-```toml
-+++
-title = 'Workshop handbook'
-[params.sidera]
-collection = 'docs'
-[params.sidera.children]
-order = ['intro', 'reference']
-sort = 'title'
-page_size = 2
-list = true
-+++
-The handbook has its own introduction, before its immediate-child list.
-```
 
-- `order`: optional array of **immediate-child logical names**, relative to this
-  parent's native `.Path`. Exact names only: not titles, URL slugs, filenames,
-  language suffixes or descendant paths. A regular `leaf.md` with `slug='custom'`
-  is still referenced as `leaf`. Empty `[]` means use fallback for everything.
-- `sort`: `title` (default) or `name`, ascending. `name` means logical Path;
-  `title` sorts by Title then logical Path. Native weight/date/discovery order
-  does not supersede the explicit sequence or settle ties.
-- `page_size`: positive integer, default 10.
-- `list`: boolean, default true. Explicit false disables only the under-body list,
-  not the full tree. Childless documents create no paginator or empty list UI.
-- Unknown settings, invalid types, duplicate references, unknown names,
-  nonchildren and unsupported flattened paths fail with parent/path diagnostics.
+## Use and develop
 
-The full tree and paginated list use the same ordering helper. Only eligible
-native immediate children of this owner enter either; descendants do not flatten
-into a parent list. Exactly one paginator is created on an eligible docs section;
-ordinary collection/tag views use their separate, mutually exclusive renderer.
-Canonical first page shows full prose and TOC. Later pagers retain title/context,
-link back to the full document, and show only that pager's children. Authors do
-not have to split or shorten their prose.
+The showcase consumes this repository as a Git submodule at `themes/sidera` and
+sets `theme = 'sidera'`. Clone the showcase with `--recurse-submodules`, or run
+`git submodule update --init --recursive` in an existing checkout.
 
-**Local versus cascading settings:** order is always read from this native Page's
-own TOML/YAML source, never inherited. This narrowly reuses the existing front
-matter reader with `.File.Filename`; it does not discover Pages or walk directories.
-Hugo's merged Params do not distinguish local from cascaded values, which is why
-order cannot safely be read from merged Params alone. Even an accidentally
-cascaded order has no effect. Fallback settings use native Params and may cascade:
+For theme development, switch this nested checkout to `main` or a feature branch
+before committing. Edit here and build the parent showcase: Hugo reads local
+changes without a commit or push. Commit the theme first, then the showcase's
+submodule pointer. Push the theme commit before pushing a showcase pointer that
+references it. Submodule updates may detach HEAD; they do not replace normal
+branch management. The `main` branch hint does not change the showcase's pinned
+commit during an ordinary submodule update.
 
-```toml
-[cascade.params.sidera.children]
-sort = 'name'
-page_size = 3
-```
+Templates live in `layouts/`; `content/_content.gotmpl` generates notebook tag
+sections through Hugo's native theme content mount. Site content, collection
+settings, date/permalink policy and pagination configuration remain site-owned.
+No Go module, symlink, sibling checkout, or site-local implementation is required.
+See [CONTRACT.md](CONTRACT.md) for the self-contained supported content/configuration
+contract, required site policies versus defaults, prerequisites and build commands.
+The [showcase repository](https://github.com/calfzhou/sidera-showcase) contains the
+synthetic fixtures and regression harness; it is not a hidden sibling dependency.
 
-On the tested Hugo, a child's own `params.sidera` table (even with unrelated keys) replaces the cascaded
-table; missing keys in that local table take theme defaults, not a deep merge.
-Repeat desired fallback values in a local table when overriding it. There is no
-parallel theme inheritance engine or separate global ordering registry.
+The current adapter reads local site `content/` TOML/YAML Markdown metadata.
+Fresh successful builds into new destinations remain the verified workflow;
+known incremental/publication limitations are not repaired by this packaging.
+Drafts must still use valid metadata. Broader content-loader support and final
+production compatibility are not claimed.
 
-## Publication, language and validation
+## English and Chinese UI
 
-Native `Site.GetPage` can resolve a draft/future/expired/headless/unlisted child
-while native `.Pages` omits it. Such an ordered reference is valid and is skipped
-without producing a dead navigation link or making strict builds fail on warnings.
-If absent in the current language, the exact logical path is checked in the other
-configured native Sites. A known child there is valid but not fabricated here.
-A name unknown in **all** configured languages fails as a probable typo.
+P2-C localizes every theme-owned visible/accessibility label through native Hugo
+i18n. English and Simplified Chinese catalogs, locale-aware dates/counts, native
+site overrides and a bounded filename-translated bilingual content fixture are
+verified. There is no automatic body/title/tag translation or fake language switcher.
+See [I18N.md](I18N.md) for configuration, the full key inventory, extension guidance,
+escaping/fallback semantics and the explicit content-loader boundary.
 
-The default proof covers normal native publication and `build.list='never'` /
-`build.render='never'`. Native `build.render='link'` is a deliberate link-only
-Page, not evidence that an HTML target is published: do not use it for an ordinary
-local docs node. Exotic cascading build modes/custom outputs/other content adapters
-and arbitrary content mounts are not certified by this proof.
+## Parameter namespace
 
-Draft is not a metadata exemption. Existing invalid-draft tag validation is
-unchanged. Referenced excluded docs also validate their own settings/order.
-Native published collections do not enumerate **unreferenced** excluded docs;
-run an all-states validation build to check those, then a fresh publication build.
-This is native Hugo validation, not a new raw metadata walker:
+All Sidera-owned configuration and content fields are under `params.sidera`, not
+just visual settings. This pre-release schema replaces the former flat custom
+fields outright; there are no compatibility readers. Native Hugo fields and
+non-Sidera site params stay native. Byline/update defaults belong on the collection
+root (Page → owner → Site resolution), avoiding native cascade table replacement
+when a note authors its own tags. See [CONTRACT.md](CONTRACT.md) and [SHELL.md](SHELL.md).
 
-```sh
-mkdir -p .checks
-run=$(mktemp -d "$PWD/.checks/docs-validate-XXXXXX")
-hugo --buildDrafts --buildFuture --buildExpired \
-  --destination "$run/validation-only" --cacheDir "$run/cache-validation" \
-  --panicOnWarning --printPathWarnings --printI18nWarnings
-# Do not publish validation-only output (it intentionally includes drafts).
-hugo --destination "$run/public" --cacheDir "$run/cache-public" \
-  --panicOnWarning --printPathWarnings --printI18nWarnings
-```
+## Shared native taxonomies
 
-Each authored language body is a file, not an i18n-generated translation. Tested:
-unsuffixed default-language docs, authored `_index.zh.md` chapters in a configured
-`zh` Site (`locale='zh-CN'`), missing translations, language/baseURL prefixes, and
-Chinese-only UI around the original English dummy body. UI labels use native
-English/Chinese catalogs. No fake language switcher is introduced.
+[Tags and categories](TAXONOMIES.md) now use the same native top-level fields for
+blogs, notes, docs and standalone pages. Global/scoped views, configurable hierarchy,
+counts, pagination and article links are implemented. A regular page/bundle can move
+between collection folders without rewriting its taxonomy metadata.
 
-## Optional theme-owned sample: default off
+## Shared native metadata
 
-The single source is **`docs/content/` in this theme**, outside automatic theme
-`content/`. Merely activating Sidera creates no bundled docs Pages, routes,
-collection links or sitemap entries. The normal theme content mount still supplies
-the notes adapter.
-
-A consuming site can opt in explicitly, using a noncolliding namespace:
-
-```toml
-[[module.mounts]]
-source = 'content'
-target = 'content'
-[[module.mounts]]
-source = 'themes/sidera/docs/content'
-target = 'content/sidera' # consumer's choice; also tested: content/manuals/theme
-```
-
-These are **filesystem mounts**, not Go-module dependencies. Keep the Git submodule
-workflow. The first mount preserves site content when overriding that component;
-layouts, assets, i18n and the theme's own adapter remain mounted natively.
-Omit the optional second entry for off mode, rather than hiding a menu or drafting
-the docs. Do not copy theme docs into site content.
-
-Use `{{< relref "./authoring" >}}`, `{{< relref ".." >}}` and similar native logical
-relative references in branch bodies. Plain relative image paths work at the
-canonical branch URL; bodies are not repeated at `/page/N/`. Both chosen prefixes,
-a baseURL subpath and language prefixes preserve links/resources. Plain URL-relative
-links do not track arbitrary slug/url changes; use native relref for document links.
-This does not implement P3 editor-file-relative links, render hooks or backlinks.
-
-### Overrides and collisions
-
-Choose an unused namespace by default. Hugo merges mounts in precedence order:
-with site content first, the **same mounted source filename** in site content
-intentionally replaces the bundled file (tested for a chapter, preserving its
-children). This is an override, not a merge of two bodies; audit such overlaps and
-use mount `files` filters when you want an explicit exclusion. Native templates
-cannot see files already masked by mount resolution. Do not rely on a warning for
-a same-filename override, and do not overlap unrelated collections accidentally.
-
-Different logical Pages publishing to the same URL fail the required strict
-`--printPathWarnings --panicOnWarning` build. Hugo also silently coalesces a
-branch and a sibling `.md` of the same logical identity; Sidera checks native
-branch source companions for this collision in the tested local Markdown layout.
-This is a bounded guard, not a universal virtual-filesystem collision auditor.
-Do not combine leaf and branch index files for the same node.
-
-The showcase commits a separate site-owned Workshop handbook, published by default.
-Its optional `docs-on.toml` configuration opts in to this small theme-owned sample;
-the ordinary showcase configuration leaves it off. They are inspection fixtures, not a complete Sidera
-manual or claims of unimplemented features. Tree/sidebar/list/card polish and
-customization remain P2-E–I work after model review.
-
-## P2-F shell integration
-
-The ordered tree is now a configurable `docs-tree` region component, with distinct
-parent links and native disclosures opening the active branch. See [SHELL.md](SHELL.md).
-Child/body/paginator order remains unchanged; no TOC is emitted on later child
-pagers without the body. Normal theme activation still does not publish these docs.
+Docs branches and regular leaves use the same native top-level `tags` and
+`categories` as posts/notes. Tagged site handbook examples participate in global
+and scoped taxonomy views; these generated views are excluded from ordered document
+children and recent-doc lists. A moved `index.md` leaf bundle is not mistaken for
+a conflicting branch. See [TAXONOMIES.md](TAXONOMIES.md), including discovery limits.

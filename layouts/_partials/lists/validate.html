@@ -22,7 +22,7 @@
     {{- errorf "P1C static file in reserved pagination route: %s" $relative -}}
   {{- end -}}
 {{- end -}}
-{{- range site.RegularPages -}}
+{{- range site.Pages -}}
   {{- if and (isset (.Params.sidera | default dict) "pinned") (ne (printf "%T" .Params.sidera.pinned) "bool") -}}
     {{- errorf "P1C pinned must be boolean: %s" .Path -}}
   {{- end -}}

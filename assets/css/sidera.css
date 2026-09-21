@@ -203,3 +203,5 @@ article[data-renderer] .prose { padding: 0 20px; max-width: none; }
   .navigation-content a[aria-current] { outline: 2px solid LinkText; }
   .tree-branch > summary { border: 1px solid ButtonText; }
 }
+/* A shared taxonomy component can contain both independent vocabularies. */
+.tag-navigation + .tag-navigation { margin-top: 24px; }

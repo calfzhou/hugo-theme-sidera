@@ -1,0 +1,4 @@
+{{ define "main" }}
+  {{ $content := partial "views/taxonomy-scope.html" . }}
+  {{ partial "sidera/shell.html" (dict "Page" . "Content" $content) }}
+{{ end }}

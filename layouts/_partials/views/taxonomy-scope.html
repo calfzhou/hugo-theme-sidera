@@ -1,0 +1,27 @@
+{{ $owner := partial "collection-owner.html" . }}
+{{ $taxonomy := .Params.sidera.tag_taxonomy }}
+{{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $owner.Path $taxonomy }}
+{{ $hub := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" "" "slug" "") }}
+<section data-tag-view="{{ .Params.sidera.tag_key }}" data-taxonomy="{{ $taxonomy }}" data-collection="{{ $owner.RelPermalink }}">
+  <header class="view-header">
+    <nav aria-label="{{ T "collection" }}"><a href="{{ $owner.RelPermalink }}">{{ $owner.Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" $owner.Params.sidera.collection)) }}</span></nav>
+    <h1>{{ .Title }}</h1>
+    <nav class="breadcrumbs" aria-label="{{ T "tag_ancestors" }}">
+      <a href="{{ $hub.RelPermalink }}"{{ if not .Params.sidera.tag_key }} aria-current="page"{{ end }}>{{ T $taxonomy }}</a>
+      {{ if .Params.sidera.tag_key }}
+        {{ $keys := split .Params.sidera.tag_key "/" }}{{ $slugs := split .Params.sidera.tag_slug "/" }}
+        {{ $depths := slice (len $keys) }}{{ if $model.nested }}{{ $depths = seq (len $keys) }}{{ end }}
+        {{ range $depths }}
+          {{ $key := delimit (first . $keys) "/" }}{{ $slug := delimit (first . $slugs) "/" }}
+          {{ $ancestor := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" $key "slug" $slug) }}
+          <span aria-hidden="true">/</span><a href="{{ $ancestor.RelPermalink }}"{{ if eq . (len $keys) }} aria-current="page"{{ end }}>{{ if $model.nested }}{{ index $keys (sub . 1) }}{{ else }}{{ $key }}{{ end }}</a>
+        {{ end }}
+      {{ end }}
+    </nav>
+    <a class="view-tools" href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" "" "slug" "")).RelPermalink }}">{{ T "all_content" }} · {{ T $taxonomy }}</a>
+    {{ $pages := $model.pages }}
+    {{ with .Params.sidera.tag_key }}{{ $pages = slice }}{{ with index $model.nodes . }}{{ $pages = .pages }}{{ end }}{{ end }}
+    <p class="intro" data-note-count="{{ len $pages }}">{{ T "taxonomy_count" (dict "count" (len $pages) "number" (lang.FormatNumber 0 (len $pages))) }}</p>
+  </header>
+  {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages "count_label" "taxonomy_count") }}
+</section>
