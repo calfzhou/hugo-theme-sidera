@@ -8,7 +8,7 @@ search or backlink feature is implied.
 
 Public vocabulary is **blog / notes / docs** (博客 / 笔记 / 文档). A notebook is
 still an ordinary collection title; wiki is a conceptual synonym for docs.
-`params.collection` accepts `blog`, `notes`, `notebook`, `docs`, `wiki`.
+`params.sidera.collection` accepts `blog`, `notes`, `notebook`, `docs`, `wiki`.
 The small normalization boundary keeps **notebook** as the internal notes marker
 for compatibility, and normalizes `notes → notebook`, `wiki → docs`. Existing
 notebook content, layout names and translation keys remain valid. Collection
@@ -37,7 +37,7 @@ those directories are native nodes. Non-page resources such as SVGs belong to
 branch bundles; companion Markdown is **content**, not a downloadable Markdown
 resource as it is inside a leaf bundle.
 
-Only the root needs `params.collection = 'docs'`. Each Page's native `.Pages`,
+Only the root needs `params.sidera.collection = 'docs'`. Each Page's native `.Pages`,
 `.Parent`, `.Ancestors` and nearest owner determine membership. Nested marked
 collections are independent: the outer tree/list does not absorb them. They
 remain available in the collection navigation. No docs adapter or source tree
@@ -50,9 +50,9 @@ Example root `_index.md` (TOML; equivalent lowercase YAML keys also work):
 ```toml
 +++
 title = 'Workshop handbook'
-[params]
+[params.sidera]
 collection = 'docs'
-[params.children]
+[params.sidera.children]
 order = ['intro', 'reference']
 sort = 'title'
 page_size = 2
@@ -90,12 +90,12 @@ order cannot safely be read from merged Params alone. Even an accidentally
 cascaded order has no effect. Fallback settings use native Params and may cascade:
 
 ```toml
-[cascade.params.children]
+[cascade.params.sidera.children]
 sort = 'name'
 page_size = 3
 ```
 
-On the tested Hugo, a child's own `params.children` table replaces the cascaded
+On the tested Hugo, a child's own `params.sidera` table (even with unrelated keys) replaces the cascaded
 table; missing keys in that local table take theme defaults, not a deep merge.
 Repeat desired fallback values in a local table when overriding it. There is no
 parallel theme inheritance engine or separate global ordering registry.

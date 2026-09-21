@@ -2,15 +2,15 @@
 {{- $order := "title" -}}
 {{- $size := 10 -}}
 {{- with . -}}
-  {{- if eq .Params.collection "blog" -}}{{- $order = "publication" -}}{{- end -}}
-  {{- if eq (partial "collection-kind.html" .Params.collection) "notebook" -}}{{- $order = "modification" -}}{{- end -}}
-  {{- if isset .Params "list_order" -}}
-    {{- if or (ne (printf "%T" .Params.list_order) "string") (not (in (slice "publication" "modification" "title") .Params.list_order)) -}}
+  {{- if eq .Params.sidera.collection "blog" -}}{{- $order = "publication" -}}{{- end -}}
+  {{- if eq (partial "collection-kind.html" .Params.sidera.collection) "notebook" -}}{{- $order = "modification" -}}{{- end -}}
+  {{- if isset (.Params.sidera | default dict) "list_order" -}}
+    {{- if or (ne (printf "%T" .Params.sidera.list_order) "string") (not (in (slice "publication" "modification" "title") .Params.sidera.list_order)) -}}
       {{- errorf "P1C list_order must be publication, modification or title: %s" .Path -}}
-    {{- else -}}{{- $order = .Params.list_order -}}{{- end -}}
+    {{- else -}}{{- $order = .Params.sidera.list_order -}}{{- end -}}
   {{- end -}}
-  {{- if isset .Params "page_size" -}}
-    {{- $value := .Params.page_size -}}
+  {{- if isset (.Params.sidera | default dict) "page_size" -}}
+    {{- $value := .Params.sidera.page_size -}}
     {{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $value))) (lt (int $value) 1) -}}
       {{- errorf "P1C page_size must be a positive integer: %s (got %v, %T)" .Path $value $value -}}
     {{- else -}}{{- $size = int $value -}}{{- end -}}

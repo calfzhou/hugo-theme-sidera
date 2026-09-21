@@ -11,7 +11,7 @@
   {{- $pinned := slice -}}
   {{- $ordinary := slice -}}
   {{- range $pages -}}
-    {{- if .Params.pinned -}}
+    {{- if .Params.sidera.pinned -}}
       {{- $pinned = $pinned | append . -}}
     {{- else -}}
       {{- $ordinary = $ordinary | append . -}}

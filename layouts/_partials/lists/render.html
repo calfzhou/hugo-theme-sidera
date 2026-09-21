@@ -10,7 +10,7 @@
 <ul id="articles" class="article-list">
   {{ range $pager.Pages }}
     <li class="article-card">
-      {{ if .Params.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
+      {{ if .Params.sidera.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
       <div class="card-dates">

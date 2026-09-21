@@ -3,7 +3,7 @@
 {{ $pager := false }}
 {{ if and $policy.list $children }}{{ $pager = .Paginate $children $policy.size }}{{ end }}
 <nav aria-label="{{ T "docs_ancestors" }}" class="view-tools">
-  {{ range .Ancestors.Reverse }}{{ $ancestor := . }}{{ with partial "collection-owner.html" . }}{{ if eq (partial "collection-kind.html" .Params.collection) "docs" }}<a href="{{ $ancestor.RelPermalink }}">{{ $ancestor.Title }}</a> / {{ end }}{{ end }}{{ end }}
+  {{ range .Ancestors.Reverse }}{{ $ancestor := . }}{{ with partial "collection-owner.html" . }}{{ if eq (partial "collection-kind.html" .Params.sidera.collection) "docs" }}<a href="{{ $ancestor.RelPermalink }}">{{ $ancestor.Title }}</a> / {{ end }}{{ end }}{{ end }}
   <a href="{{ .RelPermalink }}" aria-current="page">{{ .Title }}</a>
 </nav>
 {{ $body := true }}{{ with $pager }}{{ $body = eq .PageNumber 1 }}{{ end }}

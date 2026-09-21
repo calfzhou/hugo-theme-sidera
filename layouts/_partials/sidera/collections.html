@@ -1,8 +1,8 @@
 {{- $ctx := . -}}
 <ul class="collection-nav">
   {{- range (where .Page.Site.Pages "Kind" "section").ByTitle -}}
-    {{- if .Params.collection -}}
-    <li><a href="{{ .RelPermalink }}"{{ if eq . $ctx.Page }} aria-current="page"{{ else if eq . $ctx.Owner }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $icon := partial "collection-kind.html" .Params.collection }}{{ if isset (.Params.sidera | default dict) "icon" }}{{ $icon = .Params.sidera.icon }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ .Title }}</span><small>{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</small></a></li>
+    {{- if .Params.sidera.collection -}}
+    <li><a href="{{ .RelPermalink }}"{{ if eq . $ctx.Page }} aria-current="page"{{ else if eq . $ctx.Owner }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $icon := partial "collection-kind.html" .Params.sidera.collection }}{{ if isset (.Params.sidera | default dict) "icon" }}{{ $icon = .Params.sidera.icon }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ .Title }}</span><small>{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</small></a></li>
     {{- end -}}
   {{- end -}}
 </ul>

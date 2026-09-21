@@ -5,7 +5,7 @@
 {{- range . -}}
   {{- $tag := . -}}{{- $target := partial "tags/page.html" (dict "owner" $ctx.Owner "slug" .slug) -}}
   {{- $current := eq $ctx.Page $target -}}{{- $active := $current -}}
-  {{- if hasPrefix (printf "%s/" $ctx.Page.Params.tag_key) (printf "%s/" .key) -}}{{- $active = true -}}{{- end -}}
+  {{- if hasPrefix (printf "%s/" $ctx.Page.Params.sidera.tag_key) (printf "%s/" .key) -}}{{- $active = true -}}{{- end -}}
   {{- range index $model.assigned $ctx.Page.Path -}}{{- if hasPrefix (printf "%s/" .key) (printf "%s/" $tag.key) -}}{{- $active = true -}}{{- end -}}{{- end -}}
   {{- $children := where (sort $model.nodes "key") "parent" .key -}}
   <li data-tag="{{ .key }}" data-count="{{ len .notes }}" class="tree-node">

@@ -1,6 +1,6 @@
 {{- /* Render-time validation only; no loader or paginator work here. */ -}}
 {{- range where site.Pages "Kind" "section" -}}
-  {{- if .Params.collection -}}
+  {{- if .Params.sidera.collection -}}
     {{- $policy := partial "lists/policy.html" . -}}
   {{- end -}}
   {{- /* Every section is a list, including ordinary storage and tag views.
@@ -23,7 +23,7 @@
   {{- end -}}
 {{- end -}}
 {{- range site.RegularPages -}}
-  {{- if and (isset .Params "pinned") (ne (printf "%T" .Params.pinned) "bool") -}}
+  {{- if and (isset (.Params.sidera | default dict) "pinned") (ne (printf "%T" .Params.sidera.pinned) "bool") -}}
     {{- errorf "P1C pinned must be boolean: %s" .Path -}}
   {{- end -}}
 {{- end -}}

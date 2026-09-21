@@ -6,9 +6,9 @@
   <h2 class="section-heading">{{ T "collections" }}</h2>
   <ul id="collections" class="collection-grid">
     {{ range (where site.Pages "Kind" "section").ByTitle }}
-      {{ if .Params.collection }}
+      {{ if .Params.sidera.collection }}
         <li class="collection-card">
-          <span class="eyebrow">{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</span>
+          <span class="eyebrow">{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</span>
           <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
           <p>{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
         </li>

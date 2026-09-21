@@ -9,7 +9,7 @@
     {{- $note := . -}}
     {{- $all = $all | append $note -}}
     {{- $tags := slice -}}
-    {{- if isset .Params "tags" -}}{{- $tags = .Params.tags -}}{{- end -}}
+    {{- if isset (.Params.sidera | default dict) "tags" -}}{{- $tags = .Params.sidera.tags -}}{{- end -}}
     {{- $direct := partial "tags/normalize.html" (dict "tags" $tags "source" .Path) -}}
     {{- $assigned = merge $assigned (dict .Path $direct) -}}
     {{- range $direct -}}

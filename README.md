@@ -101,3 +101,12 @@ site overrides and a bounded filename-translated bilingual content fixture are
 verified. There is no automatic body/title/tag translation or fake language switcher.
 See [I18N.md](I18N.md) for configuration, the full key inventory, extension guidance,
 escaping/fallback semantics and the explicit content-loader boundary.
+
+## Parameter namespace
+
+All Sidera-owned configuration and content fields are under `params.sidera`, not
+just visual settings. This pre-release schema replaces the former flat custom
+fields outright; there are no compatibility readers. Native Hugo fields and
+non-Sidera site params stay native. Byline/update defaults belong on the collection
+root (Page → owner → Site resolution), avoiding native cascade table replacement
+when a note authors its own tags. See [CONTRACT.md](CONTRACT.md) and [SHELL.md](SHELL.md).

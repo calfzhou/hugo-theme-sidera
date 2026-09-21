@@ -1,22 +1,22 @@
   {{ $owner := partial "collection-owner.html" .page }}
-  {{ $showBody := .body }}
+  {{ $showBody := .body }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
   {{ with .page }}
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
     {{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" .Params.collection)) }}</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</span></nav>
     {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}
     <h1>{{ .Title }}</h1>
-    {{ with .Params.byline }}<p class="byline">{{ . }}</p>{{ end }}
+    {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     <div class="article-dates">
       {{ if not .PublishDate.IsZero }}
         <p>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</p>
       {{ end }}
-      {{ if and .Params.show_updated (not .Lastmod.IsZero) }}
+      {{ if and $settings.show_updated (not .Lastmod.IsZero) }}
         <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
       {{ end }}
     </div>
-    {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.collection) "notebook") }}
+    {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "notebook") }}
       {{ $model := partialCached "tags/model.html" $owner $owner.Path }}
       {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
       <nav class="article-tag-hub" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "all_tags_in" (dict "title" $owner.Title) }}</a></nav>

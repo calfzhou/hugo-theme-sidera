@@ -8,7 +8,7 @@
   {{- $file := path.Join $dir . -}}
   {{- if os.FileExists $file -}}
     {{- $fm := partial "tags/frontmatter.html" $file -}}
-    {{- with $fm.params.collection -}}
+    {{- with $fm.params.sidera.collection -}}
       {{- $owner = "" -}}
       {{- if eq (partial "collection-kind.html" .) "notebook" -}}
         {{- $owner = strings.TrimPrefix "content/" $dir -}}
@@ -48,7 +48,7 @@
   {{- if and $owner (ne $name "_index.md") (or (not $leaf) (eq $name "index.md")) -}}
     {{- $fm := partial "tags/frontmatter.html" $file -}}
     {{- $tags := slice -}}
-    {{- if isset ($fm.params | default dict) "tags" -}}{{- $tags = $fm.params.tags -}}{{- end -}}
+    {{- if isset ($fm.params.sidera | default dict) "tags" -}}{{- $tags = $fm.params.sidera.tags -}}{{- end -}}
     {{- range partial "tags/normalize.html" (dict "tags" $tags "source" $file) -}}
       {{- $keys := split .key "/" -}}
       {{- $slugs := split .slug "/" -}}

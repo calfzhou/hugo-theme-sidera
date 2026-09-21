@@ -7,14 +7,18 @@ article/site footers are later P2 work—not installed settings in this guide.
 
 ## Defaults and configuration
 
-All **new shell settings** are under `params.sidera`. Existing collection markers,
-notes tags, list policies, pins, article metadata and `children` settings retain
-their current locations in CONTRACT.md and DOCS.md. F deliberately avoids an
-unrelated mass rename. There are no dual readers or old/new precedence aliases.
-`notes`/`notebook` and `docs`/`wiki` are intentional kind synonyms, not key shims.
+All **Sidera-defined parameters** use `params.sidera`, in site/language configuration,
+page front matter, native cascades and native menu-entry extension params. This
+includes collection markers, notes tags, list policies, pins, article metadata,
+`children` and private generated tag metadata (see CONTRACT.md / DOCS.md).
+There are no legacy aliases or dual readers. Native Hugo metadata, menus and
+native taxonomy assignments remain native; unrelated site-owned params need not
+use Sidera's namespace. `notes`/`notebook` and `docs`/`wiki` remain kind synonyms.
 
 | Setting | Default / supported values |
 | --- | --- |
+| `byline` | `''`; escaped text, Page → nearest owner → current-language Site |
+| `show_updated` | `false`; boolean, same per-key fallback, explicit false preserved |
 | `left` | Notes: `['menu','notes-tags','recent']`; blog: `['menu','blog-taxonomies','recent']`; docs: `['menu','docs-tree']`; other: `['menu','profile']` |
 | `right` | `['toc']`; disappears unless a rendered reading body has headings |
 | `menu` | `'primary'`; a missing/empty native menu gets Home + discovered collections + ownerless regular pages; `''` clears it |
@@ -77,6 +81,16 @@ ownership is not a cascade firewall. Prefer settings on the owning root, with
 page-local exceptions. Source-local `children.order` remains the separate proven
 P2-W exception; the shell never reparses page source to invent inheritance.
 
+**Namespace migration:** a note's local `sidera.tags` table also replaces a cascaded
+`sidera` table. Put collection-wide `byline`/`show_updated` defaults directly on the
+marked owner's `params.sidera`; the existing per-key resolver supplies them without
+duplicating defaults on each article. Site values work for standalone pages. This
+is deliberate owner-default authoring, not a reconstructed deep-cascade engine.
+A nested owner is its own fallback scope: set its defaults explicitly if needed.
+Do not expect site-config cascade to inject individual fields into existing local
+`sidera` tables; use root/page front matter for those exceptions. Native cascades
+still work on pages without a replacing table, and for unrelated native fields.
+
 ```toml
 # Collection root front matter; keep its existing native/custom fields.
 [params.sidera]
@@ -106,7 +120,7 @@ menus and current/ancestor helpers. Two levels are supported. A parent without a
 destination is a heading; destinationless leaves and unresolved pageRefs fail.
 Parent page links remain links. Native menu labels are site-authored—not silently
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.
-A `menus.<name>.params.icon` value can override its decorative icon. Icon names:
+A `menus.<name>.params.sidera.icon` value can override its decorative icon. Icon names:
 `home`, `blog`, `notebook`, `docs`, `page`, `tag`, `link`, `star`; `''` means none.
 No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.
 

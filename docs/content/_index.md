@@ -1,8 +1,8 @@
 +++
 title = "Sidera documentation sample"
-[params]
+[params.sidera]
 collection = 'docs'
-[params.children]
+[params.sidera.children]
 order = ['authoring']
 page_size = 1
 +++

@@ -2,11 +2,11 @@
      Read this native Page's source, never walk directories or discover Pages. */ -}}
 {{- $p := . -}}
 {{- $settings := dict -}}
-{{- if isset .Params "children" -}}{{- $settings = .Params.children -}}{{- end -}}
+{{- if isset (.Params.sidera | default dict) "children" -}}{{- $settings = .Params.sidera.children -}}{{- end -}}
 {{- $order := slice -}}
 {{- with .File -}}
   {{- $fm := partial "tags/frontmatter.html" .Filename -}}
-  {{- with $fm.params.children -}}
+  {{- with $fm.params.sidera.children -}}
     {{- if and (reflect.IsMap .) (isset . "order") -}}{{- $order = .order -}}{{- end -}}
   {{- end -}}
 {{- end -}}

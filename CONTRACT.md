@@ -78,31 +78,28 @@ root is a branch section (`_index.md`), not a leaf article (`index.md`):
 ```toml
 +++
 title = 'My notebook'
-[params]
+[params.sidera]
+byline = 'My team'
+show_updated = true
 collection = 'notebook' # blog | notes | notebook | docs | wiki; root only, never cascade
 # Optional owner-local settings; do not cascade them:
 list_order = 'modification' # publication | modification | title
 page_size = 10             # positive integer
-[cascade]
-[cascade.target]
-kind = 'page'
-[cascade.params]
-byline = 'My team'
-show_updated = true
 +++
 ```
 
 Articles derive identity from their nearest marked section, including through
 unmarked storage sections. Nested marked collections are isolated in lists;
-ordinary Hugo cascade still inherits any outer defaults the inner root does not
-override. Article `params.byline` / `params.show_updated` overrides preserve false.
+article byline/update defaults use Page → nearest marked owner → current-language
+Site, preserving explicit empty/false values. Native cascade still follows ancestry,
+but a local `sidera` table replaces its cascaded counterpart. Article `params.sidera.byline` / `params.sidera.show_updated` overrides preserve false.
 Standalone regular pages need no owner. All use one shared article template.
 Leaf bundles keep relative images/downloads and Markdown resources together.
 
 Owner list policy applies to collection roots, storage subsets and tag unions.
 Publication uses native PublishDate descending, modification uses Lastmod descending;
 ties use Title then logical Path ascending. Title order uses Title/Path. Boolean
-article `params.pinned = true` partitions the selected result before pagination;
+article `params.sidera.pinned = true` partitions the selected result before pagination;
 pins consume slots, spill when necessary, and appear once across the pager chain.
 Recent updates is a configurable region component, default top five by Lastmod/Title/Path,
 independent of pins and current pager. Counts always cover the complete union.
@@ -110,7 +107,7 @@ There are no numeric pin ranks or repeated-pin quotas.
 
 ## Notebook tags and routes
 
-Write literal article `params.tags = ['science/quantum', 'science/experiments']`.
+Write literal article `params.sidera.tags = ['science/quantum', 'science/experiments']`.
 No per-article notebook ID, repeated ancestor tags, tag registry or generated-page
 authoring is required. Empty/missing tags are allowed; blogs have no scoped tag UI.
 
@@ -125,7 +122,7 @@ authoring is required. Empty/missing tags are allowed; blogs have no scoped tag 
   plus native language/baseURL prefixes, not custom root URL/slug overrides.
 - `<notebook>/tags/` and `<notebook>/page/` are reserved; `page/` is reserved under
   every paginated section. Authored routes, aliases and local static collisions
-  fail validation. `tag_view`, `tag_key`, `tag_slug` are generated metadata, not an
+  fail validation. `params.sidera.tag_view`, `params.sidera.tag_key`, `params.sidera.tag_slug` are generated metadata, not an
   authoring API. Draft status never exempts invalid structural metadata.
 
 ## Verification and known boundaries
@@ -171,3 +168,11 @@ It supersedes the earlier arbitrary-mount exclusion only for the two tested opti
 docs namespaces. Notes metadata discovery remains local-site-content scoped.
 Shared article presentation now lives in `layouts/_partials/article.html`; normal
 `layouts/page.html` is a wrapper, and docs sections use the same partial.
+
+## Pre-release namespace consolidation
+
+All Sidera-defined fields now live under `params.sidera`, including menu-entry
+`params.sidera.icon`. Native title/date/lastmod/draft/slug/url/menus/taxonomy fields
+stay native. No old flat-field readers or aliases remain. Site-owned unrelated
+custom params are allowed; this namespace rule is about fields Sidera defines.
+See SHELL.md for migration of article defaults out of the old cascade examples.

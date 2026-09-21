@@ -7,5 +7,5 @@
   {{- with $node.key -}}{{- $title = . -}}{{- end -}}
   {{- $.AddPage (dict "kind" "section" "path" $route "title" $title
     "layout" "notebook-tags"
-    "params" (dict "tag_view" true "tag_key" $node.key "tag_slug" $node.slug)) -}}
+    "params" (dict "sidera" (dict "tag_view" true "tag_key" $node.key "tag_slug" $node.slug))) -}}
 {{- end -}}
