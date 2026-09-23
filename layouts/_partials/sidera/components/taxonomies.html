@@ -17,9 +17,9 @@
       {{- /* Configured taxonomies outside the contextual inventory still have real
             native global term Pages. Label the fallback explicitly as global. */ -}}
       {{- with $owner.Site.GetPage (printf "/%s" $taxonomy) -}}
-        {{- $index := . -}}{{- with .Data.Terms.Alphabetical -}}
-          <nav data-tree-scope="global" class="taxonomy-navigation" aria-label="{{ $index.LinkTitle }}">
-            <h2 class="nav-heading">{{ T "all_content" }} · {{ $index.LinkTitle }}</h2>
+        {{- $index := . -}}{{- $label := .LinkTitle -}}{{- if eq $taxonomy "preset" -}}{{- $label = T "preset" -}}{{- end -}}{{- with .Data.Terms.Alphabetical -}}
+          <nav data-tree-scope="global" class="taxonomy-navigation" aria-label="{{ $label }}">
+            <h2 class="nav-heading">{{ T "all_content" }} · {{ $label }}</h2>
             <ul>{{ range . }}<li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>{{ end }}</ul>
           </nav>
         {{- end -}}
