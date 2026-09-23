@@ -7,8 +7,8 @@
       {{- $members := slice -}}{{- range partialCached "taxonomies/native-members.html" $term $term.Path -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $members = $members | append . -}}{{- end -}}{{- end -}}
       {{- $sequence := (partial "series/order.html" (dict "term" $term "pages" $members)).pages -}}
       {{- range $index, $item := $sequence -}}{{- if eq $item $page -}}
-        {{- if gt $index 0 -}}{{- with index $sequence (sub $index 1) -}} <a data-series-previous href="{{ .RelPermalink }}">{{ T "series_previous" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
-        {{- if lt (add $index 1) (len $sequence) -}}{{- with index $sequence (add $index 1) -}} <a data-series-next href="{{ .RelPermalink }}">{{ T "series_next" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
+        {{- if gt $index 0 -}}{{- with index $sequence (sub $index 1) -}}<span aria-hidden="true"> · </span><a data-series-previous href="{{ .RelPermalink }}">{{ T "series_previous" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
+        {{- if lt (add $index 1) (len $sequence) -}}{{- with index $sequence (add $index 1) -}}<span aria-hidden="true"> · </span><a data-series-next href="{{ .RelPermalink }}">{{ T "series_next" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
       {{- end -}}{{- end -}}
     {{- end -}}
   </nav>
