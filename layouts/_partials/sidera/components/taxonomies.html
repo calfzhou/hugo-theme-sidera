@@ -3,14 +3,27 @@
   {{- $owner := . -}}
   {{- range $ctx.Settings.taxonomy_navigation -}}
     {{- $taxonomy := . -}}
+    {{- if in (slice "tags" "categories" "authors" "series") $taxonomy -}}
     {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" .) $owner.Path . -}}
     {{- if $model.nodes -}}
       {{- $hub := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" . "key" "" "slug" "") -}}
       <nav data-tree-scope="owner" class="tag-navigation" aria-label="{{ T $taxonomy }}">
         <h2 class="nav-heading">{{ $owner.Title }} · {{ T $taxonomy }}</h2>
-        <a class="all-tags" href="{{ $hub.RelPermalink }}"{{ if eq $ctx.Page $hub }} aria-current="page"{{ end }}>{{ if eq $taxonomy "tags" }}{{ T "all_tags" }}{{ else }}{{ T "categories" }}{{ end }}</a>
+        <a class="all-tags" href="{{ $hub.RelPermalink }}"{{ if eq $ctx.Page $hub }} aria-current="page"{{ end }}>{{ if eq $taxonomy "tags" }}{{ T "all_tags" }}{{ else }}{{ T $taxonomy }}{{ end }}</a>
         {{ partial "sidera/taxonomy-tree.html" (dict "Context" $ctx "model" $model "parent" "") }}
       </nav>
+    {{- end -}}
+    {{- else -}}
+      {{- /* Configured taxonomies outside the contextual inventory still have real
+            native global term Pages. Label the fallback explicitly as global. */ -}}
+      {{- with $owner.Site.GetPage (printf "/%s" $taxonomy) -}}
+        {{- $index := . -}}{{- with .Data.Terms.Alphabetical -}}
+          <nav data-tree-scope="global" class="taxonomy-navigation" aria-label="{{ $index.LinkTitle }}">
+            <h2 class="nav-heading">{{ T "all_content" }} · {{ $index.LinkTitle }}</h2>
+            <ul>{{ range . }}<li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>{{ end }}</ul>
+          </nav>
+        {{- end -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
