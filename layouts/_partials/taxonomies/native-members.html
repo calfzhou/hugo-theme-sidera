@@ -1,0 +1,9 @@
+{{- /* Direct native assignments, not recursive slash-parent term .Pages. */ -}}
+{{- $term := . -}}{{- $members := slice -}}
+{{- range .Site.Pages -}}
+  {{- $page := . -}}
+  {{- range .GetTerms $term.Data.Plural -}}
+    {{- if eq . $term -}}{{- $members = $members | append $page -}}{{- break -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $members -}}

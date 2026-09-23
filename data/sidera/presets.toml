@@ -1,0 +1,47 @@
+# Bundled preset source data; public overrides are native term Pages.
+
+[blog]
+title_key = 'collection_blog'
+[blog.defaults.params]
+list_mode = 'recursive'
+list_order = 'publication'
+taxonomy_hierarchy = []
+left = ['menu', 'taxonomies', 'recent']
+icon = 'blog'
+recent_sections = false
+[blog.defaults.cascade.params]
+left = ['menu', 'taxonomies', 'recent']
+right = ['toc']
+show_updated = false
+recent_sections = false
+
+[notes]
+title_key = 'collection_notebook'
+[notes.defaults.params]
+list_mode = 'recursive'
+list_order = 'modification'
+taxonomy_hierarchy = ['tags']
+left = ['menu', 'taxonomies', 'recent']
+icon = 'notebook'
+recent_sections = false
+[notes.defaults.cascade.params]
+left = ['menu', 'taxonomies', 'recent']
+right = ['toc']
+show_updated = true
+recent_sections = false
+
+[docs]
+title_key = 'collection_docs'
+[docs.defaults.params]
+list_mode = 'children'
+list_order = 'title'
+taxonomy_hierarchy = []
+left = ['menu', 'page-tree', 'taxonomies']
+icon = 'docs'
+recent_sections = true
+[docs.defaults.cascade.params]
+left = ['menu', 'page-tree', 'taxonomies']
+right = ['toc']
+show_updated = true
+recent_sections = true
+list_mode = 'children'

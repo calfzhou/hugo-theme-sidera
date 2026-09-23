@@ -33,14 +33,16 @@ stays on the parent, never repeated on the child.
 ```toml
 disableKinds = ['RSS'] # taxonomy and term output must stay enabled
 [taxonomies]
-tag = 'tags'
-category = 'categories'
+_merge = 'shallow'
 [permalinks.term]
-tags = '/tags/:slug/'
-categories = '/categories/:slug/'
+_merge = 'shallow'
 ```
 
-The explicit native `:slug` rules honor filesystem-safe slugs supplied for Unicode
+Sidera owns the taxonomy definitions and `:slug` rules; these narrow merge flags
+import them without site duplication. [PRESETS.md](PRESETS.md) covers the new native
+authors/series/preset groups and the still-pending model-consumer migration.
+
+The native `:slug` rules honor filesystem-safe slugs supplied for Unicode
 terms (including composed/decomposed forms on macOS). Ordinary ASCII routes remain
 familiar. The root taxonomy URLs and term patterns can be remapped using native
 `permalinks.taxonomy` / `permalinks.term`, retaining `:slug`; links come from actual

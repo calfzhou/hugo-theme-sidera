@@ -1,0 +1,17 @@
+# Theme-owned native taxonomy definitions. Consumers opt in to this configuration
+# category with [taxonomies] _merge = 'shallow'; no duplicate definitions needed.
+[taxonomies]
+tag = 'tags'
+category = 'categories'
+author = 'authors'
+series = 'series'
+preset = 'preset'
+
+# Preserve safe native term slugs (including adapter-supplied Unicode slugs).
+# Consumers opt in with [permalinks.term] _merge = 'shallow'.
+[permalinks.term]
+tags = '/tags/:slug/'
+categories = '/categories/:slug/'
+authors = '/authors/:slug/'
+series = '/series/:slug/'
+preset = '/preset/:slug/'

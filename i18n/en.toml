@@ -168,3 +168,10 @@ other = "All content"
 [taxonomy_count]
 one = "{{ .number }} page"
 other = "{{ .number }} pages"
+
+[authors]
+other = "Authors"
+[series]
+other = "Series"
+[preset]
+other = "Presets"

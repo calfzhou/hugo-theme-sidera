@@ -1,3 +1,4 @@
+{{ if in (slice "tags" "categories") .Data.Plural }}
 {{ $taxonomy := .Data.Plural }}
 {{ $model := partialCached "taxonomies/model.html" (dict "owner" false "taxonomy" $taxonomy) "global" $taxonomy }}
 {{ $policy := partial "taxonomies/policy.html" false }}
@@ -21,4 +22,8 @@
     {{ if $model.nested }}{{ $parts := split $key "/" }}{{ range seq (sub (len $parts) 1) }}{{ $ancestor := delimit (first . $parts) "/" }}{{ with index $model.nodes $ancestor }} / <a href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug)).RelPermalink }}">{{ $ancestor }}</a>{{ end }}{{ end }}{{ end }}
   </nav>
   {{ partial "lists/render.html" (dict "page" . "owner" false "pages" $pages "policy" (dict "order" "publication" "size" $policy.size) "show_owner" true "count_label" "taxonomy_count") }}
+{{ end }}
+
+{{ else }}
+  {{ partial "views/native-taxonomy.html" . }}
 {{ end }}

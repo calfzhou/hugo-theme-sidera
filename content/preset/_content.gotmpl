@@ -1,0 +1,7 @@
+{{- /* Native theme content adapter: one source, current-language titles.
+      Native site-authored term files override these theme Pages without a raw-file guard.
+      Do not create physical unknown-language suffix files (Hugo treats those as Pages). */ -}}
+{{- .EnableAllLanguages -}}
+{{- range $name, $preset := hugo.Data.sidera.presets -}}
+  {{- $.AddPage (dict "kind" "term" "path" $name "title" (T $preset.title_key) "slug" $name "params" (dict "defaults" $preset.defaults)) -}}
+{{- end -}}

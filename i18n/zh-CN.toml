@@ -165,3 +165,10 @@ other = "本页目录与相关内容"
 other = "全站内容"
 [taxonomy_count]
 other = "{{ .number }} 个页面"
+
+[authors]
+other = "作者"
+[series]
+other = "专栏"
+[preset]
+other = "预设"

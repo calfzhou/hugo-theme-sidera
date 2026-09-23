@@ -28,9 +28,10 @@ parallel menu engine is introduced.
 
 ## Required site policy versus theme defaults
 
-The theme intentionally has **no site configuration file**. The showcase pins these
-native policies explicitly; consuming sites should carry them to preserve the
-verified contract, rather than assuming the theme installs them:
+The theme supplies taxonomy definitions and native term URL defaults in its own
+configuration; the site enables category-specific native import. Locale/date chains,
+page permalinks and pagination remain site-owned. See [PRESETS.md](PRESETS.md) for
+this P2-M prerequisite and the not-yet-migrated resolver boundary:
 
 ```toml
 baseURL = 'https://example.org/' # replace with the site's URL
@@ -41,11 +42,9 @@ timeZone = 'Asia/Shanghai'      # choose intentionally for source timestamps
 theme = 'sidera'
 disableKinds = ['RSS']
 [taxonomies]
-tag = 'tags'
-category = 'categories'
+_merge = 'shallow'
 [permalinks.term]
-tags = '/tags/:slug/'
-categories = '/categories/:slug/'
+_merge = 'shallow'
 
 [frontmatter]
 date = ['date', 'publishDate', 'pubdate', 'published']
@@ -72,7 +71,7 @@ disableAliases = true
   Discuss consequential authoring/URL changes rather than changing the policy silently.
 - Locale/translation choices are native Hugo settings; see [I18N.md](I18N.md) for
   Chinese-only UI, bilingual filenames, site overrides and extension/fallback rules.
-- Theme defaults: blogs sort by publication, notebooks by modification, unowned
+- Current consumer defaults (preset resolver migration still pending): blogs sort by publication, notebooks by modification, unowned
   sections by title; page size 10; missing pin is false; missing byline/update flag
   does not add either display. Initial appearance is dark; System is opt-in.
 

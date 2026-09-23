@@ -1,0 +1,19 @@
+{{- /* Native global groups. Scoped author/series UI and preset resolution belong
+      to the subsequent P2-M consumer migration, not this config prerequisite. */ -}}
+{{ $taxonomy := .Data.Plural }}
+{{ $policy := partial "taxonomies/policy.html" false }}
+<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) (in (slice "authors" "series" "preset") $taxonomy) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ .Content }}</div></header>
+{{ if eq .Kind "taxonomy" }}
+  {{ $terms := slice }}{{ range .Data.Terms.Alphabetical }}{{ $terms = $terms | append .Page }}{{ end }}
+  {{ $pager := .Paginate $terms $policy.size }}
+  <ul class="article-list taxonomy-index">
+    {{ range $pager.Pages }}
+      {{ $members := partialCached "taxonomies/native-members.html" . .Path }}
+      <li class="article-card"><h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2><p data-term-count="{{ len $members }}">{{ T "taxonomy_count" (dict "count" (len $members) "number" (lang.FormatNumber 0 (len $members))) }}</p></li>
+    {{ end }}
+  </ul>
+  {{ partial "lists/navigation.html" $pager }}
+{{ else }}
+  {{ $members := partialCached "taxonomies/native-members.html" . .Path }}
+  {{ partial "lists/render.html" (dict "page" . "owner" false "pages" $members "policy" (dict "order" "title" "size" $policy.size) "show_owner" true "count_label" "taxonomy_count") }}
+{{ end }}

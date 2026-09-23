@@ -117,3 +117,13 @@ when a note authors its own tags. See [CONTRACT.md](CONTRACT.md) and [SHELL.md](
 blogs, notes, docs and standalone pages. Global/scoped views, configurable hierarchy,
 counts, pagination and article links are implemented. A regular page/bundle can move
 between collection folders without rewriting its taxonomy metadata.
+
+
+## P2-M prerequisite: theme-owned definitions and preset terms
+
+[PRESETS.md](PRESETS.md) documents Sidera-owned taxonomy/term-URL defaults and native
+blog/notes/docs preset term Pages. Sites import these categories instead of repeating
+the definitions. Native site term overrides and EN/ZH work without an extra registry.
+This is a prerequisite, **not the completed parameter/preset consumer migration**;
+current collection/params.sidera behavior remains until that next authorized slice.
+Actual bundled docs still require explicit opt-in, independent of the docs preset term.
