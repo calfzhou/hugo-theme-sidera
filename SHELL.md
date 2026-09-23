@@ -6,47 +6,30 @@ selected-collection home and configurable article/site footers are later P2 work
 
 ## Defaults and configuration
 
-Existing **shell/section/article consumer parameters** use `params.sidera`, in site/language configuration,
-page front matter, native cascades and native menu-entry extension params. This
-includes collection markers, list policies, pins, article metadata,
-`children` and private generated tag metadata (see CONTRACT.md / DOCS.md).
-There are no legacy aliases or dual readers. Native Hugo metadata, menus and
-native taxonomy assignments remain native; unrelated site-owned params need not
-use Sidera's namespace. `notes`/`notebook` and `docs`/`wiki` remain kind synonyms.
+Public consumer settings now use native `params`, not a blanket `params.sidera` map.
+Native taxonomies/menus/date fields remain native. [CONTRACT.md](CONTRACT.md) is the complete
+field/type/domain reference and [PRESETS.md](PRESETS.md) describes the three-target fallback.
+Private generated navigation metadata remains namespaced; no old public-key reader or alias.
 
-| Setting | Default / supported values |
-| --- | --- |
-| `byline` | `''`; escaped text, Page → nearest owner → current-language Site |
-| `show_updated` | `false`; boolean, same per-key fallback, explicit false preserved |
-| `left` | Notes/blog: `['menu','taxonomies','recent']`; docs: `['menu','docs-tree','taxonomies']`; other: `['menu','profile']` |
-| `right` | `['toc']`; disappears unless a rendered reading body has headings |
-| `menu` | `'primary'`; a missing/empty native menu gets Home + discovered collections + ownerless regular pages + global taxonomy links; `''` clears it |
-| `links_menu` | `''`; name of a native menu; absent/empty menu emits nothing |
-| `text` | `''`; authored Markdown via native Page.RenderString |
-| `profile` | `{}`; optional `title`, `text` (Markdown), `image`, `menu` strings; replaced as a whole map |
-| `identity` | `{}`; site/language only: optional `title` (otherwise native site title), `subtitle`, local `image` |
-| `recent_count` | `5`; integer 1–10, never zero-as-default |
-| `taxonomy_navigation` | `['tags','categories']`; reorders/hides native/scoped taxonomy navigation, not assignments |
-| `icons` | `true`; `false` hides decorative icons, not text |
-| `icon` | Optional fixed icon name on a collection Page, used in auto/native navigation |
-| `tag_icons` | `{}`; normalized full taxonomy keys mapped to fixed icon names; whole-map replacement |
+Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+recent, profile, text, links. A profileless section can select the same components as any
+preset. page-tree replaces the old docs-tree component name and has no docs-preset gate.
+Arrays replace; false/[] disables a region. Unknown names/duplicates diagnose. Empty or
+inapplicable components emit nothing and leave no ghost grid track. Standalone pages retain
+the full shell; compact is explicit. Identity/home and appearance remain accessible when left is off.
 
-Fixed region components: `menu`, `collections`, `taxonomies`, `docs-tree`,
-`site-taxonomies`, `toc`, `recent`, `profile`, `text`, `links`. Unknown names,
-duplicates **within one list**, malformed settings and invalid counts diagnose.
-Deliberately placing a component in both regions is valid; generated IDs stay unique.
-Components with no data emit nothing. A region with no rendered component/hook
-has **no empty grid track**. Identity/home and appearance move into a compact
-header when left is absent. Standalone pages use the same full shell by default.
+Minimal defaults are left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
+Preset section/descendant maps may supply different defaults. Site/language values are below
+preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
 ```toml
-# Site / current native language settings. Omit left/right for contextual defaults.
-[params.sidera]
-menu = 'primary'
-[params.sidera.identity]
+# Useful fallback content and identity. It does not forcibly override preset region defaults.
+[params.identity]
 subtitle = 'A place for evolving ideas'
-# Optional original theme mark; or supply your own local resource.
 image = 'images/sidera-mark.svg'
+[params.profile]
+title = 'About this site'
+text = 'A site-authored **profile**.'
 
 [[menus.primary]]
 name = 'Notes'
@@ -58,59 +41,33 @@ url = 'mailto:hello@example.org'
 weight = 20
 ```
 
-## Presence, owner scope and native cascade
-
-Each key resolves independently from:
-
-1. Current native Page.Params.sidera, including native cascade.
-2. Nearest marked owner.Params.sidera.
-3. Current-language Site.Params.sidera (native site/language configuration merge).
-4. Theme page-kind default.
-
-Arrays replace, never append. `false` and `[]` disable a region (also supported for
-`taxonomy_navigation`); `true` is invalid. Empty strings clear text/menu settings.
-Maps replace entirely at the resolver boundary; `{}` clears a profile. Identity
-is deliberately site/language-owned. Native language-config merging happens before
-this resolver; it does not reconstruct the origin of native merged params.
-
-Hugo 0.166: a page-local `sidera` table replaces the *cascaded* table. Omitted local
-subkeys then fall back to owner/site/default—not to reconstructed cascade data.
-Native cascade can cross nested owners unless targeted or locally overridden;
-ownership is not a cascade firewall. Prefer settings on the owning root, with
-page-local exceptions. Source-local `children.order` remains the separate proven
-P2-W exception; the shell never reparses page source to invent inheritance.
-
-**Namespace migration:** a note's local `sidera` table also replaces a cascaded
-`sidera` table. Put collection-wide `byline`/`show_updated` defaults directly on the
-marked owner's `params.sidera`; the existing per-key resolver supplies them without
-duplicating defaults on each article. Site values work for standalone pages. This
-is deliberate owner-default authoring, not a reconstructed deep-cascade engine.
-A nested owner is its own fallback scope: set its defaults explicitly if needed.
-Do not expect site-config cascade to inject individual fields into existing local
-`sidera` tables; use root/page front matter for those exceptions. Native cascades
-still work on pages without a replacing table, and for unrelated native fields.
+For a site's intentional whole-site layout override, native cascade already wins before preset fallback:
 
 ```toml
-# Collection root front matter; keep its existing native/custom fields.
-[params.sidera]
+[cascade.params]
 left = ['menu', 'taxonomies']
-right = ['recent', 'profile']
-recent_count = 3
-[params.sidera.profile]
-title = 'Field notebook'
-text = 'Small observations that can grow into useful references.'
+right = ['toc', 'recent', 'profile']
 ```
 
-This also replaces the article's default right TOC. A reading page may override
-`right=['toc']`. Explicit compact standalone front matter is simply:
+For one section's own UI, use its params. For its descendants, use native cascade.params:
 
-```toml
-[params.sidera]
-left = false
-right = []
+```yaml
+params:
+  left: [menu, taxonomies]
+cascade:
+  params:
+    left: [menu, taxonomies, recent]
 ```
 
-No footer-disable setting is implied: configurable footers belong to H.
+Ordinary section params do not silently cascade. Native effective Page.Params is first, then
+own selected-section preset defaults or ancestor descendant-default maps, then language/site/
+minimal fallback. false/empty string/array/map remain meaningful; local nested maps replace
+cascaded maps. No raw cascade reconstruction. children.order remains its narrow parent-local exception.
+`preset: []` stops farther preset fallback only; scope_root controls browsing, not cascade reset.
+
+A compact standalone page uses `params.left: false` and `params.right: []`. Empty text/menu
+strings clear those values; profile={} clears the identity card. Identity is site/language-only.
+No article/site footer configuration is advertised yet; that remains H.
 
 ## Native menus and data
 
@@ -119,7 +76,7 @@ menus and current/ancestor helpers. Two levels are supported. A parent without a
 destination is a heading; destinationless leaves and unresolved pageRefs fail.
 Parent page links remain links. Native menu labels are site-authored—not silently
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.
-A `menus.<name>.params.sidera.icon` value can override its decorative icon. Icon names:
+A `menus.<name>.params.icon` value can override its decorative icon. Icon names:
 `home`, `blog`, `notebook`, `docs`, `page`, `tag`, `link`, `star`; `''` means none.
 No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.
 
@@ -132,13 +89,13 @@ Native `url` destinations, unlike `pageRef`, remain site-authored and require th
 site's own route/link checks. The theme doesn't invent destinations for absent
 features. `links`/profile menus are absent when the selected menu is absent.
 
-- **Notes:** complete nearest-owner hierarchy, full deduplicated counts, current
+- **Taxonomies:** complete nearest-owner flat/hierarchical views, full deduplicated counts, current
   tag and active ancestor branches. On articles all assigned branches open.
-- **Docs:** existing immediate-child order helper drives the complete tree;
+- **Page tree:** native immediate children and local order drive the complete tree, regardless of preset;
   ancestor/current branches open. A parent body's link and its disclosure are
   separate keyboard targets. No secondary paginator.
 - **Recent:** Lastmod/Title/Path, independent of pins and current pager. Owner
-  scope excludes nested independently marked collections. Docs include their
+  scope excludes nested independently marked collections. recent_sections=true includes
   body-bearing descendant sections as well as regular leaves. With no owner,
   recent means current-language Site.RegularPages (explicitly global).
 - **TOC:** native headings, only with the rendered article/docs body; no TOC on
@@ -201,6 +158,3 @@ Native top-level `tags` and `categories` are assignments, not custom settings.
 Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
 are site/owner choices described in TAXONOMIES.md; individual article exceptions
 do not change the identity/membership rules of their owner’s taxonomy views.
-
-P2-M adds separate preset term `params.defaults` metadata (PRESETS.md). It does not
-yet change this shell resolver or migrate the settings documented above.

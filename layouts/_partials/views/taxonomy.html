@@ -1,4 +1,5 @@
 {{ if in (slice "tags" "categories") .Data.Plural }}
+{{ .Store.Set "sidera-body" true }}
 {{ $taxonomy := .Data.Plural }}
 {{ $model := partialCached "taxonomies/model.html" (dict "owner" false "taxonomy" $taxonomy) "global" $taxonomy }}
 {{ $policy := partial "taxonomies/policy.html" false }}

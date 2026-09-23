@@ -1,0 +1,19 @@
+{{- $settings := .settings -}}{{- $order := .order -}}{{- $source := .source -}}
+{{- $sort := "title" -}}{{- $size := 10 -}}{{- $list := true -}}
+{{- if not (reflect.IsMap $settings) -}}
+  {{- errorf "P2W children must be a table: %s" $source -}}
+{{- else -}}
+  {{- range $key, $value := $settings -}}
+    {{- if not (in (slice "order" "sort" "page_size" "list") $key) -}}{{- errorf "P2W unknown children setting %q: %s" $key $source -}}{{- end -}}
+  {{- end -}}
+  {{- if isset $settings "sort" -}}{{- $sort = $settings.sort -}}{{- end -}}
+  {{- if isset $settings "page_size" -}}{{- $size = $settings.page_size -}}{{- end -}}
+  {{- if isset $settings "list" -}}{{- $list = $settings.list -}}{{- end -}}
+{{- end -}}
+{{- if not (in (slice "title" "name") $sort) -}}{{- errorf "P2W children.sort must be title or name: %s" $source -}}{{- end -}}
+{{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $size))) (lt (int $size) 1) -}}
+  {{- errorf "P2W children.page_size must be a positive integer: %s" $source -}}
+{{- end -}}
+{{- if ne (printf "%T" $list) "bool" -}}{{- errorf "P2W children.list must be boolean: %s" $source -}}{{- end -}}
+{{- if not (reflect.IsSlice $order) -}}{{- errorf "P2W children.order must be an array: %s" $source -}}{{- $order = slice -}}{{- end -}}
+{{- return (dict "order" $order "sort" $sort "size" (int $size) "list" $list) -}}

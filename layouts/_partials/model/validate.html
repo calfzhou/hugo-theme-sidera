@@ -1,0 +1,38 @@
+{{- range site.Pages -}}
+  {{- $page := . -}}
+  {{- with .File -}}{{- if not .IsContentAdapter -}}
+    {{- range $key := slice "tag_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}
+      {{- if isset ($page.Params.sidera | default dict) $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $page.Path -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}{{- end -}}
+  {{- if not .Params.sidera.tag_view -}}
+    {{- $valid := partial "model/input.html" (dict "fm" (dict "params" .Params) "source" .Path "section" .IsSection "effective" true) -}}
+    {{- with .File -}}{{- if not .IsContentAdapter -}}
+      {{- $fm := partial "tags/frontmatter.html" .Filename -}}
+      {{- $valid = partial "model/input.html" (dict "fm" $fm "source" .Filename "section" $page.IsSection) -}}
+      {{- if and (isset $page.Params "scope_root") (not (isset ($fm.params | default dict) "scope_root")) -}}{{- errorf "Sidera scope_root must be local, not cascaded: %s" $page.Path -}}{{- end -}}
+      {{- if and (isset $page.Params "preset") (not (isset $fm "preset")) -}}{{- errorf "Sidera preset must be local, not cascaded: %s" $page.Path -}}{{- end -}}
+    {{- end -}}{{- end -}}
+    {{- if isset .Params "preset" -}}{{- $preset := partial "model/preset.html" . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range where site.Pages "Kind" "term" -}}
+  {{- if eq .Data.Plural "series" -}}{{- $order := partial "series/order.html" (dict "term" . "pages" slice) -}}{{- end -}}
+  {{- if and (eq .Data.Plural "authors") (isset .Params "avatar") (ne (printf "%T" .Params.avatar) "string") -}}{{- errorf "Sidera avatar must be a local image string: %s" .Path -}}{{- end -}}
+  {{- if and (eq .Data.Plural "preset") (isset .Params "defaults") -}}
+    {{- $term := . -}}
+    {{- if not (reflect.IsMap .Params.defaults) -}}{{- errorf "Sidera params.defaults must be a map: %s" .Path -}}
+    {{- else -}}{{- $checked := partial "model/preset-defaults.html" . -}}{{- range $key, $value := .Params.defaults -}}
+      {{- if not (in (slice "params" "cascade") $key) -}}{{- errorf "Sidera unknown preset defaults field %s: %s" $key $term.Path -}}{{- end -}}
+      {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera preset defaults.%s must be a map: %s" $key $term.Path -}}
+      {{- else -}}{{- if eq $key "cascade" -}}
+        {{- range $k, $_ := $value -}}{{- if ne $k "params" -}}{{- errorf "Sidera preset cascade only supports params: %s" $term.Path -}}{{- end -}}{{- end -}}
+        {{- $value = $value.params | default dict -}}
+      {{- end -}}
+      {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera preset parameter defaults must be a map: %s" $term.Path -}}
+      {{- else -}}{{- range $k, $_ := $value -}}{{- if in (slice "preset" "scope_root" "tags" "categories" "authors" "series" "pinned" "identity" "defaults") $k -}}{{- errorf "Sidera %s is not inheritable preset metadata: %s" $k $term.Path -}}{{- end -}}{{- end -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return true -}}

@@ -1,61 +1,30 @@
-{{- /* Native Params (including cascade), then nearest owner, language Site, default.
-      Presence, never truthiness. Arrays and maps replace at the key boundary. */ -}}
-{{- $page := . -}}
-{{- $owner := partial "collection-owner.html" . -}}
-{{- $kind := "" -}}{{- with $owner -}}{{- $kind = partial "collection-kind.html" .Params.sidera.collection -}}{{- end -}}
-{{- $left := slice "menu" "profile" -}}
-{{- if eq $kind "notebook" -}}{{- $left = slice "menu" "taxonomies" "recent" -}}
-{{- else if eq $kind "blog" -}}{{- $left = slice "menu" "taxonomies" "recent" -}}
-{{- else if eq $kind "docs" -}}{{- $left = slice "menu" "docs-tree" "taxonomies" -}}{{- end -}}
-{{- $defaults := dict "byline" "" "show_updated" false "left" $left "right" (slice "toc") "menu" "primary" "links_menu" "" "text" "" "profile" dict "identity" dict "recent_count" 5 "taxonomy_navigation" (slice "tags" "categories") "icon" "" "icons" true "tag_icons" dict -}}
-{{- $scopes := slice $page.Site.Params -}}
-{{- with $owner -}}{{- $scopes = $scopes | append .Params -}}{{- end -}}
-{{- $scopes = $scopes | append $page.Params -}}
+{{- /* Native Page.Params first; own selected-section defaults, then ancestor
+      descendant defaults. Ordinary ancestor Params never implicitly cascade. */ -}}
+{{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}
+{{- $defaults := partial "model/defaults.html" . -}}
+{{- $scopes := slice $page.Params -}}
+{{- if and $page.Params.sidera.tag_view $owner -}}
+  {{- /* A contextual navigation Page queries its owner policy, not article metadata. */ -}}
+  {{- $scopes = $scopes | append (partialCached "sidera/settings.html" $owner $owner.Path) -}}
+{{- else -}}
+  {{- $stop := false -}}
+  {{- if $page.IsSection -}}
+    {{- with partial "model/preset.html" $page -}}{{- with .Params.defaults.params -}}{{- $scopes = $scopes | append . -}}{{- end -}}{{- end -}}
+    {{- if and (isset $page.Params "preset") (eq (len ($page.GetTerms "preset")) 0) -}}{{- $stop = true -}}{{- end -}}
+  {{- end -}}
+  {{- range $page.Ancestors -}}
+    {{- if $stop -}}{{- break -}}{{- end -}}
+    {{- if and .IsSection (not .Params.sidera.tag_view) -}}
+      {{- with partial "model/preset.html" . -}}{{- with .Params.defaults.cascade.params -}}{{- $scopes = $scopes | append . -}}{{- end -}}{{- end -}}
+      {{- if and (isset .Params "preset") (eq (len (.GetTerms "preset")) 0) -}}{{- $stop = true -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $scopes = $scopes | append $page.Site.Params | append $defaults -}}
 {{- $settings := dict -}}
-{{- range $key, $default := $defaults -}}
-  {{- $value := $default -}}
-  {{- range $scopes -}}
-    {{- if isset . "sidera" -}}
-      {{- if not (reflect.IsMap .sidera) -}}{{- errorf "Sidera %s: params.sidera must be a map" $page.Path -}}
-      {{- else if isset .sidera $key -}}{{- $value = index .sidera $key -}}{{- end -}}
-    {{- end -}}
-  {{- end -}}
-  {{- $settings = merge $settings (dict $key $value) -}}
+{{- range $key, $_ := $defaults -}}
+  {{- range $scopes -}}{{- if isset . $key -}}{{- $settings = merge $settings (dict $key (index . $key)) -}}{{- break -}}{{- end -}}{{- end -}}
 {{- end -}}
-{{- /* Identity is deliberately site/language-owned, not page-scoped. */ -}}
-{{- $identity := dict -}}{{- with $page.Site.Params.sidera -}}{{- if isset . "identity" -}}{{- $identity = .identity -}}{{- end -}}{{- end -}}
+{{- $identity := dict -}}{{- if isset $page.Site.Params "identity" -}}{{- $identity = $page.Site.Params.identity -}}{{- end -}}
 {{- $settings = merge $settings (dict "identity" $identity) -}}
-{{- range $key := slice "left" "right" "taxonomy_navigation" -}}
-  {{- $value := index $settings $key -}}
-  {{- $allowed := slice "menu" "collections" "taxonomies" "docs-tree" "site-taxonomies" "toc" "recent" "profile" "text" "links" -}}
-  {{- if eq $key "taxonomy_navigation" -}}{{- $allowed = slice "tags" "categories" -}}{{- end -}}
-  {{- if eq (printf "%T" $value) "bool" -}}
-    {{- if $value -}}{{- errorf "Sidera %s: %s accepts false or an array, not true" $page.Path $key -}}{{- end -}}
-    {{- $settings = merge $settings (dict $key slice) -}}
-  {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: %s must be an array or false" $page.Path $key -}}{{- $settings = merge $settings (dict $key slice) -}}
-  {{- else -}}
-    {{- $seen := slice -}}{{- range $value -}}
-      {{- if not (in $allowed .) -}}{{- errorf "Sidera %s: invalid %s item %v; allowed: %s" $page.Path $key . (delimit $allowed ", ") -}}{{- end -}}
-      {{- if in $seen . -}}{{- errorf "Sidera %s: duplicate %s item %v" $page.Path $key . -}}{{- end -}}
-      {{- $seen = $seen | append . -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-{{- range $key := slice "menu" "links_menu" "text" "icon" "byline" -}}
-  {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
-{{- end -}}
-{{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}
-{{- if or (not (in (slice "int" "int64" "float64") (printf "%T" $settings.recent_count))) (not (in (seq 1 10) $settings.recent_count)) -}}{{- errorf "Sidera %s: recent_count must be an integer from 1 to 10" $page.Path -}}{{- end -}}
-{{- range $key := slice "identity" "profile" "tag_icons" -}}
-  {{- $value := index $settings $key -}}
-  {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera %s: %s must be a map" $page.Path $key -}}
-  {{- else -}}{{- range $field, $item := $value -}}
-    {{- if ne (printf "%T" $item) "string" -}}{{- errorf "Sidera %s: %s.%s must be a string" $page.Path $key $field -}}{{- end -}}
-    {{- $allowed := slice "title" "subtitle" "image" -}}{{- if eq $key "profile" -}}{{- $allowed = slice "title" "text" "image" "menu" -}}{{- end -}}
-    {{- if and (ne $key "tag_icons") (not (in $allowed $field)) -}}{{- errorf "Sidera %s: unknown %s field %s" $page.Path $key $field -}}{{- end -}}
-    {{- if eq $key "tag_icons" -}}{{- $check := partial "sidera/icon.html" $item -}}{{- end -}}
-  {{- end -}}{{- end -}}
-{{- end -}}
-{{- $iconCheck := partial "sidera/icon.html" $settings.icon -}}
-{{- if ne (printf "%T" $settings.show_updated) "bool" -}}{{- errorf "Sidera %s: show_updated must be boolean" $page.Path -}}{{- end -}}
-{{- return $settings -}}
+{{- return (partial "model/settings-valid.html" (dict "page" $page "settings" $settings)) -}}

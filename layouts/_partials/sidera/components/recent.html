@@ -1,9 +1,8 @@
 {{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
-{{- $kind := "" -}}{{- with $owner -}}{{- $kind = partial "collection-kind.html" .Params.sidera.collection -}}{{- end -}}
   {{- $pages := $page.Site.RegularPages -}}
   {{- with $owner -}}
     {{- $pages = slice -}}{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
-    {{- if eq $kind "docs" -}}
+    {{- if $s.recent_sections -}}
       {{- range $page.Site.Pages -}}{{- if and .IsSection (not .Params.sidera.tag_view) (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
     {{- end -}}
   {{- end -}}

@@ -10,8 +10,8 @@ A consuming site chooses a native filesystem mount and a namespace. No route pre
 ## Page shell
 
 The shared shell also applies to standalone pages. New layout settings live under
-`params.sidera`: `left` and `right` are ordered component arrays; `false` or `[]`
-disables a region. Omitted keys fall back to the nearest collection, then site
-settings. A right `toc` component disappears when there are no body headings.
+`params`: `left` and `right` are ordered component arrays; `false` or `[]`
+disables a region. Omitted keys use the applicable preset defaults, then site settings; ordinary ancestor
+params do not implicitly cascade. A right `toc` component disappears when there are no body headings.
 See the theme's SHELL.md for the implemented contract; footer customization is not
 part of this slice.

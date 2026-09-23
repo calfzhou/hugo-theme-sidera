@@ -27,7 +27,7 @@
 {{- range .Pages -}}
   {{- if and (not .Params.sidera.tag_view) (eq (partial "collection-owner.html" .) $owner) .RelPermalink -}}
     {{- $name := strings.TrimPrefix (printf "%s/" $parent.Path) .Path -}}
-    {{- if strings.Contains $name "/" -}}
+    {{- if and (strings.Contains $name "/") (eq (partialCached "sidera/settings.html" $parent $parent.Path).list_mode "children") -}}
       {{- errorf "P2W docs require a branch _index.md at each intermediate directory: %s (parent %s)" .Path $parent.Path -}}
     {{- end -}}
     {{- if isset $byName $name -}}{{- errorf "P2W ambiguous direct child %q: %s" $name $parent.Path -}}{{- end -}}

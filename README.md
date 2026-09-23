@@ -4,6 +4,12 @@ Sidera — A Hugo theme for blogs, notebooks, and connected knowledge. Inspired 
 
 ## Development status
 
+P2-M now implements portable public params, independent scope_root boundaries, optional native
+section presets with three-target defaults, capability-based lists/trees, native multi-author
+attribution and section-scoped series views/navigation. Sidera supplies its taxonomy definitions
+and preset terms; consumers import rather than duplicate them. [Current contract](CONTRACT.md).
+
+
 P2-F implements the approved recognizable shell and native customization baseline:
 left-anchored soft-glass identity/navigation, bounded compact main, optional right
 region, complete notes/docs trees, native menus and scoped components. See
@@ -22,8 +28,8 @@ Distribution licensing is a separate unresolved gate.
   below 1231px, left below 761px. No-JS leaves navigation open; no focus trap.
 - Original fixed inline icons and optional local identity/profile images. No
   font/icon framework, downloads, remote backgrounds or integration placeholders.
-- Site/language → nearest owner → Page presence semantics are documented with
-  native cascade caveats; ordered region arrays/maps replace completely. Same
+- Native effective Page.Params → target-specific preset fallback → language/site semantics
+  are documented with native cascade caveats; ordered region arrays/maps replace completely. Same
   full shell for standalone pages; compact is an explicit override.
 - Shared ordinary reading, local wide-code/table scrolling, native TOC, meaningful
   current/ancestor navigation and one paginator per applicable list. Card/date/
@@ -102,14 +108,17 @@ verified. There is no automatic body/title/tag translation or fake language swit
 See [I18N.md](I18N.md) for configuration, the full key inventory, extension guidance,
 escaping/fallback semantics and the explicit content-loader boundary.
 
-## Parameter namespace
+## Public parameters and native presets
 
-Existing section/article/shell consumer fields remain under `params.sidera` until
-the P2-M consumer migration. New preset terms use `params.defaults` (see PRESETS.md). This pre-release schema replaces the former flat custom
-fields outright; there are no compatibility readers. Native Hugo fields and
-non-Sidera site params stay native. Byline/update defaults belong on the collection
-root (Page → owner → Site resolution), avoiding native cascade table replacement
-when a note authors its own tags. See [CONTRACT.md](CONTRACT.md) and [SHELL.md](SHELL.md).
+Public custom settings now live under `params`, with meaningful groups retained. Native fields,
+taxonomy assignments, menus and cascade remain native. Only private generated navigation metadata
+uses `params.sidera`; no legacy public-key reader or closed blog/notes/docs kind gate remains.
+Ordinary section params configure that section; use native cascade for descendant metadata.
+
+`preset` selects optional defaults without changing scope. Top-level sections are browsing roots;
+a nested `params.scope_root=true` establishes an independent one. Profileless sections have the
+same configured capabilities. The theme's blog/notes/docs term Pages support native site overrides
+and custom fourth presets without template code changes. See [PRESETS.md](PRESETS.md).
 
 ## Shared native taxonomies
 
@@ -119,11 +128,10 @@ counts, pagination and article links are implemented. A regular page/bundle can 
 between collection folders without rewriting its taxonomy metadata.
 
 
-## P2-M prerequisite: theme-owned definitions and preset terms
+## Theme-owned definitions
 
-[PRESETS.md](PRESETS.md) documents Sidera-owned taxonomy/term-URL defaults and native
-blog/notes/docs preset term Pages. Sites import these categories instead of repeating
-the definitions. Native site term overrides and EN/ZH work without an extra registry.
-This is a prerequisite, **not the completed parameter/preset consumer migration**;
-current collection/params.sidera behavior remains until that next authorized slice.
-Actual bundled docs still require explicit opt-in, independent of the docs preset term.
+[PRESETS.md](PRESETS.md) explains the narrow native import permission, theme-supplied definitions
+and per-language term Pages. The full consumer migration is implemented, including false/empty
+semantics and old-key removal. Actual theme docs still need explicit opt-in (DOCS.md); publishing
+the docs preset term does not publish that documentation tree. Remaining G/H visual/card/footer
+finishing, P3 special features and distribution licensing remain separate.

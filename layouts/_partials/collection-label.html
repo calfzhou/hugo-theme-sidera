@@ -1,0 +1,3 @@
+{{- $label := T "collection" -}}
+{{- with partial "model/preset.html" . -}}{{- $label = .LinkTitle -}}{{- end -}}
+{{- return $label -}}

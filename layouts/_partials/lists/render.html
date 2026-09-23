@@ -1,17 +1,17 @@
 {{- /* Sole paginator creation site. Selection/sort/pins are complete BEFORE
        this first (cached) call. Navigation receives the Pager, never the Page. */ -}}
 {{ $policy := partial "lists/policy.html" .owner }}{{ with .policy }}{{ $policy = . }}{{ end }}
-{{ $ordered := partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}
+{{ $ordered := .pages }}{{ if not .preordered }}{{ $ordered = partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}{{ end }}
 {{ $countLabel := "article_count" }}{{ with .count_label }}{{ $countLabel = . }}{{ end }}
 {{ $pager := .page.Paginate $ordered $policy.size }}
 <div class="list-meta">
   <p data-total="{{ $pager.TotalNumberOfElements }}">{{ T $countLabel (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}</p>
-  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ T (printf "order_%s" $policy.order) }}</p>
+  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ if .preordered }}{{ T (printf "series_order_%s" $policy.order) }}{{ else }}{{ T (printf "order_%s" $policy.order) }}{{ end }}</p>
 </div>
 <ul id="articles" class="article-list">
   {{ range $pager.Pages }}
     <li class="article-card">
-      {{ if .Params.sidera.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
+      {{ if .Params.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       {{ if $.show_owner }}{{ with partial "collection-owner.html" . }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}{{ end }}
       <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>

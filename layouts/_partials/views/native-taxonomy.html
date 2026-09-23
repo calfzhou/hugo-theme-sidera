@@ -1,8 +1,11 @@
-{{- /* Native global groups. Scoped author/series UI and preset resolution belong
-      to the subsequent P2-M consumer migration, not this config prerequisite. */ -}}
+{{ .Store.Set "sidera-body" true }}
+{{- /* Native global grouping; series navigation is separately scope-filtered. */ -}}
 {{ $taxonomy := .Data.Plural }}
 {{ $policy := partial "taxonomies/policy.html" false }}
-<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) (in (slice "authors" "series" "preset") $taxonomy) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ .Content }}</div></header>
+<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) (in (slice "authors" "series" "preset") $taxonomy) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1>{{ if and (eq .Kind "term") (eq $taxonomy "authors") }}{{ with .Params.avatar }}
+  {{ if ne (printf "%T" .) "string" }}{{ errorf "Sidera avatar must be a local image string: %s" $.Path }}{{ else }}
+  {{ $avatar := partial "sidera/image.html" (dict "Page" $ "Owner" false "path" .) }}{{ with $avatar }}<img src="{{ . }}" width="80" alt="{{ $.Title }}" loading="lazy">{{ end }}{{ end }}
+{{ end }}{{ end }}<div class="intro prose">{{ .Content }}</div></header>
 {{ if eq .Kind "taxonomy" }}
   {{ $terms := slice }}{{ range .Data.Terms.Alphabetical }}{{ $terms = $terms | append .Page }}{{ end }}
   {{ $pager := .Paginate $terms $policy.size }}

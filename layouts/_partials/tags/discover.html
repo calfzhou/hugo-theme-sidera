@@ -1,20 +1,18 @@
 {{- $owner := .owner -}}{{- $nodes := .nodes -}}{{- $dir := .dir -}}
 {{- $local := partial "tags/files.html" $dir -}}
-{{- with index $local.files "_index.md" -}}
-  {{- $fm := partial "tags/frontmatter.html" (path.Join $dir .) -}}
-  {{- with $fm.params.sidera.collection -}}
-    {{- $owner = strings.TrimPrefix "content/" $dir -}}
-    {{- if and (eq (partial "collection-kind.html" .) "notebook") (not (findRE `^[a-z0-9-]+(/[a-z0-9-]+)*$` $owner)) -}}{{- errorf "P1B notebook content path must use lowercase ASCII slug segments: %s" $owner -}}{{- end -}}
-    {{- range os.ReadDir $dir -}}
-      {{- $name := lower .Name -}}
-      {{- range $logical, $physical := $local.files -}}{{- if eq (lower $physical) $name -}}{{- $name = lower $logical -}}{{- end -}}{{- end -}}
-      {{- if in (slice "tags" "tags.md" "categories" "categories.md" "page" "page.md") $name -}}{{- errorf "P1B reserved notebook source namespace: %s" (path.Join $dir .Name) -}}{{- end -}}
-    {{- end -}}
-    {{- range slice "tags" "categories" "page" -}}
-      {{- if os.FileExists (printf "static/%s/%s" $owner .) -}}{{- errorf "P1B reserved notebook static namespace: static/%s/%s" $owner . -}}{{- end -}}
-    {{- end -}}
-    {{- range slice "tags" "categories" -}}{{- $nodes.SetInMap "routes" (printf "%s/%s" $owner .) (dict "key" "" "slug" "" "taxonomy" .) -}}{{- end -}}
+{{- $relative := strings.TrimPrefix "content/" $dir -}}
+{{- $fmRoot := dict -}}{{- with index $local.files "_index.md" -}}{{- $fmRoot = partial "tags/frontmatter.html" (path.Join $dir .) -}}{{- end -}}
+{{- $nativeTaxonomy := in (slice "tags" "categories" "authors" "series" "preset") (index (split $relative "/") 0) -}}
+{{- $root := and (ne $dir "content") (not $local.leaf) (not $nativeTaxonomy) (or (not (strings.Contains $relative "/")) (eq $fmRoot.params.scope_root true)) -}}
+{{- if $root -}}
+  {{- $owner = $relative -}}
+  {{- if not (findRE `^[a-z0-9-]+(/[a-z0-9-]+)*$` $owner) -}}{{- errorf "P1B scoped content path must use lowercase ASCII slug segments: %s" $owner -}}{{- end -}}
+  {{- range os.ReadDir $dir -}}
+    {{- $name := lower .Name -}}{{- range $logical, $physical := $local.files -}}{{- if eq (lower $physical) $name -}}{{- $name = lower $logical -}}{{- end -}}{{- end -}}
+    {{- if in (slice "tags" "tags.md" "categories" "categories.md" "authors" "authors.md" "series" "series.md" "page" "page.md") $name -}}{{- errorf "P1B reserved scoped source namespace: %s" (path.Join $dir .Name) -}}{{- end -}}
   {{- end -}}
+  {{- range slice "tags" "categories" "authors" "series" "page" -}}{{- if os.FileExists (printf "static/%s/%s" $owner .) -}}{{- errorf "P1B reserved scoped static namespace: static/%s/%s" $owner . -}}{{- end -}}{{- end -}}
+  {{- range slice "tags" "categories" "authors" "series" -}}{{- $nodes.SetInMap "routes" (printf "%s/%s" $owner .) (dict "key" "" "slug" "" "taxonomy" .) -}}{{- end -}}
 {{- end -}}
 {{- range os.ReadDir $dir -}}
   {{- if and .IsDir (not $local.leaf) -}}{{- partial "tags/discover.html" (dict "owner" $owner "nodes" $nodes "dir" (path.Join $dir .Name)) -}}{{- end -}}
@@ -22,15 +20,18 @@
 {{- range $name, $physical := $local.files -}}
   {{- if or (not $local.leaf) (eq $name "index.md") -}}
     {{- $file := path.Join $dir $physical -}}{{- $fm := partial "tags/frontmatter.html" $file -}}
-    {{- range $taxonomy := slice "tags" "categories" -}}
+    {{- $inputValid := partial "model/input.html" (dict "fm" $fm "source" $file "section" (eq $name "_index.md")) -}}
+    {{- range $taxonomy := slice "tags" "categories" "authors" "series" -}}
       {{- $terms := slice -}}{{- if isset $fm $taxonomy -}}{{- $terms = index $fm $taxonomy -}}{{- end -}}
+      {{- if and (in (slice "authors" "series") $taxonomy) (eq (printf "%T" $terms) "string") -}}{{- $terms = slice $terms -}}{{- end -}}
       {{- $normalized := partial "tags/normalize.html" (dict "tags" $terms "source" $file) -}}
       {{- /* Generate native direct/ancestor term Pages; only Unicode publication paths
              are ASCII encoded to avoid macOS composed/decomposed file collisions. */ -}}
       {{- range $terms -}}
         {{- if eq (printf "%T" .) "string" -}}
           {{- $parts := split . "/" -}}
-          {{- range seq (len $parts) -}}
+          {{- $depths := seq (len $parts) -}}{{- if in (slice "authors" "series") $taxonomy -}}{{- $depths = slice (len $parts) -}}{{- end -}}
+          {{- range $depths -}}
             {{- $raw := delimit (first . $parts) "/" -}}
             {{- $nativePath := lower (replaceRE `\s` "-" (printf "%s/%s" $taxonomy $raw)) -}}
             {{- $key := (index (partial "tags/normalize.html" (dict "tags" (slice $raw) "source" $file)) 0).key -}}
@@ -41,7 +42,8 @@
       {{- end -}}
       {{- range $normalized -}}
         {{- $keys := split .key "/" -}}{{- $slugs := split .slug "/" -}}
-        {{- range seq (len $keys) -}}
+        {{- $depths := seq (len $keys) -}}{{- if in (slice "authors" "series") $taxonomy -}}{{- $depths = slice (len $keys) -}}{{- end -}}
+        {{- range $depths -}}
           {{- $key := delimit (first . $keys) "/" -}}{{- $slug := delimit (first . $slugs) "/" -}}
           {{- /* Same normalized scope-safe identities for every content kind. */ -}}
           {{- $identity := printf "%s/%s/%s" $owner $taxonomy $slug -}}

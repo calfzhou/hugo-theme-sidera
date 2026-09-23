@@ -80,9 +80,6 @@ other = "网站"
 [overview]
 other = "概览"
 
-[tag_hierarchy]
-other = "标签树"
-
 [order_publication]
 other = "按发表时间降序 · 置顶优先"
 
@@ -138,7 +135,7 @@ other = "{{ .number }} 篇文章"
 other = "文档"
 
 [docs_tree]
-other = "文档目录"
+other = "页面目录"
 
 [docs_ancestors]
 other = "文档层级"
@@ -172,3 +169,12 @@ other = "作者"
 other = "专栏"
 [preset]
 other = "预设"
+
+[series_previous]
+other = "专栏上一篇"
+[series_next]
+other = "专栏下一篇"
+[series_order_publication]
+other = "专栏顺序：按发布时间从早到晚。"
+[series_order_weight]
+other = "专栏顺序：按专栏权重升序。"

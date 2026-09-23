@@ -1,5 +1,5 @@
 {{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
-{{- if and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "docs") -}}
+{{- if $owner -}}
   <nav class="docs-navigation tag-navigation" aria-label="{{ T "docs_tree" }}">
     <h2 class="nav-heading">{{ T "docs_tree" }}</h2>
     <a class="tree-root" href="{{ $owner.RelPermalink }}"{{ if eq $page $owner }} aria-current="page"{{ else }} aria-current="location"{{ end }}>{{ $owner.Title }}</a>

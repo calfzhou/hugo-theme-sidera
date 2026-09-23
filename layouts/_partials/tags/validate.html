@@ -1,16 +1,16 @@
-{{- range $taxonomy := slice "tags" "categories" -}}
+{{- range $taxonomy := slice "tags" "categories" "authors" "series" -}}
   {{- if not (site.GetPage (printf "/%s" $taxonomy)) -}}{{- errorf "Sidera requires native %s taxonomy output; enable tag=tags/category=categories and remove taxonomy/term from disableKinds" $taxonomy -}}{{- end -}}
 {{- end -}}
 {{- /* Validate once after Hugo has assembled Pages. Adapter discovery separately
        guards source namespace collisions before AddPage can shadow content. */ -}}
-{{- $owners := where (where site.Pages "Kind" "section") "Params.sidera.collection" "in" (slice "blog" "notebook" "notes" "docs" "wiki") -}}
+{{- $owners := slice -}}{{- range where site.Pages "Kind" "section" -}}{{- if partial "model/is-root.html" . -}}{{- $owners = $owners | append . -}}{{- end -}}{{- end -}}
 {{- range $owners -}}
   {{- $owner := . -}}
   {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relLangURL -}}
-  {{- if and (eq (partial "collection-kind.html" .Params.sidera.collection) "notebook") (ne .RelPermalink $expected) -}}
-    {{- errorf "P1B notebook route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
+  {{- if ne .RelPermalink $expected -}}
+    {{- errorf "P1B scoped route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
   {{- end -}}
-  {{- range slice "tags" "categories" "page" -}}
+  {{- range slice "tags" "categories" "authors" "series" "page" -}}
     {{- $namespace := printf "%s%s/" $owner.RelPermalink . -}}
     {{- if ne . "page" -}}{{- with site.GetPage (printf "%s/%s" $owner.Path .) -}}{{- $namespace = .RelPermalink -}}{{- end -}}{{- end -}}
     {{- range site.Pages -}}
@@ -18,17 +18,17 @@
         {{- errorf "P1B tag_view is reserved for generated pages: %s" .Path -}}
       {{- end -}}
       {{- if and (not .Params.sidera.tag_view) (or (eq .RelPermalink (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix .RelPermalink $namespace)) -}}
-        {{- errorf "P1B reserved notebook route namespace: %s (%s)" .RelPermalink .Path -}}
+        {{- errorf "P1B reserved scoped route namespace: %s (%s)" .RelPermalink .Path -}}
       {{- end -}}
       {{- range .Aliases -}}
         {{- $alias := . -}}
         {{- if or (eq (strings.TrimSuffix "/" $alias) (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix $alias $namespace) -}}
-          {{- errorf "P1B alias in reserved notebook route namespace: %s" . -}}
+          {{- errorf "P1B alias in reserved scoped route namespace: %s" . -}}
         {{- end -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- range $taxonomy := slice "tags" "categories" -}}
+  {{- range $taxonomy := slice "tags" "categories" "authors" "series" -}}
     {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $owner.Path $taxonomy -}}
     {{- range $model.nodes -}}
       {{- $page := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" .key "slug" .slug) -}}

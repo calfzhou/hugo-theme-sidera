@@ -1,18 +1,4 @@
-{{- /* Route/membership policy is site -> owner, not per-article presentation. */ -}}
-{{- $hierarchy := slice "tags" "categories" -}}{{- $size := 10 -}}
-{{- $scopes := slice site.Params -}}{{- with . -}}{{- $scopes = $scopes | append .Params -}}{{- end -}}
-{{- range $scopes -}}
-  {{- with .sidera -}}
-    {{- if isset . "taxonomy_hierarchy" -}}{{- $hierarchy = .taxonomy_hierarchy -}}{{- end -}}
-    {{- if isset . "taxonomy_page_size" -}}{{- $size = .taxonomy_page_size -}}{{- end -}}
-  {{- end -}}
-{{- end -}}
-{{- if not (reflect.IsSlice $hierarchy) -}}{{- errorf "Sidera taxonomy_hierarchy must be an array of tags/categories; [] means flat" -}}{{- $hierarchy = slice -}}
-{{- else -}}
-  {{- $seen := slice -}}{{- range $hierarchy -}}
-    {{- if or (not (in (slice "tags" "categories") .)) (in $seen .) -}}{{- errorf "Sidera invalid/duplicate taxonomy_hierarchy item %v" . -}}{{- end -}}
-    {{- $seen = $seen | append . -}}
-  {{- end -}}
-{{- end -}}
-{{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $size))) (lt (int $size) 1) -}}{{- errorf "Sidera taxonomy_page_size must be a positive integer" -}}{{- $size = 10 -}}{{- end -}}
-{{- return (dict "hierarchy" $hierarchy "size" (int $size)) -}}
+{{- /* Stable scope policy, not the individual member article's display defaults. */ -}}
+{{- $page := site.Home -}}{{- with . -}}{{- $page = . -}}{{- end -}}
+{{- $s := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- return (dict "hierarchy" $s.taxonomy_hierarchy "size" $s.taxonomy_page_size) -}}

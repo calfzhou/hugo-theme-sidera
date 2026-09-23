@@ -1,8 +1,9 @@
 +++
+preset = 'docs'
 title = "Sidera documentation sample"
-[params.sidera]
-collection = 'docs'
-[params.sidera.children]
+[params]
+scope_root = true
+[params.children]
 order = ['authoring']
 page_size = 1
 +++

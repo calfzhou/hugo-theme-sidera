@@ -1,16 +1,17 @@
 {{ $owner := partial "collection-owner.html" . }}
-  {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "docs") }}
+  {{ if eq (partialCached "sidera/settings.html" . .Path).list_mode "children" }}
     {{ partial "docs/render.html" . }}
   {{ else }}
+  {{ .Store.Set "sidera-body" true }}
   <header class="view-header">
     {{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
     {{ end }}
     <h1>{{ .Title }}</h1>
     <div class="intro prose">{{ .Content }}</div>
-    {{ if and $owner (eq (partial "collection-kind.html" $owner.Params.sidera.collection) "notebook") }}
-      {{ $hub := partial "tags/page.html" (dict "owner" $owner "slug" "") }}
-      <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>
+    {{ if and $owner (in (partialCached "sidera/settings.html" . .Path).taxonomy_navigation "tags") }}
+      {{ with $hub := .Site.GetPage (printf "%s/tags" $owner.Path) }}
+      <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>{{ end }}
     {{ end }}
   </header>
   {{ $pages := slice }}
@@ -19,5 +20,5 @@
       {{ $pages = $pages | append . }}
     {{ end }}
   {{ end }}
-  {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages) }}
+  {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages "policy" (partial "lists/policy.html" .)) }}
   {{ end }}

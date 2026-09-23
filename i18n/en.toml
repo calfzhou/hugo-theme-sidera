@@ -80,9 +80,6 @@ other = "Site"
 [overview]
 other = "Overview"
 
-[tag_hierarchy]
-other = "Tag hierarchy"
-
 [order_publication]
 other = "Newest published · Pins first"
 
@@ -139,10 +136,10 @@ other = "{{ .number }} articles"
 other = "docs"
 
 [docs_tree]
-other = "Documentation tree"
+other = "Page tree"
 
 [docs_ancestors]
-other = "Documentation ancestors"
+other = "Page ancestors"
 
 [docs_children]
 other = "Child pages"
@@ -175,3 +172,12 @@ other = "Authors"
 other = "Series"
 [preset]
 other = "Presets"
+
+[series_previous]
+other = "Previous in series"
+[series_next]
+other = "Next in series"
+[series_order_publication]
+other = "Series order: oldest publication first."
+[series_order_weight]
+other = "Series order: ascending series weight."

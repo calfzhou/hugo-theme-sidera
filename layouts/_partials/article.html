@@ -4,9 +4,15 @@
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
     {{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</span></nav>
+      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
     {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}
     <h1>{{ .Title }}</h1>
+    {{ if $settings.show_authors }}{{ with (.GetTerms "authors" | uniq) }}
+      <nav aria-label="{{ T "authors" }}"><ul id="assigned-authors" class="tag-chips">{{ range . }}
+        {{ $target := partial "taxonomies/link.html" (dict "page" $.page "term" .) }}<li><a href="{{ $target.RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}</ul></nav>
+    {{ end }}{{ end }}
+    {{ partial "series/navigation.html" . }}
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     <div class="article-dates">
       {{ if not .PublishDate.IsZero }}
@@ -25,7 +31,8 @@
         {{ with $hub }}<nav class="article-tag-hub" aria-label="{{ if eq $taxonomy "tags" }}{{ T "notebook_tags" }}{{ else }}{{ T "categories" }}{{ end }}"><a href="{{ .RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ T "all_tags_in" (dict "title" $owner.Title) }}{{ else }}{{ $owner.Title }} · {{ T "categories" }}{{ end }}</a></nav>{{ end }}
         <ul id="assigned-{{ $taxonomy }}" class="tag-chips">
           {{ range $direct }}
-            {{ $target := partial "taxonomies/page.html" (dict "owner" (cond (not $hub) false $owner) "taxonomy" $taxonomy "key" .key "slug" .slug) }}
+            {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
+            {{ $target := partial "taxonomies/link.html" (dict "page" $.page "term" $native) }}
             <li><a href="{{ $target.RelPermalink }}">{{ .key }}</a></li>
           {{ end }}
         </ul>

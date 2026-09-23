@@ -1,0 +1,16 @@
+{{- $term := .term -}}{{- $order := "publication" -}}
+{{- if isset $term.Params "series_order" -}}{{- $order = $term.Params.series_order -}}{{- end -}}
+{{- if not (in (slice "publication" "weight") $order) -}}{{- errorf "Sidera series_order must be publication or weight: %s" $term.Path -}}{{- end -}}
+{{- $pages := sort (sort .pages "Path" "asc") "Title" "asc" -}}
+{{- $pages = sort $pages "PublishDate" "asc" -}}
+{{- $dated := slice -}}{{- $undated := slice -}}
+{{- range $pages -}}{{- if .PublishDate.IsZero -}}{{- $undated = $undated | append . -}}{{- else -}}{{- $dated = $dated | append . -}}{{- end -}}{{- end -}}
+{{- $pages = $dated | append $undated -}}
+{{- if eq $order "weight" -}}
+  {{- $weighted := slice -}}{{- range $pages -}}{{- $weight := 0 -}}{{- if isset .Params "series_weight" -}}{{- $weight = .Params.series_weight -}}{{- end -}}
+    {{- if not (in (slice "int" "int64" "uint64") (printf "%T" $weight)) -}}{{- errorf "Sidera series_weight must be an integer: %s" .Path -}}{{- end -}}
+    {{- $weighted = $weighted | append (dict "page" . "weight" $weight) -}}
+  {{- end -}}
+  {{- $pages = slice -}}{{- range sort $weighted "weight" "asc" -}}{{- $pages = $pages | append .page -}}{{- end -}}
+{{- end -}}
+{{- return (dict "pages" $pages "order" $order) -}}

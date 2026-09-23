@@ -1,14 +1,4 @@
-{{- /* Membership belongs to the nearest marked section, never an article ID.
-       The marker must NOT be cascaded to ordinary storage subsections. */ -}}
 {{- $owner := false -}}
-{{- if and .IsSection .Params.sidera.collection -}}
-  {{- $owner = . -}}
-{{- else -}}
-  {{- range .Ancestors -}}
-    {{- if and .IsSection .Params.sidera.collection -}}
-      {{- $owner = . -}}
-      {{- break -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
+{{- if partial "model/is-root.html" . -}}{{- $owner = . -}}
+{{- else -}}{{- range .Ancestors -}}{{- if partial "model/is-root.html" . -}}{{- $owner = . -}}{{- break -}}{{- end -}}{{- end -}}{{- end -}}
 {{- return $owner -}}

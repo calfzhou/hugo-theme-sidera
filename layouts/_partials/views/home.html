@@ -1,3 +1,4 @@
+{{ .Store.Set "sidera-body" true }}
 <header class="view-header">
     <p class="eyebrow">{{ T "collection_overview" }}</p>
     <h1>{{ .Title }}</h1>
@@ -6,9 +7,9 @@
   <h2 class="section-heading">{{ T "collections" }}</h2>
   <ul id="collections" class="collection-grid">
     {{ range (where site.Pages "Kind" "section").ByTitle }}
-      {{ if .Params.sidera.collection }}
+      {{ if partial "model/is-root.html" . }}
         <li class="collection-card">
-          <span class="eyebrow">{{ T (printf "collection_%s" (partial "collection-kind.html" .Params.sidera.collection)) }}</span>
+          <span class="eyebrow">{{ partial "collection-label.html" . }}</span>
           <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
           <p>{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
         </li>

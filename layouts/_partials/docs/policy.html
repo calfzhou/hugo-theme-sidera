@@ -1,30 +1,12 @@
 {{- /* Native Params supply cascading defaults; only order is source-local.
      Read this native Page's source, never walk directories or discover Pages. */ -}}
 {{- $p := . -}}
-{{- $settings := dict -}}
-{{- if isset (.Params.sidera | default dict) "children" -}}{{- $settings = .Params.sidera.children -}}{{- end -}}
+{{- $settings := (partialCached "sidera/settings.html" . .Path).children -}}
 {{- $order := slice -}}
 {{- with .File -}}
   {{- $fm := partial "tags/frontmatter.html" .Filename -}}
-  {{- with $fm.params.sidera.children -}}
+  {{- with $fm.params.children -}}
     {{- if and (reflect.IsMap .) (isset . "order") -}}{{- $order = .order -}}{{- end -}}
   {{- end -}}
 {{- end -}}
-{{- $sort := "title" -}}{{- $size := 10 -}}{{- $list := true -}}
-{{- if not (reflect.IsMap $settings) -}}
-  {{- errorf "P2W children must be a table: %s" .Path -}}
-{{- else -}}
-  {{- range $key, $value := $settings -}}
-    {{- if not (in (slice "order" "sort" "page_size" "list") $key) -}}{{- errorf "P2W unknown children setting %q: %s" $key $p.Path -}}{{- end -}}
-  {{- end -}}
-  {{- if isset $settings "sort" -}}{{- $sort = $settings.sort -}}{{- end -}}
-  {{- if isset $settings "page_size" -}}{{- $size = $settings.page_size -}}{{- end -}}
-  {{- if isset $settings "list" -}}{{- $list = $settings.list -}}{{- end -}}
-{{- end -}}
-{{- if not (in (slice "title" "name") $sort) -}}{{- errorf "P2W children.sort must be title or name: %s" .Path -}}{{- end -}}
-{{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $size))) (lt (int $size) 1) -}}
-  {{- errorf "P2W children.page_size must be a positive integer: %s" .Path -}}
-{{- end -}}
-{{- if ne (printf "%T" $list) "bool" -}}{{- errorf "P2W children.list must be boolean: %s" .Path -}}{{- end -}}
-{{- if not (reflect.IsSlice $order) -}}{{- errorf "P2W children.order must be an array: %s" .Path -}}{{- $order = slice -}}{{- end -}}
-{{- return (dict "order" $order "sort" $sort "size" (int $size) "list" $list) -}}
+{{- return (partial "docs/options.html" (dict "settings" $settings "order" $order "source" .Path)) -}}

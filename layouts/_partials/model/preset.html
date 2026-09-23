@@ -1,0 +1,10 @@
+{{- $preset := false -}}
+{{- if isset .Params "preset" -}}
+  {{- if not .IsSection -}}{{- errorf "Sidera preset belongs on a section: %s" .Path -}}{{- end -}}
+  {{- $terms := .GetTerms "preset" | uniq -}}
+  {{- if gt (len $terms) 1 -}}{{- errorf "Sidera one preset per section: %s" .Path -}}{{- end -}}
+  {{- with first 1 $terms -}}{{- $preset = index . 0 -}}
+    {{- if not (reflect.IsMap $preset.Params.defaults) -}}{{- errorf "Sidera preset %s requires params.defaults map (%s)" $preset.Path $.Path -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $preset -}}

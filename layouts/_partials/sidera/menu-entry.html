@@ -7,9 +7,9 @@
 {{- with $entry.ConfiguredURL -}}{{- $validated := partial "sidera/url.html" (dict "url" . "source" (printf "menu %s/%s" $ctx.Name $entry.Name)) -}}{{- end -}}
 {{- $label := $entry.Name -}}
 <li>
-  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if .Params.sidera.collection -}}{{- $icon = partial "collection-kind.html" .Params.sidera.collection -}}{{- end -}}{{- end -}}
-  {{- with $entry.Page -}}{{- if isset (.Params.sidera | default dict) "icon" -}}{{- $icon = .Params.sidera.icon -}}{{- end -}}{{- end -}}
-  {{- if isset ($entry.Params.sidera | default dict) "icon" -}}{{- $icon = $entry.Params.sidera.icon -}}{{- end -}}
+  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if partial "model/is-root.html" . -}}{{- $icon = (partialCached "sidera/settings.html" . .Path).icon -}}{{- end -}}{{- end -}}
+  {{- with $entry.Page -}}{{- if isset (.Params | default dict) "icon" -}}{{- $icon = .Params.icon -}}{{- end -}}{{- end -}}
+  {{- if isset ($entry.Params | default dict) "icon" -}}{{- $icon = $entry.Params.icon -}}{{- end -}}
   {{- $iconHTML := partial "sidera/icon.html" $icon -}}
   {{- if $entry.URL -}}
     <a href="{{ partial "sidera/url.html" (dict "url" $entry.URL "source" (printf "menu %s/%s" $ctx.Name $entry.Name)) }}"{{ if $current }} aria-current="page"{{ else if $ancestor }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $iconHTML }}{{ end }}<span>{{ $label }}</span></a>

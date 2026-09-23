@@ -1,191 +1,191 @@
-# Supported site contract
+# Sidera content and configuration contract
 
-Sidera is an independent Hugo-native theme for peer blogs, notes and docs, with
-shared article rendering. Stellar is a visual reference, not a configuration or
-feature-compatibility API. This guide describes the implemented P2 boundary, not
-all Hugo inputs or a production migration guarantee.
+Implemented P2-M model on Hugo **0.166.0**. This is an independent Hugo theme, not a
+Stellar configuration port. The remaining G/H visual/card/footer finishing is separate.
+No Hexo, Node runtime, downloaded dependency, duplicated source repo or Go-module switch is
+required to build. Showcase tests use Python stdlib; browser tests use its pinned Node/Chrome.
 
-## Prerequisites and ownership
+## Theme versus site ownership
 
-Verified with **Hugo 0.166.0+extended+withdeploy** on macOS. This is the tested
-version, not a claim that every older version works or that the deploy/extended
-features are required. Sidera uses native templates, content adapters, CSS and JS;
-no Node, npm, Hexo, Go module, font download or sibling repository is a build input.
-The showcase's optional tests use Python 3.9+ stdlib; browser tests additionally
-use its `.nvmrc` Node 24.12.0 and installed Chrome (override `CHROME_BIN` if needed).
-
-| Site owns | Theme owns |
-| --- | --- |
-| Content, collection roots/titles, bylines, publication choices, locale/timezone, date chains, permalinks and final homepage intent | Owner lookup, tag sections/unions/validation, list sorting/pins/pagination, reusable article/list/tag/navigation presentation |
-| Native configuration and same-path template/asset/i18n overrides | Native English/Simplified Chinese catalogs, dark-first appearance and progressive enhancement |
-
-The collection overview supplied by `layouts/home.html` demonstrates peers; it
-is **not** a decision about a real site's final homepage. Overrides should preserve
-native UI translations, one paginator per list, ownership and namespace checks.
-The implemented [shell contract](SHELL.md) adds native menu selection, scoped fixed
-components, CSS tokens and small native override hooks. No widget registry or
-parallel menu engine is introduced.
-
-## Required site policy versus theme defaults
-
-The theme supplies taxonomy definitions and native term URL defaults in its own
-configuration; the site enables category-specific native import. Locale/date chains,
-page permalinks and pagination remain site-owned. See [PRESETS.md](PRESETS.md) for
-this P2-M prerequisite and the not-yet-migrated resolver boundary:
+Sidera owns the native taxonomy definitions and term-URL defaults in `hugo.toml`, the
+blog/notes/docs preset library and all reusable rendering/validation. The site grants narrow
+native import permission, without copying those definitions:
 
 ```toml
-baseURL = 'https://example.org/' # replace with the site's URL
-locale = 'en-US'
-defaultContentLanguage = 'en'
-title = 'My site'
-timeZone = 'Asia/Shanghai'      # choose intentionally for source timestamps
 theme = 'sidera'
-disableKinds = ['RSS']
 [taxonomies]
 _merge = 'shallow'
 [permalinks.term]
 _merge = 'shallow'
+```
 
+The theme provides tag→tags, category→categories, author→authors, series→series and
+preset→preset. Site keys override or extend those native tables. No global/security/markup
+merge is enabled. Date chains, baseURL, language, timezone, page permalinks and pagination
+remain deliberate site policy. The verified showcase retains:
+
+```toml
 [frontmatter]
-date = ['date', 'publishDate', 'pubdate', 'published']
-publishDate = ['publishDate', 'pubdate', 'published', 'date']
-lastmod = ['lastmod', 'modified', 'publishDate', 'pubdate', 'published', 'date']
-
+date = ['date','publishDate','pubdate','published']
+publishDate = ['publishDate','pubdate','published','date']
+lastmod = ['lastmod','modified','publishDate','pubdate','published','date']
 [pagination]
 path = 'page'
 disableAliases = true
 ```
 
-- `page` is a fixed reserved pagination namespace in the current validators.
-  Disabling pagination aliases and RSS matches the tested output contract; native tags/categories are enabled.
-  Collection-scoped taxonomy sections are projections over the same native assignments. Feed integration is not
-  implemented. These are site policies, not theme defaults or claims that all
-  other Hugo settings are invalid.
-- Date chains are site-owned, metadata-only: no Git/mtime/build-clock dates.
-  Missing publication stays unknown; a modification-only note must not invent a
-  publication date. `updated` is **not** included above; mapping that legacy field
-  needs an explicit site alias/conversion choice with real fixtures.
-- Permalinks are optional site policy. The showcase's Journal-only
-  `/journal/:year/:month/:day/:slugorcontentbasename/` is not a theme default.
-  Hugo date tokens use `.Date`; that site's convention treats `date` as publication.
-  Discuss consequential authoring/URL changes rather than changing the policy silently.
-- Locale/translation choices are native Hugo settings; see [I18N.md](I18N.md) for
-  Chinese-only UI, bilingual filenames, site overrides and extension/fallback rules.
-- Current consumer defaults (preset resolver migration still pending): blogs sort by publication, notebooks by modification, unowned
-  sections by title; page size 10; missing pin is false; missing byline/update flag
-  does not add either display. Initial appearance is dark; System is opt-in.
+Missing dates stay unknown; Git/mtime/build time do not invent article dates. Journal's
+publication-date URL rule is site-specific, not a preset rule. Native reserved metadata,
+menus, taxonomy assignments and resources stay native. Other user params remain allowed.
 
-## Content and list contract
+## Structure, browsing scope and presets are separate
 
-Use local `content/` Markdown with TOML or YAML front matter. A marked collection
-root is a branch section (`_index.md`), not a leaf article (`index.md`):
+A native top-level content section is a browsing root automatically. A nested section stays
+within the nearest outer root unless its `_index.md` explicitly sets `params.scope_root=true`.
+False/omission on a nested section means shared scope; false does not disable a top-level root.
+Never cascade this structural marker. Ordinary root-level pages remain standalone.
 
-```toml
-+++
-title = 'My notebook'
-[params.sidera]
-byline = 'My team'
-show_updated = true
-collection = 'notebook' # blog | notes | notebook | docs | wiki; root only, never cascade
-# Optional owner-local settings; do not cascade them:
-list_order = 'modification' # publication | modification | title
-page_size = 10             # positive integer
-+++
+```yaml
+title: Research
+preset: notes
+params:
+  scope_root: true  # needed only when this is an independently browsed nested section
 ```
 
-Articles derive identity from their nearest marked section, including through
-unmarked storage sections. Nested marked collections are isolated in lists;
-article byline/update defaults use Page → nearest marked owner → current-language
-Site, preserving explicit empty/false values. Native cascade still follows ancestry,
-but a local `sidera` table replaces its cascaded counterpart. Article `params.sidera.byline` / `params.sidera.show_updated` overrides preserve false.
-Standalone regular pages need no owner. All use one shared article template.
-Leaf bundles keep relative images/downloads and Markdown resources together.
+`preset` is an optional native taxonomy assignment, preferably a scalar, with a one-element
+array also accepted. **It never changes ownership.** One distinct preset per section; not
+on regular pages and not cascaded as membership. A section without a preset has the same
+capabilities through explicit params. Fourth/custom presets are native term Pages, not an enum.
+Title/Path/native relationships supply identity; articles do not repeat collection IDs.
 
-Owner list policy applies to collection roots, storage subsets and tag unions.
-Publication uses native PublishDate descending, modification uses Lastmod descending;
-ties use Title then logical Path ascending. Title order uses Title/Path. Boolean
-article `params.sidera.pinned = true` partitions the selected result before pagination;
-pins consume slots, spill when necessary, and appear once across the pager chain.
-Recent updates is a configurable region component, default top five by Lastmod/Title/Path,
-independent of pins and current pager. Counts always cover the complete union.
-There are no numeric pin ranks or repeated-pin quotas.
+Owners filter recursive lists and scoped taxonomy/recent views; independent nested roots do
+not leak into their outer collection. Native leaf bundles still have no descendant Pages;
+body-bearing parents use branch `_index.md`. Do not confuse native parentage with browsing scope.
 
-## Native tags/categories and collection routes
+## Three distinct targets for preset defaults
 
-Write literal article `tags = ['science/quantum', 'science/experiments']`.
-No per-article notebook ID, repeated ancestor tags, tag registry or generated-page
-authoring is required. Empty/missing assignments are allowed in every collection kind. [TAXONOMIES.md](TAXONOMIES.md) defines the shared native authoring, global/scoped views and hierarchy choices.
+The term's own `params`/body configure that public term Page. Its member-default fragment is:
 
-- Slash separates hierarchy; lowercasing, trimming and collapsed spaces define
-  identity. Hierarchy (enabled by default) unions/deduplicates Pages globally or within the nearest collection; flat mode uses direct assignments.
-- Empty segments, `.`/`..`, backslashes, control characters, non-string elements,
-  non-array tags, empty slugs and slug `page` are rejected. Slug collisions include
-  implicit ancestors (`a b` vs `a-b`, `C++` vs `C#`).
-- Non-ASCII slugs become `u-` + UTF-8 hexadecimal; labels stay readable. No Unicode
-  normalization/transliteration is performed. Renaming a tag can change its URL.
-- Notebook paths use lowercase ASCII slug segments; roots follow content paths
-  plus native language/baseURL prefixes, not custom root URL/slug overrides.
-- `<collection>/tags/`, `<collection>/categories/` and `<collection>/page/` are reserved; `page/` is reserved under
-  every paginated section. Authored routes, aliases and local static collisions
-  fail validation. `params.sidera.tag_view`, `params.sidera.tag_key`, `params.sidera.tag_slug` are generated metadata, not an
-  authoring API. Draft status never exempts invalid structural metadata.
+```yaml
+title: My documentation preset
+slug: handbook
+params:
+  left: [menu]                # public term UI
+  defaults:
+    params:                  # section explicitly selecting this term
+      list_mode: children
+      left: [menu, page-tree, taxonomies]
+    cascade:
+      params:                # descendant content Pages
+        list_mode: children
+        left: [menu, page-tree, taxonomies]
+        right: [toc]
+        show_updated: true
+```
 
-## Verification and known boundaries
+Resolution of an inheritable custom key:
 
-From a consuming site with this theme installed and configured:
+1. Effective native Page.Params (Hugo already applied actual local/cascade values).
+2. A selecting section's own preset `defaults.params`.
+3. Ancestor sections' preset `defaults.cascade.params`, nearest first.
+4. Current-language Site.Params, then minimal theme defaults.
+
+**Ordinary ancestor Params do not implicitly cascade.** Use real `cascade.params` for
+site-authored descendant defaults. A scope boundary is not a cascade firewall: structural
+ancestry and real native cascade still apply. `preset: []` deliberately stops farther preset
+fallback maps, but does not retract already-effective native values. Omission keeps fallback.
+Contextual generated views query the owning section's view policy, not an article's metadata.
+
+Presence wins: valid false, empty string/array/map override lower tiers. Null is not a reset
+API. Arrays and maps replace at their key boundary; native local-map cascade replacement and
+site/language config merging happen before this resolver. No raw-file cascade reconstruction,
+full second cascade matcher, implicit native taxonomy assignment or legacy dual reader.
+Preset defaults accept only implemented inheritable custom keys, not native fields, pins,
+identity/scope markers, author assignments or parent-local child order.
+
+## Public custom settings
+
+All these are under **`params`**, not `params.sidera`. Grouping is retained where meaningful.
+
+| Setting | Meaning / default |
+|---|---|
+| scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
+| byline | Additional escaped credit text; empty by default. Not author identity. |
+| show_authors / show_updated | Linked native author visibility (true) / Lastmod visibility (false). |
+| pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
+| list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
+| list_order / page_size | publication or modification descending, or title ascending; stable Title/Path ties. Minimal title / positive integer 10. |
+| children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |
+| recent_count / recent_sections | 1–10 (default 5); include descendant section documents (default false). Full owner model, independent of main pins/pager. |
+| taxonomy_hierarchy | Tags/categories interpreted hierarchically; default []. Notes preset supplies [tags]. Stable owner policy for scoped views; Site policy for globals. |
+| taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
+| taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
+| taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
+| left / right | Fixed ordered components or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
+| menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
+| profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
+| identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. |
+| icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon. |
+| avatar | Author-term local portrait string; empty means none. Safe local image lookup. |
+| series_order | Series-term publication (oldest first, undated last) or weight (native series_weight ascending). Stable date/Title/Path ties; pins do not reorder sequences. |
+
+Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+recent, profile, text, links. A page tree is available irrespective of preset/list mode.
+In recursive list mode, native non-section storage folders may flatten into their parent tree;
+children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
+Unknown components/duplicates/malformed fields diagnose. Fixed icons remain home/blog/notebook/
+docs/page/tag/link/star; custom preset names are never used as required icon/i18n enum values.
+
+Native assignments are `tags`, `categories`, `authors`, `series`, `preset` at top level.
+Authors support multiple ordered identities. Series accepts one distinct native term per page;
+its global union and independent section-scoped sequence coexist. See TAXONOMIES.md.
+
+## Presets and migration
+
+The theme's native per-language adapter supplies real blog/notes/docs term Pages from one
+bundled data source, with native site-over-theme replacement. Site-authored same-path term files
+replace the whole definition, not an implicit deep merge. Term titles/body are ordinary authored
+content; bundled labels use native EN/ZH i18n. No need to re-register presets in the showcase.
+[PRESETS.md](PRESETS.md) explains overriding/adding a term and the bundled defaults.
+
+Pre-release migration is direct: collection markers become native preset plus explicit scope_root
+where independent nesting is intended; public params lose the blanket wrapper; article defaults
+move from owner metadata to native cascade when needed. Root-only values remain root-only. Existing
+notebook/wiki enum aliases are not a compatibility layer—author native notes/docs/custom terms.
+The old docs-tree component is now page-tree. No real-site content was converted.
+
+Only generated internals remain under `params.sidera`: tag_view, tag_key, tag_slug, tag_taxonomy,
+inferred_term, term_key. Do not author them; unrelated user namespaces/params are not banned.
+
+## Validation, authoring and lifecycle boundary
+
+The contextual route adapter still inventories supported **local TOML/YAML Markdown**, including
+filename translations, and recognizes the built-in taxonomy source roots. Native published Pages
+supply actual memberships/counts. Arbitrary custom taxonomy source trees, content mounts/adapters,
+other formats and computed/cascaded route vocabulary are not universal loader support. Additional
+native taxonomy configuration/global groups are possible; validate new source layouts explicitly
+rather than assuming this bounded inventory handles every Hugo input.
+
+Scope source paths currently use lowercase ASCII slug segments and their native path routes;
+reserved pagination/context taxonomy namespaces, malformed/sluggable assignments and collisions
+are validated independently of preset labels. Do not silently broaden those verified route limits
+into a promise about an arbitrary site. Native term URL remapping/language/subpath behavior is tested.
+
+Draft is not a structural-validation exemption. Raw local scalar/cardinality/route checks cover
+excluded source; references/parent-local document rules additionally require the documented native
+all-states validation build for unreferenced excluded content, as in P2-W. Fresh successful builds
+into new destinations remain authoritative; watcher defects and harmless empty inferred term routes
+retain D-010's migration tolerance, not production privacy approval. No failed build is publishable.
 
 ```sh
 mkdir -p .checks
 run=$(mktemp -d "$PWD/.checks/build-XXXXXX")
-hugo --destination "$run/public" --cacheDir "$run/cache" \
-  --panicOnWarning --printPathWarnings --printI18nWarnings
-# User-owned convenience preview on an available port; stop with Ctrl-C:
-hugo server --bind 127.0.0.1 --port 14420 --disableFastRender
+hugo --destination "$run/public" --cacheDir "$run/cache" --panicOnWarning --printPathWarnings --printI18nWarnings
+# Structural review of otherwise excluded content, to a separate private local destination:
+hugo --buildDrafts --buildFuture --buildExpired --destination "$run/all-states" --cacheDir "$run/all-cache" --panicOnWarning --printPathWarnings
 ```
 
-Only a **successful fresh build into a new destination** is authoritative. Known
-adapter watcher/stale-output limitations are tolerated during migration;
-`--disableFastRender` does not repair them. Never publish a failed build.
-Unpublished-only tags may expose labels/empty routes even when bodies are excluded:
-use public vocabulary in showcase fixtures. Harmless empty routes are tolerated;
-private vocabulary and valid build-option/public-list semantics need relevant
-P3/P4 checks before real publication, not universal pre-P2 loader certification.
-
-Shared-directory filename translations are tested; separate language contentDirs,
-arbitrary mounts, other adapters/formats and cascaded/computed tag discovery are
-not established. Do not silently adopt those limits as real-site authoring changes.
-
-English/Chinese light/dark desktop/mobile checks and keyboard/no-JS/storage/System
-fallbacks are Chromium/macOS evidence, not full accessibility/browser certification.
-Fonts are local/system stacks; no fonts or vendor libraries are bundled. F includes
-original geometric inline icons and a small optional original SVG mark.
-Restrictive CSP must allow the generated inline appearance script hash or use a
-site override. Rich source features (links/backlinks, code-file tools, search,
-math/diagrams/embeds, comments/feeds) remain P3, not a promised P2 compatibility layer.
-Distribution licensing is unresolved; local development readiness is not permission
-to publish/distribute. See [README.md](README.md) for provenance and appearance details.
-
-## Docs extension (P2-W)
-
-[DOCS.md](DOCS.md) defines the proven body-bearing page tree, parent-local ordering,
-optional direct-child pagination, compatibility aliases and opt-in theme sample.
-It supersedes the earlier arbitrary-mount exclusion only for the two tested optional
-docs namespaces. Notes metadata discovery remains local-site-content scoped.
-Shared article presentation now lives in `layouts/_partials/article.html`; normal
-`layouts/page.html` is a wrapper, and docs sections use the same partial.
-
-## Pre-release namespace consolidation
-
-Existing section/article/shell consumer fields still live under `params.sidera`, including menu-entry
-`params.sidera.icon`. Native title/date/lastmod/draft/slug/url/menus/taxonomy fields
-stay native. No old flat-field readers or aliases remain. Site-owned unrelated
-custom params are allowed; this namespace rule is about fields Sidera defines.
-See SHELL.md for migration of article defaults out of the old cascade examples.
-
-The shared native taxonomy follow-up supersedes earlier notes-only assignment and
-blog-only taxonomy recommendations. `tags`/`categories` are native fields, not
-Sidera params. [TAXONOMIES.md](TAXONOMIES.md) is the current taxonomy contract.
-
-P2-M's new bundled preset metadata is the explicit exception: native `preset`
-assignment and term `params.defaults`. See PRESETS.md; consuming those defaults and
-migrating the older public fields is still pending.
+Bundled actual docs remain outside default content and need explicit mounts (DOCS.md); preset
+metadata never enables them. Standalone reading/shell, localization, dark/light/system behavior,
+local resources and safety remain intact. No P3 service/renderers, full browser/accessibility
+certification, distribution license grant or P2 visual completion is implied.

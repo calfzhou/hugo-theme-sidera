@@ -1,0 +1,38 @@
+{{- /* Type/structural validation only. No cascade provenance reconstruction. */ -}}
+{{- $fm := .fm -}}{{- $source := .source -}}{{- $params := $fm.params | default dict -}}
+{{- if not .effective -}}
+  {{- range $key, $_ := partial "model/defaults.html" . -}}
+    {{- if and (ne $key "menu") (isset $fm $key) -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}
+  {{- end -}}
+  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
+  {{- if isset $params "sidera" -}}
+    {{- if not (reflect.IsMap $params.sidera) -}}{{- errorf "Sidera private metadata namespace must be a map: %s" $source -}}
+    {{- else -}}{{- range $key := slice "tag_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
+  {{- end -}}
+  {{- range $key := slice "tags" "categories" "authors" "series" "preset" "series_weight" -}}
+    {{- if isset $params $key -}}{{- errorf "Sidera native %s must be authored at top level, not under params: %s" $key $source -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if isset $params "scope_root" -}}
+  {{- if or (not .section) (ne (printf "%T" $params.scope_root) "bool") -}}{{- errorf "Sidera scope_root must be a section boolean: %s" $source -}}{{- end -}}
+{{- end -}}
+{{- range $key := slice "preset" "series" "authors" -}}
+  {{- if isset $fm $key -}}
+    {{- $value := index $fm $key -}}{{- if eq (printf "%T" $value) "string" -}}{{- $value = slice $value -}}{{- end -}}
+    {{- if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s must be a string or string array: %s" $key $source -}}
+    {{- else -}}
+      {{- range $value -}}{{- if or (ne (printf "%T" .) "string") (eq (strings.TrimSpace (printf "%v" .)) "") -}}{{- errorf "Sidera %s contains an invalid term: %s" $key $source -}}{{- end -}}{{- end -}}
+      {{- if and (in (slice "preset" "series") $key) (gt (len ($value | uniq)) 1) -}}{{- errorf "Sidera one %s per page: %s" $key $source -}}{{- end -}}
+      {{- if and (eq $key "preset") (not $.section) -}}{{- errorf "Sidera preset belongs on a section: %s" $source -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" -}}
+  {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
+{{- end -}}
+{{- if isset $fm "series_weight" -}}{{- if not (in (slice "int" "int64" "uint64") (printf "%T" $fm.series_weight)) -}}{{- errorf "Sidera series_weight must be an integer: %s" $source -}}{{- end -}}{{- end -}}
+{{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
+{{- range $cascades -}}
+  {{- if or (isset . "preset") (isset (.params | default dict) "scope_root") -}}{{- errorf "Sidera preset/scope_root must not be cascaded: %s" $source -}}{{- end -}}
+{{- end -}}
+{{- return true -}}

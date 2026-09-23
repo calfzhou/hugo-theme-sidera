@@ -1,157 +1,101 @@
-# Shared native tags and categories
+# Native taxonomies and contextual views
 
-Blogs, notes, docs and standalone pages share **one authoring format**. A page's
-location determines its collection and browsing policy, not its taxonomy fields.
+Sidera supplies native tags, categories, authors, series and preset definitions. The site imports
+the theme categories with `_merge='shallow'` as described in CONTRACT.md; no duplicate registration.
+All native assignments are authored at top level, not under params:
 
-```toml
-+++
-title = 'A useful observation'
-date = 2024-03-04T10:00:00Z
-tags = ['science/quantum', 'tools/python']
-categories = ['learning/experiments']
-
-[params.sidera]
-pinned = true
-show_updated = false
-+++
+```yaml
+title: A useful observation
+tags: [science/quantum, tools/python]
+categories: [learning]
+authors: [editor, researcher]
+series: model-workshop
+params:
+  pinned: true
+  show_updated: false
 ```
 
-These are Hugo-native assignments, authored at the top level. Hugo exposes them
-internally through Page.Params and Page.GetTerms; that does **not** make them
-Sidera-defined fields. There is no `sidera.tags`, `sidera.categories`, `blog_tags`
-or `blog_categories` reader or duplicate assignment source.
+A regular page/bundle moves between blog/notes/docs/profileless folders without rewriting those
+assignments. Owner/URLs/defaults/relative links follow location naturally. A branch remains native
+`_index.md`; series membership remains the same native term but its local sequence follows its
+new scope. No per-article owner ID, repeated ancestor tags or parallel assignment source.
 
-Moving the same regular Markdown page or leaf bundle between marked blog, notes
-and docs collections requires **no front-matter rewrite**. Native URLs, inherited
-bylines, list ordering and relative links can naturally change with location.
-A docs branch remains a native `_index.md`; changing leaf/branch structure is a
-native bundle operation, not a different taxonomy schema. Parent-owned docs order
-stays on the parent, never repeated on the child.
+## Global identity; scoped projection
 
-## Required native site configuration
+| Role | Native global view | Sidera contextual view |
+|---|---|---|
+| tags/categories | Published assignments across the language Site | Same assignments filtered to nearest browsing root; flat or hierarchical interpretation |
+| authors | Shared author identity/profile and work across sections | That author's work within one scope; author identity is not duplicated |
+| series | Shared term and global member union | One sequence within a browsing scope; same term across sections is valid |
+| preset | Public grouping of explicitly classified sections | Supplies three-target defaults, not automatic article membership; see PRESETS.md |
 
-```toml
-disableKinds = ['RSS'] # taxonomy and term output must stay enabled
-[taxonomies]
-_merge = 'shallow'
-[permalinks.term]
-_merge = 'shallow'
-```
+Examples: `/tags/`, `/tags/science/`, `/journal/tags/`, `/journal/tags/science/`,
+`/authors/editor/`, `/journal/authors/editor/`, `/series/model-workshop/`,
+`/journal/series/model-workshop/`. Scoped author/series hubs list terms and full-member counts;
+scoped tags/categories retain the proven all-content hub plus complete term navigation.
+Independent nested roots do not leak into their parent. Generated views never become docs
+chapters or recent documents. Actual native Page/Pager URLs supply links and language/baseURL prefixes.
 
-Sidera owns the taxonomy definitions and `:slug` rules; these narrow merge flags
-import them without site duplication. [PRESETS.md](PRESETS.md) covers the new native
-authors/series/preset groups and the still-pending model-consumer migration.
+Ordinary article links follow `params.taxonomy_links`, a whole-map selection whose missing entries
+use these minimal defaults: tags/categories/series → section, authors/preset → global. Values are
+section/global; no available section/destination means a real global fallback. Sidebar selection
+`taxonomy_navigation` is separate display policy; hiding it does not remove pages or assignments.
+Explicit contextual “all tags in this collection” links retain their stated local meaning.
 
-The native `:slug` rules honor filesystem-safe slugs supplied for Unicode
-terms (including composed/decomposed forms on macOS). Ordinary ASCII routes remain
-familiar. The root taxonomy URLs and term patterns can be remapped using native
-`permalinks.taxonomy` / `permalinks.term`, retaining `:slug`; links come from actual
-Page.RelPermalink, never concatenated browser URLs. Native language/baseURL prefixes
-are preserved. For authored term Pages, set native `slug` or `url` when you want a
-stable explicit route independent of the native `:slug` fallback to their title.
+## Classification hierarchy is optional
 
-## One vocabulary, two views
+Minimal/site default is **flat**, including for blogs. The notes preset opts into hierarchical
+tags only. A scope or site can explicitly configure `params.taxonomy_hierarchy=['tags','categories']`,
+[] for flat, or either classification separately. Owner policy controls scoped views; Site policy
+controls globals, not an arbitrary article's presentation override. The showcase deliberately
+configures its named collection fixtures to preserve the established hierarchy examples.
 
-- **Global:** native `/tags/` and `/categories/`, with native term Pages. Results
-  cover published regular pages and assigned sections (including docs branches)
-  across collections in the current language. Result cards name/link their owner.
-- **Collection-scoped:** `<collection>/tags/` and `<collection>/categories/`, using
-  the same assignments, filtered to the nearest marked owner. Nested independent
-  collections never leak into their parent. Hubs include the owner's eligible
-  regular pages (including untagged pages); docs also include descendant documents.
-- Generated taxonomy views are navigation, **not docs children or recent documents**.
-  The native ordered docs tree/list/paginator remains independent.
-- Shared article rendering links both tags and categories, including docs and
-  standalone content. Scoped destinations are used where available; otherwise
-  native global destinations apply. There is no blog-versus-note conversion step.
+With hierarchy, `science/quantum` supplies ancestor `science`; parent membership is the union of
+direct/descendant assignments, deduplicated before counts/sorting/pagination. Flat views use exact
+assignments: `science/quantum` is one term. Native parent term `.Pages` can contain descendants and
+duplicates in Hugo 0.166, so the shared model does not treat it as exact flat membership.
 
-The two views do not create two sources of metadata. Native taxonomies remain the
-source; the adapter supplies contextual views and otherwise missing ancestor Pages.
-This replaces the earlier blog-only/global-versus-custom-notes recommendation.
+Inferred unused parent routes may remain empty (D-010). Explicitly authored empty global terms
+are valid. Global indexes page over root terms in hierarchy mode, direct terms in flat mode;
+scoped content results retain owner list policy. `taxonomy_page_size` is a positive integer;
+ordinary owner `page_size` controls scoped result lists. One paginator per mutually exclusive view.
 
-## Flat or hierarchical interpretation
+## Authors and series
 
-Sidera's default is hierarchy for both taxonomies. These **presentation policies**
-belong under `params.sidera`, on Site/current language or the owning collection:
+`authors` supports a scalar or ordered array; array is the recommended multi-author form.
+Linked authors preserve native GetTerms order with duplicate identities removed. Author term native
+title/description/body describe the person/organization; optional local `params.avatar` uses safe
+native resource lookup. `show_authors=false` hides article attribution without changing membership.
+`byline` is separate optional free-form credit, not a parsed author ID or implicit assignment.
 
-```toml
-[params.sidera]
-taxonomy_hierarchy = ['tags', 'categories'] # [] = flat; ['categories'] = categories only
-taxonomy_page_size = 10                   # positive integer; global indexes/results
-```
+`series` accepts a scalar or one-element array; more than one distinct series per page diagnoses.
+Series membership remains native/global; contextual term results and previous/next links use the
+full eligible owner subset independently of the current pager. Cross-section same-term membership
+is ordinary valid data, not a reason to prefix keys or reject the content.
 
-Owner settings replace the site's list; empty means flat. This policy belongs to
-the site/collection, not each article: moving an article adopts its new collection's
-organization without changing the article's tags. Global views use Site policy;
-owner views use the owner override. Index pagination is over root terms when
-hierarchical, all direct terms when flat. Collection results retain the existing
-owner list order/size/pin policy. Global results use PublishDate/Title/Path with
-pins once before pagination. Every Page creates at most one native paginator.
+Series term `params.series_order` defaults to publication: oldest PublishDate first, undated last,
+then Title/Path. Optional weight order uses native top-level `series_weight` ascending (missing=0),
+then publication/Title/Path ties. Pins may still be visible metadata but never reorder a sequence.
+Global series pages group the union; they are not silently used as a cross-section reading sequence.
 
-With hierarchy, `foo/bar` supplies `foo → bar`; clicking `foo` returns the deduplicated
-union beneath it, including direct `foo` assignments. With flat interpretation,
-`foo/bar` is one displayed term and `foo` contains only direct `foo` assignments.
-The native stored assignment stays `foo/bar` in both cases.
+## Metadata, URLs and boundaries
 
-Hugo 0.166's parent term `.Pages` can include descendants **and duplicate Pages**.
-Sidera therefore computes exact/ancestor membership from direct Page assignments
-and deduplicates before counts, pins and pagination. It does not use a native
-parent's recursive count as proof of either flat or hierarchical membership.
+Author term Pages and series term Pages can be authored/overridden normally, for example
+`content/authors/editor/_index.md`. Use an explicit native slug/url when a route must not follow a
+changed display title. Native term `:slug` defaults also preserve adapter-provided safe Unicode
+slugs. Contextual views reuse shared native metadata rather than inventing another per-scope
+identity/metadata registry. Native term UI params do not become member defaults; only preset defaults do.
 
-Flat mode changes interpretation/navigation, not route cleanup. Inferred ancestor
-routes may remain published as harmless empty views when they have no direct
-assignment; they are not shown as populated terms. An explicitly authored empty
-native term remains visible with zero results and no fake pager.
+Local literal TOML/YAML source discovery generates the required contextual and inferred routes.
+Actual native published Pages determine membership. Both scalar/array authors/series and the
+supported raw metadata validation are covered; invalid drafts are not exempt. Native all-states
+validation still matters for excluded Page/reference/default checks. Shared-directory filename
+translations and root/subpath routes are tested. Broader arbitrary mounts/generated/computed or
+cascaded vocabulary/custom taxonomy source trees are not universal discovery support; validate
+such source layouts explicitly before production use. This is not a new limitation on native Hugo.
 
-## Shell controls
-
-```toml
-[params.sidera]
-left = ['menu', 'taxonomies', 'recent']
-right = ['toc']
-taxonomy_navigation = ['tags', 'categories'] # display order only, NOT definitions/assignments
-```
-
-`taxonomies` is the contextual tree/flat list; `site-taxonomies` links the native
-global indexes. Both work in either region. Empty contextual vocabularies disappear.
-Native menus can use `pageRef='/tags'` or `/categories`, independent of public URL
-remapping. Index/result pages, article links and collection browsing work even when
-those sidebar components are omitted. This is not a sidebar-only implementation.
-
-Pre-release component names are now `taxonomies` (formerly `notes-tags`) and
-`site-taxonomies` (formerly `blog-taxonomies`); navigation selection is
-`taxonomy_navigation` (formerly `blog_taxonomies`). No compatibility aliases.
-Individual fixed-component overrides use the same names under
-`layouts/_partials/sidera/components/`, with the existing Page/Owner/Region/Settings
-context. Existing `tag_icons` supplies fixed decorative term icons, not SVG strings.
-
-## Native data, validation and current boundaries
-
-- Literal arrays of strings in local TOML/YAML Markdown are the proven source
-  contract. Both taxonomies and all collection kinds use the same validation,
-  including invalid drafts. Case/segment whitespace normalization, malformed paths,
-  reserved `page` segments, scoped slug conflicts and native path collisions receive
-  contextual errors. Same-named terms across collections are ordinary shared terms.
-- Counts/list membership use actual native published Pages, not the raw file inventory.
-  The existing local adapter discovers route vocabulary before publication filtering;
-  excluded-only vocabulary can therefore leave empty routes. This remains the
-  documented D-010 migration tolerance, **not private-vocabulary publication approval**.
-- Native branch/leaf resources and translation-by-filename in shared content/ are
-  tested. Discovery of implicit ancestors/context routes still reads local `content/`.
-  Arbitrary mounted/generated taxonomies, cascaded/computed assignments and other
-  front-matter formats are not universal loader support. For a source outside that
-  proven inventory, native direct term Pages may exist, but missing implicit ancestors
-  diagnose rather than becoming dead links. Do not infer mounted-taxonomy acceptance
-  from the separate default-off bundled-docs mount proof.
-- Bundled docs remain off by default and their existing body/tree/order/resource
-  behavior still works under explicit docs-on. The persistent site handbook provides
-  the tagged/docs-branch example. Source inventory never rebuilds the real reference.
-- Titles/labels are escaped; bodies use native Markdown. All theme wording uses
-  EN/ZH i18n. No JavaScript-only membership, filter backend, dependency or registry.
-
-Tests include the same bundle moved notes → blog → docs with identical source bytes
-and intact adjacent assets; parent+child duplicate assignments; flat and independent
-owner policies; categories across kinds; explicit empty terms; native URL remapping;
-bilingual/subpath routes; published-state filtering and invalid metadata. Browser
-checks exercise global/scoped browsing, keyboard/pagers, responsive palettes and
-no-JS. They are Chromium/macOS evidence, not complete browser/accessibility certification.
+Structural source/route namespaces, malformed paths, Unicode slug conflicts, aliases/static
+collisions and private generated metadata remain guarded. Tags/categories use the documented
+flat string-array input; nested arrays are not a native hierarchy API. Author/series keys are
+flat identities; they do not activate slash hierarchy. All labels are escaped; body/credit content
+uses native Markdown/plain text; theme-owned copy stays EN/ZH, with no client-side membership engine.

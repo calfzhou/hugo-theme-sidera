@@ -1,0 +1,18 @@
+{{- $term := . -}}{{- $base := partial "model/defaults.html" . -}}
+{{- $maps := slice -}}
+{{- if isset .Params.defaults "params" -}}{{- $maps = $maps | append .Params.defaults.params -}}{{- end -}}
+{{- if isset .Params.defaults "cascade" -}}
+  {{- if and (reflect.IsMap .Params.defaults.cascade) (isset .Params.defaults.cascade "params") -}}{{- $maps = $maps | append .Params.defaults.cascade.params -}}{{- end -}}
+{{- end -}}
+{{- range $maps -}}
+  {{- if not (reflect.IsMap .) -}}{{- errorf "Sidera preset parameter defaults must be a map: %s" $term.Path -}}
+  {{- else -}}
+    {{- $provided := . -}}{{- $settings := dict -}}
+    {{- range $key, $fallback := $base -}}{{- $value := $fallback -}}{{- if isset $provided $key -}}{{- $value = index $provided $key -}}{{- end -}}{{- $settings = merge $settings (dict $key $value) -}}{{- end -}}
+    {{- $valid := partial "model/settings-valid.html" (dict "page" $term "settings" $settings) -}}
+    {{- range $key, $value := . -}}
+    {{- if not (isset $base $key) -}}{{- errorf "Sidera unknown preset parameter %s: %s" $key $term.Path -}}{{- end -}}
+    {{- if and (eq $key "children") (reflect.IsMap $value) (isset $value "order") -}}{{- errorf "Sidera children.order is parent-local, not a preset default: %s" $term.Path -}}{{- end -}}
+  {{- end -}}{{- end -}}
+{{- end -}}
+{{- return true -}}

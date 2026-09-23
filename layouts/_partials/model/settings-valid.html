@@ -1,0 +1,50 @@
+{{- $page := .page -}}{{- $settings := .settings -}}
+{{- range $key := slice "left" "right" "taxonomy_navigation" -}}
+  {{- $value := index $settings $key -}}
+  {{- $allowed := slice "menu" "collections" "taxonomies" "page-tree" "site-taxonomies" "toc" "recent" "profile" "text" "links" -}}
+  {{- if eq $key "taxonomy_navigation" -}}{{- $allowed = slice -}}{{- range $name, $_ := $page.Site.Taxonomies -}}{{- $allowed = $allowed | append $name -}}{{- end -}}{{- end -}}
+  {{- if eq (printf "%T" $value) "bool" -}}
+    {{- if $value -}}{{- errorf "Sidera %s: %s accepts false or an array, not true" $page.Path $key -}}{{- end -}}
+    {{- $settings = merge $settings (dict $key slice) -}}
+  {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: %s must be an array or false" $page.Path $key -}}{{- $settings = merge $settings (dict $key slice) -}}
+  {{- else -}}
+    {{- $seen := slice -}}{{- range $value -}}
+      {{- if not (in $allowed .) -}}{{- errorf "Sidera %s: invalid %s item %v; allowed: %s" $page.Path $key . (delimit $allowed ", ") -}}{{- end -}}
+      {{- if in $seen . -}}{{- errorf "Sidera %s: duplicate %s item %v" $page.Path $key . -}}{{- end -}}
+      {{- $seen = $seen | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range $key := slice "menu" "links_menu" "text" "icon" "byline" -}}
+  {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
+{{- end -}}
+{{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}
+{{- if or (not (in (slice "int" "int64" "float64") (printf "%T" $settings.recent_count))) (not (in (seq 1 10) $settings.recent_count)) -}}{{- errorf "Sidera %s: recent_count must be an integer from 1 to 10" $page.Path -}}{{- end -}}
+{{- range $key := slice "identity" "profile" "tag_icons" -}}
+  {{- $value := index $settings $key -}}
+  {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera %s: %s must be a map" $page.Path $key -}}
+  {{- else -}}{{- range $field, $item := $value -}}
+    {{- if ne (printf "%T" $item) "string" -}}{{- errorf "Sidera %s: %s.%s must be a string" $page.Path $key $field -}}{{- end -}}
+    {{- $allowed := slice "title" "subtitle" "image" -}}{{- if eq $key "profile" -}}{{- $allowed = slice "title" "text" "image" "menu" -}}{{- end -}}
+    {{- if and (ne $key "tag_icons") (not (in $allowed $field)) -}}{{- errorf "Sidera %s: unknown %s field %s" $page.Path $key $field -}}{{- end -}}
+    {{- if eq $key "tag_icons" -}}{{- $check := partial "sidera/icon.html" $item -}}{{- end -}}
+  {{- end -}}{{- end -}}
+{{- end -}}
+{{- $iconCheck := partial "sidera/icon.html" $settings.icon -}}
+{{- if ne (printf "%T" $settings.show_updated) "bool" -}}{{- errorf "Sidera %s: show_updated must be boolean" $page.Path -}}{{- end -}}
+
+
+{{- range $key := slice "show_authors" "recent_sections" -}}
+  {{- if ne (printf "%T" (index $settings $key)) "bool" -}}{{- errorf "Sidera %s must be boolean: %s" $key $page.Path -}}{{- end -}}
+{{- end -}}
+{{- if not (in (slice "recursive" "children") $settings.list_mode) -}}{{- errorf "Sidera list_mode must be recursive or children: %s" $page.Path -}}{{- end -}}
+{{- if not (in (slice "publication" "modification" "title") $settings.list_order) -}}{{- errorf "P1C list_order must be publication, modification or title: %s" $page.Path -}}{{- end -}}
+{{- range $key := slice "page_size" "taxonomy_page_size" -}}{{- $value := index $settings $key -}}
+  {{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $value))) (lt (int $value) 1) -}}{{- errorf "Sidera %s must be a positive integer: %s" $key $page.Path -}}{{- end -}}
+{{- end -}}
+{{- if not (reflect.IsSlice $settings.taxonomy_hierarchy) -}}{{- errorf "Sidera taxonomy_hierarchy must be an array: %s" $page.Path -}}
+{{- else -}}{{- $seen := slice -}}{{- range $settings.taxonomy_hierarchy -}}{{- if or (not (in (slice "tags" "categories") .)) (in $seen .) -}}{{- errorf "Sidera invalid/duplicate taxonomy_hierarchy: %v (%s)" . $page.Path -}}{{- end -}}{{- $seen = $seen | append . -}}{{- end -}}{{- end -}}
+{{- if not (reflect.IsMap $settings.taxonomy_links) -}}{{- errorf "Sidera taxonomy_links must be a map: %s" $page.Path -}}
+{{- else -}}{{- range $taxonomy, $mode := $settings.taxonomy_links -}}{{- if or (not (isset $page.Site.Taxonomies $taxonomy)) (not (in (slice "global" "section") $mode)) -}}{{- errorf "Sidera invalid taxonomy_links entry %s=%v: %s" $taxonomy $mode $page.Path -}}{{- end -}}{{- end -}}{{- end -}}
+{{- $childrenValid := partial "docs/options.html" (dict "settings" $settings.children "order" slice "source" $page.Path) -}}
+{{- return $settings -}}
