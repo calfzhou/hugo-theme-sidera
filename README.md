@@ -104,8 +104,8 @@ escaping/fallback semantics and the explicit content-loader boundary.
 
 ## Parameter namespace
 
-All Sidera-owned configuration and content fields are under `params.sidera`, not
-just visual settings. This pre-release schema replaces the former flat custom
+Existing section/article/shell consumer fields remain under `params.sidera` until
+the P2-M consumer migration. New preset terms use `params.defaults` (see PRESETS.md). This pre-release schema replaces the former flat custom
 fields outright; there are no compatibility readers. Native Hugo fields and
 non-Sidera site params stay native. Byline/update defaults belong on the collection
 root (Page → owner → Site resolution), avoiding native cascade table replacement

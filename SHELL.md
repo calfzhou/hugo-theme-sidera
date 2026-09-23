@@ -6,7 +6,7 @@ selected-collection home and configurable article/site footers are later P2 work
 
 ## Defaults and configuration
 
-All **Sidera-defined parameters** use `params.sidera`, in site/language configuration,
+Existing **shell/section/article consumer parameters** use `params.sidera`, in site/language configuration,
 page front matter, native cascades and native menu-entry extension params. This
 includes collection markers, list policies, pins, article metadata,
 `children` and private generated tag metadata (see CONTRACT.md / DOCS.md).
@@ -201,3 +201,6 @@ Native top-level `tags` and `categories` are assignments, not custom settings.
 Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
 are site/owner choices described in TAXONOMIES.md; individual article exceptions
 do not change the identity/membership rules of their owner’s taxonomy views.
+
+P2-M adds separate preset term `params.defaults` metadata (PRESETS.md). It does not
+yet change this shell resolver or migrate the settings documented above.

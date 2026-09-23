@@ -176,7 +176,7 @@ Shared article presentation now lives in `layouts/_partials/article.html`; norma
 
 ## Pre-release namespace consolidation
 
-All Sidera-defined fields now live under `params.sidera`, including menu-entry
+Existing section/article/shell consumer fields still live under `params.sidera`, including menu-entry
 `params.sidera.icon`. Native title/date/lastmod/draft/slug/url/menus/taxonomy fields
 stay native. No old flat-field readers or aliases remain. Site-owned unrelated
 custom params are allowed; this namespace rule is about fields Sidera defines.
@@ -185,3 +185,7 @@ See SHELL.md for migration of article defaults out of the old cascade examples.
 The shared native taxonomy follow-up supersedes earlier notes-only assignment and
 blog-only taxonomy recommendations. `tags`/`categories` are native fields, not
 Sidera params. [TAXONOMIES.md](TAXONOMIES.md) is the current taxonomy contract.
+
+P2-M's new bundled preset metadata is the explicit exception: native `preset`
+assignment and term `params.defaults`. See PRESETS.md; consuming those defaults and
+migrating the older public fields is still pending.
