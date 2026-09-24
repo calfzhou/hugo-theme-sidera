@@ -89,3 +89,7 @@ The separately bundled **docs preset term** is always available and is not this 
 
 The retained showcase P2-W suite verifies exact order/tree/pagers/body, resources/links, default-off,
 explicit-on, alternate prefix, native overrides, structural rejection and EN/ZH behavior.
+
+P2-G renders immediate children with the same optional-cover/term/date card as other lists.
+The article footer follows canonical body content and stays absent on later child-list pagers.
+No tree/order/mount or source-ownership behavior changes.

@@ -181,3 +181,12 @@ other = "Next in series"
 other = "Series order: oldest publication first."
 [series_order_weight]
 other = "Series order: ascending series weight."
+
+[article_footer]
+other = "Article footer"
+
+[site_footer]
+other = "Site footer"
+
+[back_to_top]
+other = "Back to top"

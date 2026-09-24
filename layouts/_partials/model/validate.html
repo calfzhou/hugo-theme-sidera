@@ -6,6 +6,7 @@
     {{- end -}}
   {{- end -}}{{- end -}}
   {{- if not .Params.sidera.tag_view -}}
+    {{- if reflect.IsMap .Params.cover -}}{{- with .Params.cover.image -}}{{- $cover := partial "sidera/image.html" (dict "Page" $page "Owner" (partial "collection-owner.html" $page) "path" .) -}}{{- end -}}{{- end -}}
     {{- $valid := partial "model/input.html" (dict "fm" (dict "params" .Params) "source" .Path "section" .IsSection "effective" true) -}}
     {{- with .File -}}{{- if not .IsContentAdapter -}}
       {{- $fm := partial "tags/frontmatter.html" .Filename -}}

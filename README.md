@@ -15,7 +15,8 @@ left-anchored soft-glass identity/navigation, bounded compact main, optional rig
 region, complete notes/docs trees, native menus and scoped components. See
 [SHELL.md](SHELL.md) for the **implemented** settings and extensions. P2-A–W's
 organization, appearance, localization and opt-in docs foundations remain intact.
-Finished cards and full configurable footers are still G/H work; this is
+P2-G now refines cards, both rails and functional configurable footers; whole-page/Markdown
+and selected-home integration remain H. This is
 not whole-theme completion, a production migration or an official Stellar port.
 Distribution licensing is a separate unresolved gate.
 
@@ -32,17 +33,15 @@ Distribution licensing is a separate unresolved gate.
   are documented with native cascade caveats; ordered region arrays/maps replace completely. Same
   full shell for standalone pages; compact is an explicit override.
 - Shared ordinary reading, local wide-code/table scrolling, native TOC, meaningful
-  current/ancestor navigation and one paginator per applicable list. Card/date/
-  footer finishing work is explicitly not considered complete in F.
+  current/ancestor navigation and one paginator per applicable list. G adds local covers,
+  normalized term badges, numbered pagination, scroll-aware TOC and ordered native footers.
 
-Stellar 1.44.0 is a **visual reference**: sidebar/main composition, layered cards,
-notebook classification navigation. GoCalf's configuration confirms dark presentation,
-18px WenKai text and a glass sidebar. New Sidera CSS, navigation JS and presentation
-markup are independently authored over this project's P1 templates; no Stellar code,
-icons, images, fonts, EJS or Stylus have been copied. Stellar's MIT copyright notice
-(2021 xaoxuu) must accompany any actual reuse in a later slice. This repository does
-not yet specify a distribution license; resolve that before external distribution.
-No additional build or runtime dependency has been introduced.
+Stellar 1.44.0 source is the primary visual/interaction reference. G adapts selected CSS
+rules for collection rows, cards, sidebar/TOC and footer surfaces; the full MIT copyright
+notice (2021 xaoxuu) is retained in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Hugo templates and progressive native JavaScript use Sidera's existing model. No EJS,
+Stylus pipeline, third-party fonts/icons or service runtime is introduced. The overall
+Sidera distribution license remains unresolved; the upstream notice does not grant one.
 
 ## Appearance and ordinary reading
 
@@ -133,5 +132,5 @@ between collection folders without rewriting its taxonomy metadata.
 [PRESETS.md](PRESETS.md) explains the narrow native import permission, theme-supplied definitions
 and per-language term Pages. The full consumer migration is implemented, including false/empty
 semantics and old-key removal. Actual theme docs still need explicit opt-in (DOCS.md); publishing
-the docs preset term does not publish that documentation tree. Remaining G/H visual/card/footer
+the docs preset term does not publish that documentation tree. Remaining H whole-page/Markdown
 finishing, P3 special features and distribution licensing remain separate.

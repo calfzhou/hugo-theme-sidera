@@ -178,3 +178,12 @@ other = "专栏下一篇"
 other = "专栏顺序：按发布时间从早到晚。"
 [series_order_weight]
 other = "专栏顺序：按专栏权重升序。"
+
+[article_footer]
+other = "文章页脚"
+
+[site_footer]
+other = "站点页脚"
+
+[back_to_top]
+other = "返回顶部"

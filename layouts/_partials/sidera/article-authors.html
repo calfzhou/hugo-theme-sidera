@@ -1,0 +1,8 @@
+{{- $page := .Page -}}{{- $prefix := .Prefix | default "" -}}
+{{- if .Settings.show_authors -}}{{- with ($page.GetTerms "authors" | uniq) -}}
+<nav class="author-attribution" aria-label="{{ T "authors" }}"><ul id="{{ $prefix }}assigned-authors" class="author-list">
+  {{- range . -}}{{- $author := . -}}{{- $target := partial "taxonomies/link.html" (dict "page" $page "term" .) -}}
+  <li><a href="{{ $target.RelPermalink }}">{{ with .Params.avatar }}<img src="{{ partial "sidera/image.html" (dict "Page" $author "Owner" false "path" .) }}" width="24" height="24" alt="" loading="lazy">{{ end }}<span>{{ .LinkTitle }}</span></a></li>
+  {{- end -}}
+</ul></nav>
+{{- end -}}{{- end -}}

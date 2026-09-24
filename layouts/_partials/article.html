@@ -7,12 +7,7 @@
       <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
     {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}
     <h1>{{ .Title }}</h1>
-    {{ if $settings.show_authors }}{{ with (.GetTerms "authors" | uniq) }}
-      <nav aria-label="{{ T "authors" }}"><ul id="assigned-authors" class="tag-chips">{{ range . }}
-        {{ $target := partial "taxonomies/link.html" (dict "page" $.page "term" .) }}<li><a href="{{ $target.RelPermalink }}">{{ .LinkTitle }}</a></li>
-      {{ end }}</ul></nav>
-    {{ end }}{{ end }}
-    {{ partial "series/navigation.html" . }}
+    {{ partial "sidera/article-authors.html" (dict "Page" . "Settings" $settings "Prefix" "") }}
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     <div class="article-dates">
       {{ if not .PublishDate.IsZero }}
@@ -22,24 +17,11 @@
         <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
       {{ end }}
     </div>
-    {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
-    {{ range $taxonomy := slice "tags" "categories" }}
-      {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}
-      {{ $direct := index $model.assigned $.page.Path }}
-      {{ if or $direct (and $owner (eq $taxonomy "tags")) }}
-        {{ $hub := false }}{{ with $owner }}{{ $hub = .Site.GetPage (printf "%s/%s" .Path $taxonomy) }}{{ end }}
-        {{ with $hub }}<nav class="article-tag-hub" aria-label="{{ if eq $taxonomy "tags" }}{{ T "notebook_tags" }}{{ else }}{{ T "categories" }}{{ end }}"><a href="{{ .RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ T "all_tags_in" (dict "title" $owner.Title) }}{{ else }}{{ $owner.Title }} · {{ T "categories" }}{{ end }}</a></nav>{{ end }}
-        <ul id="assigned-{{ $taxonomy }}" class="tag-chips">
-          {{ range $direct }}
-            {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
-            {{ $target := partial "taxonomies/link.html" (dict "page" $.page "term" $native) }}
-            <li><a href="{{ $target.RelPermalink }}">{{ .key }}</a></li>
-          {{ end }}
-        </ul>
-      {{ end }}
-    {{ end }}
+    {{ if $settings.terms_in_header }}{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Prefix" "header-") }}{{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}
-    {{ if $showBody }}<div class="prose">{{ .Content }}</div>{{ end }}
+    {{ if $showBody }}<div class="prose">{{ .Content }}</div>
+      {{ partial "sidera/footer.html" (dict "Page" . "Owner" $owner "Settings" $settings "Region" "article-footer") }}
+    {{ end }}
   </article>
   {{ end }}

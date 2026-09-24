@@ -4,7 +4,7 @@
   {{- range $key, $_ := partial "model/defaults.html" . -}}
     {{- if and (ne $key "menu") (isset $fm $key) -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}
   {{- end -}}
-  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
+  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
   {{- if isset $params "sidera" -}}
     {{- if not (reflect.IsMap $params.sidera) -}}{{- errorf "Sidera private metadata namespace must be a map: %s" $source -}}
     {{- else -}}{{- range $key := slice "tag_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
@@ -27,8 +27,17 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" -}}
+{{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
+{{- end -}}
+{{- if isset $params "cover" -}}
+  {{- if not (reflect.IsMap $params.cover) -}}{{- errorf "Sidera cover must be an image/alt map: %s" $source -}}
+  {{- else -}}
+    {{- range $key, $value := $params.cover -}}
+      {{- if or (not (in (slice "image" "alt") $key)) (ne (printf "%T" $value) "string") -}}{{- errorf "Sidera cover accepts only image/alt strings: %s" $source -}}{{- end -}}
+    {{- end -}}
+    {{- if and $params.cover.image (not (isset $params.cover "alt")) -}}{{- errorf "Sidera cover.image requires explicit cover.alt (empty for decorative): %s" $source -}}{{- end -}}
+  {{- end -}}
 {{- end -}}
 {{- if isset $fm "series_weight" -}}{{- if not (in (slice "int" "int64" "uint64") (printf "%T" $fm.series_weight)) -}}{{- errorf "Sidera series_weight must be an integer: %s" $source -}}{{- end -}}{{- end -}}
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}

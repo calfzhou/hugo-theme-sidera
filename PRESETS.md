@@ -91,5 +91,11 @@ selecting a preset. Site defaults sit below supplied preset values; use native c
 page override when you intend to override a preset site-wide. An authored sibling order remains
 parent-local and cannot be a preset default. Native authors/series/tags/dates/URLs are not synthesized.
 
+Footer arrays/text/menu selectors and terms_in_header are presentation keys available in all
+three targets, including custom fourth presets. The bundled presets intentionally do not
+redeclare them: native Page/cascade or authored preset maps may override the minimal closing
+panel defaults, while Site.Params remains the common fallback. Cover is native effective
+Page.Params only (like authored artwork), not permitted in preset defaults.
+
 The docs preset term is configuration/classification content. It does **not** publish the actual
 theme documentation sample. That sample still requires explicit mounts described in DOCS.md.

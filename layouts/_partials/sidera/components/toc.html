@@ -2,5 +2,6 @@
   {{- if and ($page.Store.Get "sidera-body") (strings.Contains $page.TableOfContents "<li>") -}}
     <details class="article-toc" open data-responsive-toc><summary id="toc-heading-{{ .Region }}">{{ T "on_this_page" }}</summary>
       {{ $page.TableOfContents | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .Region .Region) | safeHTML }}
+      <a class="toc-top" href="#main">{{ T "back_to_top" }}</a>
     </details>
   {{- end -}}

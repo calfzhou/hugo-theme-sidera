@@ -1,0 +1,17 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $prefix := .Prefix | default "" -}}
+    {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
+    {{ range $taxonomy := slice "tags" "categories" }}
+      {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}
+      {{ $direct := index $model.assigned $page.Path }}
+      {{ if $direct }}
+        {{ $hub := false }}{{ with $owner }}{{ $hub = .Site.GetPage (printf "%s/%s" .Path $taxonomy) }}{{ end }}
+        {{ with $hub }}<nav class="article-tag-hub" aria-label="{{ if eq $taxonomy "tags" }}{{ T "notebook_tags" }}{{ else }}{{ T "categories" }}{{ end }}"><a href="{{ .RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ T "all_tags_in" (dict "title" $owner.Title) }}{{ else }}{{ $owner.Title }} · {{ T "categories" }}{{ end }}</a></nav>{{ end }}
+        <ul id="{{ $prefix }}assigned-{{ $taxonomy }}" class="tag-chips">
+          {{ range $direct }}
+            {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
+            {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $native) }}
+            <li><a href="{{ $target.RelPermalink }}">{{ .key }}</a></li>
+          {{ end }}
+        </ul>
+      {{ end }}
+    {{ end }}

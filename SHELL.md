@@ -1,8 +1,9 @@
-# Page shell and native regions (P2-F)
+# Page shell, components and native footers (P2-F/G)
 
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
-configuration API. The collection-overview home remains the default. Cards,
-selected-collection home and configurable article/site footers are later P2 work—not installed settings in this guide.
+configuration API. The collection-overview home remains the default. Reusable cards and
+configurable article/site footers are implemented. Whole-page/Markdown polish and the
+selected-collection home option remain H; this is not whole-P2 acceptance.
 
 ## Defaults and configuration
 
@@ -67,7 +68,7 @@ cascaded maps. No raw cascade reconstruction. children.order remains its narrow 
 
 A compact standalone page uses `params.left: false` and `params.right: []`. Empty text/menu
 strings clear those values; profile={} clears the identity card. Identity is site/language-only.
-No article/site footer configuration is advertised yet; that remains H.
+Both footer arrays use the same presence-based resolver; see the footer contract below.
 
 ## Native menus and data
 
@@ -130,8 +131,10 @@ extra. Site templates are trusted code, not configurable executable paths.
 Each fixed built-in also has a native override under
 `layouts/_partials/sidera/components/<fixed-name>.html`, receiving the same context.
 There is no arbitrary component name/path registry. Routine menu/profile/text/
-region changes do not need template copies. No article/site-footer hook is
-advertised yet.
+region changes do not need template copies. P2-G adds `article-footer-extra.html` and
+`site-footer-extra.html` with the same context (Region is article-footer/site-footer).
+Empty/false footer selection suppresses its hook; selected but empty built-ins permit
+a hook-only footer. No resulting markup means no footer box or spacing.
 
 Example trusted site-only right extra:
 
@@ -158,3 +161,85 @@ Native top-level `tags` and `categories` are assignments, not custom settings.
 Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
 are site/owner choices described in TAXONOMIES.md; individual article exceptions
 do not change the identity/membership rules of their owner’s taxonomy views.
+
+
+## Article and site footers
+
+Public params, using exactly the same native Page/cascade → applicable preset maps →
+Site/minimal fallback. Ordinary section params do not become descendant defaults.
+
+| Region / default items | What renders |
+|---|---|
+| article_footer=[terms,meta,series,text,links] | terms: actual assigned tags/categories and contextual hubs; meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
+| Optional article item authors | Ordered native authors, local portrait if provided; show_authors still applies. Header attribution remains, so this is intentional extra closing attribution. |
+| site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized Built with Hugo · Sidera |
+
+Article footer renders after a real shared article/section body, not on later child-list
+pagers without that body. Metadata/header byline and publication dates retain their behavior.
+Terms move to the footer by default; terms_in_header=true duplicates them with unique IDs.
+No terms, date, series, menu or text means no corresponding item/divider. A wholly empty footer
+has no container. No empty assigned-term list is emitted just to preserve an old DOM ID.
+`meta` may repeat the header's update date as a closing record; omit it if unwanted.
+
+```yaml
+# One page (or params in a real native cascade for descendants)
+params:
+  article_footer: [terms, authors, text, links, series]
+  article_text: 'Thanks for reading. [About this site](/about/).'
+  article_links_menu: article
+  site_footer: [links, text] # deliberately no theme credit
+  footer_menu: footer
+  footer_text: 'An independently maintained notebook.'
+  terms_in_header: false
+```
+
+Menu columns use native entries with identifier/name and children with parent; a parent
+may have a real pageRef link or be a heading. Native weights/ordering/current states and
+URL/depth validation are shared with sidebar menus. Authored Markdown is rendered by
+RenderString with the site's normal raw-HTML policy. No inferred license, hidden service,
+placeholder share/comment control, external resource, or automatic copyright year.
+Arrays reject unknown/duplicate items; false/[] disables; empty strings clear text/menu.
+Unused preset maps also validate these fields. Excluded Page-level references/presentation
+values require the normal all-states build; draft is not an exemption.
+
+Small trusted override at `layouts/_partials/sidera/article-footer-extra.html`:
+
+```go-html-template
+{{ with .Page.Params.closing_note }}<p>{{ . }}</p>{{ end }}
+```
+
+`closing_note` here is site-owned escaped text, not a new built-in param. Native template
+code is trusted; no arbitrary partial path or executable code is accepted from config.
+
+## Cards and interaction
+
+Ordinary result cards and immediate-child cards share one native card partial. Local covers
+are optional, clipped to 2:1, with no hero/gallery mode or automatic remote image. Excerpt
+uses native description, then plain native Summary; two desktop/three narrow lines. The
+main date follows modification-first lists, otherwise publication (docs children use
+Lastmod). Zero dates remain localized/unknown. Pins do not change their sorting contract.
+Direct term badges use the existing normalized assignment/link model, not another taxonomy
+backend. Counts/indexes, complete pager chains and scoped/global links remain native.
+
+```yaml
+params:
+  cover:
+    image: sample.svg # Page/owner resource, assets, then static
+    alt: Two connected sample nodes # explicit; empty only when decorative
+```
+
+Cover is read from effective native Page.Params, including deliberate native cascade.
+It is not a preset fallback setting: a preset must not accidentally choose member artwork.
+{} clears it. Missing alt, malformed maps, unsafe paths and missing published assets diagnose;
+raw local excluded sources receive the map/type/alt checks too. No image gets invented from
+an article's first body image. Cards keep semantic headings with a stretched title target;
+term/owner links remain independent keyboard and pointer targets.
+
+Rows share glass/quiet-surface hover, focus-visible, pressed and current/ancestor states.
+Native tree links are independent from native disclosure summaries. The TOC uses real
+anchors/history and a small passive, frame-batched scroll tracker for aria-current=location;
+no click interception, remote content engine or forced rail scrolling. Back-to-top is a
+native link. Both rails retain sticky/overflow desktop and in-flow narrow disclosure behavior.
+Reduced motion removes transitions and cover zoom; no JS leaves open, usable navigation.
+Stellar-adapted styles retain [the upstream MIT notice](THIRD-PARTY-NOTICES.md). The theme's
+own overall distribution license remains unresolved; this notice is not a new license grant.

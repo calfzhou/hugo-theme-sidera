@@ -99,3 +99,8 @@ collisions and private generated metadata remain guarded. Tags/categories use th
 flat string-array input; nested arrays are not a native hierarchy API. Author/series keys are
 flat identities; they do not activate slash hierarchy. All labels are escaped; body/credit content
 uses native Markdown/plain text; theme-owned copy stays EN/ZH, with no client-side membership engine.
+
+P2-G changes presentation only: article term badges live in the selected footer by default
+(optional duplicate header), cards reuse normalized direct assignments, ordered authors may
+also be selected as closing attribution, and the existing scoped series sequence appears
+in the article footer. Hiding/reordering a display item never changes native membership.

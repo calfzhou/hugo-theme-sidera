@@ -1,8 +1,8 @@
 {{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}
 {{- range (.GetTerms "series" | uniq) -}}
   {{- $term := . -}}{{- $target := partial "taxonomies/link.html" (dict "page" $page "term" .) -}}
-  <nav class="view-tools" aria-label="{{ T "series" }}" data-series="{{ .Data.Term }}">
-    <a href="{{ $target.RelPermalink }}">{{ .LinkTitle }}</a>
+  <nav class="series-navigation" aria-label="{{ T "series" }}" data-series="{{ .Data.Term }}">
+    <a class="series-title" href="{{ $target.RelPermalink }}">{{ T "series" }} · {{ .LinkTitle }}</a>
     {{- with $owner -}}
       {{- $members := slice -}}{{- range partialCached "taxonomies/native-members.html" $term $term.Path -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $members = $members | append . -}}{{- end -}}{{- end -}}
       {{- $sequence := (partial "series/order.html" (dict "term" $term "pages" $members)).pages -}}

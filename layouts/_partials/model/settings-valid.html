@@ -1,7 +1,9 @@
 {{- $page := .page -}}{{- $settings := .settings -}}
-{{- range $key := slice "left" "right" "taxonomy_navigation" -}}
+{{- range $key := slice "left" "right" "taxonomy_navigation" "article_footer" "site_footer" -}}
   {{- $value := index $settings $key -}}
   {{- $allowed := slice "menu" "collections" "taxonomies" "page-tree" "site-taxonomies" "toc" "recent" "profile" "text" "links" -}}
+  {{- if eq $key "article_footer" -}}{{- $allowed = slice "terms" "meta" "authors" "series" "text" "links" -}}{{- end -}}
+  {{- if eq $key "site_footer" -}}{{- $allowed = slice "links" "text" "credit" -}}{{- end -}}
   {{- if eq $key "taxonomy_navigation" -}}{{- $allowed = slice -}}{{- range $name, $_ := $page.Site.Taxonomies -}}{{- $allowed = $allowed | append $name -}}{{- end -}}{{- end -}}
   {{- if eq (printf "%T" $value) "bool" -}}
     {{- if $value -}}{{- errorf "Sidera %s: %s accepts false or an array, not true" $page.Path $key -}}{{- end -}}
@@ -15,7 +17,7 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- range $key := slice "menu" "links_menu" "text" "icon" "byline" -}}
+{{- range $key := slice "menu" "links_menu" "text" "icon" "byline" "article_text" "article_links_menu" "footer_text" "footer_menu" -}}
   {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
 {{- end -}}
 {{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}
@@ -34,7 +36,7 @@
 {{- if ne (printf "%T" $settings.show_updated) "bool" -}}{{- errorf "Sidera %s: show_updated must be boolean" $page.Path -}}{{- end -}}
 
 
-{{- range $key := slice "show_authors" "recent_sections" -}}
+{{- range $key := slice "show_authors" "recent_sections" "terms_in_header" -}}
   {{- if ne (printf "%T" (index $settings $key)) "bool" -}}{{- errorf "Sidera %s must be boolean: %s" $key $page.Path -}}{{- end -}}
 {{- end -}}
 {{- if not (in (slice "recursive" "children") $settings.list_mode) -}}{{- errorf "Sidera list_mode must be recursive or children: %s" $page.Path -}}{{- end -}}

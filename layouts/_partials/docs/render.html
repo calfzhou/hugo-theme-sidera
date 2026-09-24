@@ -15,7 +15,7 @@
     <h2 id="children-heading" class="section-heading">{{ T "docs_children" }}</h2>
     <p data-doc-total="{{ .TotalNumberOfElements }}">{{ T "docs_count" (dict "count" .TotalNumberOfElements "number" (lang.FormatNumber 0 .TotalNumberOfElements)) }}</p>
     <ul id="doc-children" class="article-list">
-      {{ range .Pages }}<li class="article-card"><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p></li>{{ end }}
+      {{ range .Pages }}{{ partial "sidera/card.html" (dict "Page" . "Order" "modification") }}{{ end }}
     </ul>
     {{ partial "lists/navigation.html" . }}
   </section>

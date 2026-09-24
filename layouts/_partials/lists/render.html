@@ -10,16 +10,7 @@
 </div>
 <ul id="articles" class="article-list">
   {{ range $pager.Pages }}
-    <li class="article-card">
-      {{ if .Params.pinned }}<span class="pin-label">{{ T "pinned" }}</span>{{ end }}
-      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-      {{ if $.show_owner }}{{ with partial "collection-owner.html" . }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}{{ end }}
-      <p class="excerpt">{{ .Summary | plainify | htmlUnescape | truncate 180 }}</p>
-      <div class="card-dates">
-        <span>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</span>
-        <span>{{ partial "date.html" (dict "date" .Lastmod "kind" "modified") }}</span>
-      </div>
-    </li>
+    {{ partial "sidera/card.html" (dict "Page" . "Order" $policy.order "ShowOwner" $.show_owner) }}
   {{ end }}
 </ul>
 {{ partial "lists/navigation.html" $pager }}

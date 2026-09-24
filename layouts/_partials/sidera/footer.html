@@ -1,0 +1,14 @@
+{{- $ctx := . -}}{{- $key := replace .Region "-" "_" -}}{{- $items := index .Settings $key -}}
+{{- if $items -}}
+  {{- $body := "" -}}
+  {{- range $items -}}
+    {{- $item := partial "sidera/footer-item.html" (merge $ctx (dict "Name" .)) -}}
+    {{- if strings.TrimSpace $item -}}{{- $body = printf `%s<div class="footer-item" data-footer-item="%s">%s</div>` $body . $item -}}{{- end -}}
+  {{- end -}}
+  {{- $extra := "" -}}
+  {{- if eq .Region "article-footer" -}}{{- $extra = partial "sidera/article-footer-extra.html" . -}}
+  {{- else -}}{{- $extra = partial "sidera/site-footer-extra.html" . -}}{{- end -}}
+  {{- if or (strings.TrimSpace $body) (strings.TrimSpace $extra) -}}
+    <footer class="{{ .Region }}" aria-label="{{ if eq .Region "article-footer" }}{{ T "article_footer" }}{{ else }}{{ T "site_footer" }}{{ end }}">{{ $body | safeHTML }}{{ $extra }}</footer>
+  {{- end -}}
+{{- end -}}

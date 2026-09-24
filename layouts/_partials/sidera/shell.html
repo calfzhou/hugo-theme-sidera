@@ -17,6 +17,6 @@
   {{ end }}
   <div class="reading-column">
     <main id="main" tabindex="-1">{{ .Content }}</main>
-    <footer class="site-footer">{{ T "built_with" }}</footer>
+    {{ partial "sidera/footer.html" (merge $ctx (dict "Region" "site-footer")) }}
   </div>
 </div>

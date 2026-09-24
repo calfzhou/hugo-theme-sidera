@@ -4,6 +4,13 @@
   {{ if gt .TotalPages 1 }}
     <a data-page-link="first" href="{{ .First.URL }}">{{ T "page_first" }}</a>
     {{ with .Prev }}<a data-page-link="previous" rel="prev" href="{{ .URL }}">{{ T "page_previous" }}</a>{{ end }}
+    <div class="pagination-pages">
+      {{ $current := .PageNumber }}
+      {{ range .Pagers }}{{ if le (math.Abs (sub .PageNumber $current)) 2 }}
+        {{ if eq .PageNumber $current }}<span aria-current="page">{{ lang.FormatNumber 0 .PageNumber }}</span>
+        {{ else }}<a href="{{ .URL }}">{{ lang.FormatNumber 0 .PageNumber }}</a>{{ end }}
+      {{ end }}{{ end }}
+    </div>
     {{ with .Next }}<a data-page-link="next" rel="next" href="{{ .URL }}">{{ T "page_next" }}</a>{{ end }}
     <a data-page-link="last" href="{{ .Last.URL }}">{{ T "page_last" }}</a>
   {{ end }}

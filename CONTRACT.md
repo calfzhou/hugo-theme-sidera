@@ -1,7 +1,8 @@
 # Sidera content and configuration contract
 
 Implemented P2-M model on Hugo **0.166.0**. This is an independent Hugo theme, not a
-Stellar configuration port. The remaining G/H visual/card/footer finishing is separate.
+Stellar configuration port. P2-G adds reusable component styling and configurable footers;
+whole-page/ordinary-Markdown completion and selected-home integration remain P2-H.
 No Hexo, Node runtime, downloaded dependency, duplicated source repo or Go-module switch is
 required to build. Showcase tests use Python stdlib; browser tests use its pinned Node/Chrome.
 
@@ -126,6 +127,12 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. |
 | icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon. |
+| article_footer | Ordered fixed items or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
+| site_footer | Ordered links/text/credit items or false; default [links,text,credit]. []/false hides the region and hook. |
+| article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
+| footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
+| terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |
+| cover | Effective Page.Params image/alt map, default absent; {} or image='' hides. image requires explicit alt ('' for decorative). Local safe resource lookup; no preset-default cover or automatic image selection. |
 | avatar | Author-term local portrait string; empty means none. Safe local image lookup. |
 | series_order | Series-term publication (oldest first, undated last) or weight (native series_weight ascending). Stable date/Title/Path ties; pins do not reorder sequences. |
 
