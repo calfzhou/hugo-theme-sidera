@@ -1,4 +1,5 @@
 {{- $page := .Page -}}{{- $owner := partial "collection-owner.html" $page -}}
+{{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
 <li class="article-card">
   {{- with $page.Params.cover.image -}}<div class="card-cover"><img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="{{ $page.Params.cover.alt }}" loading="lazy" decoding="async"></div>{{- end -}}
   <div class="card-content">
@@ -7,7 +8,7 @@
     {{ $excerpt := $page.Description }}{{ if not $excerpt }}{{ $excerpt = $page.Summary | plainify | htmlUnescape }}{{ end }}
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}
     <div class="card-dates">
-      {{ if $page.Params.pinned }}<span class="pin-label">{{ partial "sidera/icon.html" "star" }}{{ T "pinned" }}</span>{{ end }}
+      {{ if $page.Params.pinned }}<span class="pin-label">{{ if $settings.icons }}{{ partial "sidera/icon.html" "star" }}{{ end }}{{ T "pinned" }}</span>{{ end }}
       <span>{{ if eq .Order "modification" }}{{ partial "date.html" (dict "date" $page.Lastmod "kind" "modified") }}{{ else }}{{ partial "date.html" (dict "date" $page.PublishDate "kind" "published") }}{{ end }}</span>
       {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
       {{ range $taxonomy := slice "tags" "categories" }}
