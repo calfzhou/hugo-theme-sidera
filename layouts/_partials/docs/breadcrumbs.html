@@ -1,0 +1,5 @@
+{{ $owner := partial "collection-owner.html" . }}
+<nav aria-label="{{ T "docs_ancestors" }}" class="view-tools">
+  {{ range .Ancestors.Reverse }}{{ $ancestor := . }}{{ with partial "collection-owner.html" . }}{{ if eq . $owner }}<a{{ if eq $ancestor $owner }} data-collection-link{{ end }} href="{{ $ancestor.RelPermalink }}">{{ $ancestor.Title }}</a> / {{ end }}{{ end }}{{ end }}
+  <a{{ if eq . $owner }} data-collection-link{{ end }} href="{{ .RelPermalink }}" aria-current="page">{{ .Title }}</a>
+</nav>

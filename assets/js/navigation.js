@@ -1,18 +1,32 @@
-// In-flow native disclosures. No script leaves every region reachable and open.
-for (const [selector, query] of [
-  ['.site-menu', '(min-width: 761px)'],
-  ['.context-menu', '(min-width: 1231px)']
-]) {
-  const disclosure = document.querySelector(selector);
-  if (!disclosure) continue;
-  const wide = matchMedia(query);
-  const update = () => { disclosure.open = wide.matches; };
-  update();
-  wide.addEventListener('change', update);
+// Native auto-popovers provide Escape, light-dismiss, focus return and one open
+// region at a time. Without support/script, the original in-flow details stay open.
+if ('showPopover' in HTMLElement.prototype) {
+  document.documentElement.classList.add('drawers-ready');
+  for (const [name, query] of [['left', '(max-width: 667px)'], ['right', '(max-width: 1180px)']]) {
+    const region = document.querySelector(`#${name}-region`);
+    const button = document.querySelector(`[data-region="${name}"]`);
+    if (!region || !button) continue;
+    const narrow = matchMedia(query);
+    const update = () => {
+      if (region.matches(':popover-open')) region.hidePopover();
+      if (narrow.matches) region.setAttribute('popover', 'auto');
+      else region.removeAttribute('popover');
+      button.setAttribute('aria-expanded', 'false');
+    };
+    region.addEventListener('toggle', event => {
+      button.setAttribute('aria-expanded', String(event.newState === 'open'));
+    });
+    region.addEventListener('click', event => {
+      // Follow real TOC/history links; dismiss only the overlay, not the anchor.
+      if (event.target.closest('a[href^="#"]') && region.matches(':popover-open')) region.hidePopover();
+    });
+    update();
+    narrow.addEventListener('change', update);
+  }
 }
 
 // Native anchors remain native (URL, history, focus and no-script behavior).
-// Track the last heading above the reading offset; do not steal focus or scroll a rail.
+// Track the last heading above the reading offset; never steal focus or scroll the document.
 const tocLinks = [...document.querySelectorAll('[data-toc] a[href^="#"]')];
 const headings = [...document.querySelectorAll('.prose :is(h2,h3,h4,h5,h6)[id]')]
   .filter(heading => tocLinks.some(link => {
@@ -31,7 +45,16 @@ if (headings.length) {
     for (const link of tocLinks) {
       let active = false;
       try { active = decodeURIComponent(link.hash.slice(1)) === current.id; } catch { /* malformed custom anchor */ }
-      if (active) link.setAttribute('aria-current', 'location');
+      if (active) {
+        const changed = !link.hasAttribute('aria-current');
+        link.setAttribute('aria-current', 'location');
+        const toc = link.closest('[data-toc]');
+        // Scroll the TOC only, never the document or a focused keyboard target.
+        if (changed && toc.clientHeight && !toc.contains(document.activeElement)) {
+          const row = link.getBoundingClientRect(), box = toc.getBoundingClientRect();
+          if (row.top < box.top || row.bottom > box.bottom) toc.scrollTop += row.top - box.top - 24;
+        }
+      }
       else link.removeAttribute('aria-current');
     }
   };
@@ -41,4 +64,36 @@ if (headings.length) {
   addEventListener('hashchange', schedule);
   addEventListener('load', schedule);
   update();
+}
+
+// Stellar/React Bits card hover, adapted to static Hugo cards (see third-party notices).
+// One queued frame per hovered card; touch, reduced motion and keyboard never tilt.
+const cardMotion = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+for (const card of document.querySelectorAll('.article-card:has(.card-content), .collection-card')) {
+  let frame = 0, point;
+  const reset = () => {
+    cancelAnimationFrame(frame); frame = 0; point = null;
+    card.classList.remove('pointer-active');
+    for (const key of ['--pointer-x', '--pointer-y', '--tilt-x', '--tilt-y']) card.style.removeProperty(key);
+  };
+  card.addEventListener('pointermove', event => {
+    if (!cardMotion.matches || event.pointerType === 'touch') return;
+    point = { x: event.clientX, y: event.clientY };
+    if (frame) return;
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      const rect = card.getBoundingClientRect();
+      const x = Math.max(0, Math.min(rect.width, point.x - rect.left));
+      const y = Math.max(0, Math.min(rect.height, point.y - rect.top));
+      card.style.setProperty('--pointer-x', `${x}px`);
+      card.style.setProperty('--pointer-y', `${y}px`);
+      card.style.setProperty('--tilt-x', `${-(y / rect.height * 2 - 1) * 3}deg`);
+      card.style.setProperty('--tilt-y', `${(x / rect.width * 2 - 1) * 3}deg`);
+      card.classList.add('pointer-active');
+    });
+  });
+  card.addEventListener('pointerleave', reset);
+  card.addEventListener('pointercancel', reset);
+  card.addEventListener('focusin', reset);
+  cardMotion.addEventListener('change', reset);
 }

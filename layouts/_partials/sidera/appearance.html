@@ -1,4 +1,5 @@
 <div class="appearance" hidden>
+  {{ if .Settings.icons }}{{ partial "sidera/icon.html" "appearance" }}{{ end }}
   <label for="appearance">{{ T "appearance" }}</label>
   <select id="appearance" name="appearance">
     <option value="dark">{{ T "appearance_dark" }}</option>

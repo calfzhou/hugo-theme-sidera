@@ -190,3 +190,6 @@ other = "Site footer"
 
 [back_to_top]
 other = "Back to top"
+
+[close_navigation]
+other = "Close navigation"

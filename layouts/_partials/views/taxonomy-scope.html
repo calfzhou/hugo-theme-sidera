@@ -6,13 +6,14 @@
 {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $owner.Path $taxonomy }}
 {{ $term := false }}{{ with .Params.sidera.tag_key }}{{ $term = partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" . "slug" $.Params.sidera.tag_slug) }}{{ end }}
 {{ $hub := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" "" "slug" "") }}
+{{ $pages := $model.pages }}
+{{ with .Params.sidera.tag_key }}{{ $pages = slice }}{{ with index $model.nodes . }}{{ $pages = .pages }}{{ end }}{{ end }}
 <section data-tag-view="{{ .Params.sidera.tag_key }}" data-taxonomy="{{ $taxonomy }}" data-collection="{{ $owner.RelPermalink }}">
-  <header class="view-header">
+  <header class="view-header" data-note-count="{{ len $pages }}">
     <nav aria-label="{{ T "collection" }}"><a href="{{ $owner.RelPermalink }}">{{ $owner.Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" $owner }}</span></nav>
     <h1>{{ if and $term (in (slice "authors" "series") $taxonomy) }}{{ $term.Title }}{{ else }}{{ .Title }}{{ end }}</h1>
     {{ if and $term (in (slice "authors" "series") $taxonomy) }}
       {{ with $term.Description }}<p>{{ . }}</p>{{ end }}
-      <p><a href="{{ $term.RelPermalink }}">{{ T "all_content" }} · {{ $term.LinkTitle }}</a></p>
     {{ end }}
     <nav class="breadcrumbs" aria-label="{{ T "tag_ancestors" }}">
       <a href="{{ $hub.RelPermalink }}"{{ if not .Params.sidera.tag_key }} aria-current="page"{{ end }}>{{ T $taxonomy }}</a>
@@ -22,14 +23,12 @@
         {{ range $depths }}
           {{ $key := delimit (first . $keys) "/" }}{{ $slug := delimit (first . $slugs) "/" }}
           {{ $ancestor := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" $key "slug" $slug) }}
-          <span aria-hidden="true">/</span><a href="{{ $ancestor.RelPermalink }}"{{ if eq . (len $keys) }} aria-current="page"{{ end }}>{{ if $model.nested }}{{ index $keys (sub . 1) }}{{ else }}{{ $key }}{{ end }}</a>
+          <span aria-hidden="true">/</span><a href="{{ $ancestor.RelPermalink }}"{{ if eq . (len $keys) }} aria-current="page"{{ end }}>{{ if and $term (in (slice "authors" "series") $taxonomy) }}{{ $term.LinkTitle }}{{ else if $model.nested }}{{ index $keys (sub . 1) }}{{ else }}{{ $key }}{{ end }}</a>
         {{ end }}
       {{ end }}
     </nav>
-    <a class="view-tools" href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" "" "slug" "")).RelPermalink }}">{{ T "all_content" }} · {{ T $taxonomy }}</a>
-    {{ $pages := $model.pages }}
-    {{ with .Params.sidera.tag_key }}{{ $pages = slice }}{{ with index $model.nodes . }}{{ $pages = .pages }}{{ end }}{{ end }}
-    <p class="intro" data-note-count="{{ len $pages }}">{{ T "taxonomy_count" (dict "count" (len $pages) "number" (lang.FormatNumber 0 (len $pages))) }}</p>
+    <div class="taxonomy-context"><a href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" "" "slug" "")).RelPermalink }}">{{ T "all_content" }} · {{ T $taxonomy }}</a>{{ if and $term (in (slice "authors" "series") $taxonomy) }}<a href="{{ $term.RelPermalink }}">{{ T "all_content" }} · {{ $term.LinkTitle }}</a>{{ end }}</div>
+
   </header>
   {{ if and (not $term) (in (slice "authors" "series") $taxonomy) }}
     {{ $terms := slice }}{{ range sort $model.nodes "key" }}{{ $terms = $terms | append (partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" .key "slug" .slug)) }}{{ end }}

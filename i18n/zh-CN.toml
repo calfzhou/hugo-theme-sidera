@@ -187,3 +187,6 @@ other = "站点页脚"
 
 [back_to_top]
 other = "返回顶部"
+
+[close_navigation]
+other = "关闭导航"

@@ -93,3 +93,8 @@ explicit-on, alternate prefix, native overrides, structural rejection and EN/ZH 
 P2-G renders immediate children with the same optional-cover/term/date card as other lists.
 The article footer follows canonical body content and stays absent on later child-list pagers.
 No tree/order/mount or source-ownership behavior changes.
+
+P2-GR places the existing native ancestor trail inside the shared article banner rather
+than stacking a second owner bar above it. Parent links and native complete tree/order
+semantics remain. Narrow page-tree/TOC regions use the same progressive native drawers
+as other pages, with open in-flow fallback when JS/Popover support is absent.

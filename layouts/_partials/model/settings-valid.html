@@ -36,7 +36,7 @@
 {{- if ne (printf "%T" $settings.show_updated) "bool" -}}{{- errorf "Sidera %s: show_updated must be boolean" $page.Path -}}{{- end -}}
 
 
-{{- range $key := slice "show_authors" "recent_sections" "terms_in_header" -}}
+{{- range $key := slice "show_authors" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if ne (printf "%T" (index $settings $key)) "bool" -}}{{- errorf "Sidera %s must be boolean: %s" $key $page.Path -}}{{- end -}}
 {{- end -}}
 {{- if not (in (slice "recursive" "children") $settings.list_mode) -}}{{- errorf "Sidera list_mode must be recursive or children: %s" $page.Path -}}{{- end -}}

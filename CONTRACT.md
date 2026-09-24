@@ -2,7 +2,7 @@
 
 Implemented P2-M model on Hugo **0.166.0**. This is an independent Hugo theme, not a
 Stellar configuration port. P2-G adds reusable component styling and configurable footers;
-whole-page/ordinary-Markdown completion and selected-home integration remain P2-H.
+P2-GR corrects whole-site/non-content composition against Stellar. Detailed Markdown and selected-home integration remain separate.
 No Hexo, Node runtime, downloaded dependency, duplicated source repo or Go-module switch is
 required to build. Showcase tests use Python stdlib; browser tests use its pinned Node/Chrome.
 
@@ -114,6 +114,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | byline | Additional escaped credit text; empty by default. Not author identity. |
 | show_authors / show_updated | Linked native author visibility (true) / Lastmod visibility (false). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
+| list_header | Boolean, default true. Show the recursive section title/intro/tools. false keeps an accessible title and full counts/pagination, but emits no hidden-body TOC. Does not hide taxonomy result titles or docs bodies. |
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
 | list_order / page_size | publication or modification descending, or title ascending; stable Title/Path ties. Minimal title / positive integer 10. |
 | children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |

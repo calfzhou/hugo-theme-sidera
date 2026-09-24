@@ -8,8 +8,8 @@
     {{ $excerpt := $page.Description }}{{ if not $excerpt }}{{ $excerpt = $page.Summary | plainify | htmlUnescape }}{{ end }}
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}
     <div class="card-dates">
-      {{ if $page.Params.pinned }}<span class="pin-label">{{ if $settings.icons }}{{ partial "sidera/icon.html" "star" }}{{ end }}{{ T "pinned" }}</span>{{ end }}
-      <span>{{ if eq .Order "modification" }}{{ partial "date.html" (dict "date" $page.Lastmod "kind" "modified") }}{{ else }}{{ partial "date.html" (dict "date" $page.PublishDate "kind" "published") }}{{ end }}</span>
+      {{ if $page.Params.pinned }}<span class="pin-label">{{ if $settings.icons }}{{ partial "sidera/icon.html" "pin" }}{{ end }}{{ T "pinned" }}</span>{{ end }}
+      <span class="card-date">{{ if $settings.icons }}{{ partial "sidera/icon.html" "calendar" }}{{ end }}{{ if eq .Order "modification" }}{{ partial "date.html" (dict "date" $page.Lastmod "kind" "modified") }}{{ else }}{{ partial "date.html" (dict "date" $page.PublishDate "kind" "published") }}{{ end }}</span>
       {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
       {{ range $taxonomy := slice "tags" "categories" }}
         {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}

@@ -27,7 +27,7 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" "terms_in_header" -}}
+{{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
 {{- end -}}
 {{- if isset $params "cover" -}}

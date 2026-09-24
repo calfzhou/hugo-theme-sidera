@@ -1,7 +1,9 @@
-    <aside class="sidebar left-region" aria-label="{{ T "site_navigation" }}">
+    <aside id="left-region" class="sidebar left-region region-drawer" aria-label="{{ T "site_navigation" }}">
+      <button class="drawer-close" type="button" popovertarget="left-region" popovertargetaction="hide">{{ T "close_navigation" }}</button>
       {{ partial "sidera/identity.html" .Context }}
       <details class="site-menu" open>
         <summary>{{ T "browse_collections_tags" }}</summary>
-        <div class="navigation-content">{{ .Content }}{{ partial "sidera/appearance.html" . }}</div>
+        <div class="navigation-content">{{ .Content }}</div>
       </details>
+      {{ partial "sidera/appearance.html" .Context }}
     </aside>

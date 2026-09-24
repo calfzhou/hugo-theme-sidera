@@ -9,9 +9,11 @@
     {{ range (where site.Pages "Kind" "section").ByTitle }}
       {{ if partial "model/is-root.html" . }}
         <li class="collection-card">
+          {{ $s := partialCached "sidera/settings.html" . .Path }}
+          <span class="collection-emblem">{{ if $s.icons }}{{ partial "sidera/icon.html" $s.icon }}{{ end }}</span>
           <span class="eyebrow">{{ partial "collection-label.html" . }}</span>
           <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <p>{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
+          <p>{{ (.Description | default (.Summary | plainify | htmlUnescape)) | truncate 160 }}</p>
         </li>
       {{ end }}
     {{ end }}

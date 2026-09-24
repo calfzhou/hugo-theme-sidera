@@ -104,3 +104,9 @@ P2-G changes presentation only: article term badges live in the selected footer 
 (optional duplicate header), cards reuse normalized direct assignments, ordered authors may
 also be selected as closing attribution, and the existing scoped series sequence appears
 in the article footer. Hiding/reordering a display item never changes native membership.
+
+P2-GR presentation uses Stellar-style compact tag chips for flat global tags and quiet
+directory rows for categories/hierarchical indexes. Full native counts, nested links and
+pagination remain. Contextual result headers consolidate global/scoped links and show
+the full count once in the list metadata; authors/series breadcrumbs use native display
+titles rather than the raw assignment key. No membership or sequence policy changes.

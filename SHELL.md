@@ -2,8 +2,8 @@
 
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
 configuration API. The collection-overview home remains the default. Reusable cards and
-configurable article/site footers are implemented. Whole-page/Markdown polish and the
-selected-collection home option remain H; this is not whole-P2 acceptance.
+configurable article/site footers are implemented. P2-GR now refines whole-site/non-content composition; detailed Markdown and the
+selected-collection home option remain separate; this is not whole-P2 acceptance.
 
 ## Defaults and configuration
 
@@ -16,7 +16,8 @@ Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies,
 recent, profile, text, links. A profileless section can select the same components as any
 preset. page-tree replaces the old docs-tree component name and has no docs-preset gate.
 Arrays replace; false/[] disables a region. Unknown names/duplicates diagnose. Empty or
-inapplicable components emit nothing and leave no ghost grid track. Standalone pages retain
+inapplicable components emit no empty region. Desktop left-shell views preserve the reading
+track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and appearance remain accessible when left is off.
 
 Minimal defaults are left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
@@ -101,7 +102,7 @@ features. `links`/profile menus are absent when the selected menu is absent.
   recent means current-language Site.RegularPages (explicitly global).
 - **TOC:** native headings, only with the rendered article/docs body; no TOC on
   later docs child pagers whose body is intentionally omitted. Full standalone
-  support. A right disclosure moves in flow above main content on narrow screens.
+  support. A right native popover drawer is available below 1181px; without JS/Popover support the region stays open in flow.
 - **Native taxonomies:** shared `tags`/`categories` on every content kind, global
   native indexes/results plus owner-scoped projections. See [TAXONOMIES.md](TAXONOMIES.md)
   for hierarchy/flat policy, deduplicated counts and pagination. These are now
@@ -150,12 +151,17 @@ Use head-extra to load an owner CSS asset *after* theme CSS. UI/prose prefer loc
 LXGW WenKai, then Helvetica Neue/PingFang/Arial; code prefers local Source Code Pro,
 then Menlo/Consolas. The portable fallback is visibly different. Owner-supplied
 local fonts need their own rights/notices; none are downloaded or distributed here.
-The inline mark and geometric icons are original project artwork.
+The inline mark/link icon are original artwork; a small pinned Solar icon subset and Stellar drawer icons are local, with separate notices in THIRD-PARTY-NOTICES.md. No authored SVG strings are trusted.
 
-Desktop at 1440: left x32/w288, main x384/w696, optional right x1112.
-Below 1231px right becomes an in-flow native disclosure; below 761px left does too.
-No JS leaves navigation open and dark readable; appearance controls stay hidden.
-No modal/focus trap, fake search, remote background or persistent review server.
+Desktop uses Stellar's bounded 720px reading track (696px at a 1440px viewport with
+8px scroll gutter), 288px left and 320px right rails. List cards have an 18px inner gutter;
+article banners span the reading track. The left rail fills the viewport and scrolls widgets
+independently of identity/appearance. Its neutral fading surface uses no borrowed background art.
+At 1180px the right region becomes a native auto-popover; at 667px the left does too.
+Floating controls, Escape/light-dismiss, explicit close and native focus return remain usable.
+Only one drawer opens at a time. No modal focus trap; no-JS/unsupported browsers retain open
+in-flow disclosures. Appearance stays a labeled native three-way select, unlike Stellar's
+binary theme action: System mode and keyboard usability are retained. No fake search/services.
 
 Native top-level `tags` and `categories` are assignments, not custom settings.
 Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
@@ -235,11 +241,16 @@ raw local excluded sources receive the map/type/alt checks too. No image gets in
 an article's first body image. Cards keep semantic headings with a stretched title target;
 term/owner links remain independent keyboard and pointer targets.
 
+`list_header=false` can hide a redundant recursive section title/intro/tools when its identity
+is already in the menu. The default stays true; it uses the same Page/cascade/preset/site boolean
+precedence. The accessible title, full list count, policy and pager remain; contextual taxonomy
+headings and docs bodies are unaffected. See the live Fieldbook example in the showcase.
+
 Rows share glass/quiet-surface hover, focus-visible, pressed and current/ancestor states.
 Native tree links are independent from native disclosure summaries. The TOC uses real
 anchors/history and a small passive, frame-batched scroll tracker for aria-current=location;
-no click interception, remote content engine or forced rail scrolling. Back-to-top is a
-native link. Both rails retain sticky/overflow desktop and in-flow narrow disclosure behavior.
-Reduced motion removes transitions and cover zoom; no JS leaves open, usable navigation.
+no click interception or remote content engine. Its scrollport keeps a newly current row visible without scrolling the document or stealing focus. Back-to-top is a
+native link. Both rails retain sticky desktop behavior with narrow native drawers and an in-flow no-JS fallback.
+Fine-pointer card tilt/spotlight adapts Stellar/React Bits; keyboard gets title/focus feedback without tilt. Reduced motion and touch remove tilt/spotlight, transitions and cover zoom; no JS leaves open, usable navigation.
 Stellar-adapted styles retain [the upstream MIT notice](THIRD-PARTY-NOTICES.md). The theme's
 own overall distribution license remains unresolved; this notice is not a new license grant.

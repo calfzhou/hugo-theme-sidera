@@ -8,15 +8,25 @@
   {{ if $hasLeft }}
     {{ partial "sidebar.html" (dict "Context" $ctx "Content" $left) }}
   {{ else }}
-    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ partial "sidera/appearance.html" . }}</div>
+    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ partial "sidera/appearance.html" $ctx }}</div>
   {{ end }}
   {{ if $hasRight }}
-    <aside class="right-region" aria-label="{{ T "page_context" }}">
+    <aside id="right-region" class="right-region region-drawer" aria-label="{{ T "page_context" }}">
+      <button class="drawer-close" type="button" popovertarget="right-region" popovertargetaction="hide">{{ T "close_navigation" }}</button>
       <details class="context-menu" open><summary>{{ T "page_context" }}</summary><div class="navigation-content">{{ $right }}</div></details>
     </aside>
   {{ end }}
+  {{ if $hasLeft }}<div class="mobile-brand">{{ partial "sidera/identity.html" $ctx }}</div>{{ end }}
   <div class="reading-column">
     <main id="main" tabindex="-1">{{ .Content }}</main>
     {{ partial "sidera/footer.html" (merge $ctx (dict "Region" "site-footer")) }}
   </div>
+</div>
+
+<div class="region-controls">
+{{ range $region := slice "left" "right" }}
+  {{ if or (and (eq $region "left") $hasLeft) (and (eq $region "right") $hasRight) }}
+    <button class="region-toggle{{ if $settings.icons }} has-icon{{ end }}" data-region="{{ $region }}" type="button" popovertarget="{{ $region }}-region" aria-controls="{{ $region }}-region" aria-expanded="false">{{ if $settings.icons }}{{ partial "sidera/icon.html" (printf "sidebar-%s" $region) }}{{ end }}<span>{{ T (cond (eq $region "left") "site_navigation" "page_context") }}</span></button>
+  {{ end }}
+{{ end }}
 </div>

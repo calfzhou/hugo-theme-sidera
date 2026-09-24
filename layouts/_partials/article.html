@@ -1,11 +1,12 @@
   {{ $owner := partial "collection-owner.html" .page }}
+  {{ $breadcrumbs := .breadcrumbs }}
   {{ $showBody := .body }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
   {{ with .page }}
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
-    {{ with $owner }}
+    {{ if $breadcrumbs }}{{ $breadcrumbs }}{{ else }}{{ with $owner }}
       <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
-    {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}
+    {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}{{ end }}
     <h1>{{ .Title }}</h1>
     {{ partial "sidera/article-authors.html" (dict "Page" . "Settings" $settings "Prefix" "") }}
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
@@ -17,7 +18,7 @@
         <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
       {{ end }}
     </div>
-    {{ if $settings.terms_in_header }}{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Prefix" "header-") }}{{ end }}
+    {{ if $settings.terms_in_header }}<div class="article-terms">{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Prefix" "header-") }}</div>{{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}
     {{ if $showBody }}<div class="prose">{{ .Content }}</div>

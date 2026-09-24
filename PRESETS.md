@@ -99,3 +99,7 @@ Page.Params only (like authored artwork), not permitted in preset defaults.
 
 The docs preset term is configuration/classification content. It does **not** publish the actual
 theme documentation sample. That sample still requires explicit mounts described in DOCS.md.
+
+`list_header` is an inheritable presentation boolean (default true) in all three targets;
+only recursive section presentation consumes it. It does not change browsing roots, membership
+or list policy. A hidden section intro does not generate a TOC.

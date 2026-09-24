@@ -2,7 +2,8 @@
   {{ if eq (partialCached "sidera/settings.html" . .Path).list_mode "children" }}
     {{ partial "docs/render.html" . }}
   {{ else }}
-  {{ .Store.Set "sidera-body" true }}
+  {{ .Store.Set "sidera-body" (partialCached "sidera/settings.html" . .Path).list_header }}
+  {{ if (partialCached "sidera/settings.html" . .Path).list_header }}
   <header class="view-header">
     {{ with $owner }}
       <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
@@ -14,6 +15,7 @@
       <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>{{ end }}
     {{ end }}
   </header>
+  {{ else }}<h1 class="visually-hidden">{{ .Title }}</h1>{{ end }}
   {{ $pages := slice }}
   {{ range .RegularPagesRecursive }}
     {{ if eq (partial "collection-owner.html" .) $owner }}
