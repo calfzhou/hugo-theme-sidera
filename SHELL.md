@@ -71,6 +71,25 @@ A compact standalone page uses `params.left: false` and `params.right: []`. Empt
 strings clear those values; profile={} clears the identity card. Identity is site/language-only.
 Both footer arrays use the same presence-based resolver; see the footer contract below.
 
+## Site identity interactions
+
+The image is a circular home link (48px target, 44px image with a 2px ring inset).
+Title and subtitle share a second home link covering their entire text box, not just glyphs.
+Neither target underlines. Hover/focus on the image reveals Stellar's rotating rainbow ring
+(4-second revolution). Hover/focus anywhere in the text box transitions the subtitle upward:
+
+```toml
+[params.identity]
+subtitle = 'Notes & everyday tools | Small ideas, kept close'
+```
+
+The first `|` separates the resting and alternate text; later pipes remain literal in the
+alternate. Both sides are trimmed, escaped plain text; an unsplit subtitle stays unchanged.
+The two lines share a grid cell so differently sized/wrapped messages do not shift the page.
+The alternate slogan is decorative to assistive technology; the home link keeps a stable name.
+No JS is needed. Reduced motion shows a static ring and swaps text without movement.
+Both links use the native language/subpath-aware home URL, including mobile and compact shells.
+
 ## Native menus and data
 
 Menus use ordinary native ordering/weights, `pageRef`, external `url`, language

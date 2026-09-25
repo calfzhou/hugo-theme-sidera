@@ -1,6 +1,6 @@
 # Third-party notices
 
-Component CSS in assets/css/sidera.css adapts layout, palette, banner and component rules from
+Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
 hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets and footers.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This notice applies to those adaptations; it does not grant a distribution license

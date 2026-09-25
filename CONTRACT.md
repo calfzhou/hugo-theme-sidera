@@ -126,7 +126,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | left / right | Fixed ordered components or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
-| identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. |
+| identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see SHELL.md). |
 | icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon. |
 | article_footer | Ordered fixed items or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
 | site_footer | Ordered links/text/credit items or false; default [links,text,credit]. []/false hides the region and hook. |

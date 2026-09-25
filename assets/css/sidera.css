@@ -62,9 +62,24 @@ summary { cursor: pointer; }
 .compact-header { grid-column: 1 / -1; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; font-size: 15px; }
 .compact-header .site-heading { margin: 0; }
 .site-heading { display: flex; align-items: center; gap: 14px; margin: 0 0 32px; }
-.brand { font-size: 27px; font-weight: 750; line-height: 1.15; color: var(--text); text-decoration: none; }
-.subtitle { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
-.identity-image { width: 48px; height: 48px; object-fit: cover; border-radius: 50%; flex: none; }
+.brand { display: block; font-size: 27px; font-weight: 750; line-height: 1.15; color: var(--text); text-decoration: none; }
+/* Stellar logo.styl: one circular avatar target and one title/subtitle box. */
+.identity-avatar { display: block; position: relative; width: 48px; height: 48px; flex: none; border-radius: 50%; overflow: hidden; }
+.identity-avatar::before { content: ""; position: absolute; inset: 0; opacity: 0; background: conic-gradient(from 0deg,#04f3ff,#08ffc6,#ddf730,#ffbd19,#ff1fe0,#c418ff,#3b5bff,#04f3ff); transition: opacity .2s ease-out; }
+.identity-avatar:is(:hover,:focus-visible)::before { opacity: 1; animation: identity-spin 4s linear infinite; }
+.identity-image { display: block; position: relative; width: 44px; height: 44px; margin: 2px; object-fit: cover; border-radius: 50%; }
+.identity-text { display: block; min-width: 0; flex: 1; color: inherit; }
+.site-heading a,.site-heading a:is(:hover,:focus-visible,:active) { text-decoration: none; }
+.subtitle { display: grid; color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+.subtitle > span { grid-area: 1 / 1; min-width: 0; transition: opacity .2s ease-out,transform .2s ease-out; }
+.subtitle-hover { opacity: 0; transform: translateY(8px); }
+.identity-text:is(:hover,:focus-visible) .subtitle-flip .subtitle-normal { opacity: 0; transform: translateY(-8px); }
+.identity-text:is(:hover,:focus-visible) .subtitle-hover { opacity: 1; transform: translateY(0); }
+@keyframes identity-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .identity-avatar:is(:hover,:focus-visible)::before { animation: none; }
+  .identity-text:is(:hover,:focus-visible) .subtitle > span { transform: none; }
+}
 .site-menu > summary,.context-menu > summary { display: none; }
 .navigation-content ul { list-style: none; margin: 0; padding: 0; }
 .region-component + .region-component { margin-top: 28px; }
