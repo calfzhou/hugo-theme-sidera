@@ -3,6 +3,8 @@
 [blog]
 title_key = 'collection_blog'
 [blog.defaults.params]
+primary_date = "published"
+show_updated = true
 top = ["collection-nav"]
 taxonomy_hubs = "index"
 list_mode = 'recursive'
@@ -12,6 +14,7 @@ left = ['menu', 'taxonomies', 'recent']
 icon = 'blog'
 recent_sections = false
 [blog.defaults.cascade.params]
+primary_date = "published"
 left = ['menu', 'taxonomies', 'recent']
 right = ['toc']
 show_updated = true
@@ -20,6 +23,8 @@ recent_sections = false
 [notes]
 title_key = 'collection_notebook'
 [notes.defaults.params]
+primary_date = "updated"
+show_updated = true
 list_mode = 'recursive'
 list_order = 'modification'
 taxonomy_hierarchy = ['tags']
@@ -27,6 +32,7 @@ left = ['menu', 'taxonomies', 'recent']
 icon = 'notebook'
 recent_sections = false
 [notes.defaults.cascade.params]
+primary_date = "updated"
 left = ['menu', 'taxonomies', 'recent']
 right = ['toc']
 show_updated = true
@@ -35,6 +41,8 @@ recent_sections = false
 [docs]
 title_key = 'collection_docs'
 [docs.defaults.params]
+primary_date = "updated"
+show_updated = true
 list_mode = 'children'
 list_order = 'title'
 taxonomy_hierarchy = []
@@ -42,6 +50,7 @@ left = ['menu', 'page-tree', 'taxonomies']
 icon = 'docs'
 recent_sections = true
 [docs.defaults.cascade.params]
+primary_date = "updated"
 left = ['menu', 'page-tree', 'taxonomies']
 right = ['toc']
 show_updated = true

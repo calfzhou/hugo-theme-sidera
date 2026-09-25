@@ -1,5 +1,11 @@
 {{- $page := .Page -}}{{- $owner := partial "collection-owner.html" $page -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- $dates := partial "sidera/dates.html" (dict "Page" $page "Settings" $settings) -}}
+{{- $date := dict "date" $page.PublishDate "kind" "published" -}}
+{{- if and (eq $settings.primary_date "updated") $settings.show_updated -}}{{- $date = dict "date" $page.Lastmod "kind" "updated" -}}{{- end -}}
+{{- with $dates -}}{{- $date = index . 0 -}}{{- end -}}
+{{- /* Keep the existing card class/translation key; its visible wording is Updated. */ -}}
+{{- if eq $date.kind "updated" -}}{{- $date = merge $date (dict "kind" "modified") -}}{{- end -}}
 <li class="article-card">
   {{- with $page.Params.cover.image -}}<div class="card-cover"><img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="{{ $page.Params.cover.alt }}" loading="lazy" decoding="async"></div>{{- end -}}
   <div class="card-content">
@@ -9,7 +15,7 @@
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}
     <div class="card-dates">
       {{ if $page.Params.pinned }}<span class="pin-label">{{ if $settings.icons }}{{ partial "sidera/icon.html" "pin" }}{{ end }}{{ T "pinned" }}</span>{{ end }}
-      <span class="card-date">{{ if $settings.icons }}{{ partial "sidera/icon.html" "calendar" }}{{ end }}{{ if eq .Order "modification" }}{{ partial "date.html" (dict "date" $page.Lastmod "kind" "modified") }}{{ else }}{{ partial "date.html" (dict "date" $page.PublishDate "kind" "published") }}{{ end }}</span>
+      <span class="card-date">{{ if $settings.icons }}{{ partial "sidera/icon.html" "calendar" }}{{ end }}{{ partial "date.html" $date }}</span>
       {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
       {{ range $taxonomy := slice "tags" "categories" }}
         {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}

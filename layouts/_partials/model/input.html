@@ -33,6 +33,9 @@
 {{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
 {{- end -}}
+{{- if isset $params "primary_date" -}}
+  {{- if or (ne (printf "%T" $params.primary_date) "string") (not (in (slice "published" "updated") $params.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $source -}}{{- end -}}
+{{- end -}}
 {{- if isset $params "cover" -}}
   {{- if not (reflect.IsMap $params.cover) -}}{{- errorf "Sidera cover must be an image/alt map: %s" $source -}}
   {{- else -}}

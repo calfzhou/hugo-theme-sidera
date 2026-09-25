@@ -112,7 +112,8 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 |---|---|
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
-| show_authors / show_updated | Linked native author visibility (true) / Lastmod visibility (minimal false; blog/notes/docs descendant presets true). |
+| primary_date | published (minimal/blog) or updated (notes/docs). Per-page date priority shared by cards/headers, independent of sorting; normal params/cascade/preset/site precedence. |
+| show_authors / show_updated | Linked native author visibility (true) / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
 | list_header | Boolean, default true. Show the recursive section title/intro/tools. false keeps an accessible title and full counts/pagination, but emits no hidden-body TOC. Does not hide taxonomy result titles or docs bodies. |
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |

@@ -11,7 +11,7 @@
   <section aria-labelledby="children-heading">
     <h2 id="children-heading" class="section-heading">{{ T "docs_children" }}</h2>
     <ul id="doc-children" class="article-list" data-doc-total="{{ .TotalNumberOfElements }}" aria-label="{{ T "docs_count" (dict "count" .TotalNumberOfElements "number" (lang.FormatNumber 0 .TotalNumberOfElements)) }}">
-      {{ range .Pages }}{{ partial "sidera/card.html" (dict "Page" . "Order" "modification") }}{{ end }}
+      {{ range .Pages }}{{ partial "sidera/card.html" (dict "Page" .) }}{{ end }}
     </ul>
     {{ partial "lists/navigation.html" . }}
   </section>

@@ -43,4 +43,5 @@
 {{- else -}}{{- range $taxonomy, $mode := $settings.taxonomy_links -}}{{- if or (not (isset $page.Site.Taxonomies $taxonomy)) (not (in (slice "global" "section") $mode)) -}}{{- errorf "Sidera invalid taxonomy_links entry %s=%v: %s" $taxonomy $mode $page.Path -}}{{- end -}}{{- end -}}{{- end -}}
 {{- $childrenValid := partial "docs/options.html" (dict "settings" $settings.children "order" slice "source" $page.Path) -}}
 {{- if not (in (slice "list" "index") $settings.taxonomy_hubs) -}}{{- errorf "Sidera taxonomy_hubs must be list or index: %s" $page.Path -}}{{- end -}}
+{{- if or (ne (printf "%T" $settings.primary_date) "string") (not (in (slice "published" "updated") $settings.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $page.Path -}}{{- end -}}
 {{- return $settings -}}

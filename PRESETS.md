@@ -122,6 +122,11 @@ unchanged; recent-updates/recent-published are available reusable choices backed
 The minimal taxonomy_hubs default is now index for every scope, including notes/docs and
 sections without a preset. The blog entry remains explicit; list is still an owner opt-in.
 
-Blog descendants now default show_updated=true, making the update date available in the shared
+Blog sections/descendants default show_updated=true, making the update date available in the shared
 header reveal. Explicit false still opts out. The default article footer omits meta, so this does
-not create a second date below the body. Notes/docs already enable show_updated for descendants.
+not create a second date below the body. Notes/docs also enable show_updated for their section and descendants.
+
+
+Date priority is separate from ordering: primary_date=published in blog, updated in notes/docs,
+for both defaults.params and defaults.cascade.params. A title-ordered docs section or a
+publication-ordered notes section still emphasizes updates. Page/cascade overrides work normally.

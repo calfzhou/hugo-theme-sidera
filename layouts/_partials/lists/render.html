@@ -8,7 +8,7 @@
     aria-label="{{ T $countLabel (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}"
     aria-description="{{ if .preordered }}{{ T (printf "series_order_%s" $policy.order) }}{{ else }}{{ T (printf "order_%s" $policy.order) }}{{ end }}">
   {{ range $pager.Pages }}
-    {{ partial "sidera/card.html" (dict "Page" . "Order" $policy.order "ShowOwner" $.show_owner) }}
+    {{ partial "sidera/card.html" (dict "Page" . "ShowOwner" $.show_owner) }}
   {{ end }}
 </ul>
 {{ partial "lists/navigation.html" $pager }}

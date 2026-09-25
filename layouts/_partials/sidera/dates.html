@@ -1,0 +1,9 @@
+{{- /* Shared per-page date priority and availability, independent of the containing list. */ -}}
+{{- $page := .Page -}}{{- $dates := slice -}}
+{{- if not $page.PublishDate.IsZero -}}{{- $dates = $dates | append (dict "date" $page.PublishDate "kind" "published") -}}{{- end -}}
+{{- if and .Settings.show_updated (not $page.Lastmod.IsZero) -}}
+  {{- $updated := dict "date" $page.Lastmod "kind" "updated" -}}
+  {{- if eq .Settings.primary_date "updated" -}}{{- $dates = (slice $updated) | append $dates -}}
+  {{- else -}}{{- $dates = $dates | append $updated -}}{{- end -}}
+{{- end -}}
+{{- return $dates -}}

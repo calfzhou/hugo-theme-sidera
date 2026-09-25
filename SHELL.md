@@ -656,21 +656,47 @@ are attached to the native list as localized accessible metadata and stable data
 no hidden paragraph or extra visual spacing is retained. Pin-priority wording is not repeated.
 
 
-## Article date line
+## Card and article date priority
 
-Header dates follow the owning scope's list order: modification shows Updated first; publication
-and non-date/title ordering show Published first. Render only available native timestamps, without
-inventing missing dates. If both exist, the second date and divider appear on date-row hover or
-keyboard focus; visibility preserves geometry to avoid moving content. Touch/no-hover devices
-show both because there is no hover gesture. This works without JavaScript. Equal dates remain
-two distinct facts, as in Stellar. The native localized date format is unchanged.
+`params.primary_date` chooses which native date readers should see first, independently of
+`list_order`, docs child ordering or the list where a card appears. Values are `published` and
+`updated`. The minimal default is published. Bundled Blog defaults to published; Notes and Docs
+default to updated, for both the selecting section and its descendants.
 
-`show_updated=false` still suppresses Lastmod; a single surviving date has no extra focus stop.
-The blog preset now enables show_updated for descendants, like notes/docs, so its update date is
-available on reveal by default. Explicit owner/cascade/page overrides remain effective. Minimal
-unclassified defaults are unchanged. The default article footer no longer includes meta, preventing
-a repeated date below the article; owners may still explicitly select that item.
+Both cards and article headers resolve the **displayed Page's** settings through the normal
+Page/cascade → applicable preset → site/minimal precedence. A card in a global tag/author/series
+list therefore agrees with that page's header instead of borrowing the containing list's sort.
+Cards show the first available enabled date; headers show it first and retain the other on reveal.
+No timestamp, sort, scope membership, pin, child ordering or paginator rule changes.
+
+A Notes collection already defaults to updated dates even if `params.list_order: publication`.
+To deliberately choose a different date for an entire collection, use native cascade for its
+children as well as params for the section itself:
+
+```yaml
+params:
+  list_order: publication
+  primary_date: updated
+cascade:
+  params:
+    primary_date: updated
+```
+
+Page-local `params.primary_date` overrides the inherited preference. Ordinary section params do
+not implicitly cascade. Site/language params provide the usual fallback; preset defaults retain
+their existing precedence. Invalid values/types, misplaced top-level fields and malformed unused
+preset definitions diagnose.
+
+`show_updated=false` suppresses Lastmod in both places, even if it is preferred. If the preferred
+date is unavailable/disabled, use the other enabled native date. When neither exists, headers omit
+the date row and cards retain a localized undated label. No dates are invented. Minimal
+show_updated remains false; bundled presets enable it for the section and descendants.
+
+With two dates, the second and divider appear on date-row hover or keyboard focus without reflow.
+Touch/no-hover devices show both; no JavaScript is required. Equal timestamps remain distinct facts.
+Native localized formatting is unchanged. The default article footer omits meta to avoid a repeat;
+owners may still explicitly select that item.
 
 Visible Lastmod wording is consistently Updated / 更新于, including cards and undated labels.
-The existing date_modified/modified_undated keys and modified class are retained for compatibility;
-this is wording alignment, not a new timestamp field or ordering rule.
+The existing date_modified/modified_undated keys and modified card class are retained. Recent
+widgets keep their own date-order semantics, and archives remain publication-date navigation.
