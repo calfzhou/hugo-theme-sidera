@@ -196,7 +196,9 @@ The inline mark/link icon are original artwork; a small pinned Solar icon subset
 Desktop uses Stellar's bounded 720px reading track (696px at a 1440px viewport with
 8px scroll gutter), 288px left and 320px right rails. List cards have an 18px inner gutter;
 article banners span the reading track. The left rail fills the viewport and scrolls widgets
-independently of identity/appearance. Its neutral fading surface uses no borrowed background art.
+independently of identity/appearance. Sidebar, drawer and TOC scrollbars are hidden, as in
+Stellar; native wheel/touch/keyboard scrolling and focus-reveal still work. This does not hide
+the document scrollbar or article code/table scrollbars. Its neutral fading surface uses no borrowed background art.
 At 1180px the right region becomes a native auto-popover; at 667px the left does too.
 Floating controls, Escape/light-dismiss, explicit close and native focus return remain usable.
 Only one drawer opens at a time. No modal focus trap; no-JS/unsupported browsers retain open

@@ -56,9 +56,13 @@ summary { cursor: pointer; }
 .has-left .reading-column { grid-column: 2; grid-row: 1; }
 .left-region { grid-column: 1; grid-row: 1 / span 2; width: var(--rail-width); position: sticky; top: var(--page-gap); height: calc(100dvh - 2 * var(--page-gap)); min-height: 0; display: flex; flex-direction: column; padding: 18px 16px 16px; border-radius: var(--radius); background: var(--rail-background); }
 .left-region .site-menu { display: flex; flex: 1; flex-direction: column; min-height: 0; }
-.left-region .navigation-content { overflow: auto; flex: 1; scrollbar-width: thin; padding-bottom: 24px; mask-image: linear-gradient(#000 calc(100% - 24px),transparent); }
-.right-region { grid-column: 2; grid-row: 2; position: sticky; top: var(--page-gap); max-height: calc(100dvh - 2 * var(--page-gap)); overflow-y: auto; padding: 16px; min-width: 0; font-size: 16px; scrollbar-width: thin; }
+.left-region .navigation-content { overflow: auto; flex: 1; padding-bottom: 24px; mask-image: linear-gradient(#000 calc(100% - 24px),transparent); }
+.right-region { grid-column: 2; grid-row: 2; position: sticky; top: var(--page-gap); max-height: calc(100dvh - 2 * var(--page-gap)); overflow-y: auto; padding: 16px; min-width: 0; font-size: 16px; }
 .has-left .right-region { grid-column: 3; grid-row: 1; }
+/* Stellar rails conceal scrollbar chrome, not their native scrolling behavior.
+   The document and article code/table scrollbars are deliberately unaffected. */
+:is(.left-region,.right-region,.left-region .site-menu,.left-region .navigation-content,.article-toc [data-toc]) { scrollbar-width: none; }
+:is(.left-region,.right-region,.left-region .site-menu,.left-region .navigation-content,.article-toc [data-toc])::-webkit-scrollbar { display: none; width: 0; height: 0; }
 .compact-header { grid-column: 1 / -1; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between; font-size: 15px; }
 .compact-header .site-heading { margin: 0; }
 .site-heading { display: flex; align-items: center; gap: 14px; margin: 0 0 32px; }
@@ -135,7 +139,7 @@ summary { cursor: pointer; }
 .profile .nav-heading { color: var(--text); font-size: 16px; }
 .article-toc { padding: 0; font-size: 16px; }
 .article-toc > summary { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
-.article-toc [data-toc] { border-left: 4px solid var(--panel); max-height: 60dvh; overflow: auto; scrollbar-width: thin; }
+.article-toc [data-toc] { border-left: 4px solid var(--panel); max-height: 60dvh; overflow: auto; }
 .article-toc [data-toc] a { display: block; position: relative; padding: 5px 10px; margin: 0 0 2px 6px; border-radius: 6px; line-height: 1.35; font-size: 15px; }
  .article-toc [data-toc] a[aria-current] { background: none; color: var(--text); }
 .article-toc [data-toc] a[aria-current]::before { content: ""; position: absolute; left: -9px; top: 5px; bottom: 5px; width: 3px; border-radius: 3px; background: var(--accent); }
@@ -349,7 +353,7 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 /* A shared taxonomy component can contain both independent vocabularies. */
 .tag-navigation + .tag-navigation { margin-top: 24px; }
 /* Keep the widget scrollport bounded by identity and bottom controls. */
-.left-region .site-menu { overflow-y: auto; scrollbar-width: thin; mask-image: linear-gradient(#000 calc(100% - 24px),transparent); }
+.left-region .site-menu { overflow-y: auto; mask-image: linear-gradient(#000 calc(100% - 24px),transparent); }
 .left-region .navigation-content { overflow: visible; mask-image: none; }
 .navigation-content .native-menu .icon { width: 24px; height: 24px; }
 .navigation-content a .icon { opacity: .65; }
