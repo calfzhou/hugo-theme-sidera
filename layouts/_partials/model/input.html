@@ -13,6 +13,7 @@
     {{- if isset $params $key -}}{{- errorf "Sidera native %s must be authored at top level, not under params: %s" $key $source -}}{{- end -}}
   {{- end -}}
 {{- end -}}
+{{- if isset $params "widgets" -}}{{- errorf "Sidera widget definitions belong in site/language params.widgets, not page/cascade params: %s" $source -}}{{- end -}}
 {{- if isset $params "scope_root" -}}
   {{- if or (not .section) (ne (printf "%T" $params.scope_root) "bool") -}}{{- errorf "Sidera scope_root must be a section boolean: %s" $source -}}{{- end -}}
 {{- end -}}

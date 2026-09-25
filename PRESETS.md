@@ -114,3 +114,7 @@ The blog section target now selects `top=[collection-nav]` and `taxonomy_hubs=in
 regular descendants do not acquire a bar by that default. Generated scoped browsing views use
 the owner's resolved presentation. Other presets remain unchanged and can opt into identical
 capabilities through native Page/cascade or preset options; no runtime blog-name gate is used.
+
+Preset region arrays can reference site/language named widgets. Define widgets in params.widgets
+at site/language level, not in a preset's defaults map. Existing bundled preset selections remain
+unchanged; recent-updates/recent-published are available reusable choices backed by recent.

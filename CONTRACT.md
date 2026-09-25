@@ -125,13 +125,14 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
 | top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
 | taxonomy_hubs | list (minimal default) or index (blog section default). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
-| left / right | Ordered name strings or component/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
+| left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
+| widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See SHELL.md. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see SHELL.md). |
 | icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see SHELL.md). |
-| article_footer | Ordered name strings or component/config maps, or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
-| site_footer | Ordered links/text/credit strings or component/config maps, or false; default [links,text,credit]. []/false hides the region and hook. |
+| article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
+| site_footer | Ordered link/text/credit component or derived-widget references, or false; default [links,text,credit]. []/false hides the region and hook. |
 | article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
 | footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
 | terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |
@@ -202,9 +203,10 @@ certification, distribution license grant or P2 visual completion is implied.
 
 ## Component instances
 
-All five configurable regions accept name strings and `{component: name, config: {...}}` entries.
-Config is a typed component-specific presentation overlay after the normal resolver; strings use
-defaults. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
+All five configurable regions accept component/widget names, `{component: name, config: {...}}`
+and `{widget: name, config: {...}}` entries.
+Config is a typed component-specific presentation overlay after the normal resolver. Named
+widgets add reusable defaults before per-use options; they do not change the resolved data scope. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
 model change. SHELL.md contains the complete per-component option/default table and empty semantics.
 There is one recent component with instance order=modification/publication, not a second component.
 
@@ -214,3 +216,8 @@ Collection browsing adds private generated `params.sidera.archive_view` and the 
 not content-kind/scope roots. The root's native publication subset drives one separate archive
 paginator; list/tree/recent/taxonomy membership stays unchanged. See SHELL.md for the component,
 index presentation, collision guards and bounded-source limitations.
+
+Widget definitions are native site/language params, not Page/preset metadata. Built-in component
+names cannot be shadowed and widgets cannot derive from other widgets. Native config merging
+precedes validation; per-use options replace shallowly and IDs count the resolved component kind.
+The two recent widget names are reusable definitions, not additional components or legacy aliases.

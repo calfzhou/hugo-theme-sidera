@@ -9,23 +9,47 @@
   "toc" (dict "icons" "icons")
   "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections")
   "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
-  "text" (dict "text" "text")
+  "text" (dict "title" "" "text" "text")
   "links" (dict "menu" "links_menu" "icons" "icons") -}}
+{{- $builtins := merge $schemas (dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "credit" dict) -}}
+{{- if eq .Region "widget-definition" -}}{{- $schemas = $builtins -}}{{- end -}}
+{{- with .Definition -}}{{- if isset $builtins . -}}{{- errorf "Sidera widget %q cannot shadow a built-in component" . -}}{{- end -}}{{- end -}}
 {{- if eq .Region "article-footer" -}}
-  {{- $schemas = dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "text" (dict "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
+  {{- $schemas = dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "text" (dict "title" "" "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
 {{- else if eq .Region "site-footer" -}}
-  {{- $schemas = dict "text" (dict "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
+  {{- $schemas = dict "text" (dict "title" "" "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
 {{- end -}}
 {{- $source := .Source | default "component instance" -}}{{- with .Page -}}{{- $source = .Path -}}{{- end -}}
-{{- $name := "" -}}{{- $config := dict -}}
-{{- if eq (printf "%T" .Entry) "string" -}}{{- $name = .Entry -}}
+{{- $name := "" -}}{{- $widget := "" -}}{{- $config := dict -}}
+{{- if eq (printf "%T" .Entry) "string" -}}
+  {{- $name = .Entry -}}{{- if and (not .Definition) (not (isset $builtins $name)) -}}{{- $widget = $name -}}{{- end -}}
 {{- else if reflect.IsMap .Entry -}}
-  {{- range $key, $_ := .Entry -}}{{- if not (in (slice "component" "config") $key) -}}{{- errorf "Sidera %s: unknown component instance field %s" $source $key -}}{{- end -}}{{- end -}}
-  {{- if ne (printf "%T" .Entry.component) "string" -}}{{- errorf "Sidera %s: instance component must be a name string" $source -}}{{- else -}}{{- $name = .Entry.component -}}{{- end -}}
+  {{- $fields := slice "component" "config" -}}{{- if not .Definition -}}{{- $fields = $fields | append "widget" -}}{{- end -}}
+  {{- range $key, $_ := .Entry -}}{{- if not (in $fields $key) -}}{{- errorf "Sidera %s: unknown component instance field %s" $source $key -}}{{- end -}}{{- end -}}
+  {{- if and (not .Definition) (isset .Entry "widget") -}}
+    {{- if isset .Entry "component" -}}{{- errorf "Sidera %s: use either widget or component, not both" $source -}}{{- end -}}
+    {{- if or (ne (printf "%T" .Entry.widget) "string") (eq .Entry.widget "") -}}{{- errorf "Sidera %s: instance widget must be a name string" $source -}}{{- else -}}{{- $widget = .Entry.widget -}}{{- end -}}
+  {{- else -}}
+    {{- if ne (printf "%T" .Entry.component) "string" -}}{{- errorf "Sidera %s: instance component must be a name string" $source -}}{{- else -}}{{- $name = .Entry.component -}}{{- end -}}
+  {{- end -}}
   {{- if isset .Entry "config" -}}
     {{- if not (reflect.IsMap .Entry.config) -}}{{- errorf "Sidera %s: component config must be a map" $source -}}{{- else -}}{{- $config = .Entry.config -}}{{- end -}}
   {{- end -}}
-{{- else -}}{{- errorf "Sidera %s: component instance must be a name or component/config map" $source -}}{{- end -}}
+{{- else -}}{{- errorf "Sidera %s: component instance must be a name or component/widget/config map" $source -}}{{- end -}}
+{{- with $widget -}}
+  {{- $site := site -}}{{- with $.Page -}}{{- $site = .Site -}}{{- end -}}
+  {{- $widgets := partialCached "sidera/widgets.html" $site "widgets" -}}
+  {{- $name = . -}}
+  {{- with index $widgets . -}}
+    {{- $name = .component -}}{{- $definition := .config -}}{{- $local := $config -}}{{- $config = dict -}}
+    {{- /* Per-use overrides replace each option, including false/empty/nested maps. */ -}}
+    {{- range $key, $value := $definition -}}
+      {{- if isset $local $key -}}{{- $value = index $local $key -}}{{- end -}}
+      {{- $config = merge $config (dict $key $value) -}}
+    {{- end -}}
+    {{- range $key, $value := $local -}}{{- if not (isset $definition $key) -}}{{- $config = merge $config (dict $key $value) -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
 {{- if not (isset $schemas $name) -}}{{- errorf "Sidera %s: invalid %s item %q" $source .Region $name -}}{{- end -}}
 {{- $schema := index $schemas $name | default dict -}}{{- $overrides := dict -}}
 {{- range $key, $value := $config -}}
@@ -68,10 +92,12 @@
   {{- end -}}
   {{- $overrides = merge $overrides (dict "profile" $profile) -}}
 {{- end -}}
+{{- /* Sitemap links are text-first; explicit instance/widget options remain available. */ -}}
+{{- if and (eq .Region "site-footer") (eq $name "links") (not (isset $config "icons")) -}}{{- $overrides = merge $overrides (dict "icons" false) -}}{{- end -}}
 {{- /* Construct each key once: merge must not refill cleared nested maps from shared settings. */ -}}
 {{- $settings := dict -}}
 {{- range $key, $value := .Settings -}}
   {{- if isset $overrides $key -}}{{- $value = index $overrides $key -}}{{- end -}}
   {{- $settings = merge $settings (dict $key $value) -}}
 {{- end -}}
-{{- return (dict "Page" .Page "Owner" .Owner "Region" .Region "Name" $name "Config" $config "Settings" $settings) -}}
+{{- return (dict "Page" .Page "Owner" .Owner "Region" .Region "Name" $name "Widget" $widget "Config" $config "Settings" $settings) -}}

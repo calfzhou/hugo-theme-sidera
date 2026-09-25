@@ -1,3 +1,4 @@
+{{- $widgets := partialCached "sidera/widgets.html" site "widgets" -}}
 {{- range site.Pages -}}
   {{- $page := . -}}
   {{- with .File -}}{{- if not .IsContentAdapter -}}

@@ -180,13 +180,17 @@ params:
       config: {menu: article}
 ```
 
-A name string is shorthand for `{component: name, config: {}}`, not a legacy alias. Repeat
-any component within/across regions, with different settings or defaults. No author IDs are
-required. Site identity and the main article remain site/page settings, not entries in these regions. Only `component` and optional `config` are accepted; arbitrary template paths,
-unknown options, wrong types and components in the wrong region fail the build.
+A name string selects either a built-in component with defaults or a named widget defined
+below. Inline `{component: name, config: {...}}` remains available for one-off built-ins;
+`{widget: name, config: {...}}` customizes one use of a named widget. `component` always means
+a built-in implementation, never a template path or another widget. Do not use both selectors.
+Repeat any component/widget within/across compatible regions; no author IDs are required.
+Site identity and the main article remain site/page settings, not entries in these regions.
+Unknown names/options, wrong types and components in the wrong region fail the build.
 
 The existing native Page/cascade → preset → site/default resolution first selects the whole
-region array and default settings. Then each instance overlays **only its supported options**
+region array and default settings. A named widget supplies reusable option defaults; then an
+inline use may override individual options. Each instance overlays **only its supported options**
 on a fresh local settings map. Omitted options inherit; explicit false/empty strings/arrays/maps
 win. Supplied maps (such as tag_icons) replace, not deep-merge. For profile, each flat config
 field overrides that field in the resolved profile; `image: ''` removes the inherited image.
@@ -206,7 +210,7 @@ Neither Page.Params, the cached page settings, another instance nor a region hoo
 | toc | icons (bool) | icons |
 | recent | order (publication/modification), count (integer 1–10), sections (bool) | modification; recent_count; recent_sections |
 | profile | title, text, image, menu (strings), icons (bool) | Corresponding profile fields; icons |
-| text | text (Markdown string) | text |
+| text | title (optional plain string), text (Markdown string) | No title; text |
 | links | menu (string), icons (bool) | links_menu; icons |
 
 Taxonomy names must exist in the current native site vocabulary. Hierarchy, source membership,
@@ -217,15 +221,19 @@ excluded resources/native references still requires the documented all-states bu
 
 ### Footer options
 
-`text.config.text` and `links.config.menu/icons` work in both footers, defaulting to the existing
-article_text/article_links_menu or footer_text/footer_menu settings. Article `meta.config.show`
+`text.config.title/text` and `links.config.menu/icons` work in both footers, defaulting to the
+existing article_text/article_links_menu or footer_text/footer_menu settings. Site-footer links
+are icon-free by default, independently of sidebar icons; an explicit widget/instance icons=true
+remains available. Site-footer links never receive a visual current/ancestor highlight, though
+native aria-current metadata is retained. Hover/focus feedback remains. Sitemap group headings
+use quiet, medium-weight type and content-sized links, separated from the page by a thin rule. Article `meta.config.show`
 and `authors.config.show` default to show_updated/show_authors but only affect that footer
 instance, not the article header. Terms, series and site credit have no additional presentation
 options yet; their config may be omitted or empty. All footer items can repeat.
 
 ### IDs and trusted overrides
 
-Instances have region/type/occurrence identities (`data-instance`, also `.Instance` in partials).
+Instances have region/resolved-component/occurrence identities (`data-instance`, also `.Instance` in partials).
 Repeated TOCs, taxonomy trees and footer attribution/terms receive distinct IDs. First occurrences
 keep their natural region IDs; subsequent occurrences get deterministic numeric suffixes, even
 if an earlier instance emits no content. Native heading anchors stay shared; collapsing one TOC
@@ -233,7 +241,7 @@ or tree does not collapse its siblings. Main-menu selection indicators stay limi
 instances, not auxiliary links/profile menus.
 
 Trusted fixed component partial overrides receive the usual Page/Owner/Region plus **Config**,
-local **Settings**, **Instance**, **IDScope** and **IDSuffix**. Use IDScope/Instance when producing
+local **Settings**, **Widget** (name, or empty for a direct component), **Instance**, **IDScope** and **IDSuffix**. Use IDScope/Instance when producing
 DOM IDs, not Region alone. Footer hooks still run once with the base region settings; they do not
 inherit the last component's local options. Built-ins share existing renderers, not copied backends.
 
@@ -242,6 +250,64 @@ pins/main pagers, use the full nearest-owner collection, exclude independent nes
 sort ties by Title/Path with zero dates last. Without an owner they use current-language regular
 pages. The bundled presets retain their existing selections; Fieldbook explicitly demonstrates
 publication-order recent links on Notes and both orders on Handbook.
+
+## Named reusable widgets
+
+A **component** is a fixed built-in renderer; a **widget** is a named reusable configuration of
+one component; an **instance** is one placement. Definitions belong in native **site/language
+params.widgets**, not page front matter, cascades or preset defaults. Pages/presets select names.
+This adopts Stellar's define-once/reference-by-name idea, not its Hexo layout/file-loading API.
+
+```yaml
+# Site configuration (the same structure can be expressed in hugo.toml).
+params:
+  widgets:
+    welcome:
+      component: text
+      config:
+        title: Welcome
+        text: |
+          Notes on reading and everyday life.
+
+          [About this site](/about/)
+    reading-updates:
+      component: recent
+      config: {order: modification, count: 8}
+```
+
+```yaml
+# A page or collection's front matter; native cascade can select names for descendants.
+params:
+  left: [menu, welcome, recent-published]
+  right:
+    - widget: reading-updates
+      config: {count: 3}
+```
+
+Bundled widgets, supplied through the theme's native config:
+
+| Name | Built-in component/config |
+|---|---|
+| recent-updates | recent, order=modification |
+| recent-published | recent, order=publication |
+
+They do not fork the recent renderer. Site/language definitions follow **Hugo's native config
+merging first**; e.g. `[params.widgets.recent-published.config] count=8` keeps its bundled component
+and order. The theme does not emulate language/config inheritance. Each use starts from the
+validated effective definition, then applies per-use config **shallowly by option**: false/empty
+strings/arrays/maps replace, never mutate the definition or neighboring instances. Component
+fallbacks still come from resolved Page settings when the widget leaves an option unspecified.
+
+Definitions may target only built-in components. No widget-to-widget chains, template paths,
+callbacks, or shadowing of component names are allowed. Use lower-case names without surrounding
+whitespace. Unknown names and unused malformed definitions are diagnosed; references validate
+again in their actual region (an authors widget, for example, cannot appear in a sidebar).
+Repeated named widgets and direct components share the same collision-free ID counters.
+
+Text widget titles are escaped plain text; bodies use the existing safe native RenderString
+policy. URLs in authored Markdown retain normal Markdown semantics: supply the intended locale/
+base-path URL rather than expecting arbitrary template interpolation. Image/menu safety and the
+all-states checks for excluded references remain unchanged. No new JavaScript or dependency.
 
 ## Assets, escaping and extensions
 
@@ -266,7 +332,7 @@ extra. Site templates are trusted code, not configurable executable paths.
 
 Each fixed built-in also has a native override under
 `layouts/_partials/sidera/components/<fixed-name>.html`, receiving the same context.
-There is no arbitrary component name/path registry. Routine menu/profile/text/
+Named widgets are data definitions over that fixed list, not an arbitrary template-path registry. Routine menu/profile/text/
 region changes do not need template copies. P2-G adds `article-footer-extra.html` and
 `site-footer-extra.html` with the same context (Region is article-footer/site-footer).
 Empty/false footer selection suppresses its hook; selected but empty built-ins permit

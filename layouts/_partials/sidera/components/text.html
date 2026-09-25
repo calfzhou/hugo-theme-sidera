@@ -1,2 +1,1 @@
-{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
-  {{- with $s.text -}}<div class="authored-text">{{ $page.RenderString (dict "display" "block") . }}</div>{{- end -}}
+{{- partial "sidera/text-block.html" (dict "Page" .Page "Title" .Config.title "Text" .Settings.text) -}}

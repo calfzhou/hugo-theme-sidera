@@ -15,3 +15,13 @@ categories = '/categories/:slug/'
 authors = '/authors/:slug/'
 series = '/series/:slug/'
 preset = '/preset/:slug/'
+
+# Reusable configured widgets. Native site/language params can override these definitions.
+[params.widgets.recent-updates]
+component = 'recent'
+[params.widgets.recent-updates.config]
+order = 'modification'
+[params.widgets.recent-published]
+component = 'recent'
+[params.widgets.recent-published.config]
+order = 'publication'

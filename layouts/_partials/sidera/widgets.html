@@ -1,0 +1,14 @@
+{{- /* Effective native site/language definitions; never resolve other widgets or template paths. */ -}}
+{{- $widgets := dict -}}
+{{- if isset .Params "widgets" -}}
+  {{- if not (reflect.IsMap .Params.widgets) -}}{{- errorf "Sidera params.widgets must be a map of named definitions" -}}
+  {{- else -}}{{- range $name, $definition := .Params.widgets -}}
+    {{- if or (eq (strings.TrimSpace $name) "") (ne $name (strings.TrimSpace $name)) -}}{{- errorf "Sidera widget names must be nonempty without surrounding whitespace" -}}{{- end -}}
+    {{- if not (reflect.IsMap $definition) -}}{{- errorf "Sidera widget %q must be a component/config map" $name -}}
+    {{- else -}}
+      {{- $instance := partial "sidera/instance.html" (dict "Entry" $definition "Definition" $name "Region" "widget-definition" "Settings" dict "Source" (printf "widget %s" $name)) -}}
+      {{- $widgets = merge $widgets (dict $name (dict "component" $instance.Name "config" $instance.Config)) -}}
+    {{- end -}}
+  {{- end -}}{{- end -}}
+{{- end -}}
+{{- return $widgets -}}

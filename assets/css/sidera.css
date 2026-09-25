@@ -269,7 +269,7 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 .series-navigation [data-series-previous],.series-navigation [data-series-next] { padding: 12px; background: var(--canvas); border-radius: 8px; color: var(--muted); font-size: 13px; text-decoration: none; }
 .series-navigation [data-series-next] { grid-column: 2; text-align: right; }
 .series-navigation a:is(:hover,:focus-visible) { color: var(--accent); background-color: var(--accent-soft); }
-.site-footer { margin: 72px 18px 54px; padding: 0; color: var(--muted); font-size: 14px; }
+.site-footer { margin: 72px 18px 54px; padding: 18px 0 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
 .site-footer .footer-item + .footer-item { margin-top: 16px; }
 :is(.article-footer,.site-footer) .native-menu ul { list-style: none; margin: 0; padding: 0; }
 .site-footer .native-menu > ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 16px; }
@@ -279,7 +279,7 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 :is(.article-footer,.site-footer) .menu-group { padding: 6px 4px; font-weight: 600; color: var(--text); }
 :is(.article-footer,.site-footer) a:is(:hover,:focus-visible) { color: var(--text); background-color: var(--surface-hover); }
 :is(.article-footer,.site-footer) a:active { color: var(--accent); }
-:is(.article-footer,.site-footer) [aria-current] { color: var(--accent); }
+.article-footer [aria-current] { color: var(--accent); }
 .theme-credit { margin: 0; font-size: 12px; }
 .view-header > img { border-radius: 50%; object-fit: cover; }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
@@ -460,3 +460,13 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .archive-date { flex: none; min-width: 12ch; color: var(--quiet); font-size: 13px; }
 .archive-year a:is(:hover,:focus-visible) .archive-date { color: var(--accent); }
 @media (max-width: 667px) { .top-region { margin-top: 8px; } .top-region:has([data-collection-nav]) { top: 8px; } .archive-year a { gap: 10px; } }
+
+:is(.article-footer,.site-footer) .text-widget .nav-heading { margin-inline: 0; }
+
+/* Stellar sitemap: quiet text columns, a thin divider, and no persistent current-page styling. */
+.site-footer .native-menu > ul { margin: 8px -4px; }
+.site-footer .native-menu a { width: fit-content; max-width: 100%; min-height: 0; padding: 4px; border-radius: 4px; font-size: 15px; line-height: 1.5; color: var(--muted); background: none; box-shadow: none; }
+.site-footer .native-menu .menu-group { margin: 4px 0; padding: 4px; color: color-mix(in srgb,var(--text) 80%,transparent); font-size: 17px; font-weight: 500; }
+.site-footer .native-menu > ul > li > a:has(+ ul) { margin: 4px 0; font-size: 17px; font-weight: 500; }
+.site-footer .native-menu a:is(:hover,:focus-visible,:active) { color: var(--text); background: var(--surface-hover); }
+.site-footer .native-menu a:is(:hover,:focus-visible,[aria-current]) .icon { color: inherit; }
