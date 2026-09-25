@@ -1,0 +1,10 @@
+{{- $value := .Value -}}{{- $source := .Source | default "region" -}}{{- with .Page -}}{{- $source = .Path -}}{{- end -}}
+{{- if eq (printf "%T" $value) "bool" -}}
+  {{- if $value -}}{{- errorf "Sidera %s: %s accepts false or an array, not true" $source .Region -}}{{- end -}}
+  {{- $value = slice -}}
+{{- else if not (reflect.IsSlice $value) -}}
+  {{- errorf "Sidera %s: %s must be an array or false" $source .Region -}}{{- $value = slice -}}
+{{- else -}}
+  {{- range $value -}}{{- $valid := partial "sidera/instance.html" (dict "Entry" . "Region" $.Region "Page" $.Page "Source" $source "Settings" dict) -}}{{- end -}}
+{{- end -}}
+{{- return $value -}}

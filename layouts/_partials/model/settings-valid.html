@@ -1,27 +1,20 @@
 {{- $page := .page -}}{{- $settings := .settings -}}
-{{- range $key := slice "left" "right" "taxonomy_navigation" "article_footer" "site_footer" -}}
-  {{- $value := index $settings $key -}}
-  {{- $allowed := slice "menu" "collections" "taxonomies" "page-tree" "site-taxonomies" "toc" "recent" "profile" "text" "links" -}}
-  {{- if eq $key "article_footer" -}}{{- $allowed = slice "terms" "meta" "authors" "series" "text" "links" -}}{{- end -}}
-  {{- if eq $key "site_footer" -}}{{- $allowed = slice "links" "text" "credit" -}}{{- end -}}
-  {{- if eq $key "taxonomy_navigation" -}}{{- $allowed = slice -}}{{- range $name, $_ := $page.Site.Taxonomies -}}{{- $allowed = $allowed | append $name -}}{{- end -}}{{- end -}}
-  {{- if eq (printf "%T" $value) "bool" -}}
-    {{- if $value -}}{{- errorf "Sidera %s: %s accepts false or an array, not true" $page.Path $key -}}{{- end -}}
-    {{- $settings = merge $settings (dict $key slice) -}}
-  {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: %s must be an array or false" $page.Path $key -}}{{- $settings = merge $settings (dict $key slice) -}}
-  {{- else -}}
-    {{- $seen := slice -}}{{- range $value -}}
-      {{- if not (in $allowed .) -}}{{- errorf "Sidera %s: invalid %s item %v; allowed: %s" $page.Path $key . (delimit $allowed ", ") -}}{{- end -}}
-      {{- if in $seen . -}}{{- errorf "Sidera %s: duplicate %s item %v" $page.Path $key . -}}{{- end -}}
-      {{- $seen = $seen | append . -}}
-    {{- end -}}
-  {{- end -}}
+{{- range $key := slice "left" "right" "article_footer" "site_footer" -}}
+  {{- $value := partial "model/region-valid.html" (dict "Value" (index $settings $key) "Region" (replace $key "_" "-") "Page" $page) -}}
+  {{- $settings = merge $settings (dict $key $value) -}}
 {{- end -}}
+{{- $navigation := $settings.taxonomy_navigation -}}
+{{- if and (eq (printf "%T" $navigation) "bool") (eq $navigation false) -}}{{- $settings = merge $settings (dict "taxonomy_navigation" slice) -}}
+{{- else if not (reflect.IsSlice $navigation) -}}{{- errorf "Sidera %s: taxonomy_navigation must be an array or false" $page.Path -}}
+{{- else -}}{{- $seen := slice -}}{{- range $navigation -}}
+  {{- if not (isset $page.Site.Taxonomies (printf "%v" .)) -}}{{- errorf "Sidera %s: invalid taxonomy_navigation item %v" $page.Path . -}}{{- end -}}
+  {{- if in $seen . -}}{{- errorf "Sidera %s: duplicate taxonomy_navigation item %v" $page.Path . -}}{{- end -}}{{- $seen = $seen | append . -}}
+{{- end -}}{{- end -}}
 {{- range $key := slice "menu" "links_menu" "text" "icon" "byline" "article_text" "article_links_menu" "footer_text" "footer_menu" -}}
   {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
 {{- end -}}
 {{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}
-{{- if or (not (in (slice "int" "int64" "float64") (printf "%T" $settings.recent_count))) (not (in (seq 1 10) $settings.recent_count)) -}}{{- errorf "Sidera %s: recent_count must be an integer from 1 to 10" $page.Path -}}{{- end -}}
+{{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $settings.recent_count))) (not (in (seq 1 10) $settings.recent_count)) -}}{{- errorf "Sidera %s: recent_count must be an integer from 1 to 10" $page.Path -}}{{- end -}}
 {{- range $key := slice "identity" "profile" "tag_icons" -}}
   {{- $value := index $settings $key -}}
   {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera %s: %s must be a map" $page.Path $key -}}

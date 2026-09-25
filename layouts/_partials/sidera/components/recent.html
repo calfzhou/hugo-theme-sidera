@@ -1,3 +1,6 @@
+{{- $order := "modification" -}}{{- with .Config.order -}}{{- $order = . -}}{{- end -}}
+{{- $label := T "recent_updates" -}}{{- $id := "recent-updates" -}}
+{{- if eq $order "publication" -}}{{- $label = T "recent_published" -}}{{- $id = "recent-published" -}}{{- end -}}
 {{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
   {{- $pages := $page.Site.RegularPages -}}
   {{- with $owner -}}
@@ -6,11 +9,10 @@
       {{- range $page.Site.Pages -}}{{- if and .IsSection (not .Params.sidera.tag_view) (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
     {{- end -}}
   {{- end -}}
-  {{- with first (int $s.recent_count) (partial "lists/order.html" (dict "pages" $pages "order" "modification" "pins" false)) -}}
-    <section class="recent-panel" aria-label="{{ T "recent_updates" }}"><h2 class="section-heading nav-heading">{{ T "recent_updates" }}</h2>
-      <p class="muted recent-scope">{{ if $owner }}{{ T "recent_explanation" }}{{ else }}{{ T "recent_global" }}{{ end }}</p>
-      <ul id="recent-updates{{ if eq $ctx.Region "right" }}-right{{ end }}" data-recent>
-        {{- range . -}}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a><span>{{ if .Lastmod.IsZero }}{{ T "undated" }}{{ else }}{{ time.Format ":date_medium" .Lastmod }}{{ end }}</span></li>{{- end -}}
+  {{- with first (int $s.recent_count) (partial "lists/order.html" (dict "pages" $pages "order" $order "pins" false)) -}}
+    <section class="recent-panel" aria-label="{{ $label }}"><h2 class="section-heading nav-heading">{{ $label }}</h2>
+      <ul id="{{ $id }}{{ if eq $ctx.Region "right" }}-right{{ end }}{{ $ctx.IDSuffix }}" data-recent="{{ $order }}">
+        {{- range . -}}<li><a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></li>{{- end -}}
       </ul>
     </section>
   {{- end -}}

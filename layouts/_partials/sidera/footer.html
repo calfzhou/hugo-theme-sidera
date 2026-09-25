@@ -1,9 +1,13 @@
 {{- $ctx := . -}}{{- $key := replace .Region "-" "_" -}}{{- $items := index .Settings $key -}}
 {{- if $items -}}
-  {{- $body := "" -}}
+  {{- $body := "" -}}{{- $counts := dict -}}
   {{- range $items -}}
-    {{- $item := partial "sidera/footer-item.html" (merge $ctx (dict "Name" .)) -}}
-    {{- if strings.TrimSpace $item -}}{{- $body = printf `%s<div class="footer-item" data-footer-item="%s">%s</div>` $body . $item -}}{{- end -}}
+    {{- $instance := partial "sidera/instance.html" (dict "Entry" . "Page" $ctx.Page "Owner" $ctx.Owner "Region" $ctx.Region "Settings" $ctx.Settings) -}}
+    {{- $name := $instance.Name -}}{{- $ordinal := add 1 (index $counts $name | default 0) -}}{{- $counts = merge $counts (dict $name $ordinal) -}}
+    {{- $prefix := "" -}}{{- if gt $ordinal 1 -}}{{- $prefix = printf "%s-%d-" $name $ordinal -}}{{- end -}}
+    {{- $instance = merge $instance (dict "InstancePrefix" $prefix "Instance" (printf "%s-%s-%d" $ctx.Region $name $ordinal)) -}}
+    {{- $item := partial "sidera/footer-item.html" $instance -}}
+    {{- if strings.TrimSpace $item -}}{{- $body = printf `%s<div class="footer-item" data-footer-item="%s" data-instance="%s">%s</div>` $body $name $instance.Instance $item -}}{{- end -}}
   {{- end -}}
   {{- $extra := "" -}}
   {{- if eq .Region "article-footer" -}}{{- $extra = partial "sidera/article-footer-extra.html" . -}}

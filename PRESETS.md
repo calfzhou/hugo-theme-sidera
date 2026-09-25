@@ -103,3 +103,9 @@ theme documentation sample. That sample still requires explicit mounts described
 `list_header` is an inheritable presentation boolean (default true) in all three targets;
 only recursive section presentation consumes it. It does not change browsing roots, membership
 or list policy. A hidden section intro does not generate a TOC.
+
+Region defaults in any of the three preset targets accept component/config objects as well as
+plain names. Native effective Page.Params still wins and arrays replace wholly. Each chosen
+instance then overlays its own validated options; unused preset instances are validated too.
+One `recent` type accepts order=publication/modification per instance. Bundled selections are
+unchanged; Fieldbook explicitly demonstrates new notebook entries and both orders on docs.

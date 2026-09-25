@@ -123,14 +123,10 @@ summary { cursor: pointer; }
 .appearance .icon { width: 24px; height: 24px; }
 .appearance select { font: inherit; color: var(--text); background: var(--panel); border: 1px solid transparent; border-radius: 8px; padding: 6px 8px; min-height: 34px; max-width: 100%; }
 .compact-header .appearance { margin: 0; }
-.recent-panel { font-size: 15px; }
-.recent-scope { font-size: 12px; margin: 0 16px 8px; color: var(--quiet); }
-[data-recent] li { position: relative; padding: 7px 10px; border-radius: 8px; }
-[data-recent] li:has(a:is(:hover,:focus-visible)) { background: var(--item-hover); box-shadow: var(--item-shadow); }
-[data-recent] a { display: block; line-height: 1.4; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-[data-recent] a::after { content: ""; position: absolute; inset: 0; border-radius: 8px; }
-[data-recent] a:is(:hover,:focus-visible) { background: none; box-shadow: none; }
-[data-recent] span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+.recent-panel { font-size: 16px; }
+[data-recent] { display: grid; gap: 2px; }
+[data-recent] li { min-width: 0; }
+[data-recent] a { display: block; min-height: 30px; padding: 4px 16px; border-radius: 8px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .authored-text { font-size: 15px; line-height: 1.65; padding: 0 10px; }
 .authored-text p:last-child { margin: 0; }
 .authored-text img { max-width: 100%; height: auto; }
@@ -161,7 +157,7 @@ summary { cursor: pointer; }
 .intro { color: var(--muted); }
 .intro p:last-child { margin-bottom: 0; }
 .section-heading { margin: 1.7rem 18px .8rem; font-size: 1rem; }
-.recent-panel .section-heading { margin: 0 10px 8px; font-size: 13px; }
+.recent-panel .section-heading { margin: 0 16px 4px; font-size: 14px; }
 .collection-grid { list-style: none; padding: 0; margin-inline: 18px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
 .collection-card,.article-card { background: var(--surface); border: 1px solid transparent; border-radius: var(--radius); padding: 18px; box-shadow: var(--card-shadow); position: relative; }
 .article-card:has(.card-content) { padding: 0; }

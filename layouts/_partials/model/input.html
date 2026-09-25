@@ -44,4 +44,7 @@
 {{- range $cascades -}}
   {{- if or (isset . "preset") (isset (.params | default dict) "scope_root") -}}{{- errorf "Sidera preset/scope_root must not be cascaded: %s" $source -}}{{- end -}}
 {{- end -}}
+{{- range $key := slice "left" "right" "article_footer" "site_footer" -}}
+  {{- if isset $params $key -}}{{- $valid := partial "model/region-valid.html" (dict "Value" (index $params $key) "Region" (replace $key "_" "-") "Source" $source) -}}{{- end -}}
+{{- end -}}
 {{- return true -}}

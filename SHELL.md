@@ -15,7 +15,7 @@ Private generated navigation metadata remains namespaced; no old public-key read
 Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A profileless section can select the same components as any
 preset. page-tree replaces the old docs-tree component name and has no docs-preset gate.
-Arrays replace; false/[] disables a region. Unknown names/duplicates diagnose. Empty or
+Arrays replace; false/[] disables a region. Unknown names/options diagnose; repeated components are supported. Empty or
 inapplicable components emit no empty region. Desktop left-shell views preserve the reading
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and appearance remain accessible when left is off.
@@ -135,14 +135,18 @@ site's own route/link checks. The theme doesn't invent destinations for absent
 features. `links`/profile menus are absent when the selected menu is absent.
 
 - **Taxonomies:** complete nearest-owner flat/hierarchical views, full deduplicated counts, current
-  tag and active ancestor branches. On articles all assigned branches open.
+  tag and active ancestor branches. On articles all assigned branches open. Sidebar headings
+  use the localized taxonomy label alone, without repeating the collection name.
 - **Page tree:** native immediate children and local order drive the complete tree, regardless of preset;
   ancestor/current branches open. A parent body's link and its disclosure are
   separate keyboard targets. No secondary paginator.
-- **Recent:** Lastmod/Title/Path, independent of pins and current pager. Owner
-  scope excludes nested independently marked collections. recent_sections=true includes
-  body-bearing descendant sections as well as regular leaves. With no owner,
-  recent means current-language Site.RegularPages (explicitly global).
+- **Recent (`recent`):** each instance selects `config.order=modification` (default,
+  caption Recent updates) or `publication` (caption Recently published). Lastmod descending versus PublishDate descending,
+  then Title/Path ascending; zero dates sort last. Both ignore pins and the main paginator.
+  Owner scope excludes nested independently marked collections. recent_sections=true includes
+  descendant sections as well as regular leaves. With no owner, both use current-language
+  Site.RegularPages. Rows show only one ellipsized title, with the full escaped title in the
+  native tooltip/accessibility name; no date or scope-explanation line.
 - **TOC:** native headings, only with the rendered article/docs body; no TOC on
   later docs child pagers whose body is intentionally omitted. Full standalone
   support. A right native popover drawer is available below 1181px; without JS/Popover support the region stays open in flow.
@@ -150,6 +154,90 @@ features. `links`/profile menus are absent when the selected menu is absent.
   native indexes/results plus owner-scoped projections. See [TAXONOMIES.md](TAXONOMIES.md)
   for hierarchy/flat policy, deduplicated counts and pagination. These are now
   functional pages, not only navigation to future taxonomy templates.
+
+## Per-instance configuration
+
+The same entry format works in **left, right, article_footer and site_footer**:
+
+```yaml
+params:
+  left:
+    - menu
+    - component: recent
+      config: {order: publication, count: 5}
+    - component: recent
+      config: {order: modification, count: 8}
+    - component: text
+      config: {text: 'A short **site note**.'}
+  article_footer:
+    - terms
+    - component: text
+      config: {text: 'Thanks for reading.'}
+    - component: links
+      config: {menu: article}
+```
+
+A name string is shorthand for `{component: name, config: {}}`, not a legacy alias. Repeat
+any component within/across regions, with different settings or defaults. No author IDs are
+required. Site identity and the main article remain site/page settings, not entries in these regions. Only `component` and optional `config` are accepted; arbitrary template paths,
+unknown options, wrong types and components in the wrong region fail the build.
+
+The existing native Page/cascade → preset → site/default resolution first selects the whole
+region array and default settings. Then each instance overlays **only its supported options**
+on a fresh local settings map. Omitted options inherit; explicit false/empty strings/arrays/maps
+win. Supplied maps (such as tag_icons) replace, not deep-merge. For profile, each flat config
+field overrides that field in the resolved profile; `image: ''` removes the inherited image.
+`config: {}` means all defaults, not “disable”. Use false/[] on a region to disable it.
+Neither Page.Params, the cached page settings, another instance nor a region hook is mutated.
+
+### Sidebar options
+
+| Component | Instance `config` keys | Default source |
+|---|---|---|
+| menu | menu (string), icons (bool), taxonomies (array or false, for fallback navigation) | menu, icons, taxonomy_navigation |
+| collections | icons (bool) | icons |
+| taxonomies | taxonomies (array or false), icons (bool), tag_icons (map of fixed icon names) | taxonomy_navigation, icons, tag_icons |
+| site-taxonomies | taxonomies (array or false), icons (bool) | taxonomy_navigation, icons |
+| page-tree | No presentation options yet; config may be omitted or empty | Native owner/tree/local order, not instance data |
+| toc | icons (bool) | icons |
+| recent | order (publication/modification), count (integer 1–10), sections (bool) | modification; recent_count; recent_sections |
+| profile | title, text, image, menu (strings), icons (bool) | Corresponding profile fields; icons |
+| text | text (Markdown string) | text |
+| links | menu (string), icons (bool) | links_menu; icons |
+
+Taxonomy names must exist in the current native site vocabulary. Hierarchy, source membership,
+term-link policy, tree ordering, scope boundaries and paging remain page/site model decisions;
+they are not silently overridden by an instance. Image/Markdown/menu URL safety uses the existing
+native consumers. Raw local source validates instance shapes/options including drafts; resolving
+excluded resources/native references still requires the documented all-states build.
+
+### Footer options
+
+`text.config.text` and `links.config.menu/icons` work in both footers, defaulting to the existing
+article_text/article_links_menu or footer_text/footer_menu settings. Article `meta.config.show`
+and `authors.config.show` default to show_updated/show_authors but only affect that footer
+instance, not the article header. Terms, series and site credit have no additional presentation
+options yet; their config may be omitted or empty. All footer items can repeat.
+
+### IDs and trusted overrides
+
+Instances have region/type/occurrence identities (`data-instance`, also `.Instance` in partials).
+Repeated TOCs, taxonomy trees and footer attribution/terms receive distinct IDs. First occurrences
+keep their natural region IDs; subsequent occurrences get deterministic numeric suffixes, even
+if an earlier instance emits no content. Native heading anchors stay shared; collapsing one TOC
+or tree does not collapse its siblings. Main-menu selection indicators stay limited to `menu`
+instances, not auxiliary links/profile menus.
+
+Trusted fixed component partial overrides receive the usual Page/Owner/Region plus **Config**,
+local **Settings**, **Instance**, **IDScope** and **IDSuffix**. Use IDScope/Instance when producing
+DOM IDs, not Region alone. Footer hooks still run once with the base region settings; they do not
+inherit the last component's local options. Built-ins share existing renderers, not copied backends.
+
+One `recent` instance can show new notebook entries while another shows updates. Both ignore
+pins/main pagers, use the full nearest-owner collection, exclude independent nested scopes, and
+sort ties by Title/Path with zero dates last. Without an owner they use current-language regular
+pages. The bundled presets retain their existing selections; Fieldbook explicitly demonstrates
+publication-order recent links on Notes and both orders on Handbook.
 
 ## Assets, escaping and extensions
 
@@ -249,7 +337,7 @@ may have a real pageRef link or be a heading. Native weights/ordering/current st
 URL/depth validation are shared with sidebar menus. Authored Markdown is rendered by
 RenderString with the site's normal raw-HTML policy. No inferred license, hidden service,
 placeholder share/comment control, external resource, or automatic copyright year.
-Arrays reject unknown/duplicate items; false/[] disables; empty strings clear text/menu.
+Arrays reject unknown components/options; repeated instances are supported; false/[] disables; empty strings clear text/menu.
 Unused preset maps also validate these fields. Excluded Page-level references/presentation
 values require the normal all-states build; draft is not an exemption.
 

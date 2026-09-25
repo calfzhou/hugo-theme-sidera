@@ -1,7 +1,12 @@
 {{- $ctx := . -}}
+{{- $counts := dict -}}
 {{- range index .Settings .Region -}}
-  {{- $content := partial "sidera/component.html" (merge $ctx (dict "Name" .)) -}}
-  {{- if strings.TrimSpace $content -}}<div class="region-component" data-component="{{ . }}">{{ $content }}</div>{{- end -}}
+  {{- $instance := partial "sidera/instance.html" (dict "Entry" . "Page" $ctx.Page "Owner" $ctx.Owner "Region" $ctx.Region "Settings" $ctx.Settings) -}}
+  {{- $name := $instance.Name -}}{{- $ordinal := add 1 (index $counts $name | default 0) -}}{{- $counts = merge $counts (dict $name $ordinal) -}}
+  {{- $suffix := "" -}}{{- if gt $ordinal 1 -}}{{- $suffix = printf "-%d" $ordinal -}}{{- end -}}
+  {{- $instance = merge $instance (dict "IDScope" (printf "%s%s" $ctx.Region $suffix) "IDSuffix" $suffix "Instance" (printf "%s-%s-%d" $ctx.Region $name $ordinal)) -}}
+  {{- $content := partial "sidera/component.html" $instance -}}
+  {{- if strings.TrimSpace $content -}}<div class="region-component" data-component="{{ $name }}" data-instance="{{ $instance.Instance }}">{{ $content }}</div>{{- end -}}
 {{- end -}}
 {{- if index .Settings .Region -}}
   {{- if eq .Region "left" -}}{{- partial "sidera/left-extra.html" . -}}{{- else -}}{{- partial "sidera/right-extra.html" . -}}{{- end -}}

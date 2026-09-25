@@ -41,12 +41,6 @@ other = "Browse tags →"
 [recent_updates]
 other = "Recent updates"
 
-[recent_explanation]
-other = "Across this collection, independent of pins."
-
-[undated]
-other = "undated"
-
 [tags]
 other = "Tags"
 
@@ -153,8 +147,6 @@ other = "{{ .number }} child pages"
 
 [categories]
 other = "Categories"
-[recent_global]
-other = "Across this site, independent of pins."
 [toggle_branch]
 other = "Expand or collapse {{ .title }}"
 [page_context]
@@ -193,3 +185,6 @@ other = "Back to top"
 
 [close_navigation]
 other = "Close navigation"
+
+[recent_published]
+other = "Recently published"

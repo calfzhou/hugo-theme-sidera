@@ -1,7 +1,7 @@
 {{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
   {{- if and ($page.Store.Get "sidera-body") (strings.Contains $page.TableOfContents "<li>") -}}
-    <details class="article-toc" open data-responsive-toc><summary id="toc-heading-{{ .Region }}"><span>{{ T "on_this_page" }}</span>{{ if $s.icons }}{{ partial "sidera/icon.html" "sidebar-right" }}{{ end }}</summary>
-      {{ $page.TableOfContents | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .Region .Region) | safeHTML }}
+    <details class="article-toc" open data-responsive-toc><summary id="toc-heading-{{ .IDScope }}"><span>{{ T "on_this_page" }}</span>{{ if $s.icons }}{{ partial "sidera/icon.html" "sidebar-right" }}{{ end }}</summary>
+      {{ $page.TableOfContents | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .IDScope .IDScope) | safeHTML }}
       <a class="toc-top" href="#main">{{ T "back_to_top" }}</a>
     </details>
   {{- end -}}

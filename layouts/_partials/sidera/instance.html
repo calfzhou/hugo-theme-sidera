@@ -1,0 +1,71 @@
+{{- /* Fixed component options. No authored partial paths, Page mutation or resolver recursion. */ -}}
+{{- $schemas := dict
+  "menu" (dict "menu" "menu" "icons" "icons" "taxonomies" "taxonomy_navigation")
+  "collections" (dict "icons" "icons")
+  "taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons" "tag_icons" "tag_icons")
+  "site-taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons")
+  "page-tree" dict
+  "toc" (dict "icons" "icons")
+  "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections")
+  "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
+  "text" (dict "text" "text")
+  "links" (dict "menu" "links_menu" "icons" "icons") -}}
+{{- if eq .Region "article-footer" -}}
+  {{- $schemas = dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "text" (dict "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
+{{- else if eq .Region "site-footer" -}}
+  {{- $schemas = dict "text" (dict "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
+{{- end -}}
+{{- $source := .Source | default "component instance" -}}{{- with .Page -}}{{- $source = .Path -}}{{- end -}}
+{{- $name := "" -}}{{- $config := dict -}}
+{{- if eq (printf "%T" .Entry) "string" -}}{{- $name = .Entry -}}
+{{- else if reflect.IsMap .Entry -}}
+  {{- range $key, $_ := .Entry -}}{{- if not (in (slice "component" "config") $key) -}}{{- errorf "Sidera %s: unknown component instance field %s" $source $key -}}{{- end -}}{{- end -}}
+  {{- if ne (printf "%T" .Entry.component) "string" -}}{{- errorf "Sidera %s: instance component must be a name string" $source -}}{{- else -}}{{- $name = .Entry.component -}}{{- end -}}
+  {{- if isset .Entry "config" -}}
+    {{- if not (reflect.IsMap .Entry.config) -}}{{- errorf "Sidera %s: component config must be a map" $source -}}{{- else -}}{{- $config = .Entry.config -}}{{- end -}}
+  {{- end -}}
+{{- else -}}{{- errorf "Sidera %s: component instance must be a name or component/config map" $source -}}{{- end -}}
+{{- if not (isset $schemas $name) -}}{{- errorf "Sidera %s: invalid %s item %q" $source .Region $name -}}{{- end -}}
+{{- $schema := index $schemas $name | default dict -}}{{- $overrides := dict -}}
+{{- range $key, $value := $config -}}
+  {{- if not (isset $schema $key) -}}{{- errorf "Sidera %s: unknown %s config option %s" $source $name $key -}}
+  {{- else -}}
+    {{- if in (slice "icons" "sections" "show") $key -}}
+      {{- if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera %s: %s config.%s must be boolean" $source $name $key -}}{{- end -}}
+    {{- else if eq $key "count" -}}
+      {{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $value))) (not (in (seq 1 10) $value)) -}}{{- errorf "Sidera %s: recent config.count must be an integer from 1 to 10 (got %T %v)" $source $value $value -}}{{- end -}}
+    {{- else if eq $key "taxonomies" -}}
+      {{- if and (eq (printf "%T" $value) "bool") (eq $value false) -}}{{- $value = slice -}}
+      {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: config.taxonomies must be an array or false" $source -}}{{- $value = slice -}}{{- end -}}
+      {{- $seen := slice -}}{{- range $value -}}
+        {{- if or (ne (printf "%T" .) "string") (and $.Page (not (isset $.Page.Site.Taxonomies (printf "%v" .)))) (in $seen .) -}}{{- errorf "Sidera %s: invalid/duplicate config.taxonomies entry %v" $source . -}}{{- end -}}
+        {{- $seen = $seen | append . -}}
+      {{- end -}}
+    {{- else if eq $key "tag_icons" -}}
+      {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera %s: config.tag_icons must be a map" $source -}}
+      {{- else -}}{{- range $value -}}{{- if ne (printf "%T" .) "string" -}}{{- errorf "Sidera %s: config.tag_icons values must be icon names" $source -}}{{- else -}}{{- $valid := partial "sidera/icon.html" . -}}{{- end -}}{{- end -}}{{- end -}}
+    {{- else -}}
+      {{- if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera %s: %s config.%s must be a string" $source $name $key -}}
+      {{- else if and (eq $key "order") (not (in (slice "publication" "modification") $value)) -}}{{- errorf "Sidera %s: recent config.order must be publication or modification" $source -}}
+      {{- else if and (eq $key "image") $value -}}
+        {{- if or (findRE `[:?#\\]` $value) (hasPrefix $value "//") (in (split $value "/") "..") (not (in (slice ".svg" ".png" ".jpg" ".jpeg" ".webp" ".gif" ".avif") (lower (path.Ext $value)))) -}}{{- errorf "Sidera %s: profile config.image must be a local image path" $source -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- with index $schema $key -}}{{- $overrides = merge $overrides (dict . $value) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if eq $name "profile" -}}
+  {{- $profile := dict -}}{{- $base := .Settings.profile | default dict -}}
+  {{- range $key := slice "title" "text" "image" "menu" -}}
+    {{- if isset $config $key -}}{{- $profile = merge $profile (dict $key (index $config $key)) -}}
+    {{- else if and (reflect.IsMap $base) (isset $base $key) -}}{{- $profile = merge $profile (dict $key (index $base $key)) -}}{{- end -}}
+  {{- end -}}
+  {{- $overrides = merge $overrides (dict "profile" $profile) -}}
+{{- end -}}
+{{- /* Construct each key once: merge must not refill cleared nested maps from shared settings. */ -}}
+{{- $settings := dict -}}
+{{- range $key, $value := .Settings -}}
+  {{- if isset $overrides $key -}}{{- $value = index $overrides $key -}}{{- end -}}
+  {{- $settings = merge $settings (dict $key $value) -}}
+{{- end -}}
+{{- return (dict "Page" .Page "Owner" .Owner "Region" .Region "Name" $name "Config" $config "Settings" $settings) -}}

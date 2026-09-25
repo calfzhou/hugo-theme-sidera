@@ -118,18 +118,18 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
 | list_order / page_size | publication or modification descending, or title ascending; stable Title/Path ties. Minimal title / positive integer 10. |
 | children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |
-| recent_count / recent_sections | 1–10 (default 5); include descendant section documents (default false). Full owner model, independent of main pins/pager. |
+| recent_count / recent_sections | 1–10 (default 5); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
 | taxonomy_hierarchy | Tags/categories interpreted hierarchically; default []. Notes preset supplies [tags]. Stable owner policy for scoped views; Site policy for globals. |
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
-| left / right | Fixed ordered components or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
+| left / right | Ordered name strings or component/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see SHELL.md). |
 | icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see SHELL.md). |
-| article_footer | Ordered fixed items or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
-| site_footer | Ordered links/text/credit items or false; default [links,text,credit]. []/false hides the region and hook. |
+| article_footer | Ordered name strings or component/config maps, or false; default [terms,meta,series,text,links]. Optional authors. []/false hides the region and its hook. |
+| site_footer | Ordered links/text/credit strings or component/config maps, or false; default [links,text,credit]. []/false hides the region and hook. |
 | article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
 | footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
 | terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |
@@ -141,7 +141,7 @@ Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies,
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.
 In recursive list mode, native non-section storage folders may flatten into their parent tree;
 children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
-Unknown components/duplicates/malformed fields diagnose. Fixed icons remain home/blog/notebook/
+Unknown components/options/malformed fields diagnose; repeated component instances are allowed. Fixed icons remain home/blog/notebook/
 docs/page/tag/link/star; custom preset names are never used as required icon/i18n enum values.
 
 Native assignments are `tags`, `categories`, `authors`, `series`, `preset` at top level.
@@ -197,3 +197,11 @@ Bundled actual docs remain outside default content and need explicit mounts (DOC
 metadata never enables them. Standalone reading/shell, localization, dark/light/system behavior,
 local resources and safety remain intact. No P3 service/renderers, full browser/accessibility
 certification, distribution license grant or P2 visual completion is implied.
+
+## Component instances
+
+All four configurable regions accept name strings and `{component: name, config: {...}}` entries.
+Config is a typed component-specific presentation overlay after the normal resolver; strings use
+defaults. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
+model change. SHELL.md contains the complete per-component option/default table and empty semantics.
+There is one recent component with instance order=modification/publication, not a second component.

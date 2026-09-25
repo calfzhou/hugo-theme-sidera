@@ -1,7 +1,7 @@
 {{- $ctx := .Context -}}{{- $parent := .parent -}}{{- $model := .model -}}
 {{- $nodes := where (sort $model.nodes "key") "parent" $parent -}}
 {{- with $nodes -}}
-<ul{{ if not $parent }} id="{{ $model.taxonomy }}-tree-{{ $ctx.Region }}"{{ end }}>
+<ul{{ if not $parent }} id="{{ $model.taxonomy }}-tree-{{ $ctx.IDScope | default $ctx.Region }}"{{ end }}>
 {{- range . -}}
   {{- $tag := . -}}{{- $target := partial "taxonomies/page.html" (dict "owner" $ctx.Owner "taxonomy" $model.taxonomy "key" .key "slug" .slug) -}}
   {{- $current := eq $ctx.Page $target -}}{{- $active := $current -}}

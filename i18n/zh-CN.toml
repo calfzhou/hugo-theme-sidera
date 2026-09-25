@@ -41,12 +41,6 @@ other = "浏览标签 →"
 [recent_updates]
 other = "最近更新"
 
-[recent_explanation]
-other = "此合集的最近更新，不受置顶影响。"
-
-[undated]
-other = "日期不详"
-
 [tags]
 other = "标签"
 
@@ -151,8 +145,6 @@ other = "{{ .number }} 篇子文档"
 
 [categories]
 other = "分类"
-[recent_global]
-other = "全站最近更新，不受置顶影响。"
 [toggle_branch]
 other = "展开或收起{{ .title }}"
 [page_context]
@@ -190,3 +182,6 @@ other = "返回顶部"
 
 [close_navigation]
 other = "关闭导航"
+
+[recent_published]
+other = "最近发布"
