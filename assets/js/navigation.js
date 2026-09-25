@@ -28,12 +28,26 @@ if ('showPopover' in HTMLElement.prototype) {
 // Native anchors remain native (URL, history, focus and no-script behavior).
 // Track the last heading above the reading offset; never steal focus or scroll the document.
 const tocLinks = [...document.querySelectorAll('[data-toc] a[href^="#"]')];
-const headings = [...document.querySelectorAll('.prose :is(h2,h3,h4,h5,h6)[id]')]
+const headings = [...document.querySelectorAll('.prose :is(h1,h2,h3,h4,h5,h6)[id]')]
   .filter(heading => tocLinks.some(link => {
     try { return decodeURIComponent(link.hash.slice(1)) === heading.id; }
     catch { return false; }
   }));
 if (headings.length) {
+  const revealCurrent = link => {
+    const toc = link.closest('[data-toc]');
+    if (!toc.clientHeight || toc.scrollHeight <= toc.clientHeight || toc.contains(document.activeElement)) return;
+    const row = link.getBoundingClientRect(), box = toc.getBoundingClientRect();
+    const above = row.top - box.top - 64, below = row.bottom - box.bottom + 100;
+    if (above < 0) toc.scrollTop += above;
+    else if (below > 0) toc.scrollTop += below;
+  };
+  for (const disclosure of document.querySelectorAll('[data-responsive-toc]')) {
+    disclosure.addEventListener('toggle', () => {
+      const link = disclosure.querySelector('[data-toc] a[aria-current]');
+      if (disclosure.open && link) revealCurrent(link);
+    });
+  }
   let queued = false;
   const update = () => {
     queued = false;
@@ -48,12 +62,7 @@ if (headings.length) {
       if (active) {
         const changed = !link.hasAttribute('aria-current');
         link.setAttribute('aria-current', 'location');
-        const toc = link.closest('[data-toc]');
-        // Scroll the TOC only, never the document or a focused keyboard target.
-        if (changed && toc.clientHeight && !toc.contains(document.activeElement)) {
-          const row = link.getBoundingClientRect(), box = toc.getBoundingClientRect();
-          if (row.top < box.top || row.bottom > box.bottom) toc.scrollTop += row.top - box.top - 24;
-        }
+        if (changed) revealCurrent(link);
       }
       else link.removeAttribute('aria-current');
     }

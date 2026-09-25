@@ -143,20 +143,35 @@ summary { cursor: pointer; }
 .profile { background: var(--panel); border-radius: 12px; padding: 20px 8px 12px; }
 .profile > img { object-fit: cover; border-radius: 50%; margin: 0 10px 12px; }
 .profile .nav-heading { color: var(--text); font-size: 16px; }
+/* Stellar TOC: one fixed track, consistent nested padding and a marker inside the scrollport. */
 .article-toc { padding: 0; font-size: 16px; }
-.article-toc > summary { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
-.article-toc [data-toc] { border-left: 4px solid var(--panel); max-height: 60dvh; overflow: auto; }
-.article-toc [data-toc] a { display: block; position: relative; padding: 5px 10px; margin: 0 0 2px 6px; border-radius: 6px; line-height: 1.35; font-size: 15px; }
- .article-toc [data-toc] a[aria-current] { background: none; color: var(--text); }
-.article-toc [data-toc] a[aria-current]::before { content: ""; position: absolute; left: -9px; top: 5px; bottom: 5px; width: 3px; border-radius: 3px; background: var(--accent); }
+.article-toc > summary { display: flex; align-items: center; justify-content: space-between; list-style: none; padding: 0 16px; margin-bottom: 4px; border-radius: 8px; color: var(--quiet); font-size: 15px; font-weight: 500; line-height: 28px; }
+.article-toc > summary::-webkit-details-marker { display: none; }
+.toc-toggle { display: inline-flex; padding: 6px; margin-right: -6px; border-radius: 8px; opacity: .5; }
+.toc-toggle .icon { width: 16px; height: 16px; color: inherit; }
+.article-toc > summary:is(:hover,:focus-visible) { color: var(--muted); background: none; }
+.article-toc > summary:is(:hover,:focus-visible) .toc-toggle,.article-toc:not([open]) .toc-toggle { opacity: 1; background: var(--item-hover); box-shadow: var(--item-shadow); }
+.toc-body { position: relative; }
+.toc-body::before { content: ""; position: absolute; top: 8px; bottom: 8px; left: 0; width: 4px; border-radius: 4px; background: var(--panel); pointer-events: none; }
+.article-toc [data-toc] { position: relative; max-height: 60dvh; overflow: auto; }
+.article-toc ul,.article-toc li { list-style: none; margin: 0; padding: 0; }
+.article-toc [data-toc] a { display: block; position: relative; padding: 4px 8px; margin: 0 8px; border-radius: 8px; line-height: 1.2; font-size: 17px; font-weight: 500; color: var(--quiet); text-decoration: none; }
+.article-toc [data-toc] a:is(:hover,:focus-visible) { color: var(--text); background: var(--item-hover); box-shadow: var(--item-shadow); }
+.article-toc [data-toc] ul ul a { font-size: 16px; font-weight: 400; padding-left: 16px; }
+.article-toc [data-toc] ul ul ul a { padding-left: 32px; }
+.article-toc [data-toc] ul ul ul ul a { padding-left: 48px; }
+.article-toc [data-toc] ul ul ul ul ul a { padding-left: 64px; }
+.article-toc [data-toc] ul ul ul ul ul ul a { padding-left: 80px; }
+.article-toc [data-toc] a[aria-current] { color: var(--text); }
+.article-toc [data-toc] a[aria-current]::before { content: ""; position: absolute; left: -8px; top: 4px; bottom: 4px; width: 4px; border-radius: 4px; background: var(--accent); }
 .article-toc [data-toc] a[aria-current]::after { content: none; }
-.article-toc [data-toc] ul ul a[aria-current]::before { left: -21px; }
-.article-toc [data-toc] ul ul ul a[aria-current]::before { left: -33px; }
-.article-toc [data-toc] ul ul ul ul a[aria-current]::before { left: -45px; }
-.toc-top { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--line); padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
-.article-toc > summary { padding: 4px 10px; border-radius: 6px; }
-.article-toc > summary:is(:hover,:focus-visible) { color: var(--text); background: var(--item-hover); }
-.article-toc ul ul { padding-left: 12px; }
+.toc-footer { position: relative; margin-top: 8px; padding-top: 8px; }
+.toc-footer::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 1px; background: var(--line); }
+.toc-top { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 16px; text-decoration: none; }
+.toc-top .icon { width: 16px; height: 16px; }
+.prose h1[id] { scroll-margin-top: 1.5rem; }
+@media (min-width: 1441px) { .article-toc [data-toc] { max-height: 70dvh; } }
+@media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } .toc-top { background: var(--panel); } }
 .view-header { padding: 0 18px 12px; margin-bottom: 12px; }
 .view-header h1 { font-size: 25px; margin: 8px 0; }
 .view-header .intro { font-size: 15px; line-height: 1.6; }
@@ -371,11 +386,6 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 
 /* The current section stays selected while reading a descendant. */
 .navigation-content .native-menu a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
-.article-toc > summary { display: flex; align-items: center; justify-content: space-between; list-style: none; }
-.article-toc > summary::-webkit-details-marker { display: none; }
-.article-toc > summary .icon { width: 16px; height: 16px; opacity: .5; }
-.article-toc > summary:is(:hover,:focus-visible) .icon { opacity: 1; }
-.article-toc:not([open]) > summary { background: var(--panel); }
 .collection-emblem { float: right; padding: 6px; border-radius: 8px; background: var(--panel); }
 .collection-emblem:empty { display: none; }
 .collection-emblem .icon { width: 28px; height: 28px; }

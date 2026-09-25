@@ -586,3 +586,20 @@ text; where supported, a manual popover keeps visual feedback above an open side
 without dismissing it. Reduced motion removes movement/transitions but retains the message and
 dwell time. With no JavaScript both notification regions stay empty/inactive. Native control
 labels and saved appearance behavior remain unchanged.
+
+
+## TOC presentation
+
+The native Hugo outline follows Stellar's hierarchy and rail geometry: 17px/500 top entries,
+16px/400 nested entries, shallow first indentation then 16px increments, wrapped labels and a
+4px rounded track/current marker. Indentation is link padding, not nested-list offsets, so the
+marker stays inside the scrolling viewport at every native heading depth rather than clipping.
+The muted caption and collapse icon share the native summary target; keyboard/no-JS disclosure
+behavior remains. Back to top has its own divided footer and stays available when the list closes.
+
+Desktop outlines are bounded to 60vh (70vh above 1440px), with hidden scrollbars; narrow drawers
+scroll the whole contextual region instead of nesting another small TOC scrollport. The native
+heading anchors/history remain unchanged. Scroll tracking covers H1–H6 when included in Hugo's
+configured outline, keeps a newly current entry visible without stealing keyboard focus, and
+rechecks it when an outline is reopened. Repeated TOCs keep independent disclosure state/IDs.
+The local up icon is the pinned Stellar/Solar default:upup asset under the retained CC BY notice.
