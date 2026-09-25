@@ -57,7 +57,7 @@ other = "Site navigation"
 other = "Browse collections & tags"
 
 [appearance]
-other = "Appearance"
+other = "Color mode"
 
 [appearance_dark]
 other = "Dark"
@@ -206,3 +206,12 @@ other = "{{ .label }}: {{ .current }}. Switch to {{ .next }}."
 
 [social_links]
 other = "Social links"
+
+[color_mode_dark_notice]
+other = "Switched to dark color mode."
+
+[color_mode_light_notice]
+other = "Switched to light color mode."
+
+[color_mode_auto_notice]
+other = "Following system color mode."

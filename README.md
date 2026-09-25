@@ -47,7 +47,7 @@ Sidera distribution license remains unresolved; the upstream notice does not gra
 
 The theme default is **auto** (follow the OS). Set native site/language
 `params.appearance` to `dark`, `light` or `auto` for new visitors; a saved valid visitor choice
-wins. The optional social-menu action `Sidera.cycleAppearance()` cycles dark → light → auto.
+wins. The UI calls this **Color mode**; config/API names remain unchanged. The optional social-menu action `Sidera.cycleAppearance()` cycles dark → light → auto and shows a brief localized notification.
 The leftbar's pinned `left_footer` region defaults to `social`, but emits no controls without
 a configured menu. Owners can omit the switch or the entire footer. See SHELL.md for local
 custom icons, the six-entry bound, native menu configuration and the fixed onclick whitelist.

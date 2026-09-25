@@ -1,0 +1,6 @@
+{{- /* Visual feedback is separate from the always-present polite live region. */ -}}
+<div id="sidera-toast" class="site-toast" aria-hidden="true" hidden
+  data-mode-dark="{{ T "color_mode_dark_notice" }}"
+  data-mode-light="{{ T "color_mode_light_notice" }}"
+  data-mode-auto="{{ T "color_mode_auto_notice" }}"></div>
+<div id="sidera-toast-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>

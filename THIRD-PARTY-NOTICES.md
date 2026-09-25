@@ -1,7 +1,8 @@
 # Third-party notices
 
 Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
-hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets and footers.
+hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers and toast. Site notification motion also follows
+Stellar main.js hud.toast/theme.js; Sidera uses plain-text messages instead of upstream innerHTML.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This notice applies to those adaptations; it does not grant a distribution license
 for the rest of Sidera or site content. No third-party fonts are bundled. The small local icon subset below has a separate license.

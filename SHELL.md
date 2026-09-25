@@ -566,3 +566,23 @@ menu entirely. Stored visitor choices still apply even without a button. With no
 CSS follows the owner default/OS and the inert action is hidden; ordinary social links stay usable.
 Fieldbook explicitly starts new visitors in dark mode and demonstrates two original local example
 icons, not a bundled vendor-logo collection. Its default can be changed to auto in root config.
+
+
+## Site-level notifications
+
+`Sidera.toast(message, duration=2000)` displays one **plain-text** site notification after the
+DOM is ready. Duration is the dwell time in milliseconds; normal entrance/exit take 500ms each.
+It follows Stellar's top-centered card/slide treatment: starts above the viewport, settles at
+32px, then slides back out. Rapid calls replace the prior message and cancel old timers instead
+of stacking notices. No HTML or callback strings are interpreted.
+
+The color-mode switch (`Sidera.cycleAppearance()`) announces the selected dark/light/auto mode
+using native EN/ZH messages. Initial paint, OS/storage updates and the explicit setAppearance
+setter remain silent. The UI now says **Color mode / 配色模式**; existing params.appearance,
+API names and storage remain unchanged in this wording refinement.
+
+Notifications do not take focus or intercept pointer input. A polite live region announces the
+text; where supported, a manual popover keeps visual feedback above an open sidebar drawer
+without dismissing it. Reduced motion removes movement/transitions but retains the message and
+dwell time. With no JavaScript both notification regions stay empty/inactive. Native control
+labels and saved appearance behavior remain unchanged.

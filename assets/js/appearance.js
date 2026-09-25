@@ -32,7 +32,13 @@
   }
   window.Sidera = Object.assign(window.Sidera || {}, {
     setAppearance,
-    cycleAppearance: () => setAppearance(modes[(modes.indexOf(choice) + 1) % modes.length])
+    cycleAppearance: () => {
+      const mode = setAppearance(modes[(modes.indexOf(choice) + 1) % modes.length]);
+      const notice = document.getElementById('sidera-toast');
+      const message = notice?.dataset[`mode${mode[0].toUpperCase()}${mode.slice(1)}`];
+      if (message && window.Sidera.toast) window.Sidera.toast(message);
+      return mode;
+    }
   });
   apply();
   system.addEventListener('change', () => { if (choice === 'auto') apply(); });
