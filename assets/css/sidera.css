@@ -409,3 +409,16 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 
 .taxonomy-context { display: flex; gap: 8px 18px; flex-wrap: wrap; font-size: 13px; }
 .view-header .breadcrumbs { margin: 8px 0; }
+
+/* Stellar main navigation: 1.5rem leading icons, 4px row separation, 8px selection dot.
+   Keep profile/link menus and sitemap/footer icons at their existing smaller scale. */
+[data-component="menu"] .native-menu ul,
+[data-component="menu"] :is(.fallback-menu,.fallback-menu > .collection-nav,.fallback-menu > .page-nav) { display: grid; gap: 4px; }
+[data-component="menu"] .native-menu ul ul { margin-top: 4px; }
+[data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) { gap: 12px; min-height: 44px; }
+[data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) .icon { width: 1.5rem; height: 1.5rem; }
+[data-component="menu"] :is(.native-menu,.fallback-menu) a[aria-current]::after { width: 8px; height: 8px; }
+[data-component="menu"] .collection-nav a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); }
+[data-component="menu"] .collection-nav a[aria-current="location"]::after { content: ""; flex: none; margin-left: auto; border-radius: 50%; background: var(--accent); }
+.native-menu a:is(:hover,:focus-visible,[aria-current]) .icon { color: var(--menu-accent,var(--accent)); }
+.navigation-content .native-menu a[aria-current]::after { background: var(--menu-accent,var(--accent)); background: linear-gradient(225deg,color-mix(in srgb,var(--menu-accent,var(--accent)) 50%,#fff) 20%,var(--menu-accent,var(--accent)) 60%); }

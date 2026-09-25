@@ -99,6 +99,27 @@ Parent page links remain links. Native menu labels are site-authored—not silen
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.
 A `menus.<name>.params.icon` value can override its decorative icon. Icon names:
 `home`, `blog`, `notebook`, `docs`, `page`, `tag`, `link`, `star`; `''` means none.
+Optional `menus.<name>.params.color` supplies that entry's icon/selection-dot accent on
+hover, focus-visible or current/ancestor selection. Omission or `''` uses the theme accent.
+It accepts hex `#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`; invalid types/CSS diagnose at build time for rendered entries,
+even with icons off. Labels stay neutral, and a hover-only row does not acquire a selection dot.
+The accent belongs to the entry, not its parent/child or a Page's inherited settings.
+
+```toml
+[[menus.primary]]
+name = 'Journal'
+pageRef = '/journal'
+[menus.primary.params]
+icon = 'blog'
+color = '#ffbd2b'
+```
+
+Main `menu` components use Stellar's 1.5rem (27px at the default root size) icons, 12px
+icon/label gap, 4px adjacent-row gaps and 8px selected dots. Discovered fallback main links
+use the same sizing/spacing. Profile/link/footer menus retain their smaller icon treatment.
+Selected dots remain selection indicators, including with icons=false. These are local native
+menu params; arbitrary CSS strings, URLs and authored SVG are never accepted as color values.
+
 No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.
 
 URLs allow local URLs and `http://`, `https://`, `mailto:`; dangerous schemes,
