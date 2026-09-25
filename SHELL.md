@@ -636,11 +636,13 @@ Native list navigation follows Stellar's rounded single-bar treatment: muted num
 current/hover pills, dashed arrow-end dividers, dim noninteractive unavailable arrows and
 accent hover/focus. First/last numbers retain native endpoint URLs; previous/next are ordinary
 links with rel and translated accessible labels. Current pages carry aria-current. The localized
-page summary is screen-reader-only for multiple pages; empty/single-page summaries remain visible.
+page summary is screen-reader-only for multiple pages; single-page pagers are omitted entirely.
+Empty-result messages remain unchanged.
 
 Show first/last plus two neighboring pages on each side, separating omitted ranges with ellipses.
 Below 28rem available bar width a CSS container query selects a one-neighbor window; the other
 window is display:none (not focusable or exposed to assistive technology). No pagination JS or
 second Paginate call is introduced. The two decorative arrow SVGs use the same pinned Stellar/
 Solar registry and retained CC BY notice. Native list membership, order, page size and routes
-are unchanged. Existing localized empty/single-result behavior is retained rather than hidden.
+are unchanged. The shared partial omits a one-page pager for every caller, including docs and
+taxonomies; existing localized empty-result messages are retained.

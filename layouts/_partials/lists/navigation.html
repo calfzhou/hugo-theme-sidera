@@ -1,4 +1,5 @@
 {{- /* Accept a Pager, not a Page: no .Paginator/.Paginate here. */ -}}
+{{- if ne .TotalPages 1 -}}
 <nav class="pagination" aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
   {{ if .TotalNumberOfElements }}<span class="pagination-summary{{ if gt .TotalPages 1 }} visually-hidden{{ end }}">{{ T "page_summary" (dict "current" (lang.FormatNumber 0 .PageNumber) "total" (lang.FormatNumber 0 .TotalPages)) }}</span>{{ else }}<span>{{ T "no_articles" }}</span>{{ end }}
   {{ if gt .TotalPages 1 }}
@@ -22,3 +23,4 @@
     {{ else }}<span class="pagination-arrow" aria-disabled="true" aria-label="{{ T "page_next" }}">{{ partial "sidera/icon.html" "arrow-right" }}</span>{{ end }}
   {{ end }}
 </nav>
+{{- end -}}
