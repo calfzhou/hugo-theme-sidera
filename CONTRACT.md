@@ -123,6 +123,8 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
+| appearance | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |
+| left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
 | top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
 | taxonomy_hubs | list (minimal default) or index (blog section default). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
 | left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
@@ -140,7 +142,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | avatar | Author-term local portrait string; empty means none. Safe local image lookup. |
 | series_order | Series-term publication (oldest first, undated last) or weight (native series_weight ascending). Stable date/Title/Path ties; pins do not reorder sequences. |
 
-Fixed components: collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+Fixed components: social, collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.
 In recursive list mode, native non-section storage folders may flatten into their parent tree;
 children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
@@ -197,13 +199,13 @@ hugo --buildDrafts --buildFuture --buildExpired --destination "$run/all-states" 
 ```
 
 Bundled actual docs remain outside default content and need explicit mounts (DOCS.md); preset
-metadata never enables them. Standalone reading/shell, localization, dark/light/system behavior,
+metadata never enables them. Standalone reading/shell, localization, dark/light/auto behavior,
 local resources and safety remain intact. No P3 service/renderers, full browser/accessibility
 certification, distribution license grant or P2 visual completion is implied.
 
 ## Component instances
 
-All five configurable regions accept component/widget names, `{component: name, config: {...}}`
+All six configurable regions accept component/widget names, `{component: name, config: {...}}`
 and `{widget: name, config: {...}}` entries.
 Config is a typed component-specific presentation overlay after the normal resolver. Named
 widgets add reusable defaults before per-use options; they do not change the resolved data scope. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
@@ -221,3 +223,8 @@ Widget definitions are native site/language params, not Page/preset metadata. Bu
 names cannot be shadowed and widgets cannot derive from other widgets. Native config merging
 precedes validation; per-use options replace shallowly and IDs count the resolved component kind.
 The two recent widget names are reusable definitions, not additional components or legacy aliases.
+
+Social entries use native menu params.icon/image or the whitelisted onclick action
+Sidera.cycleAppearance(). No arbitrary JavaScript, fetched icon content or template paths are
+accepted. Owner appearance defaults are separate from page/instance settings and visitor storage.
+SHELL.md defines exact behavior, local-image safety, six-entry bound and no-JS fallback.

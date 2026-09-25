@@ -12,15 +12,15 @@ Native taxonomies/menus/date fields remain native. [CONTRACT.md](CONTRACT.md) is
 field/type/domain reference and [PRESETS.md](PRESETS.md) describes the three-target fallback.
 Private generated navigation metadata remains namespaced; no old public-key reader or alias.
 
-Fixed browsing components: collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+Fixed browsing components: social, collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A profileless section can select the same components as any
 preset. page-tree replaces the old docs-tree component name and has no docs-preset gate.
 Arrays replace; false/[] disables a region. Unknown names/options diagnose; repeated components are supported. Empty or
 inapplicable components emit no empty region. Desktop left-shell views preserve the reading
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
-the full shell; compact is explicit. Identity/home and appearance remain accessible when left is off.
+the full shell; compact is explicit. Identity/home and any configured left-footer items move to the compact header when left is off.
 
-Minimal defaults are top=[], taxonomy_hubs=list, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
+Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=list, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
 Preset section/descendant maps may supply different defaults. Site/language values are below
 preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
@@ -160,7 +160,7 @@ features. `links`/profile menus are absent when the selected menu is absent.
 
 ## Per-instance configuration
 
-The same entry format works in **top, left, right, article_footer and site_footer**:
+The same entry format works in **top, left, right, left_footer, article_footer and site_footer**:
 
 ```yaml
 params:
@@ -201,6 +201,7 @@ Neither Page.Params, the cached page settings, another instance nor a region hoo
 
 | Component | Instance `config` keys | Default source |
 |---|---|---|
+| social | menu (native menu name), icons (bool) | social_menu (social); icons |
 | collection-nav | items (array of recent/categories/tags/archive; [] hides) | All four, in that order; empty categories/tags omitted |
 | menu | menu (string), icons (bool), taxonomies (array or false, for fallback navigation) | menu, icons, taxonomy_navigation |
 | collections | icons (bool) | icons |
@@ -363,8 +364,8 @@ the document scrollbar or article code/table scrollbars. Its neutral fading surf
 At 1180px the right region becomes a native auto-popover; at 667px the left does too.
 Floating controls, Escape/light-dismiss, explicit close and native focus return remain usable.
 Only one drawer opens at a time. No modal focus trap; no-JS/unsupported browsers retain open
-in-flow disclosures. Appearance stays a labeled native three-way select, unlike Stellar's
-binary theme action: System mode and keyboard usability are retained. No fake search/services.
+in-flow disclosures. Appearance is an optional icon action selected by the site owner; it cycles dark/light/auto
+and keeps native keyboard/focus semantics. No control is invented when none is configured. No fake search/services.
 
 Native top-level `tags` and `categories` are assignments, not custom settings.
 Hierarchy policy (`taxonomy_hierarchy`) and global size (`taxonomy_page_size`)
@@ -508,3 +509,60 @@ TOML/YAML/filename-language inventory applies; arbitrary mounted/generated vocab
 newly supported. Enabling the bar where an archive route cannot be generated diagnoses the
 missing supported source context. Bundled docs stay opt-in, and archive navigation is off by
 default for docs. No search, comments, special-syntax backend or real-site URL migration is added.
+
+
+## Pinned social footer and appearance
+
+`left_footer` is a sixth instance region, pinned below the scrolling left widgets. Its default
+`[social]` emits nothing when the selected native social menu is absent. Use false/[] to disable,
+or a social widget/instance with `config.menu` to select another menu. With left off, configured
+footer items remain available in the compact header. The social component can also be reused in
+other top/sidebar regions; article/site footer allowlists are unchanged.
+
+A social menu supports up to **six** flat entries, native ordering, internal pageRef or validated
+local/http/https/mailto URLs. Names provide accessible link labels and native hover tooltips.
+Choose a fixed built-in `params.icon` or a safe **local** `params.image` (assets/static/home
+resources); no inline authored SVG, remote icon request or large icon framework is required.
+Without an icon, or with icons=false, the label remains a usable text link. Custom images are
+muted/grayscale until hover/focus, following Stellar. User-provided SVGs render as images, not
+trusted inline code. Supply only artwork you have permission to use.
+
+```toml
+[params]
+appearance = 'auto' # theme default; 'dark' and 'light' are also supported
+social_menu = 'social'
+
+[[menus.social]]
+name = 'Email'
+url = 'mailto:hello@example.org'
+weight = 10
+[menus.social.params]
+image = 'icons/email.svg' # site-owned local file
+
+[[menus.social]]
+name = 'Appearance'
+weight = 20
+[menus.social.params]
+icon = 'appearance' # optional: this action defaults to the built-in appearance icon
+onclick = 'Sidera.cycleAppearance()'
+```
+
+`onclick` accepts **only that exact supplied action**. It is converted to a data attribute and
+an event listener, not emitted/evaluated as arbitrary JavaScript. An entry cannot combine a
+URL/pageRef with onclick, or image with a nonempty icon name. Nested social menus and missing
+link/action destinations diagnose. An explicit empty icon selects text instead of the fallback
+icon. The built-in action's current/next labels are localized by the theme.
+
+`params.appearance` is site/language-only and applies to **new visitors**: omitted means auto.
+A valid local visitor preference wins over later site-default changes and is saved under
+sidera-appearance. The button cycles **dark → light → auto → dark**. Auto follows the OS live;
+manual modes do not. The former stored value system is migrated once to auto; it is not a valid
+new config/API alias. Invalid saved values use the owner default. Storage failures allow a
+page-local choice without errors. Other tabs synchronize native storage changes.
+
+The public API is `Sidera.cycleAppearance()` and `Sidera.setAppearance('dark'|'light'|'auto')`.
+Changing/exposing a control is optional: omit the action to offer only social links, or omit the
+menu entirely. Stored visitor choices still apply even without a button. With no JavaScript,
+CSS follows the owner default/OS and the inert action is hidden; ordinary social links stay usable.
+Fieldbook explicitly starts new visitors in dark mode and demonstrates two original local example
+icons, not a bundled vendor-logo collection. Its default can be changed to auto in root config.

@@ -65,9 +65,6 @@ other = "深色"
 [appearance_light]
 other = "浅色"
 
-[appearance_system]
-other = "跟随系统"
-
 [site]
 other = "网站"
 
@@ -197,3 +194,12 @@ other = "日期不详"
 
 [collection_navigation]
 other = "合集导航"
+
+[appearance_auto]
+other = "自动（跟随系统）"
+
+[appearance_cycle]
+other = "{{ .label }}：{{ .current }}。切换为{{ .next }}。"
+
+[social_links]
+other = "社交链接"

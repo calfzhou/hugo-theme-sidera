@@ -5,5 +5,5 @@
         <summary>{{ T "browse_collections_tags" }}</summary>
         <div class="navigation-content">{{ .Content }}</div>
       </details>
-      {{ partial "sidera/appearance.html" .Context }}
+      {{ if strings.TrimSpace .Footer }}<div class="sidebar-footer">{{ .Footer }}</div>{{ end }}
     </aside>

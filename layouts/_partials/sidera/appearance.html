@@ -1,9 +1,6 @@
-<div class="appearance" hidden>
-  {{ if .Settings.icons }}{{ partial "sidera/icon.html" "appearance" }}{{ end }}
-  <label for="appearance">{{ T "appearance" }}</label>
-  <select id="appearance" name="appearance">
-    <option value="dark">{{ T "appearance_dark" }}</option>
-    <option value="light">{{ T "appearance_light" }}</option>
-    <option value="system">{{ T "appearance_system" }}</option>
-  </select>
-</div>
+<button type="button" class="social-link{{ if not .Icon }} social-text{{ end }}" data-appearance-cycle hidden
+  data-label-dark="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_dark") "next" (T "appearance_light")) }}"
+  data-label-light="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_light") "next" (T "appearance_auto")) }}"
+  data-label-auto="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_auto") "next" (T "appearance_dark")) }}">
+  {{ if .Icon }}{{ .Icon }}{{ else }}{{ T "appearance" }}{{ end }}
+</button>

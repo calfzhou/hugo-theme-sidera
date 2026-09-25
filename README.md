@@ -45,20 +45,18 @@ Sidera distribution license remains unresolved; the upstream notice does not gra
 
 ## Appearance and ordinary reading
 
-The initial/default appearance is **dark**, irrespective of OS preference. The
-native labeled Appearance select is in the left navigation (open “Browse
-collections & tags” on mobile), or the compact header when left is absent. Dark and Light are explicit choices; System follows live
-`prefers-color-scheme` changes. A small script inlined from `assets/js/appearance.js`
-runs before the stylesheet/body, then installs the control after DOM readiness.
-It remembers a valid choice in the origin's `sidera-appearance` localStorage key.
-Denied storage leaves the choice usable for that document, with dark restored on
-navigation if no stored value can be read. No JavaScript: readable dark, open native
-navigation, and no appearance control. No animation or framework is needed.
+The theme default is **auto** (follow the OS). Set native site/language
+`params.appearance` to `dark`, `light` or `auto` for new visitors; a saved valid visitor choice
+wins. The optional social-menu action `Sidera.cycleAppearance()` cycles dark → light → auto.
+The leftbar's pinned `left_footer` region defaults to `social`, but emits no controls without
+a configured menu. Owners can omit the switch or the entire footer. See SHELL.md for local
+custom icons, the six-entry bound, native menu configuration and the fixed onclick whitelist.
 
-The inline head script is deliberate to avoid a separate request before palette
-selection. A deployment with a restrictive CSP must authorize its generated hash
-(or use an appropriate site override); if scripting is blocked, the readable dark
-fallback remains. CSP deployment configuration is not provided or tested here.
+The head script applies the chosen palette before body paint and stores it locally. Auto follows
+OS changes live; manual modes do not. Denied storage leaves a working page-local choice. With
+JavaScript unavailable, CSS follows the owner/OS default and hides the inert action while keeping
+ordinary links. No remote resources, framework or mandatory appearance select are required.
+A restrictive CSP must authorize the existing head script; no full CSP compatibility claim is made.
 
 Native Hugo/Chroma code highlighting uses a small render hook with palette-aware
 classes, preserving ordinary fenced-code options and avoiding fixed inline theme

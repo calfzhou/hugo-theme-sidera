@@ -3,13 +3,14 @@
 {{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings -}}
 {{- $top := partial "sidera/region.html" (merge $ctx (dict "Region" "top")) -}}
 {{- $left := partial "sidera/region.html" (merge $ctx (dict "Region" "left")) -}}
+{{- $leftFooter := partial "sidera/region.html" (merge $ctx (dict "Region" "left_footer")) -}}
 {{- $right := partial "sidera/region.html" (merge $ctx (dict "Region" "right")) -}}
 {{- $hasLeft := ne (strings.TrimSpace $left) "" -}}{{- $hasRight := ne (strings.TrimSpace $right) "" -}}
 <div class="site-shell{{ if $hasLeft }} has-left{{ end }}{{ if $hasRight }} has-right{{ end }}">
   {{ if $hasLeft }}
-    {{ partial "sidebar.html" (dict "Context" $ctx "Content" $left) }}
+    {{ partial "sidebar.html" (dict "Context" $ctx "Content" $left "Footer" $leftFooter) }}
   {{ else }}
-    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ partial "sidera/appearance.html" $ctx }}</div>
+    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ if strings.TrimSpace $leftFooter }}<div class="sidebar-footer">{{ $leftFooter }}</div>{{ end }}</div>
   {{ end }}
   {{ if $hasRight }}
     <aside id="right-region" class="right-region region-drawer" aria-label="{{ T "page_context" }}">

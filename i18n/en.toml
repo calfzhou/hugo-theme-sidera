@@ -65,9 +65,6 @@ other = "Dark"
 [appearance_light]
 other = "Light"
 
-[appearance_system]
-other = "System"
-
 [site]
 other = "Site"
 
@@ -200,3 +197,12 @@ other = "Undated"
 
 [collection_navigation]
 other = "Collection navigation"
+
+[appearance_auto]
+other = "Auto (system)"
+
+[appearance_cycle]
+other = "{{ .label }}: {{ .current }}. Switch to {{ .next }}."
+
+[social_links]
+other = "Social links"
