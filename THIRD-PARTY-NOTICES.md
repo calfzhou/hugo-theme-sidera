@@ -1,7 +1,7 @@
 # Third-party notices
 
 Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
-hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers and toast. Site notification motion also follows
+hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers, pagination and toast. Site notification motion also follows
 Stellar main.js hud.toast/theme.js; Sidera uses plain-text messages instead of upstream innerHTML.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This notice applies to those adaptations; it does not grant a distribution license
@@ -41,7 +41,7 @@ No endorsement by the original author is implied.
 
 Local source/version: Stellar **1.44.0, commit 1f4cb4bc**, `_data/icons.yml`.
 Retained keys: default:documents, default:category, example:notebook,
-default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup.
+default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:arrow-left, default:arrow-right.
 Sidera changes only SVG root sizing/class/accessibility attributes and semantic
 names; paths and duotone opacity are unchanged. The home/link icons remain
 original Sidera artwork. No arbitrary authored SVG is interpreted as an icon.

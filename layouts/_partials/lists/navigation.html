@@ -1,17 +1,24 @@
 {{- /* Accept a Pager, not a Page: no .Paginator/.Paginate here. */ -}}
 <nav class="pagination" aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
-  {{ if .TotalNumberOfElements }}<span>{{ T "page_summary" (dict "current" (lang.FormatNumber 0 .PageNumber) "total" (lang.FormatNumber 0 .TotalPages)) }}</span>{{ else }}<span>{{ T "no_articles" }}</span>{{ end }}
+  {{ if .TotalNumberOfElements }}<span class="pagination-summary{{ if gt .TotalPages 1 }} visually-hidden{{ end }}">{{ T "page_summary" (dict "current" (lang.FormatNumber 0 .PageNumber) "total" (lang.FormatNumber 0 .TotalPages)) }}</span>{{ else }}<span>{{ T "no_articles" }}</span>{{ end }}
   {{ if gt .TotalPages 1 }}
-    <a data-page-link="first" href="{{ .First.URL }}">{{ T "page_first" }}</a>
-    {{ with .Prev }}<a data-page-link="previous" rel="prev" href="{{ .URL }}">{{ T "page_previous" }}</a>{{ end }}
-    <div class="pagination-pages">
-      {{ $current := .PageNumber }}
-      {{ range .Pagers }}{{ if le (math.Abs (sub .PageNumber $current)) 2 }}
-        {{ if eq .PageNumber $current }}<span aria-current="page">{{ lang.FormatNumber 0 .PageNumber }}</span>
-        {{ else }}<a href="{{ .URL }}">{{ lang.FormatNumber 0 .PageNumber }}</a>{{ end }}
-      {{ end }}{{ end }}
-    </div>
-    {{ with .Next }}<a data-page-link="next" rel="next" href="{{ .URL }}">{{ T "page_next" }}</a>{{ end }}
-    <a data-page-link="last" href="{{ .Last.URL }}">{{ T "page_last" }}</a>
+    {{ with .Prev }}<a class="pagination-arrow pagination-previous" data-page-link="previous" rel="prev" href="{{ .URL }}" aria-label="{{ T "page_previous" }}">{{ partial "sidera/icon.html" "arrow-left" }}</a>
+    {{ else }}<span class="pagination-arrow pagination-previous" aria-disabled="true" aria-label="{{ T "page_previous" }}">{{ partial "sidera/icon.html" "arrow-left" }}</span>{{ end }}
+    {{ $pager := . }}
+    {{- /* The compact window is CSS-selected by available bar width, with no JS or hidden links in the tab order. */ -}}
+    {{ range $radius := slice 2 1 }}
+      <div class="pagination-pages" data-radius="{{ $radius }}">
+        {{ $previous := 0 }}
+        {{ range $pager.Pagers }}
+          {{ if or (eq .PageNumber 1) (eq .PageNumber $pager.TotalPages) (le (math.Abs (sub .PageNumber $pager.PageNumber)) $radius) }}
+            {{ if gt (sub .PageNumber $previous) 1 }}<span class="pagination-gap" aria-hidden="true">…</span>{{ end }}
+            <a class="page-number" href="{{ .URL }}"{{ if eq .PageNumber $pager.PageNumber }} aria-current="page"{{ end }}{{ if eq .PageNumber 1 }} data-page-link="first" aria-label="{{ T "page_first" }}"{{ else if eq .PageNumber $pager.TotalPages }} data-page-link="last" aria-label="{{ T "page_last" }}"{{ end }}>{{ lang.FormatNumber 0 .PageNumber }}</a>
+            {{ $previous = .PageNumber }}
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ end }}
+    {{ with .Next }}<a class="pagination-arrow" data-page-link="next" rel="next" href="{{ .URL }}" aria-label="{{ T "page_next" }}">{{ partial "sidera/icon.html" "arrow-right" }}</a>
+    {{ else }}<span class="pagination-arrow" aria-disabled="true" aria-label="{{ T "page_next" }}">{{ partial "sidera/icon.html" "arrow-right" }}</span>{{ end }}
   {{ end }}
 </nav>

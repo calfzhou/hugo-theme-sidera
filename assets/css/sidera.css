@@ -219,15 +219,30 @@ summary { cursor: pointer; }
 .article-dates p { margin: 0; }
 .card-date { display: inline-flex; align-items: center; gap: 8px; }
 .card-date .icon { width: 16px; height: 16px; }
-.pagination { margin: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; padding: 10px; background: var(--surface); border-radius: 10px; }
-.pagination span { color: var(--muted); margin-right: auto; }
-.pagination a { padding: 8px 10px; min-height: 36px; border-radius: 8px; text-decoration: none; color: var(--muted); }
-.pagination a:is(:hover,:focus-visible) { background: var(--panel); color: var(--text); }
-.pagination a:active { background: var(--accent-soft); color: var(--accent); }
-.pagination-pages { display: flex; gap: 2px; align-items: center; }
-.pagination-pages [aria-current] { margin: 0; padding: 6px 10px; border-radius: 6px; color: var(--text); background: var(--panel); }
-.pagination:has([data-page-link]) span { font-family: var(--code); font-size: 12px; }
-.pagination[data-total-pages="0"] { background: var(--panel); padding: 24px 20px; }
+/* Stellar paginator: one quiet rounded bar, compact number pills and divided arrow ends. */
+.pagination { container: pager / inline-size; margin: 18px; display: flex; align-items: center; justify-content: space-between; min-height: 45px; font-size: 18px; font-weight: 700; color: var(--quiet); background: var(--surface); border-radius: 16px; box-shadow: 0 2px 8px #00000008; }
+.pagination a { color: inherit; text-decoration: none; }
+.pagination-pages { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-evenly; gap: 2px; padding: 2px; overflow-x: auto; }
+.pagination-pages[data-radius="1"] { display: none; }
+.pagination .page-number { flex: none; padding: 4px 8px; border-radius: 8px; line-height: 1.2; }
+.pagination .page-number[aria-current] { font-family: var(--code); background: var(--panel); }
+.pagination .page-number:is(:hover,:focus-visible) { color: var(--text); background: var(--panel); }
+.pagination .pagination-arrow { flex: none; display: grid; place-items: center; width: 45px; align-self: stretch; min-height: 45px; padding: 9px; }
+.pagination-previous { border-right: 1px dashed var(--line); border-radius: 16px 0 0 16px; }
+.pagination-arrow:last-child { border-left: 1px dashed var(--line); border-right: 0; border-radius: 0 16px 16px 0; }
+.pagination-arrow .icon { width: 27px; height: 27px; color: inherit; }
+.pagination-arrow[aria-disabled] { opacity: .25; }
+.pagination a.pagination-arrow:is(:hover,:focus-visible) { color: var(--accent); }
+.pagination a:active { color: var(--accent); }
+.pagination a:focus-visible { outline-offset: -3px; }
+.pagination-summary:not(.visually-hidden) { padding: 10px 16px; font-size: 14px; font-weight: 400; color: var(--muted); }
+.pagination[data-total-pages="0"] { background: var(--panel); padding: 24px 20px; font-size: 14px; font-weight: 400; color: var(--muted); }
+@container pager (max-width: 28rem) {
+  .pagination-pages[data-radius="2"] { display: none; }
+  .pagination-pages[data-radius="1"] { display: flex; }
+  .pagination .page-number { padding: 4px; font-size: 16px; }
+}
+
 .muted { color: var(--muted); }
 .breadcrumbs { display: flex; flex-wrap: wrap; gap: 5px 8px; margin: 16px 0; }
 .breadcrumbs [aria-current] { color: var(--text); }
