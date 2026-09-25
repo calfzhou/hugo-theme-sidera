@@ -382,7 +382,20 @@ Site/minimal fallback. Ordinary section params do not become descendant defaults
 |---|---|
 | article_footer=[terms,meta,series,text,links] | terms: actual assigned tags/categories and contextual hubs; meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
 | Optional article item authors | Ordered native authors, local portrait if provided; show_authors still applies. Header attribution remains, so this is intentional extra closing attribution. |
-| site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized Built with Hugo · Sidera |
+| site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized built_with Markdown (default Built with Hugo · Sidera) |
+
+The `credit` item renders the native `built_with` translation as Markdown, using the same
+Page.RenderString and site-wide raw-HTML policy as `footer_text`. Override it in the site's
+`i18n/en.toml` (and `i18n/zh-CN.toml` for Chinese), without editing the theme:
+
+```toml
+[built_with]
+other = 'Built with [Hugo](https://gohugo.io/) · **Sidera**'
+```
+
+Paragraphs and other Markdown blocks are supported; the wrapper retains the small credit styling.
+Raw HTML stays disabled by default; enabling Goldmark's `renderer.unsafe` is a site-wide trust
+choice. Omit `credit` from `site_footer` to hide it. No extra credit parameter is needed.
 
 Article footer renders after a real shared article/section body, not on later child-list
 pagers without that body. Metadata/header byline and publication dates retain their behavior.

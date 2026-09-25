@@ -14,5 +14,5 @@
   {{- $menu := $s.footer_menu -}}{{- if $article -}}{{- $menu = $s.article_links_menu -}}{{- end -}}
   {{- with $menu -}}{{- partial "sidera/menu.html" (merge $ (dict "Name" .)) -}}{{- end -}}
 {{- else if eq .Name "credit" -}}
-  <p class="theme-credit">{{ T "built_with" }}</p>
+  <div class="authored-text theme-credit">{{ $page.RenderString (dict "display" "block") (T "built_with") }}</div>
 {{- end -}}
