@@ -90,13 +90,13 @@ other = "发表于 {{ .date }}"
 other = "更新于 {{ .date }}"
 
 [date_modified]
-other = "修改于 {{ .date }}"
+other = "更新于 {{ .date }}"
 
 [published_undated]
 other = "发表日期不详"
 
 [modified_undated]
-other = "修改日期不详"
+other = "更新日期不详"
 
 [pagination]
 other = "分页导航"

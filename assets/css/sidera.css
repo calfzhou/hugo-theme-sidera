@@ -216,7 +216,14 @@ summary { cursor: pointer; }
 .pin-label { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--pin); }
 .pin-label .icon { width: 14px; height: 14px; color: inherit; }
 .card-dates,.article-dates { display: flex; align-items: center; gap: 5px 16px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
-.article-dates p { margin: 0; }
+/* Stellar dateinfo/bread-nav: primary always shown, secondary revealed without reflow. */
+.article-dates { gap: 4px 8px; width: fit-content; max-width: 100%; }
+.article-dates > span { display: inline-flex; align-items: baseline; gap: 8px; }
+.article-dates .date-separator { opacity: .5; }
+@media (hover: hover) {
+  .article-dates .date-secondary { visibility: hidden; }
+  .article-dates:is(:hover,:focus-within) .date-secondary { visibility: visible; }
+}
 .card-date { display: inline-flex; align-items: center; gap: 8px; }
 .card-date .icon { width: 16px; height: 16px; }
 /* Stellar paginator: one quiet rounded bar, compact number pills and divided arrow ends. */

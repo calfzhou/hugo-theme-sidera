@@ -1,0 +1,14 @@
+{{- $page := .Page -}}{{- $dates := slice -}}
+{{- if not $page.PublishDate.IsZero -}}{{- $dates = $dates | append (dict "date" $page.PublishDate "kind" "published") -}}{{- end -}}
+{{- if and .Settings.show_updated (not $page.Lastmod.IsZero) -}}
+  {{- $updated := dict "date" $page.Lastmod "kind" "updated" -}}
+  {{- if eq (partial "lists/policy.html" .Owner).order "modification" -}}{{- $dates = (slice $updated) | append $dates -}}
+  {{- else -}}{{- $dates = $dates | append $updated -}}{{- end -}}
+{{- end -}}
+{{- with $dates -}}
+  <div class="article-dates"{{ if gt (len .) 1 }} tabindex="0"{{ end }}>
+    {{- range $index, $date := . -}}
+      <span class="{{ if $index }}date-secondary{{ else }}date-primary{{ end }}">{{ if $index }}<span class="date-separator" aria-hidden="true">|</span>{{ end }}{{ partial "date.html" $date }}</span>
+    {{- end -}}
+  </div>
+{{- end -}}

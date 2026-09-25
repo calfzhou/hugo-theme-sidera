@@ -121,3 +121,7 @@ unchanged; recent-updates/recent-published are available reusable choices backed
 
 The minimal taxonomy_hubs default is now index for every scope, including notes/docs and
 sections without a preset. The blog entry remains explicit; list is still an owner opt-in.
+
+Blog descendants now default show_updated=true, making the update date available in the shared
+header reveal. Explicit false still opts out. The default article footer omits meta, so this does
+not create a second date below the body. Notes/docs already enable show_updated for descendants.

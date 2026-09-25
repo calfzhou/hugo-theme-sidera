@@ -14,7 +14,7 @@ recent_sections = false
 [blog.defaults.cascade.params]
 left = ['menu', 'taxonomies', 'recent']
 right = ['toc']
-show_updated = false
+show_updated = true
 recent_sections = false
 
 [notes]

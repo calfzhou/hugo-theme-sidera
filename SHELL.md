@@ -380,7 +380,7 @@ Site/minimal fallback. Ordinary section params do not become descendant defaults
 
 | Region / default items | What renders |
 |---|---|
-| article_footer=[terms,meta,series,text,links] | terms: actual assigned tags/categories and contextual hubs; meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
+| article_footer=[terms,series,text,links] | terms: actual assigned tags/categories and contextual hubs; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
 | Optional article item authors | Ordered native authors, local portrait if provided; show_authors still applies. Header attribution remains, so this is intentional extra closing attribution. |
 | site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized built_with Markdown (default Built with Hugo · Sidera) |
 
@@ -654,3 +654,23 @@ Post/note result lists omit the visible total/sort metadata row, and docs child 
 visible child-count line. The child-list heading, cards, pins and pagination remain. Counts/order
 are attached to the native list as localized accessible metadata and stable data attributes;
 no hidden paragraph or extra visual spacing is retained. Pin-priority wording is not repeated.
+
+
+## Article date line
+
+Header dates follow the owning scope's list order: modification shows Updated first; publication
+and non-date/title ordering show Published first. Render only available native timestamps, without
+inventing missing dates. If both exist, the second date and divider appear on date-row hover or
+keyboard focus; visibility preserves geometry to avoid moving content. Touch/no-hover devices
+show both because there is no hover gesture. This works without JavaScript. Equal dates remain
+two distinct facts, as in Stellar. The native localized date format is unchanged.
+
+`show_updated=false` still suppresses Lastmod; a single surviving date has no extra focus stop.
+The blog preset now enables show_updated for descendants, like notes/docs, so its update date is
+available on reveal by default. Explicit owner/cascade/page overrides remain effective. Minimal
+unclassified defaults are unchanged. The default article footer no longer includes meta, preventing
+a repeated date below the article; owners may still explicitly select that item.
+
+Visible Lastmod wording is consistently Updated / 更新于, including cards and undated labels.
+The existing date_modified/modified_undated keys and modified class are retained for compatibility;
+this is wording alignment, not a new timestamp field or ordering rule.

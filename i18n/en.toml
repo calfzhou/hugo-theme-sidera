@@ -90,13 +90,13 @@ other = "Published {{ .date }}"
 other = "Updated {{ .date }}"
 
 [date_modified]
-other = "Modified {{ .date }}"
+other = "Updated {{ .date }}"
 
 [published_undated]
 other = "Published: undated"
 
 [modified_undated]
-other = "Modified: undated"
+other = "Updated: undated"
 
 [pagination]
 other = "Pagination"

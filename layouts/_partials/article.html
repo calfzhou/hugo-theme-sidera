@@ -10,14 +10,7 @@
     <h1>{{ .Title }}</h1>
     {{ partial "sidera/article-authors.html" (dict "Page" . "Settings" $settings "Prefix" "") }}
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
-    <div class="article-dates">
-      {{ if not .PublishDate.IsZero }}
-        <p>{{ partial "date.html" (dict "date" .PublishDate "kind" "published") }}</p>
-      {{ end }}
-      {{ if and $settings.show_updated (not .Lastmod.IsZero) }}
-        <p>{{ partial "date.html" (dict "date" .Lastmod "kind" "updated") }}</p>
-      {{ end }}
-    </div>
+    {{ partial "sidera/article-dates.html" (dict "Page" . "Owner" $owner "Settings" $settings) }}
     {{ if $settings.terms_in_header }}<div class="article-terms">{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Prefix" "header-") }}</div>{{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}
