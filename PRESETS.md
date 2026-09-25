@@ -118,3 +118,6 @@ capabilities through native Page/cascade or preset options; no runtime blog-name
 Preset region arrays can reference site/language named widgets. Define widgets in params.widgets
 at site/language level, not in a preset's defaults map. Existing bundled preset selections remain
 unchanged; recent-updates/recent-published are available reusable choices backed by recent.
+
+The minimal taxonomy_hubs default is now index for every scope, including notes/docs and
+sections without a preset. The blog entry remains explicit; list is still an owner opt-in.

@@ -126,7 +126,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | color_mode | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |
 | left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
 | top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
-| taxonomy_hubs | list (minimal default) or index (blog section default). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
+| taxonomy_hubs | index (shared default) or list (explicit all-content opt-in). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
 | left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |

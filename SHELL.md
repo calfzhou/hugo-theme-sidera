@@ -20,7 +20,7 @@ inapplicable components emit no empty region. Desktop left-shell views preserve 
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and any configured left-footer items move to the compact header when left is off.
 
-Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=list, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
+Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=index, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
 Preset section/descendant maps may supply different defaults. Site/language values are below
 preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
@@ -489,16 +489,17 @@ params:
   taxonomy_hubs: index
 ```
 
-The blog preset supplies this top bar and `taxonomy_hubs=index` to its selecting section.
-Notes/docs and unclassified scopes can choose the same capabilities explicitly. `top=false`
+The blog preset supplies this top bar to its selecting section. Notes/docs and unclassified
+scopes can choose the top bar explicitly; all scopes default to `taxonomy_hubs=index`. `top=false`
 or `[]` disables the bar; a custom item array changes order/selection. Series is intentionally
 not a tab yet (its existing native taxonomy/sequence UI still works). Category/tag tabs use
 complete actual scoped vocabularies, not the current pager. The first tab links the owner:
 Recently published for publication order, Recent updates for modification order, All content
 otherwise. It does not secretly change list ordering, pins or the site's homepage.
 
-`taxonomy_hubs=list` (minimal default) preserves the scoped all-content hub. `index` makes scoped
+`taxonomy_hubs=index` is the shared default for blogs, notes, docs and unclassified scopes. It makes scoped
 **tag/category roots** vocabulary indexes; term-result pages still list native member articles.
+Explicit `taxonomy_hubs=list` retains the alternative all-content hub when intentionally wanted.
 Categories use wide, always-expanded directory rows, including nested categories when enabled.
 Flat tags use chips; hierarchical tags use tree rows, never a forced flattening. Root-node
 pagination uses taxonomy_page_size; descendant rows and counts use the full deduplicated model.

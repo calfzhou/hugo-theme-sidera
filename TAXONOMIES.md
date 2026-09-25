@@ -113,7 +113,7 @@ titles rather than the raw assignment key. No membership or sequence policy chan
 
 
 Collection browsing refinement: `taxonomy_hubs=index` renders scoped tag/category roots as
-vocabulary indexes (blog preset section default); `list` retains their prior all-content list
-(minimal default). Term pages, native assignments and full union counts are unchanged. Wide
+vocabulary indexes (shared default for every scope); explicit `list` retains the alternative
+all-content list. Term pages, native assignments and full union counts are unchanged. Wide
 categories honor the existing hierarchy flag; flat tag chips do not flatten hierarchical tags.
 Global indexes share this source-based renderer. `All categories` is the sidebar hub caption.
