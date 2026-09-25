@@ -110,3 +110,10 @@ directory rows for categories/hierarchical indexes. Full native counts, nested l
 pagination remain. Contextual result headers consolidate global/scoped links and show
 the full count once in the list metadata; authors/series breadcrumbs use native display
 titles rather than the raw assignment key. No membership or sequence policy changes.
+
+
+Collection browsing refinement: `taxonomy_hubs=index` renders scoped tag/category roots as
+vocabulary indexes (blog preset section default); `list` retains their prior all-content list
+(minimal default). Term pages, native assignments and full union counts are unchanged. Wide
+categories honor the existing hierarchy flag; flat tag chips do not flatten hierarchical tags.
+Global indexes share this source-based renderer. `All categories` is the sidebar hub caption.

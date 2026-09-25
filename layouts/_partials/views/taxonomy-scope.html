@@ -9,6 +9,12 @@
 {{ $pages := $model.pages }}
 {{ with .Params.sidera.tag_key }}{{ $pages = slice }}{{ with index $model.nodes . }}{{ $pages = .pages }}{{ end }}{{ end }}
 <section data-tag-view="{{ .Params.sidera.tag_key }}" data-taxonomy="{{ $taxonomy }}" data-collection="{{ $owner.RelPermalink }}">
+  {{ $settings := partialCached "sidera/settings.html" . .Path }}
+  {{ if and (not $term) (in (slice "tags" "categories") $taxonomy) (eq $settings.taxonomy_hubs "index") }}
+    <header class="view-header taxonomy-hub-header" data-note-count="{{ len $pages }}"><h1>{{ .Title }}</h1></header>
+    {{ partial "taxonomies/index.html" (dict "Page" . "Owner" $owner "Model" $model "Settings" $settings) }}
+    <nav class="taxonomy-context index-global"><a href="{{ (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" "" "slug" "")).RelPermalink }}">{{ T "all_content" }} · {{ T $taxonomy }}</a></nav>
+  {{ else }}
   <header class="view-header" data-note-count="{{ len $pages }}">
     <nav aria-label="{{ T "collection" }}"><a href="{{ $owner.RelPermalink }}">{{ $owner.Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" $owner }}</span></nav>
     <h1>{{ if and $term (in (slice "authors" "series") $taxonomy) }}{{ $term.Title }}{{ else }}{{ .Title }}{{ end }}</h1>
@@ -41,6 +47,7 @@
   {{ $policy := partial "lists/policy.html" $owner }}{{ $sequence := false }}
   {{ if and $term (eq $taxonomy "series") }}{{ $result := partial "series/order.html" (dict "term" $term "pages" $pages) }}{{ $pages = $result.pages }}{{ $policy = merge $policy (dict "order" $result.order) }}{{ $sequence = true }}{{ end }}
   {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages "policy" $policy "preordered" $sequence "count_label" "taxonomy_count") }}
+  {{ end }}
   {{ end }}
 </section>
 

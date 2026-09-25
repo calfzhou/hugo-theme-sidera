@@ -1,0 +1,13 @@
+{{- $node := .Node -}}{{- $model := .Model -}}{{- $ctx := . -}}
+{{- $target := partial "taxonomies/page.html" (dict "owner" .Owner "taxonomy" $model.taxonomy "key" $node.key "slug" $node.slug) -}}
+{{- $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $model.taxonomy "key" $node.key "slug" $node.slug) -}}
+{{- $label := $native.LinkTitle -}}{{- if $model.nested -}}{{- $label = path.Base $node.key -}}{{- if and $native.File (not $native.File.IsContentAdapter) -}}{{- $label = $native.LinkTitle -}}{{- end -}}{{- end -}}
+<li class="taxonomy-node" data-term-count="{{ len $node.pages }}">
+  <a class="taxonomy-entry" href="{{ $target.RelPermalink }}">
+    <span class="taxonomy-name">{{ if .Settings.icons }}{{ $icon := cond (eq $model.taxonomy "categories") "category" "tag" }}{{ if isset .Settings.tag_icons $node.key }}{{ $icon = index .Settings.tag_icons $node.key }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ $label }}</span></span>
+    <small title="{{ T "taxonomy_count" (dict "count" (len $node.pages) "number" (lang.FormatNumber 0 (len $node.pages))) }}">({{ lang.FormatNumber 0 (len $node.pages) }})</small>
+  </a>
+  {{- with where (sort $model.nodes "key") "parent" $node.key -}}
+    <ul class="taxonomy-branches">{{ range . }}{{ partial "taxonomies/index-node.html" (dict "Node" . "Model" $model "Owner" $ctx.Owner "Settings" $ctx.Settings) }}{{ end }}</ul>
+  {{- end -}}
+</li>

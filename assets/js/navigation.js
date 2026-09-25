@@ -97,3 +97,17 @@ for (const card of document.querySelectorAll('.article-card:has(.card-content), 
   card.addEventListener('focusin', reset);
   cardMotion.addEventListener('change', reset);
 }
+
+// Sticky collection browsing gets Stellar's translucent pinned surface. Links remain native.
+const topRegion = document.querySelector('.top-region:has([data-collection-nav])');
+if (topRegion) {
+  let scheduled = false;
+  const update = () => {
+    scheduled = false;
+    const inset = parseFloat(getComputedStyle(topRegion).top) || 0;
+    topRegion.classList.toggle('is-stuck', scrollY > 0 && topRegion.getBoundingClientRect().top <= inset + 1);
+  };
+  addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } }, {passive: true});
+  addEventListener('resize', update);
+  update();
+}

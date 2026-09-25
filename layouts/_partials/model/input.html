@@ -7,7 +7,7 @@
   {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
   {{- if isset $params "sidera" -}}
     {{- if not (reflect.IsMap $params.sidera) -}}{{- errorf "Sidera private metadata namespace must be a map: %s" $source -}}
-    {{- else -}}{{- range $key := slice "tag_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
+    {{- else -}}{{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
   {{- end -}}
   {{- range $key := slice "tags" "categories" "authors" "series" "preset" "series_weight" -}}
     {{- if isset $params $key -}}{{- errorf "Sidera native %s must be authored at top level, not under params: %s" $key $source -}}{{- end -}}
@@ -44,7 +44,7 @@
 {{- range $cascades -}}
   {{- if or (isset . "preset") (isset (.params | default dict) "scope_root") -}}{{- errorf "Sidera preset/scope_root must not be cascaded: %s" $source -}}{{- end -}}
 {{- end -}}
-{{- range $key := slice "left" "right" "article_footer" "site_footer" -}}
+{{- range $key := slice "top" "left" "right" "article_footer" "site_footer" -}}
   {{- if isset $params $key -}}{{- $valid := partial "model/region-valid.html" (dict "Value" (index $params $key) "Region" (replace $key "_" "-") "Source" $source) -}}{{- end -}}
 {{- end -}}
 {{- return true -}}

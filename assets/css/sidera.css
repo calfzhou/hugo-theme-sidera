@@ -422,3 +422,38 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 /* Selection dots belong only to actual main-menu links, not every current sidebar link.
    Explicit fallback targets exclude its embedded taxonomy navigation. */
 [data-component="menu"] :is(.native-menu a,.fallback-menu > .home-link,.fallback-menu > .collection-nav a,.fallback-menu > .page-nav a)[aria-current]::after { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-left: auto; flex: none; background: var(--menu-accent,var(--accent)); background: linear-gradient(225deg,color-mix(in srgb,var(--menu-accent,var(--accent)) 50%,#fff) 20%,var(--menu-accent,var(--accent)) 60%); }
+/* Stellar collection navbar: real scoped links, compact selected tabs, sticky main placement. */
+.top-region { margin-bottom: 18px; }
+.top-region:has([data-collection-nav]) { position: sticky; top: var(--page-gap); z-index: 5; }
+.collection-nav-tabs { display: flex; align-items: center; gap: 4px; padding: 4px; margin: 0 18px; overflow-x: auto; scrollbar-width: none; border-radius: 12px; background: var(--surface); box-shadow: var(--card-shadow); }
+.collection-nav-tabs::-webkit-scrollbar { display: none; }
+.collection-nav-tabs a { flex: none; padding: .25rem .75rem; font-size: 16px; line-height: 2; font-weight: 500; color: var(--muted); border-radius: 8px; text-decoration: none; white-space: nowrap; }
+.collection-nav-tabs a:is(:hover,:focus-visible) { color: var(--text); background: var(--surface-hover); }
+.collection-nav-tabs a[aria-current] { color: var(--text); background: #ffffff40; box-shadow: 0 0 4px #00000014; backdrop-filter: saturate(300%); }
+:root[data-appearance="light"] .collection-nav-tabs a[aria-current] { background: var(--panel); }
+.top-region.is-stuck .collection-nav-tabs { background: color-mix(in srgb,var(--surface) 75%,transparent); backdrop-filter: blur(20px) saturate(180%); }
+main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.taxonomy-index-list { list-style: none; padding: 0; margin: 18px; }
+.taxonomy-index-list .taxonomy-node { list-style: none; min-width: 0; }
+.taxonomy-entry { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 18px; border-radius: 8px; color: var(--muted); font-size: 16px; text-decoration: none; }
+.taxonomy-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.taxonomy-name .icon { width: 20px; height: 20px; }
+.taxonomy-entry small { flex: none; font: 600 12px var(--code); color: var(--quiet); }
+.taxonomy-entry:is(:hover,:focus-visible) { background: var(--surface-hover); color: var(--text); text-decoration: none; }
+.taxonomy-entry:is(:hover,:focus-visible) :is(.icon,small) { color: var(--accent); }
+.taxonomy-branches { list-style: none; margin: 0 0 0 22px; padding: 0 0 0 12px; border-left: 1px dashed var(--line); }
+.taxonomy-index-list.taxonomy-cloud { display: flex; flex-wrap: wrap; gap: 16px; }
+.taxonomy-cloud .taxonomy-entry { padding: 8px 14px; background: var(--panel); border-radius: 999px; font-size: 15px; gap: 10px; }
+.taxonomy-cloud .taxonomy-name .icon { width: 16px; height: 16px; opacity: .5; }
+.taxonomy-cloud .taxonomy-entry:is(:hover,:focus-visible) { background: var(--surface-hover); }
+.taxonomy-cloud .taxonomy-entry:is(:hover,:focus-visible) .icon { opacity: 1; }
+.index-global { margin: 18px; }
+.archive-list { margin: 18px; }
+.archive-year + .archive-year { margin-top: 32px; }
+.archive-year h2 { width: fit-content; margin: 18px 0 12px; font: 700 20px var(--code); border-bottom: 4px solid var(--accent); }
+.archive-year ul { list-style: none; padding: 0; margin: 0; }
+.archive-year a { display: inline-flex; gap: 18px; align-items: baseline; margin: 4px 0; padding: 4px 0; color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--line); }
+.archive-year a:is(:hover,:focus-visible) { color: var(--text); border-bottom-color: var(--accent); }
+.archive-date { flex: none; min-width: 12ch; color: var(--quiet); font-size: 13px; }
+.archive-year a:is(:hover,:focus-visible) .archive-date { color: var(--accent); }
+@media (max-width: 667px) { .top-region { margin-top: 8px; } .top-region:has([data-collection-nav]) { top: 8px; } .archive-year a { gap: 10px; } }

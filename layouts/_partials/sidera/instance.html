@@ -1,5 +1,6 @@
 {{- /* Fixed component options. No authored partial paths, Page mutation or resolver recursion. */ -}}
 {{- $schemas := dict
+  "collection-nav" (dict "items" "")
   "menu" (dict "menu" "menu" "icons" "icons" "taxonomies" "taxonomy_navigation")
   "collections" (dict "icons" "icons")
   "taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons" "tag_icons" "tag_icons")
@@ -32,6 +33,11 @@
   {{- else -}}
     {{- if in (slice "icons" "sections" "show") $key -}}
       {{- if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera %s: %s config.%s must be boolean" $source $name $key -}}{{- end -}}
+    {{- else if eq $key "items" -}}
+      {{- if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: collection-nav config.items must be an array" $source -}}
+      {{- else -}}{{- $seen := slice -}}{{- range $value -}}
+        {{- if or (not (in (slice "recent" "categories" "tags" "archive") .)) (in $seen .) -}}{{- errorf "Sidera %s: invalid/duplicate collection-nav item %v" $source . -}}{{- end -}}{{- $seen = $seen | append . -}}
+      {{- end -}}{{- end -}}
     {{- else if eq $key "count" -}}
       {{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $value))) (not (in (seq 1 10) $value)) -}}{{- errorf "Sidera %s: recent config.count must be an integer from 1 to 10 (got %T %v)" $source $value $value -}}{{- end -}}
     {{- else if eq $key "taxonomies" -}}

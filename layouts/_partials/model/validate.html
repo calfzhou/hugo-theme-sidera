@@ -1,7 +1,7 @@
 {{- range site.Pages -}}
   {{- $page := . -}}
   {{- with .File -}}{{- if not .IsContentAdapter -}}
-    {{- range $key := slice "tag_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}
+    {{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}
       {{- if isset ($page.Params.sidera | default dict) $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $page.Path -}}{{- end -}}
     {{- end -}}
   {{- end -}}{{- end -}}

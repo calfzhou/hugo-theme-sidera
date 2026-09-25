@@ -1,5 +1,5 @@
 {{- $page := .page -}}{{- $settings := .settings -}}
-{{- range $key := slice "left" "right" "article_footer" "site_footer" -}}
+{{- range $key := slice "top" "left" "right" "article_footer" "site_footer" -}}
   {{- $value := partial "model/region-valid.html" (dict "Value" (index $settings $key) "Region" (replace $key "_" "-") "Page" $page) -}}
   {{- $settings = merge $settings (dict $key $value) -}}
 {{- end -}}
@@ -42,4 +42,5 @@
 {{- if not (reflect.IsMap $settings.taxonomy_links) -}}{{- errorf "Sidera taxonomy_links must be a map: %s" $page.Path -}}
 {{- else -}}{{- range $taxonomy, $mode := $settings.taxonomy_links -}}{{- if or (not (isset $page.Site.Taxonomies $taxonomy)) (not (in (slice "global" "section") $mode)) -}}{{- errorf "Sidera invalid taxonomy_links entry %s=%v: %s" $taxonomy $mode $page.Path -}}{{- end -}}{{- end -}}{{- end -}}
 {{- $childrenValid := partial "docs/options.html" (dict "settings" $settings.children "order" slice "source" $page.Path) -}}
+{{- if not (in (slice "list" "index") $settings.taxonomy_hubs) -}}{{- errorf "Sidera taxonomy_hubs must be list or index: %s" $page.Path -}}{{- end -}}
 {{- return $settings -}}

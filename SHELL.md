@@ -12,7 +12,7 @@ Native taxonomies/menus/date fields remain native. [CONTRACT.md](CONTRACT.md) is
 field/type/domain reference and [PRESETS.md](PRESETS.md) describes the three-target fallback.
 Private generated navigation metadata remains namespaced; no old public-key reader or alias.
 
-Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+Fixed browsing components: collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A profileless section can select the same components as any
 preset. page-tree replaces the old docs-tree component name and has no docs-preset gate.
 Arrays replace; false/[] disables a region. Unknown names/options diagnose; repeated components are supported. Empty or
@@ -20,7 +20,7 @@ inapplicable components emit no empty region. Desktop left-shell views preserve 
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and appearance remain accessible when left is off.
 
-Minimal defaults are left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
+Minimal defaults are top=[], taxonomy_hubs=list, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
 Preset section/descendant maps may supply different defaults. Site/language values are below
 preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
@@ -98,7 +98,7 @@ destination is a heading; destinationless leaves and unresolved pageRefs fail.
 Parent page links remain links. Native menu labels are site-authored—not silently
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.
 A `menus.<name>.params.icon` value can override its decorative icon. Icon names:
-`home`, `blog`, `notebook`, `docs`, `page`, `tag`, `link`, `star`; `''` means none.
+`home`, `blog`, `notebook`, `docs`, `page`, `tag`, `category`, `link`, `star`; `''` means none.
 Optional `menus.<name>.params.color` supplies that entry's icon/selection-dot accent on
 hover, focus-visible or current/ancestor selection. Omission or `''` uses the theme accent.
 It accepts hex `#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`; invalid types/CSS diagnose at build time for rendered entries,
@@ -157,7 +157,7 @@ features. `links`/profile menus are absent when the selected menu is absent.
 
 ## Per-instance configuration
 
-The same entry format works in **left, right, article_footer and site_footer**:
+The same entry format works in **top, left, right, article_footer and site_footer**:
 
 ```yaml
 params:
@@ -190,10 +190,11 @@ field overrides that field in the resolved profile; `image: ''` removes the inhe
 `config: {}` means all defaults, not “disable”. Use false/[] on a region to disable it.
 Neither Page.Params, the cached page settings, another instance nor a region hook is mutated.
 
-### Sidebar options
+### Top/sidebar options
 
 | Component | Instance `config` keys | Default source |
 |---|---|---|
+| collection-nav | items (array of recent/categories/tags/archive; [] hides) | All four, in that order; empty categories/tags omitted |
 | menu | menu (string), icons (bool), taxonomies (array or false, for fallback navigation) | menu, icons, taxonomy_navigation |
 | collections | icons (bool) | icons |
 | taxonomies | taxonomies (array or false), icons (bool), tag_icons (map of fixed icon names) | taxonomy_navigation, icons, tag_icons |
@@ -254,8 +255,8 @@ Markdown links inside profile/text have normal native Markdown semantics; use
 appropriate site paths. No remote font/resource download or external service.
 
 Stable F hooks under `layouts/_partials/sidera/`: `head-extra.html`,
-`left-extra.html`, `right-extra.html`. Empty by default. Context dictionary:
-`Page`, `Owner` (false when absent), `Region` (`head`/`left`/`right`), `Settings`
+`top-extra.html`, `left-extra.html`, `right-extra.html`. Empty by default. Context dictionary:
+`Page`, `Owner` (false when absent), `Region` (`head`/`top`/`left`/`right`), `Settings`
 (resolved values). Region extras appear after components; false/empty region
 selection suppresses its extra. An otherwise empty region may be supplied by an
 extra. Site templates are trusted code, not configurable executable paths.
@@ -387,3 +388,54 @@ native link. Both rails retain sticky desktop behavior with narrow native drawer
 Fine-pointer card tilt/spotlight adapts Stellar/React Bits; keyboard gets title/focus feedback without tilt. Reduced motion and touch remove tilt/spotlight, transitions and cover zoom; no JS leaves open, usable navigation.
 Stellar-adapted styles retain [the upstream MIT notice](THIRD-PARTY-NOTICES.md). The theme's
 own overall distribution license remains unresolved; this notice is not a new license grant.
+
+
+## Collection browsing bar and index views
+
+The `top` region sits above main content and uses the same instance contract as sidebars.
+A `collection-nav` instance renders on owned section/contextual browsing views, not articles or
+unowned home/standalone pages. Its native anchors do not create a paginator. In the top region,
+the bar sticks while browsing the main content; JavaScript only adds the translucent pinned
+surface. Keyboard/no-JS links remain fully functional; narrow strips scroll horizontally.
+
+```yaml
+params:
+  top:
+    - component: collection-nav
+      config: {items: [recent, categories, tags, archive]}
+  taxonomy_hubs: index
+```
+
+The blog preset supplies this top bar and `taxonomy_hubs=index` to its selecting section.
+Notes/docs and unclassified scopes can choose the same capabilities explicitly. `top=false`
+or `[]` disables the bar; a custom item array changes order/selection. Series is intentionally
+not a tab yet (its existing native taxonomy/sequence UI still works). Category/tag tabs use
+complete actual scoped vocabularies, not the current pager. The first tab links the owner:
+Recently published for publication order, Recent updates for modification order, All content
+otherwise. It does not secretly change list ordering, pins or the site's homepage.
+
+`taxonomy_hubs=list` (minimal default) preserves the scoped all-content hub. `index` makes scoped
+**tag/category roots** vocabulary indexes; term-result pages still list native member articles.
+Categories use wide, always-expanded directory rows, including nested categories when enabled.
+Flat tags use chips; hierarchical tags use tree rows, never a forced flattening. Root-node
+pagination uses taxonomy_page_size; descendant rows and counts use the full deduplicated model.
+Global tag/category indexes share the same renderer. A one-page index/archive does not show a
+redundant pager, but multiple pages use the usual native pager. Sidebar category hubs say
+“All categories”, paralleling “All tags”. Authored label escaping and icons-off remain intact.
+
+### Archives and source boundaries
+
+Each supported local browsing root has a generated `/scope/archives/` native section Page, with
+`build.list=never` and `render=always`: it renders and resolves via GetPage but is not ordinary
+content, a recent item or a docs child. Private params.sidera.archive_view is reserved. The
+archive sorts the complete owner's regular pages by native PublishDate descending, then Title/
+Path; pins and Lastmod do not reorder it. It groups each pager's entries by publication year;
+zero dates appear under a localized Undated heading. Owner page_size controls its single paginator.
+Independent nested roots do not leak; drafts/future/expired pages follow the native build flags.
+
+The archives namespace, aliases and static/source collisions are guarded just like scoped
+classification routes. No existing content is overwritten. The same bounded local literal
+TOML/YAML/filename-language inventory applies; arbitrary mounted/generated vocabularies are not
+newly supported. Enabling the bar where an archive route cannot be generated diagnoses the
+missing supported source context. Bundled docs stay opt-in, and archive navigation is off by
+default for docs. No search, comments, special-syntax backend or real-site URL migration is added.

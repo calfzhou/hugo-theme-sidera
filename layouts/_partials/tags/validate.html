@@ -10,7 +10,7 @@
   {{- if ne .RelPermalink $expected -}}
     {{- errorf "P1B scoped route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
   {{- end -}}
-  {{- range slice "tags" "categories" "authors" "series" "page" -}}
+  {{- range slice "tags" "categories" "authors" "series" "archives" "page" -}}
     {{- $namespace := printf "%s%s/" $owner.RelPermalink . -}}
     {{- if ne . "page" -}}{{- with site.GetPage (printf "%s/%s" $owner.Path .) -}}{{- $namespace = .RelPermalink -}}{{- end -}}{{- end -}}
     {{- range site.Pages -}}

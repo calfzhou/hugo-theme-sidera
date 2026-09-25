@@ -1,0 +1,25 @@
+{{- $page := .Page -}}{{- $owner := .Owner -}}
+{{- if and $owner $page.IsSection -}}
+  {{- $items := slice "recent" "categories" "tags" "archive" -}}{{- if isset .Config "items" -}}{{- $items = .Config.items -}}{{- end -}}
+  {{- $links := slice -}}
+  {{- range $items -}}
+    {{- $target := false -}}{{- $label := "" -}}{{- $current := "" -}}
+    {{- if eq . "recent" -}}
+      {{- $target = $owner -}}{{- $label = T "all_content" -}}
+      {{- $order := (partial "lists/policy.html" $owner).order -}}
+      {{- if eq $order "publication" -}}{{- $label = T "recent_published" -}}{{- else if eq $order "modification" -}}{{- $label = T "recent_updates" -}}{{- end -}}
+      {{- if eq $page $owner -}}{{- $current = "page" -}}{{- end -}}
+    {{- else if in (slice "categories" "tags") . -}}
+      {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" .) $owner.Path . -}}
+      {{- if $model.nodes -}}{{- $target = partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" . "key" "" "slug" "") -}}{{- $label = T . -}}{{- end -}}
+      {{- if eq $page.Params.sidera.tag_taxonomy . -}}{{- $current = "location" -}}{{- if not $page.Params.sidera.tag_key -}}{{- $current = "page" -}}{{- end -}}{{- end -}}
+    {{- else if eq . "archive" -}}
+      {{- $target = $page.Site.GetPage (printf "%s/archives" $owner.Path) -}}{{- $label = T "archives" -}}
+      {{- if not $target -}}{{- errorf "Sidera missing archive for %s; collection navigation requires the supported local scoped-route inventory" $owner.Path -}}
+      {{- else if not $target.Params.sidera.archive_view -}}{{- errorf "Sidera archive route collision at %s" $target.Path -}}{{- end -}}
+      {{- if $page.Params.sidera.archive_view -}}{{- $current = "page" -}}{{- end -}}
+    {{- end -}}
+    {{- with $target -}}{{- $links = $links | append (dict "Page" . "Label" $label "Current" $current) -}}{{- end -}}
+  {{- end -}}
+  {{- with $links -}}<nav class="collection-nav-tabs" data-collection-nav aria-label="{{ T "collection_navigation" }}">{{ range . }}<a href="{{ .Page.RelPermalink }}"{{ with .Current }} aria-current="{{ . }}"{{ end }}>{{ .Label }}</a>{{ end }}</nav>{{- end -}}
+{{- end -}}

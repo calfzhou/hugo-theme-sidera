@@ -3,6 +3,8 @@
 [blog]
 title_key = 'collection_blog'
 [blog.defaults.params]
+top = ["collection-nav"]
+taxonomy_hubs = "index"
 list_mode = 'recursive'
 list_order = 'publication'
 taxonomy_hierarchy = []

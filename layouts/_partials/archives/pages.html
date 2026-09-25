@@ -1,0 +1,3 @@
+{{- $owner := . -}}{{- $pages := slice -}}
+{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+{{- return (partial "lists/order.html" (dict "pages" $pages "order" "publication" "pins" false)) -}}

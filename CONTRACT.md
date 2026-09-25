@@ -123,6 +123,8 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
+| top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
+| taxonomy_hubs | list (minimal default) or index (blog section default). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
 | left / right | Ordered name strings or component/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
@@ -137,12 +139,12 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | avatar | Author-term local portrait string; empty means none. Safe local image lookup. |
 | series_order | Series-term publication (oldest first, undated last) or weight (native series_weight ascending). Stable date/Title/Path ties; pins do not reorder sequences. |
 
-Fixed components: menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
+Fixed components: collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.
 In recursive list mode, native non-section storage folders may flatten into their parent tree;
 children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
 Unknown components/options/malformed fields diagnose; repeated component instances are allowed. Fixed icons remain home/blog/notebook/
-docs/page/tag/link/star; custom preset names are never used as required icon/i18n enum values.
+docs/page/tag/category/link/star; custom preset names are never used as required icon/i18n enum values.
 
 Native assignments are `tags`, `categories`, `authors`, `series`, `preset` at top level.
 Authors support multiple ordered identities. Series accepts one distinct native term per page;
@@ -200,8 +202,15 @@ certification, distribution license grant or P2 visual completion is implied.
 
 ## Component instances
 
-All four configurable regions accept name strings and `{component: name, config: {...}}` entries.
+All five configurable regions accept name strings and `{component: name, config: {...}}` entries.
 Config is a typed component-specific presentation overlay after the normal resolver; strings use
 defaults. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
 model change. SHELL.md contains the complete per-component option/default table and empty semantics.
 There is one recent component with instance order=modification/publication, not a second component.
+
+
+Collection browsing adds private generated `params.sidera.archive_view` and the reserved
+`archives` namespace at supported local roots. Archives are native list-excluded rendered Pages,
+not content-kind/scope roots. The root's native publication subset drives one separate archive
+paginator; list/tree/recent/taxonomy membership stays unchanged. See SHELL.md for the component,
+index presentation, collision guards and bounded-source limitations.

@@ -1,2 +1,2 @@
 {{- /* Native structure supplies identity. Preset is never a boundary. */ -}}
-{{- return (and .IsSection (not .Params.sidera.tag_view) (or .Parent.IsHome (eq .Params.scope_root true))) -}}
+{{- return (and .IsSection (not .Params.sidera.tag_view) (not .Params.sidera.archive_view) (or .Parent.IsHome (eq .Params.scope_root true))) -}}

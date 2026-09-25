@@ -4,9 +4,13 @@
 {{- partial "tags/discover.html" (dict "owner" "" "nodes" $nodes "dir" "content") -}}
 {{- range $path, $conflict := $nodes.Get "native_collisions" -}}{{- errorf "Sidera native taxonomy path collision at %s: %s" $path $conflict -}}{{- end -}}
 {{- range $route, $node := $nodes.Get "routes" -}}
+  {{- if $node.archive -}}
+    {{- $.AddPage (dict "kind" "section" "path" $route "title" (T "archives") "layout" "archive" "build" (dict "list" "never" "render" "always") "params" (dict "sidera" (dict "archive_view" true))) -}}
+  {{- else -}}
   {{- $title := T $node.taxonomy -}}{{- with $node.key -}}{{- $title = . -}}{{- end -}}
   {{- $.AddPage (dict "kind" "section" "path" $route "title" $title "layout" "taxonomy-scope"
     "params" (dict "sidera" (dict "tag_view" true "tag_key" $node.key "tag_slug" $node.slug "tag_taxonomy" $node.taxonomy))) -}}
+  {{- end -}}
 {{- end -}}
 {{- range $path, $term := $nodes.Get "native" -}}
   {{- /* Native authored term pages take precedence; don't shadow source content. */ -}}

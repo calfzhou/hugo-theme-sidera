@@ -5,17 +5,7 @@
 {{ $policy := partial "taxonomies/policy.html" false }}
 <header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ .Content }}</div></header>
 {{ if eq .Kind "taxonomy" }}
-  {{ $roots := where (sort $model.nodes "key") "parent" "" }}
-  {{ $rootPages := slice }}{{ range $roots }}{{ $rootPages = $rootPages | append (partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug)) }}{{ end }}
-  {{ $pager := .Paginate $rootPages $policy.size }}
-  <ul class="article-list taxonomy-index {{ if and (eq $taxonomy "tags") (not $model.nested) }}taxonomy-cloud{{ else }}taxonomy-directory{{ end }}">
-    {{ range $pager.Pages }}
-      {{ $target := . }}{{ with index $model.nodes (partial "taxonomies/key.html" .) }}
-      <li class="article-card"><h2><a href="{{ $target.RelPermalink }}">{{ if (partialCached "sidera/settings.html" $ $.Path).icons }}{{ partial "sidera/icon.html" "tag" }}{{ end }}{{ $target.Title }}</a></h2><p data-term-count="{{ len .pages }}">{{ T "taxonomy_count" (dict "count" (len .pages) "number" (lang.FormatNumber 0 (len .pages))) }}</p>
-      <div class="navigation-content">{{ partial "sidera/taxonomy-tree.html" (dict "Context" (dict "Page" $ "Owner" false "Region" "index" "Settings" (partialCached "sidera/settings.html" $ $.Path)) "model" $model "parent" .key) }}</div></li>
-    {{ end }}{{ end }}
-  </ul>
-  {{ partial "lists/navigation.html" $pager }}
+  {{ partial "taxonomies/index.html" (dict "Page" . "Owner" false "Model" $model "Settings" (partialCached "sidera/settings.html" . .Path)) }}
 {{ else }}
   {{ $key := partial "taxonomies/key.html" . }}
   {{ $pages := slice }}{{ with index $model.nodes $key }}{{ $pages = .pages }}{{ end }}

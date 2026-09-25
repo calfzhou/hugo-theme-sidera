@@ -82,7 +82,7 @@ creates a scope. See CONTRACT.md for exact types and field-domain exceptions.
 
 | Preset | Selecting section | Descendants |
 |---|---|---|
-| blog | Recursive list, publication order, flat classification, menu/taxonomies/recent | Same left components, TOC right, update date hidden |
+| blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs, menu/taxonomies/recent | Same left components, TOC right, update date hidden |
 | notes | Recursive list, modification order, hierarchical tags, menu/taxonomies/recent | Same left components, TOC right, update date shown |
 | docs | Children list, page-tree/taxonomies, recent sections enabled | Children mode for sections, same tree/taxonomy components, TOC, update date shown |
 
@@ -109,3 +109,8 @@ plain names. Native effective Page.Params still wins and arrays replace wholly. 
 instance then overlays its own validated options; unused preset instances are validated too.
 One `recent` type accepts order=publication/modification per instance. Bundled selections are
 unchanged; Fieldbook explicitly demonstrates new notebook entries and both orders on docs.
+
+The blog section target now selects `top=[collection-nav]` and `taxonomy_hubs=index`. Its
+regular descendants do not acquire a bar by that default. Generated scoped browsing views use
+the owner's resolved presentation. Other presets remain unchanged and can opt into identical
+capabilities through native Page/cascade or preset options; no runtime blog-name gate is used.

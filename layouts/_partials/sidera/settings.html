@@ -3,7 +3,7 @@
 {{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}
 {{- $defaults := partial "model/defaults.html" . -}}
 {{- $scopes := slice $page.Params -}}
-{{- if and $page.Params.sidera.tag_view $owner -}}
+{{- if and (or $page.Params.sidera.tag_view $page.Params.sidera.archive_view) $owner -}}
   {{- /* A contextual navigation Page queries its owner policy, not article metadata. */ -}}
   {{- $scopes = $scopes | append (partialCached "sidera/settings.html" $owner $owner.Path) -}}
 {{- else -}}

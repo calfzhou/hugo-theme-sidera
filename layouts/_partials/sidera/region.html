@@ -9,5 +9,5 @@
   {{- if strings.TrimSpace $content -}}<div class="region-component" data-component="{{ $name }}" data-instance="{{ $instance.Instance }}">{{ $content }}</div>{{- end -}}
 {{- end -}}
 {{- if index .Settings .Region -}}
-  {{- if eq .Region "left" -}}{{- partial "sidera/left-extra.html" . -}}{{- else -}}{{- partial "sidera/right-extra.html" . -}}{{- end -}}
+  {{- if eq .Region "left" -}}{{- partial "sidera/left-extra.html" . -}}{{- else if eq .Region "right" -}}{{- partial "sidera/right-extra.html" . -}}{{- else if eq .Region "top" -}}{{- partial "sidera/top-extra.html" . -}}{{- end -}}
 {{- end -}}

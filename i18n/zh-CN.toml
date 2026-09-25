@@ -185,3 +185,15 @@ other = "关闭导航"
 
 [recent_published]
 other = "最近发布"
+
+[all_categories]
+other = "所有分类"
+
+[archives]
+other = "归档"
+
+[archive_undated]
+other = "日期不详"
+
+[collection_navigation]
+other = "合集导航"

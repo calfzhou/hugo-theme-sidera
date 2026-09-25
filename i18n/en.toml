@@ -188,3 +188,15 @@ other = "Close navigation"
 
 [recent_published]
 other = "Recently published"
+
+[all_categories]
+other = "All categories"
+
+[archives]
+other = "Archive"
+
+[archive_undated]
+other = "Undated"
+
+[collection_navigation]
+other = "Collection navigation"

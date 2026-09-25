@@ -1,0 +1,22 @@
+{{ $owner := partial "collection-owner.html" . }}
+{{ if not $owner }}{{ errorf "Sidera archive %s has no collection owner" .Path }}{{ else }}
+{{ $pages := partial "archives/pages.html" $owner }}
+{{ $pager := .Paginate $pages (partial "lists/policy.html" $owner).size }}
+{{/* Group this already ordered pager without treating a real year 0001 as a missing date. */}}
+{{ $years := slice }}{{ $groups := dict }}
+{{ range $pager.Pages }}
+  {{ $year := "undated" }}{{ if not .PublishDate.IsZero }}{{ $year = .PublishDate.Format "2006" }}{{ end }}
+  {{ if not (isset $groups $year) }}{{ $years = $years | append $year }}{{ end }}
+  {{ $groups = merge $groups (dict $year ((index $groups $year | default slice) | append .)) }}
+{{ end }}
+<header class="view-header taxonomy-hub-header"><h1>{{ T "archives" }}</h1></header>
+<div class="list-meta"><p data-archive-total="{{ len $pages }}">{{ T "article_count" (dict "count" (len $pages) "number" (lang.FormatNumber 0 (len $pages))) }}</p></div>
+<div class="archive-list" data-archive-scope="{{ $owner.RelPermalink }}">
+  {{ range $years }}
+    <section class="archive-year"><h2>{{ if eq . "undated" }}{{ T "archive_undated" }}{{ else }}{{ . }}{{ end }}</h2>
+      <ul>{{ range index $groups . }}<li><a data-archive-article href="{{ .RelPermalink }}">{{ if .PublishDate.IsZero }}<span class="archive-date" aria-hidden="true">—</span>{{ else }}<time class="archive-date" datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ time.Format ":date_medium" .PublishDate }}</time>{{ end }}<span>{{ .Title }}</span></a></li>{{ end }}</ul>
+    </section>
+  {{ end }}
+</div>
+{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" $pager }}{{ else if not $pages }}<p class="list-meta">{{ T "no_articles" }}</p>{{ end }}
+{{ end }}

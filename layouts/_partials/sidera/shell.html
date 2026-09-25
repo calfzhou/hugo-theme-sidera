@@ -1,6 +1,7 @@
 {{- $page := .Page -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
 {{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings -}}
+{{- $top := partial "sidera/region.html" (merge $ctx (dict "Region" "top")) -}}
 {{- $left := partial "sidera/region.html" (merge $ctx (dict "Region" "left")) -}}
 {{- $right := partial "sidera/region.html" (merge $ctx (dict "Region" "right")) -}}
 {{- $hasLeft := ne (strings.TrimSpace $left) "" -}}{{- $hasRight := ne (strings.TrimSpace $right) "" -}}
@@ -18,7 +19,7 @@
   {{ end }}
   {{ if $hasLeft }}<div class="mobile-brand">{{ partial "sidera/identity.html" $ctx }}</div>{{ end }}
   <div class="reading-column">
-    <main id="main" tabindex="-1">{{ .Content }}</main>
+    <main id="main" tabindex="-1">{{ if strings.TrimSpace $top }}<div class="top-region">{{ $top }}</div>{{ end }}{{ .Content }}</main>
     {{ partial "sidera/footer.html" (merge $ctx (dict "Region" "site-footer")) }}
   </div>
 </div>
