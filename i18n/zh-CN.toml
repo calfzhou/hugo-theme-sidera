@@ -72,13 +72,13 @@ other = "网站"
 other = "概览"
 
 [order_publication]
-other = "按发表时间降序 · 置顶优先"
+other = "按发表时间降序"
 
 [order_modification]
-other = "按更新时间降序 · 置顶优先"
+other = "按更新时间降序"
 
 [order_title]
-other = "按标题排序 · 置顶优先"
+other = "按标题排序"
 
 [pinned]
 other = "置顶"

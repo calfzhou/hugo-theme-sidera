@@ -648,3 +648,9 @@ second Paginate call is introduced. The two decorative arrow SVGs use the same p
 Solar registry and retained CC BY notice. Native list membership, order, page size and routes
 are unchanged. The shared partial omits a one-page pager for every caller, including docs and
 taxonomies; existing localized empty-result messages are retained.
+
+
+Post/note result lists omit the visible total/sort metadata row, and docs child lists omit the
+visible child-count line. The child-list heading, cards, pins and pagination remain. Counts/order
+are attached to the native list as localized accessible metadata and stable data attributes;
+no hidden paragraph or extra visual spacing is retained. Pin-priority wording is not repeated.

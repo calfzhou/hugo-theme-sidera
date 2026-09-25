@@ -72,13 +72,13 @@ other = "Site"
 other = "Overview"
 
 [order_publication]
-other = "Newest published · Pins first"
+other = "Newest published"
 
 [order_modification]
-other = "Last updated · Pins first"
+other = "Last updated"
 
 [order_title]
-other = "By title · Pins first"
+other = "By title"
 
 [pinned]
 other = "Pinned"

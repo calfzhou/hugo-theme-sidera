@@ -4,11 +4,9 @@
 {{ $ordered := .pages }}{{ if not .preordered }}{{ $ordered = partial "lists/order.html" (dict "pages" .pages "order" $policy.order "pins" true) }}{{ end }}
 {{ $countLabel := "article_count" }}{{ with .count_label }}{{ $countLabel = . }}{{ end }}
 {{ $pager := .page.Paginate $ordered $policy.size }}
-<div class="list-meta">
-  <p data-total="{{ $pager.TotalNumberOfElements }}">{{ T $countLabel (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}</p>
-  <p data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}">{{ if .preordered }}{{ T (printf "series_order_%s" $policy.order) }}{{ else }}{{ T (printf "order_%s" $policy.order) }}{{ end }}</p>
-</div>
-<ul id="articles" class="article-list">
+<ul id="articles" class="article-list" data-total="{{ $pager.TotalNumberOfElements }}" data-list-order="{{ $policy.order }}" data-page-size="{{ $policy.size }}"
+    aria-label="{{ T $countLabel (dict "count" $pager.TotalNumberOfElements "number" (lang.FormatNumber 0 $pager.TotalNumberOfElements)) }}"
+    aria-description="{{ if .preordered }}{{ T (printf "series_order_%s" $policy.order) }}{{ else }}{{ T (printf "order_%s" $policy.order) }}{{ end }}">
   {{ range $pager.Pages }}
     {{ partial "sidera/card.html" (dict "Page" . "Order" $policy.order "ShowOwner" $.show_owner) }}
   {{ end }}
