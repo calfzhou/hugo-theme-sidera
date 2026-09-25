@@ -493,9 +493,10 @@ The blog preset supplies this top bar to its selecting section. Notes/docs and u
 scopes can choose the top bar explicitly; all scopes default to `taxonomy_hubs=index`. `top=false`
 or `[]` disables the bar; a custom item array changes order/selection. Series is intentionally
 not a tab yet (its existing native taxonomy/sequence UI still works). Category/tag tabs use
-complete actual scoped vocabularies, not the current pager. The first tab links the owner:
-Recently published for publication order, Recent updates for modification order, All content
-otherwise. It does not secretly change list ordering, pins or the site's homepage.
+complete actual scoped vocabularies, not the current pager. The first tab links the owner and always reads **All posts / 全部文章**, independent of sort
+order. Its existing item key remains `recent`; the localized label uses `all_posts` and can be
+overridden through site i18n. It does not change list ordering, pins or the site's homepage.
+The separate recent widgets retain their publication/modification-specific captions.
 
 `taxonomy_hubs=index` is the shared default for blogs, notes, docs and unclassified scopes. It makes scoped
 **tag/category roots** vocabulary indexes; term-result pages still list native member articles.

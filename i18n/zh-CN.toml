@@ -192,6 +192,9 @@ other = "归档"
 [archive_undated]
 other = "日期不详"
 
+[all_posts]
+other = "全部文章"
+
 [collection_navigation]
 other = "合集导航"
 

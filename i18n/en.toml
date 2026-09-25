@@ -195,6 +195,9 @@ other = "Archive"
 [archive_undated]
 other = "Undated"
 
+[all_posts]
+other = "All posts"
+
 [collection_navigation]
 other = "Collection navigation"
 

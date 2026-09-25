@@ -5,9 +5,7 @@
   {{- range $items -}}
     {{- $target := false -}}{{- $label := "" -}}{{- $current := "" -}}
     {{- if eq . "recent" -}}
-      {{- $target = $owner -}}{{- $label = T "all_content" -}}
-      {{- $order := (partial "lists/policy.html" $owner).order -}}
-      {{- if eq $order "publication" -}}{{- $label = T "recent_published" -}}{{- else if eq $order "modification" -}}{{- $label = T "recent_updates" -}}{{- end -}}
+      {{- $target = $owner -}}{{- $label = T "all_posts" -}}
       {{- if eq $page $owner -}}{{- $current = "page" -}}{{- end -}}
     {{- else if in (slice "categories" "tags") . -}}
       {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" .) $owner.Path . -}}
