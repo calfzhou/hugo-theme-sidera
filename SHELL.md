@@ -120,7 +120,10 @@ use the same sizing/spacing. Profile/link/footer menus retain their smaller icon
 Selection dots belong only to main-menu links (including their selected ancestors), even with
 icons=false. Tag/page trees, taxonomy hubs and auxiliary link/profile menus use their current-row
 highlight without dots. Tree counts remain visible and right-aligned across branches, leaves and
-indentation levels; every row reserves the same disclosure column. These are local native
+indentation levels; every row reserves the same disclosure column. Page/tag/category tree
+titles wrap rather than truncate. Their native disclosure shares the title’s grid row, so the
+arrow is centered for any line count, independently of expanded children. Recent lists remain
+single-line with ellipsis. These are local native
 menu params; arbitrary CSS strings, URLs and authored SVG are never accepted as color values.
 
 No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.

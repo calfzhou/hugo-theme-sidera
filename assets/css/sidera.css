@@ -106,18 +106,21 @@ summary { cursor: pointer; }
 .menu-group { display: block; padding: 8px 12px; font-size: 14px; color: var(--muted); }
 .tag-navigation { font-size: 16px; }
 .all-tags,.tree-root { display: block; padding: 6px 12px; border-radius: 8px; }
-.tree-node { position: relative; }
-/* Reserve the disclosure column for every row, including leaves, so counts line up. */
-.tree-row { padding-right: 32px; }
+/* The label and native disclosure share a grid row; children occupy a separate row.
+   This centers the arrow against wrapped text, never against the expanded subtree. */
+.tree-node { position: relative; display: grid; grid-template-columns: minmax(0,1fr) 32px; }
+.tree-row { grid-column: 1; grid-row: 1; min-width: 0; }
+.tree-branch,.tree-branch::details-content { display: contents; }
+.tree-branch:not([open]) > :not(summary) { display: none; }
 .tree-row a { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 5px 10px; border-radius: 8px; line-height: 1.5; }
 .tree-row small { margin-left: auto; flex: none; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px; }
 .tree-row .icon { width: 16px; height: 16px; }
-.tree-branch > summary { position: absolute; right: 0; top: 0; display: grid; place-items: center; width: 30px; height: 34px; list-style: none; border-radius: 6px; color: var(--muted); }
+.tree-branch > summary { grid-column: 2; grid-row: 1; align-self: stretch; display: grid; place-items: center; width: 30px; min-height: 34px; list-style: none; border-radius: 6px; color: var(--muted); }
 .tree-branch > summary::-webkit-details-marker { display: none; }
 .tree-branch > summary:is(:hover,:focus-visible) { background: var(--item-hover); color: var(--text); }
 .tree-branch > summary span { font: 22px/1 var(--ui); transition: transform .18s ease; }
 .tree-branch[open] > summary span { transform: rotate(90deg); }
-.tree-branch > ul { margin-left: 16px; padding-left: 0; }
+.tree-branch > ul { grid-column: 1 / -1; grid-row: 2; margin-left: 16px; padding-left: 0; }
 .tree-branch .tree-branch .tree-branch > ul { margin-left: 3px; padding-left: 4px; }
 .appearance { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 8px 0; font-size: 13px; flex-shrink: 0; }
 .appearance .icon { width: 24px; height: 24px; }
@@ -327,7 +330,7 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
   .article-card h2 { font-size: 22px; margin: 9px 0; }
   .excerpt { -webkit-line-clamp: 3; margin: 12px 0; }
   .tree-row a { min-height: 44px; }
-  .tree-branch > summary { height: 44px; }
+  .tree-branch > summary { min-height: 44px; }
   .prose { line-height: 1.8; }
   .site-footer { margin-bottom: 96px; }
 }
