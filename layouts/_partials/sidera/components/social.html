@@ -11,7 +11,7 @@
     {{- range $key := slice "icon" "image" "onclick" -}}{{- if and (isset $p $key) (ne (printf "%T" (index $p $key)) "string") -}}{{- errorf "Sidera %s: params.%s must be a string" $where $key -}}{{- $paramsValid = false -}}{{- end -}}{{- end -}}
     {{- if not $paramsValid -}}{{- continue -}}{{- end -}}
     {{- $action := $p.onclick | default "" -}}
-    {{- if and $action (ne $action "Sidera.cycleAppearance()") -}}{{- errorf "Sidera %s: onclick accepts only Sidera.cycleAppearance()" $where -}}{{- end -}}
+    {{- if and $action (ne $action "Sidera.cycleColorMode()") -}}{{- errorf "Sidera %s: onclick accepts only Sidera.cycleColorMode()" $where -}}{{- end -}}
     {{- if and $action .URL -}}{{- errorf "Sidera %s: choose a URL/pageRef or onclick, not both" $where -}}{{- end -}}
     {{- if and (not $action) (not .URL) -}}{{- errorf "Sidera %s: social entry requires a destination or supported onclick" $where -}}{{- end -}}
     {{- if and $p.icon $p.image -}}{{- errorf "Sidera %s: choose an icon name or local image, not both" $where -}}{{- end -}}
@@ -20,12 +20,12 @@
       {{- $url := partial "sidera/image.html" (dict "Page" $ctx.Page.Site.Home "Owner" false "path" $p.image) -}}
       {{- $icon = printf `<img src="%s" width="24" height="24" alt="">` ($url | htmlEscape) | safeHTML -}}
     {{- else -}}
-      {{- $name := "" -}}{{- if isset $p "icon" -}}{{- $name = $p.icon -}}{{- else if $action -}}{{- $name = "appearance" -}}{{- end -}}
+      {{- $name := "" -}}{{- if isset $p "icon" -}}{{- $name = $p.icon -}}{{- else if $action -}}{{- $name = "color-mode" -}}{{- end -}}
       {{- $icon = partial "sidera/icon.html" $name -}}
     {{- end -}}
     {{- if not $ctx.Settings.icons -}}{{- $icon = "" -}}{{- end -}}
     {{- if $action -}}
-      {{- partial "sidera/appearance.html" (dict "Icon" $icon) -}}
+      {{- partial "sidera/color-mode-control.html" (dict "Icon" $icon) -}}
     {{- else -}}
       {{- with .ConfiguredURL -}}{{- $valid := partial "sidera/url.html" (dict "url" . "source" $where) -}}{{- end -}}
       <a class="social-link{{ if not $icon }} social-text{{ end }}" href="{{ partial "sidera/url.html" (dict "url" .URL "source" $where) }}" title="{{ .Name }}" aria-label="{{ .Name }}">{{ if $icon }}{{ $icon }}{{ else }}{{ .Name }}{{ end }}</a>

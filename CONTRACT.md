@@ -123,7 +123,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
-| appearance | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |
+| color_mode | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |
 | left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
 | top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
 | taxonomy_hubs | list (minimal default) or index (blog section default). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
@@ -225,6 +225,6 @@ precedes validation; per-use options replace shallowly and IDs count the resolve
 The two recent widget names are reusable definitions, not additional components or legacy aliases.
 
 Social entries use native menu params.icon/image or the whitelisted onclick action
-Sidera.cycleAppearance(). No arbitrary JavaScript, fetched icon content or template paths are
-accepted. Owner appearance defaults are separate from page/instance settings and visitor storage.
+Sidera.cycleColorMode(). No arbitrary JavaScript, fetched icon content or template paths are
+accepted. Owner color-mode defaults are separate from page/instance settings and visitor storage.
 SHELL.md defines exact behavior, local-image safety, six-entry bound and no-JS fallback.

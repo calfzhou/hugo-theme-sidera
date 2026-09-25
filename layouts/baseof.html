@@ -2,16 +2,16 @@
 {{- $listsValid := partialCached "lists/validate.html" . "site" -}}
 {{- $valid := partialCached "tags/validate.html" . "site" -}}
 <!doctype html>
-{{ $defaultAppearance := partial "sidera/appearance-default.html" site }}
-<html lang="{{ site.Language.Locale }}" data-appearance-default="{{ $defaultAppearance }}" data-appearance="{{ $defaultAppearance }}">
+{{ $defaultColorMode := partial "sidera/color-mode-default.html" site }}
+<html lang="{{ site.Language.Locale }}" data-color-mode-default="{{ $defaultColorMode }}" data-color-scheme="{{ $defaultColorMode }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="sidera:icon-attribution" content="Solar icons by 480 Design · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/480-Design/Solar-Icon-Set · adapted sizing and semantics; original paths retained from Stellar 1.44.0">
   <meta name="color-scheme" content="light dark">
   <title>{{ .Title }} | {{ site.Title }}</title>
-  {{ $appearance := resources.Get "js/appearance.js" | minify }}
-  <script>{{ $appearance.Content | safeJS }}</script>
+  {{ $colorMode := resources.Get "js/color-mode.js" | minify }}
+  <script>{{ $colorMode.Content | safeJS }}</script>
   {{ $css := resources.Get "css/sidera.css" | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
   {{ $notifications := resources.Get "js/notifications.js" | minify | fingerprint }}

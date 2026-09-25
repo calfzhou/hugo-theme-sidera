@@ -1,0 +1,4 @@
+{{- if isset .Params "appearance" -}}{{- errorf "Sidera params.appearance was renamed to params.color_mode; update the site/language configuration" -}}{{- end -}}
+{{- $mode := "auto" -}}{{- if isset .Params "color_mode" -}}{{- $mode = .Params.color_mode -}}{{- end -}}
+{{- if not (in (slice "dark" "light" "auto") $mode) -}}{{- errorf "Sidera site/language params.color_mode must be dark, light or auto" -}}{{- $mode = "auto" -}}{{- end -}}
+{{- return $mode -}}

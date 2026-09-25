@@ -358,13 +358,13 @@ The inline mark/link icon are original artwork; a small pinned Solar icon subset
 Desktop uses Stellar's bounded 720px reading track (696px at a 1440px viewport with
 8px scroll gutter), 288px left and 320px right rails. List cards have an 18px inner gutter;
 article banners span the reading track. The left rail fills the viewport and scrolls widgets
-independently of identity/appearance. Sidebar, drawer and TOC scrollbars are hidden, as in
+independently of identity/footer. Sidebar, drawer and TOC scrollbars are hidden, as in
 Stellar; native wheel/touch/keyboard scrolling and focus-reveal still work. This does not hide
 the document scrollbar or article code/table scrollbars. Its neutral fading surface uses no borrowed background art.
 At 1180px the right region becomes a native auto-popover; at 667px the left does too.
 Floating controls, Escape/light-dismiss, explicit close and native focus return remain usable.
 Only one drawer opens at a time. No modal focus trap; no-JS/unsupported browsers retain open
-in-flow disclosures. Appearance is an optional icon action selected by the site owner; it cycles dark/light/auto
+in-flow disclosures. Color mode is an optional icon action selected by the site owner; it cycles dark/light/auto
 and keeps native keyboard/focus semantics. No control is invented when none is configured. No fake search/services.
 
 Native top-level `tags` and `categories` are assignments, not custom settings.
@@ -511,7 +511,7 @@ missing supported source context. Bundled docs stay opt-in, and archive navigati
 default for docs. No search, comments, special-syntax backend or real-site URL migration is added.
 
 
-## Pinned social footer and appearance
+## Pinned social footer and color mode
 
 `left_footer` is a sixth instance region, pinned below the scrolling left widgets. Its default
 `[social]` emits nothing when the selected native social menu is absent. Use false/[] to disable,
@@ -529,7 +529,7 @@ trusted inline code. Supply only artwork you have permission to use.
 
 ```toml
 [params]
-appearance = 'auto' # theme default; 'dark' and 'light' are also supported
+color_mode = 'auto' # theme default; 'dark' and 'light' are also supported
 social_menu = 'social'
 
 [[menus.social]]
@@ -540,11 +540,11 @@ weight = 10
 image = 'icons/email.svg' # site-owned local file
 
 [[menus.social]]
-name = 'Appearance'
+name = 'Color mode'
 weight = 20
 [menus.social.params]
-icon = 'appearance' # optional: this action defaults to the built-in appearance icon
-onclick = 'Sidera.cycleAppearance()'
+icon = 'color-mode' # optional: this action defaults to the built-in color-mode icon
+onclick = 'Sidera.cycleColorMode()'
 ```
 
 `onclick` accepts **only that exact supplied action**. It is converted to a data attribute and
@@ -553,14 +553,14 @@ URL/pageRef with onclick, or image with a nonempty icon name. Nested social menu
 link/action destinations diagnose. An explicit empty icon selects text instead of the fallback
 icon. The built-in action's current/next labels are localized by the theme.
 
-`params.appearance` is site/language-only and applies to **new visitors**: omitted means auto.
+`params.color_mode` is site/language-only and applies to **new visitors**: omitted means auto.
 A valid local visitor preference wins over later site-default changes and is saved under
 sidera-appearance. The button cycles **dark → light → auto → dark**. Auto follows the OS live;
 manual modes do not. The former stored value system is migrated once to auto; it is not a valid
 new config/API alias. Invalid saved values use the owner default. Storage failures allow a
 page-local choice without errors. Other tabs synchronize native storage changes.
 
-The public API is `Sidera.cycleAppearance()` and `Sidera.setAppearance('dark'|'light'|'auto')`.
+The public API is `Sidera.cycleColorMode()` and `Sidera.setColorMode('dark'|'light'|'auto')`.
 Changing/exposing a control is optional: omit the action to offer only social links, or omit the
 menu entirely. Stored visitor choices still apply even without a button. With no JavaScript,
 CSS follows the owner default/OS and the inert action is hidden; ordinary social links stay usable.
@@ -576,16 +576,16 @@ It follows Stellar's top-centered card/slide treatment: starts above the viewpor
 32px, then slides back out. Rapid calls replace the prior message and cancel old timers instead
 of stacking notices. No HTML or callback strings are interpreted.
 
-The color-mode switch (`Sidera.cycleAppearance()`) announces the selected dark/light/auto mode
-using native EN/ZH messages. Initial paint, OS/storage updates and the explicit setAppearance
-setter remain silent. The UI now says **Color mode / 配色模式**; existing params.appearance,
-API names and storage remain unchanged in this wording refinement.
+The color-mode switch (`Sidera.cycleColorMode()`) announces the selected dark/light/auto mode
+using native EN/ZH messages. Initial paint, OS/storage updates and the explicit setColorMode
+setter remain silent. The UI and public identifiers use **Color mode / 配色模式**. The owner setting is
+params.color_mode, and the public methods are cycleColorMode/setColorMode.
 
 Notifications do not take focus or intercept pointer input. A polite live region announces the
 text; where supported, a manual popover keeps visual feedback above an open sidebar drawer
 without dismissing it. Reduced motion removes movement/transitions but retains the message and
 dwell time. With no JavaScript both notification regions stay empty/inactive. Native control
-labels and saved appearance behavior remain unchanged.
+labels and saved color-mode behavior remain unchanged.
 
 
 ## TOC presentation
@@ -603,3 +603,15 @@ heading anchors/history remain unchanged. Scroll tracking covers H1–H6 when in
 configured outline, keeps a newly current entry visible without stealing keyboard focus, and
 rechecks it when an outline is reopened. Repeated TOCs keep independent disclosure state/IDs.
 The local up icon is the pinned Stellar/Solar default:upup asset under the retained CC BY notice.
+
+
+## Public naming migration
+
+Use params.color_mode, Sidera.cycleColorMode(), Sidera.setColorMode(mode), and the fixed icon
+name color-mode. The color_mode, color_mode_dark, color_mode_light, color_mode_auto and color_mode_cycle
+i18n keys match that terminology.
+The previous appearance config/action/icon names are not aliases: stale configuration produces
+an error directing owners to the new names. Update trusted custom JS and translation overrides
+as well. The internal browser storage key sidera-appearance is deliberately retained so existing
+visitor preferences are not reset; this is persistence continuity, not a public config alias.
+CSS uses data-color-scheme for the resolved palette, with data-color-mode tracking the choice.

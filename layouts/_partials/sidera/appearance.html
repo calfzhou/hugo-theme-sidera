@@ -1,6 +1,0 @@
-<button type="button" class="social-link{{ if not .Icon }} social-text{{ end }}" data-appearance-cycle hidden
-  data-label-dark="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_dark") "next" (T "appearance_light")) }}"
-  data-label-light="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_light") "next" (T "appearance_auto")) }}"
-  data-label-auto="{{ T "appearance_cycle" (dict "label" (T "appearance") "current" (T "appearance_auto") "next" (T "appearance_dark")) }}">
-  {{ if .Icon }}{{ .Icon }}{{ else }}{{ T "appearance" }}{{ end }}
-</button>

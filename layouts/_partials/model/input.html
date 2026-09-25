@@ -13,7 +13,8 @@
     {{- if isset $params $key -}}{{- errorf "Sidera native %s must be authored at top level, not under params: %s" $key $source -}}{{- end -}}
   {{- end -}}
 {{- end -}}
-{{- if isset $params "appearance" -}}{{- errorf "Sidera appearance defaults belong in site/language params.appearance: %s" $source -}}{{- end -}}
+{{- if isset $params "appearance" -}}{{- errorf "Sidera params.appearance was renamed to site/language params.color_mode: %s" $source -}}{{- end -}}
+{{- if isset $params "color_mode" -}}{{- errorf "Sidera color-mode defaults belong in site/language params.color_mode: %s" $source -}}{{- end -}}
 {{- if isset $params "widgets" -}}{{- errorf "Sidera widget definitions belong in site/language params.widgets, not page/cascade params: %s" $source -}}{{- end -}}
 {{- if isset $params "scope_root" -}}
   {{- if or (not .section) (ne (printf "%T" $params.scope_root) "bool") -}}{{- errorf "Sidera scope_root must be a section boolean: %s" $source -}}{{- end -}}

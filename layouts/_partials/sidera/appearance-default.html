@@ -1,3 +1,0 @@
-{{- $mode := "auto" -}}{{- if isset .Params "appearance" -}}{{- $mode = .Params.appearance -}}{{- end -}}
-{{- if not (in (slice "dark" "light" "auto") $mode) -}}{{- errorf "Sidera site/language params.appearance must be dark, light or auto" -}}{{- $mode = "auto" -}}{{- end -}}
-{{- return $mode -}}

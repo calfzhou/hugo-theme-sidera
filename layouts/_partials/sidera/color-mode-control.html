@@ -1,0 +1,6 @@
+<button type="button" class="social-link{{ if not .Icon }} social-text{{ end }}" data-color-mode-cycle hidden
+  data-label-dark="{{ T "color_mode_cycle" (dict "label" (T "color_mode") "current" (T "color_mode_dark") "next" (T "color_mode_light")) }}"
+  data-label-light="{{ T "color_mode_cycle" (dict "label" (T "color_mode") "current" (T "color_mode_light") "next" (T "color_mode_auto")) }}"
+  data-label-auto="{{ T "color_mode_cycle" (dict "label" (T "color_mode") "current" (T "color_mode_auto") "next" (T "color_mode_dark")) }}">
+  {{ if .Icon }}{{ .Icon }}{{ else }}{{ T "color_mode" }}{{ end }}
+</button>

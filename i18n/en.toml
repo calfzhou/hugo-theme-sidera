@@ -56,13 +56,13 @@ other = "Site navigation"
 [browse_collections_tags]
 other = "Browse collections & tags"
 
-[appearance]
+[color_mode]
 other = "Color mode"
 
-[appearance_dark]
+[color_mode_dark]
 other = "Dark"
 
-[appearance_light]
+[color_mode_light]
 other = "Light"
 
 [site]
@@ -198,10 +198,10 @@ other = "Undated"
 [collection_navigation]
 other = "Collection navigation"
 
-[appearance_auto]
+[color_mode_auto]
 other = "Auto (system)"
 
-[appearance_cycle]
+[color_mode_cycle]
 other = "{{ .label }}: {{ .current }}. Switch to {{ .next }}."
 
 [social_links]
