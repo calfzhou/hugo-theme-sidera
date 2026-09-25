@@ -144,7 +144,7 @@ features. `links`/profile menus are absent when the selected menu is absent.
   ancestor/current branches open. A parent body's link and its disclosure are
   separate keyboard targets. No secondary paginator.
 - **Recent (`recent`):** each instance selects `config.order=modification` (default,
-  caption Recent updates) or `publication` (caption Recently published). Lastmod descending versus PublishDate descending,
+  caption Recently updated) or `publication` (caption Recently published). Lastmod descending versus PublishDate descending,
   then Title/Path ascending; zero dates sort last. Both ignore pins and the main paginator.
   Owner scope excludes nested independently marked collections. recent_sections=true includes
   descendant sections as well as regular leaves. With no owner, both use current-language
