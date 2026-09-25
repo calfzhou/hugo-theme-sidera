@@ -450,7 +450,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .index-global { margin: 18px; }
 .archive-list { margin: 18px; }
 .archive-year + .archive-year { margin-top: 32px; }
-.archive-year h2 { width: fit-content; margin: 18px 0 12px; font: 700 20px var(--code); border-bottom: 4px solid var(--accent); }
+.archive-year h2 { width: fit-content; margin: 18px 0 12px; font-size: 20px; font-weight: 700; border-bottom: 4px solid var(--accent); }
 .archive-year ul { list-style: none; padding: 0; margin: 0; }
 .archive-year a { display: inline-flex; gap: 18px; align-items: baseline; margin: 4px 0; padding: 4px 0; color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--line); }
 .archive-year a:is(:hover,:focus-visible) { color: var(--text); border-bottom-color: var(--accent); }
