@@ -117,7 +117,10 @@ color = '#ffbd2b'
 Main `menu` components use Stellar's 1.5rem (27px at the default root size) icons, 12px
 icon/label gap, 4px adjacent-row gaps and 8px selected dots. Discovered fallback main links
 use the same sizing/spacing. Profile/link/footer menus retain their smaller icon treatment.
-Selected dots remain selection indicators, including with icons=false. These are local native
+Selection dots belong only to main-menu links (including their selected ancestors), even with
+icons=false. Tag/page trees, taxonomy hubs and auxiliary link/profile menus use their current-row
+highlight without dots. Tree counts remain visible and right-aligned across branches, leaves and
+indentation levels; every row reserves the same disclosure column. These are local native
 menu params; arbitrary CSS strings, URLs and authored SVG are never accepted as color values.
 
 No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.

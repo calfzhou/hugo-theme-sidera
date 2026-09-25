@@ -98,7 +98,6 @@ summary { cursor: pointer; }
 .navigation-content a:active { background: var(--accent-soft); }
 .navigation-content a:is(:hover,:focus-visible) .icon { color: var(--accent); }
 .navigation-content a[aria-current="page"] { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
-.navigation-content a[aria-current="page"]:after { content: ""; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; margin-left: auto; flex: none; }
 .navigation-content a[aria-current="location"],.menu-group[data-active-ancestor] { color: var(--accent); }
 .navigation-content a[aria-current="location"] { color: var(--text); font-weight: 500; }
 .navigation-content a[aria-current] .icon { color: var(--accent); }
@@ -108,9 +107,10 @@ summary { cursor: pointer; }
 .tag-navigation { font-size: 16px; }
 .all-tags,.tree-root { display: block; padding: 6px 12px; border-radius: 8px; }
 .tree-node { position: relative; }
-.tree-node:has(> .tree-branch) > .tree-row { padding-right: 32px; }
+/* Reserve the disclosure column for every row, including leaves, so counts line up. */
+.tree-row { padding-right: 32px; }
 .tree-row a { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 5px 10px; border-radius: 8px; line-height: 1.5; }
-.tree-row small { margin-left: auto; color: var(--muted); font-size: 12px; }
+.tree-row small { margin-left: auto; flex: none; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12px; }
 .tree-row .icon { width: 16px; height: 16px; }
 .tree-branch > summary { position: absolute; right: 0; top: 0; display: grid; place-items: center; width: 30px; height: 34px; list-style: none; border-radius: 6px; color: var(--muted); }
 .tree-branch > summary::-webkit-details-marker { display: none; }
@@ -365,7 +365,6 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 
 /* The current section stays selected while reading a descendant. */
 .navigation-content .native-menu a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
-.navigation-content .native-menu a[aria-current="location"]::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; margin-left: auto; }
 .article-toc > summary { display: flex; align-items: center; justify-content: space-between; list-style: none; }
 .article-toc > summary::-webkit-details-marker { display: none; }
 .article-toc > summary .icon { width: 16px; height: 16px; opacity: .5; }
@@ -421,8 +420,9 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 [data-component="menu"] .native-menu ul ul { margin-top: 4px; }
 [data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) { gap: 12px; min-height: 44px; }
 [data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) .icon { width: 1.5rem; height: 1.5rem; }
-[data-component="menu"] :is(.native-menu,.fallback-menu) a[aria-current]::after { width: 8px; height: 8px; }
 [data-component="menu"] .collection-nav a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); }
-[data-component="menu"] .collection-nav a[aria-current="location"]::after { content: ""; flex: none; margin-left: auto; border-radius: 50%; background: var(--accent); }
 .native-menu a:is(:hover,:focus-visible,[aria-current]) .icon { color: var(--menu-accent,var(--accent)); }
-.navigation-content .native-menu a[aria-current]::after { background: var(--menu-accent,var(--accent)); background: linear-gradient(225deg,color-mix(in srgb,var(--menu-accent,var(--accent)) 50%,#fff) 20%,var(--menu-accent,var(--accent)) 60%); }
+
+/* Selection dots belong only to actual main-menu links, not every current sidebar link.
+   Explicit fallback targets exclude its embedded taxonomy navigation. */
+[data-component="menu"] :is(.native-menu a,.fallback-menu > .home-link,.fallback-menu > .collection-nav a,.fallback-menu > .page-nav a)[aria-current]::after { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-left: auto; flex: none; background: var(--menu-accent,var(--accent)); background: linear-gradient(225deg,color-mix(in srgb,var(--menu-accent,var(--accent)) 50%,#fff) 20%,var(--menu-accent,var(--accent)) 60%); }
