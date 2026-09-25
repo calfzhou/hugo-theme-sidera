@@ -635,7 +635,8 @@ CSS uses data-color-scheme for the resolved palette, with data-color-mode tracki
 ## Pager presentation
 
 Native list navigation follows Stellar's rounded single-bar treatment: muted numbers, small
-current/hover pills, dashed arrow-end dividers, dim noninteractive unavailable arrows and
+current/hover pills, one shared UI font for current and other page numbers, dashed arrow-end
+dividers, dim noninteractive unavailable arrows and
 accent hover/focus. First/last numbers retain native endpoint URLs; previous/next are ordinary
 links with rel and translated accessible labels. Current pages carry aria-current. The localized
 page summary is screen-reader-only for multiple pages; single-page pagers are omitted entirely.

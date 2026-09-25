@@ -232,7 +232,7 @@ summary { cursor: pointer; }
 .pagination-pages { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-evenly; gap: 2px; padding: 2px; overflow-x: auto; }
 .pagination-pages[data-radius="1"] { display: none; }
 .pagination .page-number { flex: none; padding: 4px 8px; border-radius: 8px; line-height: 1.2; }
-.pagination .page-number[aria-current] { font-family: var(--code); background: var(--panel); }
+.pagination .page-number[aria-current] { background: var(--panel); }
 .pagination .page-number:is(:hover,:focus-visible) { color: var(--text); background: var(--panel); }
 .pagination .pagination-arrow { flex: none; display: grid; place-items: center; width: 45px; align-self: stretch; min-height: 45px; padding: 9px; }
 .pagination-previous { border-right: 1px dashed var(--line); border-radius: 16px 0 0 16px; }
