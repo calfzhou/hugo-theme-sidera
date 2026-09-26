@@ -9,6 +9,7 @@
 <li class="article-card">
   {{- with $page.Params.cover.image -}}<div class="card-cover"><img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="{{ $page.Params.cover.alt }}" loading="lazy" decoding="async"></div>{{- end -}}
   <div class="card-content">
+    {{ partial "series/badge.html" $page }}
     <h2><a class="card-title" href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
     {{ if .ShowOwner }}{{ with $owner }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}{{ end }}
     {{ $excerpt := $page.Description }}{{ if not $excerpt }}{{ $excerpt = $page.Summary | plainify | htmlUnescape }}{{ end }}

@@ -146,7 +146,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |
 | cover | Effective Page.Params image/alt map, default absent; {} or image='' hides. image requires explicit alt ('' for decorative). Local safe resource lookup; no preset-default cover or automatic image selection. |
 | avatar | Author-term local portrait string; empty means none. Safe local image lookup. |
-| series_order | Series-term publication (oldest first, undated last) or weight (native series_weight ascending). Stable date/Title/Path ties; pins do not reorder sequences. |
+| series_order | Publication order only: oldest PublishDate first, undated last, stable Title/Path ties. Omission or publication accepted; weight/other values diagnose. Native series_weight has no effect on Sidera series order. |
 
 Fixed components: social, collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.

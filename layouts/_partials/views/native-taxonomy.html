@@ -18,5 +18,7 @@
   {{ partial "lists/navigation.html" $pager }}
 {{ else }}
   {{ $members := partialCached "taxonomies/native-members.html" . .Path }}
-  {{ partial "lists/render.html" (dict "page" . "owner" false "pages" $members "policy" (dict "order" "title" "size" $policy.size) "show_owner" true "count_label" "taxonomy_count") }}
+  {{ $order := "title" }}{{ $preordered := false }}
+  {{ if eq $taxonomy "series" }}{{ $members = (partial "series/order.html" (dict "term" . "pages" $members)).pages }}{{ $order = "publication" }}{{ $preordered = true }}{{ end }}
+  {{ partial "lists/render.html" (dict "page" . "owner" false "pages" $members "policy" (dict "order" $order "size" $policy.size) "preordered" $preordered "show_owner" true "count_label" "taxonomy_count") }}
 {{ end }}

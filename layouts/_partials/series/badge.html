@@ -1,0 +1,5 @@
+{{- with partialCached "series/context.html" . .Path -}}
+<a class="card-series" href="{{ .Target.RelPermalink }}" data-series-position="{{ .Position }}" data-series-total="{{ .Total }}" aria-label="{{ T "series" }} · {{ .Term.LinkTitle }} · {{ T "series_part" (dict "current" (lang.FormatNumber 0 .Position) "total" (lang.FormatNumber 0 .Total)) }}">
+  <span>{{ .Term.LinkTitle }}</span><span class="series-fraction" aria-hidden="true">{{ lang.FormatNumber 0 .Position }}/{{ lang.FormatNumber 0 .Total }}</span>
+</a>
+{{- end -}}

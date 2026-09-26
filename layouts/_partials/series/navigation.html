@@ -1,15 +1,17 @@
-{{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}
-{{- range (.GetTerms "series" | uniq) -}}
-  {{- $term := . -}}{{- $target := partial "taxonomies/link.html" (dict "page" $page "term" .) -}}
-  <nav class="series-navigation" aria-label="{{ T "series" }}" data-series="{{ .Data.Term }}">
-    <a class="series-title" href="{{ $target.RelPermalink }}">{{ T "series" }} · {{ .LinkTitle }}</a>
-    {{- with $owner -}}
-      {{- $members := slice -}}{{- range partialCached "taxonomies/native-members.html" $term $term.Path -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $members = $members | append . -}}{{- end -}}{{- end -}}
-      {{- $sequence := (partial "series/order.html" (dict "term" $term "pages" $members)).pages -}}
-      {{- range $index, $item := $sequence -}}{{- if eq $item $page -}}
-        {{- if gt $index 0 -}}{{- with index $sequence (sub $index 1) -}}<span aria-hidden="true"> · </span><a data-series-previous href="{{ .RelPermalink }}">{{ T "series_previous" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
-        {{- if lt (add $index 1) (len $sequence) -}}{{- with index $sequence (add $index 1) -}}<span aria-hidden="true"> · </span><a data-series-next href="{{ .RelPermalink }}">{{ T "series_next" }}: {{ .LinkTitle }}</a>{{- end -}}{{- end -}}
-      {{- end -}}{{- end -}}
-    {{- end -}}
-  </nav>
+{{- $page := . -}}
+{{- with partialCached "series/context.html" . .Path -}}
+<nav class="series-navigation" aria-label="{{ T "series" }}" data-series="{{ .Term.Data.Term }}" data-series-position="{{ .Position }}" data-series-total="{{ .Total }}">
+  <a class="series-title" href="{{ .Target.RelPermalink }}">{{ T "series" }} · {{ .Term.LinkTitle }}</a>
+  <details class="series-outline" open>
+    <summary>{{ T "series_part" (dict "current" (lang.FormatNumber 0 .Position) "total" (lang.FormatNumber 0 .Total)) }}</summary>
+    <ol>{{ range .Pages }}<li><a href="{{ .RelPermalink }}"{{ if eq . $page }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>{{ end }}</ol>
+  </details>
+  {{- $index := sub .Position 1 -}}
+  {{- if gt .Total 1 -}}
+  <div class="series-neighbors">
+    {{- if gt $index 0 -}}{{- with index .Pages (sub $index 1) -}}<a data-series-previous href="{{ .RelPermalink }}"><span>{{ T "series_previous" }}</span><span>{{ .LinkTitle }}</span></a>{{- end -}}{{- end -}}
+    {{- if lt .Position .Total -}}{{- with index .Pages .Position -}}<a data-series-next href="{{ .RelPermalink }}"><span>{{ T "series_next" }}</span><span>{{ .LinkTitle }}</span></a>{{- end -}}{{- end -}}
+  </div>
+  {{- end -}}
+</nav>
 {{- end -}}

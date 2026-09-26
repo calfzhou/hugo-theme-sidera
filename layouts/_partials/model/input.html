@@ -37,6 +37,7 @@
   {{- if or (ne (printf "%T" $params.navigation_mode) "string") (not (in (slice "list" "siblings" "sequential") $params.navigation_mode)) -}}{{- errorf "Sidera navigation_mode must be list, siblings or sequential: %s" $source -}}{{- end -}}
   {{- if not .section -}}{{- errorf "Sidera navigation_mode belongs on a collection root: %s" $source -}}{{- end -}}
 {{- end -}}
+{{- if and (isset $params "series_order") (ne $params.series_order "publication") -}}{{- errorf "Sidera series_order must be publication; remove weight-based ordering: %s" $source -}}{{- end -}}
 {{- if isset $params "primary_date" -}}
   {{- if or (ne (printf "%T" $params.primary_date) "string") (not (in (slice "published" "updated") $params.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $source -}}{{- end -}}
 {{- end -}}

@@ -273,3 +273,6 @@ other = "Next"
 
 [navigation_parent]
 other = "Parent"
+
+[series_part]
+other = "Part {{ .current }} of {{ .total }}"

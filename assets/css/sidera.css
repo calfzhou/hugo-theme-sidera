@@ -199,7 +199,7 @@ summary { cursor: pointer; }
 .article-card h2 a,.collection-card h3 a { background: linear-gradient(var(--title-highlight),var(--title-highlight)) no-repeat left bottom / 100% 0; transition: background-size .25s ease,color .18s ease; }
 .article-card:is(:hover,:focus-within) h2 a,.collection-card:is(:hover,:focus-within) h3 a { background-size: 100% 10px; text-decoration: none; }
 .card-title::after,.collection-card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
-.card-content :is(.term-badge,[data-result-owner]) { position: relative; z-index: 1; }
+.card-content :is(.term-badge,.card-series,[data-result-owner]) { position: relative; z-index: 1; }
 .card-cover { overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; background: var(--image-background); }
 .card-cover img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: cover; transition: transform 1.5s ease-out,filter .2s ease-out; }
 .article-card:is(:hover,:focus-within) .card-cover img { transform: scale(1.05); filter: brightness(.85) saturate(1.15); }
@@ -337,12 +337,25 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 .author-list a { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 14px; text-decoration: none; border-radius: 6px; }
 .author-list img { border-radius: 50%; object-fit: cover; }
 .author-list a:is(:hover,:focus-visible) { color: var(--accent); background: var(--accent-soft); }
-.series-navigation { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin: 0; }
-.series-title { grid-column: 1 / -1; font-size: 14px; font-weight: 600; }
-.series-navigation > span { display: none; }
-.series-navigation [data-series-previous],.series-navigation [data-series-next] { padding: 12px; background: var(--canvas); border-radius: 8px; color: var(--muted); font-size: 13px; text-decoration: none; }
-.series-navigation [data-series-next] { grid-column: 2; text-align: right; }
-.series-navigation a:is(:hover,:focus-visible) { color: var(--accent); background-color: var(--accent-soft); }
+.card-series { display: inline-flex; align-items: baseline; gap: 8px; max-width: 100%; margin: 0 0 10px; padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--muted); background: var(--panel); text-decoration: none; }
+.card-series span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.series-fraction { flex: none; font-variant-numeric: tabular-nums; color: var(--quiet); }
+.card-series:is(:hover,:focus-visible) { color: var(--accent); background: var(--surface-hover); text-decoration: none; }
+.series-navigation { padding: 16px 0; border-block: 1px solid var(--line); }
+.series-title { display: inline-block; font-size: 16px; font-weight: 500; color: var(--text); text-decoration: none; }
+.series-outline { margin: 8px 0 0; }
+.series-outline summary { padding: 4px 0; color: var(--muted); font-size: 13px; }
+.series-outline ol { max-height: 18rem; overflow-y: auto; margin: 8px 0 0; padding-left: 28px; }
+.series-outline li { padding-left: 2px; color: var(--quiet); font-size: 14px; }
+.series-outline li::marker { font-variant-numeric: tabular-nums; }
+.series-outline a { display: block; padding: 6px 8px; border-radius: 4px; color: var(--muted); text-decoration: none; }
+.series-outline a[aria-current] { background: var(--panel); color: var(--accent); font-weight: 500; }
+.series-neighbors { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 14px; }
+.series-neighbors a { display: flex; flex-direction: column; gap: 6px; padding: 8px; border-radius: 4px; color: var(--muted); text-decoration: none; font-size: 14px; }
+.series-neighbors a span:first-child { color: var(--quiet); font-size: 12px; }
+.series-neighbors [data-series-previous] { grid-column: 1; }
+.series-neighbors [data-series-next] { grid-column: 2; text-align: right; }
+.series-navigation a:is(:hover,:focus-visible) { color: var(--accent); background-color: var(--surface-hover); }
 .site-footer { margin: 72px 18px 54px; padding: 18px 0 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
 .site-footer .footer-item + .footer-item { margin-top: 16px; }
 :is(.article-footer,.site-footer) .native-menu ul { list-style: none; margin: 0; padding: 0; }

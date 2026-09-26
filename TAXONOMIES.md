@@ -73,10 +73,19 @@ Series membership remains native/global; contextual term results and previous/ne
 full eligible owner subset independently of the current pager. Cross-section same-term membership
 is ordinary valid data, not a reason to prefix keys or reject the content.
 
-Series term `params.series_order` defaults to publication: oldest PublishDate first, undated last,
-then Title/Path. Optional weight order uses native top-level `series_weight` ascending (missing=0),
-then publication/Title/Path ties. Pins may still be visible metadata but never reorder a sequence.
-Global series pages group the union; they are not silently used as a cross-section reading sequence.
+Series always use oldest PublishDate first, undated last, then stable Title/Path ties. The former
+optional weight mode is removed: omit params.series_order (recommended) or use publication;
+weight/other values fail with a migration diagnostic. Native series_weight may remain metadata
+but never changes the sequence. Pins, Lastmod, primary_date and main-list order do not reorder it.
+Global series term results also sort the complete union by publication date without pins; articles
+with an owner still use only that owner's subset for their positions and reading navigation.
+
+Cards show a compact series name and current/total badge. The article's existing series component
+now contains a native collapsible ordered outline, current-page highlight and explicitly labeled
+Previous/Next in series. Context/positions are shared and cached per term/owner so list pagination
+cannot shrink the count. No series means no badge or outline; a singleton has Part 1 of 1 and no
+neighbor links. Standalone pages with no owner use the global series sequence. Existing
+taxonomy_links policy controls the overview link; member positions stay owner-scoped when owned.
 
 ## Metadata, URLs and boundaries
 

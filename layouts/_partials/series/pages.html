@@ -1,0 +1,7 @@
+{{- $members := partialCached "taxonomies/native-members.html" .Term .Term.Path -}}
+{{- with .Owner -}}
+  {{- $owner := . -}}{{- $scoped := slice -}}
+  {{- range $members -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $scoped = $scoped | append . -}}{{- end -}}{{- end -}}
+  {{- $members = $scoped -}}
+{{- end -}}
+{{- return (partial "series/order.html" (dict "term" .Term "pages" $members)).pages -}}

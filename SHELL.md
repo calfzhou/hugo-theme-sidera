@@ -832,3 +832,22 @@ pages without a collection, and later list/child paginator pages have no reading
 Published eligibility follows native Pages (current language, draft/future/list/render settings);
 known excluded or untranslated nodes do not become navigation links. Hidden child cards do not
 truncate the tree sequence. Labels are Previous / Parent / Next and 上一页 / 上级页面 / 下一页.
+
+
+## Series badges and outline
+
+Each member card shows a small series-name + position/total link; standalone non-series cards
+have no extra label. The link uses the existing taxonomy_links policy (section by default).
+The article_footer series component remains outside the boxed references/license/authors/share
+panel. It now displays the series title, localized Part N of M summary, complete ordered chapter
+list with aria-current and Previous/Next in series. It is distinct from collection reading
+navigation and its arbitrary list sorting. The outline starts open, collapses natively and uses
+a bounded scrolling list for long series; no JavaScript or part numbers embedded in titles.
+Omitting series from article_footer hides the outline, not the card's membership badge.
+Repeated instances use no duplicate IDs and have independent native disclosure state.
+
+Series always read oldest publication first; undated last, then Title/Path ties. The same helper
+feeds card badges, article outline and neighbor links. Native pins/series_weight and primary_date
+cannot alter this sequence. The prior series_order=weight mode now diagnoses; omission or
+publication remains valid. Global series term results are chronological too, but each owned
+article's badge/outline counts only the current collection's members. No new Series tab is added.
