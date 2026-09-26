@@ -261,11 +261,15 @@ article[data-renderer] { padding: 0; }
 .article-header :is(.author-list,.byline) { margin: 4px 0; }
 .article-header .article-terms { order: 3; }
 .byline { margin: 8px 0; font-size: 15px; }
-.article-tag-hub { margin-top: 16px; }
-.tag-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 12px 0 0; }
-.tag-chips a { display: block; padding: 4px 10px; background: var(--accent-soft); border-radius: 6px; font-size: 13px; text-decoration: none; }
-.tag-chips a:is(:hover,:focus-visible) { background: var(--accent); color: var(--canvas); }
-.tag-chips a:active { box-shadow: inset 0 0 0 2px var(--text); }
+/* Stellar article-tags + tag-chip: quiet centered pills with an accented hover glyph. */
+.tag-chips { list-style: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 18px; padding: 0; margin: 0; }
+.tag-chips li { min-width: 0; max-width: 100%; margin: 9px 0; }
+.tag-chips a { display: inline-flex; align-items: center; max-width: 100%; padding: .5em 13.5px; background: var(--panel); border-radius: 999px; font-size: 13px; font-weight: 500; line-height: 1.6; text-decoration: none; color: var(--muted); }
+.tag-chips a span { min-width: 0; overflow-wrap: anywhere; }
+.tag-chips .icon { width: 1em; height: 1em; margin-right: .25em; opacity: .4; color: inherit; }
+.tag-chips a:is(:hover,:focus-visible) { background: var(--line); color: var(--text); }
+.tag-chips a:is(:hover,:focus-visible) .icon { color: var(--accent); opacity: 1; }
+.tag-chips a:active { box-shadow: inset 0 0 0 2px var(--accent); }
 .tag-chips:empty { display: none; }
 article[data-renderer] .prose { max-width: 65ch; margin-inline: auto; }
 .prose { color: var(--muted); font-family: var(--reading); font-size: 1rem; line-height: 1.85; }
@@ -325,9 +329,8 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
 .share-copy-fallback { margin-top: 12px; }
 .share-copy-fallback label { display: block; color: var(--muted); font-size: 14px; }
 .share-copy-fallback input { display: block; width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--canvas); color: var(--text); font: inherit; }
-.article-footer .article-tag-hub { margin: 0; font-size: 12px; }
-.article-footer .tag-chips { margin: 8px 0 16px; }
-.article-footer .tag-chips:last-child { margin-bottom: 0; }
+.article-footer > [data-footer-item="terms"] + .article-footer-box { margin-top: 36px; }
+.article-footer .tag-chips a:is(:hover,:focus-visible) { background: var(--line); color: var(--text); }
 .footer-meta { margin: 0; font-size: 13px; color: var(--muted); }
 .article-footer .authored-text,.site-footer .authored-text { padding: 0; }
 .author-list { list-style: none; padding: 0; margin: 12px 0; display: flex; gap: 6px 16px; flex-wrap: wrap; }

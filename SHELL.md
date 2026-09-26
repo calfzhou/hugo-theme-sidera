@@ -380,7 +380,7 @@ Site/minimal fallback. Ordinary section params do not become descendant defaults
 
 | Region / default items | What renders |
 |---|---|
-| article_footer=[terms,references,license,authors,share,series,text,links] | terms: actual assigned tags/categories and contextual hubs; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
+| article_footer=[terms,references,license,authors,share,series,text,links] | terms: actual assigned tag/category pills, without collection-hub links; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
 | Article item authors | Ordered native authors with optional local portrait cards and edit_url. show_authors still applies. Attribution is footer-only; the independent custom byline is unchanged. |
 | site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized built_with Markdown (default Built with Hugo · Sidera) |
 
@@ -783,3 +783,14 @@ icons=false uses text. Edit uses the existing verified Stellar/Solar icon source
 Native QR disclosure, email/edit/provider links and authored Markdown work without JavaScript.
 No comments, related-post recommendations, new previous/next logic, automated references or
 Git-derived contributors are introduced in this slice.
+
+
+## Article tag pills
+
+The terms component follows Stellar article-tags/tag-chip styling: centered wrapping pills,
+neutral surface, full rounded ends, muted hashtag/category icons and accent icons on hover/focus.
+The article no longer repeats All tags in … or collection/category hub links; these remain in
+sidebar/navigation components. Only directly assigned terms render, retaining native scoped/global
+link policy and full hierarchy keys. Categories remain supported alongside tags. No assignment,
+term membership or URL changes. Empty lists disappear, icons=false removes decorative glyphs,
+and repeated/header-opt-in terms retain their unique IDs. Terms stay outside the boxed footer.

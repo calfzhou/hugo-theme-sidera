@@ -10,7 +10,7 @@
     <h1>{{ .Title }}</h1>
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     {{ partial "sidera/article-dates.html" (dict "Page" . "Settings" $settings) }}
-    {{ if $settings.terms_in_header }}<div class="article-terms">{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Prefix" "header-") }}</div>{{ end }}
+    {{ if $settings.terms_in_header }}<div class="article-terms">{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Settings" $settings "Prefix" "header-") }}</div>{{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}
     {{ if $showBody }}<div class="prose">{{ .Content }}</div>
