@@ -47,7 +47,6 @@ summary:active { background-color: var(--accent-soft); }
 a, h1, h2, h3, p, li { overflow-wrap: anywhere; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
 #main:focus { outline: none; }
-::selection { background: var(--accent); color: var(--canvas); }
 h1,h2,h3,h4 { line-height: 1.35; text-wrap: pretty; font-weight: 600; }
 h1 { font-size: 28px; margin: .65rem 0 1rem; }
 h2 { font-size: 25px; font-weight: 500; } h3 { font-size: 21px; font-weight: 500; }
@@ -301,7 +300,6 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose a.heading-anchor:is(:hover,:focus-visible,:active) { background: hsl(14 100% 57%); color: #fff; text-decoration: none; }
 .prose > :first-child { margin-top: 0; }
 .prose > :last-child { margin-bottom: 0; }
-.prose ::selection { background: color-mix(in srgb,var(--accent) 80%,var(--text)); color: var(--canvas); }
 .prose strong { color: var(--text); font-weight: 700; }
 .prose a { color: color-mix(in srgb,var(--link) 85%,var(--text)); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .prose a:is(:hover,:focus-visible) { color: color-mix(in srgb,var(--link) 85%,var(--text)); background: var(--accent-soft); text-decoration-color: currentColor; }

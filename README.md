@@ -62,8 +62,9 @@ Ordinary Markdown uses the existing 18px local/system reading stack and bounded 
 track, with 1.7 line height, explicit heading hierarchy and compact nested lists/quotes.
 Quotation text is muted separately from the rest of the prose; its hover/focus bar uses
 a subdued half-opacity accent, following Stellar. Links and emphasis are not faded as a group.
-Body links and code tokens adapt the existing palette for contrast, including selected text
-and highlighted code lines; global shell colors/fonts are unchanged. No new parameter is needed.
+Body links and code tokens adapt the existing palette for contrast, including highlighted
+code lines; global shell colors/fonts are unchanged. No new parameter is needed. Text selection follows browser/OS defaults site-wide, as in
+Stellar; there is no global or article-only selection-color override.
 
 Native Hugo/Goldmark renders paragraphs, emphasis/strong/strikethrough, ordered/unordered/task
 lists, links, rules, tables and footnotes with the site's enabled extensions. Tasks retain
