@@ -90,7 +90,21 @@ print(value)
 ````
 
 Code/line-number tables have one local horizontal scrollport, separate from ordinary data
-tables. Line numbers are not selected with code. Wide tables/code retain visible native
+tables. Line numbers are not selected with code. Ordinary fences have increased vertical padding
+and a top-right language label. With JavaScript, hovering/focusing the block reveals a native
+Copy button; successful copying shows Copied for three seconds and uses the existing site
+toast. Touch layouts expose the language and Copy together without requiring hover.
+The corner control stays outside the horizontal scrollport. Clipboard text comes from the
+rendered code alone, stripping native line-number spans (not labels or toolbar text); internal
+tabs/newlines are preserved. As with native highlighted output, no final source newline is
+invented. Denied/unavailable clipboard access reveals and selects a read-only manual-copy field
+and shows a localized failure toast, never a false Copied state. No-JS retains language metadata
+and selectable/scrollable code without an inert button. Native hl_inline output stays inline
+without a toolbar; the built-in highlight shortcode is not replaced by this fence hook.
+
+A pointer click no longer paints a thick/double border. Keyboard focus draws one 2px outline
+around the highlighted scrollport, suppressing the redundant inner pre outline. This is focus
+feedback, not a code border or syntax-highlighting state. Wide tables/code retain visible native
 scrollbars; keyboard scrolling is spot-checked in Chromium, not certified across browsers.
 Native table column alignment is preserved, with quiet headers and row separators.
 

@@ -7,7 +7,8 @@ Pinned collection tabs also adapt navbar.styl and the bar-glass/newblur mixins i
 Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
 Ordinary Markdown styles also adapt _components/md.styl, pages/article-tech.styl and
-_common/base.styl, title.styl, blockquote.styl, pre.styl and highlight.styl. Native
+_common/base.styl, title.styl, blockquote.styl, pre.styl and highlight.styl. Code-toolbar presentation also follows _plugins/copycode.styl; temporary copy feedback follows
+source/js/plugins/copycode.js, with native buttons, localized failure text and manual-copy fallback. Native
 Goldmark/Chroma structure replaces Hexo markup; readable palette tokens and keyboard
 scrollbars are retained rather than copying hidden scrollbars or low-contrast colors.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.

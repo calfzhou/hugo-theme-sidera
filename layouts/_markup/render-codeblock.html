@@ -1,4 +1,16 @@
-{{- /* HighlightCodeBlock already consumes .Options. Passing them again normalizes
-      hl_lines twice; override only the palette policy, leaving native options intact. */ -}}
+{{- /* HighlightCodeBlock already consumes .Options; override only palette policy. */ -}}
 {{- $result := transform.HighlightCodeBlock . (dict "noClasses" false) -}}
-{{- $result.Wrapped -}}
+{{- /* Respect actual inline output, whether selected by fence or site options. */ -}}
+{{- if strings.HasPrefix (string $result.Wrapped) "<code" -}}
+  {{- $result.Wrapped -}}
+{{- else -}}
+  {{- $language := .Type | default (T "code_language_text") -}}
+  <div class="code-block">
+    <div class="code-toolbar">
+      <span class="code-language" title="{{ $language }}">{{ $language }}</span>
+      <button class="code-copy" type="button" hidden aria-label="{{ T "code_copy_label" (dict "language" $language) }}" data-copy="{{ T "code_copy" }}" data-copied="{{ T "code_copied" }}" data-success="{{ T "code_copy_success" }}" data-failure="{{ T "code_copy_failed" }}">{{ T "code_copy" }}</button>
+    </div>
+    {{- $result.Wrapped -}}
+    <textarea class="code-copy-fallback" hidden readonly aria-label="{{ T "code_copy_manual" }}"></textarea>
+  </div>
+{{- end -}}

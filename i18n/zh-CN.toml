@@ -285,3 +285,24 @@ other = "链接到标题：{{ .title }}"
 
 [external_link_suffix]
 other = "（外部链接）"
+
+[code_language_text]
+other = "纯文本"
+
+[code_copy]
+other = "复制"
+
+[code_copy_label]
+other = "复制 {{ .language }} 代码"
+
+[code_copied]
+other = "已复制"
+
+[code_copy_success]
+other = "代码已复制到剪贴板。"
+
+[code_copy_failed]
+other = "无法自动复制，请手动复制已选中的代码。"
+
+[code_copy_manual]
+other = "供手动复制的代码"

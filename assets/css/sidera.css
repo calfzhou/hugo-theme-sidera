@@ -284,7 +284,7 @@ article[data-renderer] { padding: 0; }
    to native Goldmark/Chroma markup. No changes to the surrounding article frame. */
 article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose { color: color-mix(in srgb,var(--text) 80%,transparent); font-family: var(--reading); font-size: 1rem; line-height: 1.7; overflow-wrap: anywhere; }
-.prose :is(p,ul,ol,blockquote,pre,table,figure,.highlight) { margin-block: 1rem; }
+.prose :is(p,ul,ol,blockquote,pre,table,figure,.highlight,.code-block) { margin-block: 1rem; }
 .prose :is(h1,h2,h3,h4,h5,h6) { font-family: var(--ui); color: var(--text); font-weight: 500; line-height: 1.5; margin-block: 1.5em .75em; overflow-wrap: anywhere; scroll-margin-top: 1.5rem; }
 .prose h1 { font-size: 1.8em; font-weight: 600; }
 .prose h2 { font-size: 1.6em; }
@@ -328,14 +328,16 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose figcaption h4 { color: var(--text); font-weight: 500; }
 .prose code { font-family: var(--code); font-size: .85em; overflow-wrap: anywhere; }
 .prose :not(pre) > code { padding: .15em .3em; background: var(--panel); border-radius: 4px; }
-.prose pre { max-width: 100%; overflow: auto; padding: .85rem 1rem; background: var(--panel); border: 0; border-radius: 8px; font: .85rem/1.6 var(--code); tab-size: 4; }
+.prose pre { max-width: 100%; overflow: auto; padding: 1.75rem 1rem; background: var(--panel); border: 0; border-radius: 8px; font: .85rem/1.6 var(--code); tab-size: 4; }
 .prose pre code { padding: 0; font: inherit; overflow-wrap: normal; word-break: normal; }
 .prose .highlight { max-width: 100%; }
 .prose .highlight pre { margin: 0; }
 /* Chroma's optional line-number table is layout, never an ordinary data table.
    One outer scrollport keeps gutter and code lines aligned at every width. */
 .prose .highlight:has(.lntable) { overflow-x: auto; border-radius: 8px; background: var(--panel); }
-.prose .highlight:has(.lntable):focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+/* One keyboard-only ring on the scrollport, never a second outline around its pre. */
+.prose .highlight:has(pre:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+.prose .highlight pre:focus { outline: none; }
 .prose .chroma .lntable { display: table; margin: 0; border: 0; border-spacing: 0; border-collapse: collapse; width: 100%; max-width: none; overflow: visible; }
 .prose .chroma .lntd { padding: 0; border: 0; vertical-align: top; }
 .prose .chroma .lntd:first-child { width: 1%; }
@@ -346,6 +348,23 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose .chroma .line { display: flex; }
 .prose .chroma .cl { flex: 1; }
 .prose .chroma .hl { background: var(--line); }
+/* Stellar-style corner metadata becomes a real copy button, outside horizontal scrolling. */
+.code-toolbar { display: none; }
+.prose .code-block { position: relative; min-width: 0; }
+.prose .code-block > :is(.highlight,pre) { margin: 0; }
+.prose .code-toolbar { position: absolute; z-index: 1; top: 4px; right: 4px; display: grid; max-width: calc(100% - 8px); font: .72rem/1.5 var(--ui); }
+.code-language,.code-copy { grid-area: 1 / 1; min-width: 0; padding: 4px 8px; }
+.code-language { color: var(--muted); text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-copy { border: 0; border-radius: 4px; background: var(--canvas); color: var(--muted); font: inherit; cursor: pointer; opacity: 0; pointer-events: none; min-height: 28px; min-width: 44px; }
+.code-block.copy-ready:is(:hover,:focus-within,.is-copied) .code-language { visibility: hidden; }
+.code-block.copy-ready:is(:hover,:focus-within,.is-copied) .code-copy { opacity: 1; pointer-events: auto; }
+.code-copy:is(:hover,:focus-visible),.code-block.is-copied .code-copy { color: color-mix(in srgb,var(--accent) 85%,var(--text)); background: var(--canvas); }
+.prose .code-copy-fallback { display: block; width: 100%; min-height: 6rem; max-height: 14rem; resize: vertical; margin-top: .5rem; padding: .75rem; border: 1px solid var(--line); border-radius: 4px; background: var(--canvas); color: var(--text); font: .85rem/1.6 var(--code); }
+@media (hover: none), (pointer: coarse) {
+  .code-block.copy-ready .code-toolbar { display: flex; align-items: center; gap: 4px; }
+  .code-block.copy-ready .code-language { visibility: visible; }
+  .code-block.copy-ready .code-copy { opacity: 1; pointer-events: auto; flex: none; }
+}
 /* Ordinary tokens reuse palette-aware, readable colors instead of fixed inline colors. */
 .prose .chroma { color: var(--text); }
 .prose .chroma :is(.c,.ch,.cm,.c1,.cs,.cp,.cpf,.ln,.lnt) { color: var(--muted); }

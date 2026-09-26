@@ -288,3 +288,24 @@ other = "Link to heading: {{ .title }}"
 
 [external_link_suffix]
 other = "(external link)"
+
+[code_language_text]
+other = "Text"
+
+[code_copy]
+other = "Copy"
+
+[code_copy_label]
+other = "Copy {{ .language }} code"
+
+[code_copied]
+other = "Copied"
+
+[code_copy_success]
+other = "Code copied to clipboard."
+
+[code_copy_failed]
+other = "Could not copy. Copy the selected code manually."
+
+[code_copy_manual]
+other = "Code for manual copying"
