@@ -141,6 +141,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | license | Markdown string, true (localized neutral default), or false. Default true; empty string also hides. Content notice, not a theme software license. |
 | share | Ordered unique array of link/wechat/weibo/email or false; default [link,wechat,email]. []/false hides. Local Hugo QR, no QR service. |
 | edit_url | Explicit safe URL string, default empty; shown in the Authors section, no automatic repository mapping/API. show_authors=false hides that section including edit link. |
+| article_end_text | Optional final Markdown after navigation and any docs child list, default empty. Native site/cascade/page overrides; independent of footer text/visibility. Empty clears. |
 | article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
 | footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
 | terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |

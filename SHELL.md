@@ -840,14 +840,15 @@ Each member card shows a small series-name + position/total link; standalone non
 have no extra label. The link uses the existing taxonomy_links policy (section by default).
 The article_footer series component remains outside the boxed references/license/authors/share
 panel. It now displays the series title, localized Part N of M summary, complete ordered chapter
-list with aria-current and Previous/Next in series. It is distinct from collection reading
+list with aria-current. There is no separate Previous/Next in series pair: the outline already
+links directly to every part. It is distinct from collection reading
 navigation and its arbitrary list sorting. The outline starts open, collapses natively and uses
 a bounded scrolling list for long series; no JavaScript or part numbers embedded in titles.
 Omitting series from article_footer hides the outline, not the card's membership badge.
 Repeated instances use no duplicate IDs and have independent native disclosure state.
 
 Series always read oldest publication first; undated last, then Title/Path ties. The same helper
-feeds card badges, article outline and neighbor links. Native pins/series_weight and primary_date
+feeds card badges and the article outline. Native pins/series_weight and primary_date
 cannot alter this sequence. The prior series_order=weight mode now diagnoses; omission or
 publication remains valid. Global series term results are chronological too, but each owned
 article's badge/outline counts only the current collection's members. No new Series tab is added.
@@ -863,3 +864,20 @@ A separate surface wraps the horizontally scrollable nav so mobile tab scrolling
 glass layers away. Pseudo-layers are pointer-transparent. Actual geometry is rechecked on scroll,
 resize, pageshow and visualViewport resize, reverting at the page top. No scroll-direction hiding.
 Without JavaScript or backdrop-filter support, the solid readable card surface remains available.
+
+
+## Final article content
+
+`params.article_end_text` is optional Markdown rendered after the article footer and collection
+navigation; on children-mode sections it also follows the child list. Default is empty. Native
+site/language/cascade/page precedence applies, and empty text clears an inherited value. It uses
+the normal site-wide Markdown/raw-HTML policy, not an extra executable template format.
+
+This is separate from article_text, which still belongs to the configurable footer text component.
+Existing footer component ordering is not changed to move one site's contact sentence. The showcase
+now sets article_end_text instead, so Get in touch is the final article section. It is absent from
+later child pagers and generated/index views, and does not depend on article_footer being enabled.
+
+The small `sidera/article-end.html` partial accepts Page, Owner and Settings. A future comment
+integration can replace this final slot without moving the footer or collection navigation. No
+comment provider, external request or new runtime script is introduced now.

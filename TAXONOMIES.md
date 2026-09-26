@@ -81,8 +81,8 @@ Global series term results also sort the complete union by publication date with
 with an owner still use only that owner's subset for their positions and reading navigation.
 
 Cards show a compact series name and current/total badge. The article's existing series component
-now contains a native collapsible ordered outline, current-page highlight and explicitly labeled
-Previous/Next in series. Context/positions are shared and cached per term/owner so list pagination
+now contains a native collapsible ordered outline and current-page highlight. The separate
+Previous/Next in series pair is omitted; adjacent chapters remain available in the outline. Context/positions are shared and cached per term/owner so list pagination
 cannot shrink the count. No series means no badge or outline; a singleton has Part 1 of 1 and no
 neighbor links. Standalone pages with no owner use the global series sequence. Existing
 taxonomy_links policy controls the overview link; member positions stay owner-scoped when owned.

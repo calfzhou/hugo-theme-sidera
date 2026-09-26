@@ -10,7 +10,7 @@
   {{- if not (isset $page.Site.Taxonomies (printf "%v" .)) -}}{{- errorf "Sidera %s: invalid taxonomy_navigation item %v" $page.Path . -}}{{- end -}}
   {{- if in $seen . -}}{{- errorf "Sidera %s: duplicate taxonomy_navigation item %v" $page.Path . -}}{{- end -}}{{- $seen = $seen | append . -}}
 {{- end -}}{{- end -}}
-{{- range $key := slice "social_menu" "menu" "links_menu" "text" "icon" "byline" "article_text" "article_links_menu" "footer_text" "footer_menu" -}}
+{{- range $key := slice "social_menu" "menu" "links_menu" "text" "icon" "byline" "article_end_text" "article_text" "article_links_menu" "footer_text" "footer_menu" -}}
   {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
 {{- end -}}
 {{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}

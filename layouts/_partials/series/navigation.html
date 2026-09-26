@@ -1,17 +1,12 @@
 {{- $page := . -}}
 {{- with partialCached "series/context.html" . .Path -}}
+{{- $series := . -}}
+{{- /* Adjacent chapter markers/tooltips stay on existing outline links, not duplicate controls. */ -}}
 <nav class="series-navigation" aria-label="{{ T "series" }}" data-series="{{ .Term.Data.Term }}" data-series-position="{{ .Position }}" data-series-total="{{ .Total }}">
   <a class="series-title" href="{{ .Target.RelPermalink }}">{{ T "series" }} · {{ .Term.LinkTitle }}</a>
   <details class="series-outline" open>
     <summary>{{ T "series_part" (dict "current" (lang.FormatNumber 0 .Position) "total" (lang.FormatNumber 0 .Total)) }}</summary>
-    <ol>{{ range .Pages }}<li><a href="{{ .RelPermalink }}"{{ if eq . $page }} aria-current="page"{{ end }}>{{ .LinkTitle }}</a></li>{{ end }}</ol>
+    <ol>{{ range $index, $member := .Pages }}<li><a href="{{ .RelPermalink }}"{{ if eq . $page }} aria-current="page"{{ else if eq $index (sub $series.Position 2) }} data-series-previous title="{{ T "series_previous" }}"{{ else if eq $index $series.Position }} data-series-next title="{{ T "series_next" }}"{{ end }}>{{ .LinkTitle }}</a></li>{{ end }}</ol>
   </details>
-  {{- $index := sub .Position 1 -}}
-  {{- if gt .Total 1 -}}
-  <div class="series-neighbors">
-    {{- if gt $index 0 -}}{{- with index .Pages (sub $index 1) -}}<a data-series-previous href="{{ .RelPermalink }}"><span>{{ T "series_previous" }}</span><span>{{ .LinkTitle }}</span></a>{{- end -}}{{- end -}}
-    {{- if lt .Position .Total -}}{{- with index .Pages .Position -}}<a data-series-next href="{{ .RelPermalink }}"><span>{{ T "series_next" }}</span><span>{{ .LinkTitle }}</span></a>{{- end -}}{{- end -}}
-  </div>
-  {{- end -}}
 </nav>
 {{- end -}}

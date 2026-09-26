@@ -5,7 +5,7 @@
 {{ if and $policy.list $children }}{{ $pager = .Paginate $children $policy.size }}{{ end }}
 
 {{ $body := true }}{{ with $pager }}{{ $body = eq .PageNumber 1 }}{{ end }}
-{{ partial "article.html" (dict "page" . "body" $body "breadcrumbs" (partial "docs/breadcrumbs.html" .)) }}
+{{ partial "article.html" (dict "page" . "body" $body "deferEnd" true "breadcrumbs" (partial "docs/breadcrumbs.html" .)) }}
 {{ if not $body }}<p><a href="{{ .RelPermalink }}">{{ T "docs_full_page" }}</a></p>{{ end }}
 {{ with $pager }}
   <section aria-labelledby="children-heading">
@@ -16,3 +16,5 @@
     {{ partial "lists/navigation.html" . }}
   </section>
 {{ end }}
+
+{{ if $body }}{{ partial "sidera/article-end.html" (dict "Page" . "Owner" $owner "Settings" (partialCached "sidera/settings.html" . .Path)) }}{{ end }}

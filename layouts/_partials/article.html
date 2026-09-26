@@ -1,6 +1,6 @@
   {{ $owner := partial "collection-owner.html" .page }}
   {{ $breadcrumbs := .breadcrumbs }}
-  {{ $showBody := .body }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
+  {{ $showBody := .body }}{{ $deferEnd := .deferEnd }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
   {{ with .page }}
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
@@ -17,5 +17,8 @@
       {{ partial "sidera/footer.html" (dict "Page" . "Owner" $owner "Settings" $settings "Region" "article-footer") }}
     {{ end }}
   </article>
-  {{ if $showBody }}{{ partial "navigation/render.html" . }}{{ end }}
+  {{ if $showBody }}
+    {{ partial "navigation/render.html" . }}
+    {{ if not $deferEnd }}{{ partial "sidera/article-end.html" (dict "Page" . "Owner" $owner "Settings" $settings) }}{{ end }}
+  {{ end }}
   {{ end }}
