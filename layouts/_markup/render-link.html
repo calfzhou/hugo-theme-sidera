@@ -1,0 +1,5 @@
+{{- $href := partial "links/destination.html" . -}}
+{{- /* Go html/template does not allow tel by default; allow this scheme only. */ -}}
+{{- if eq (lower (urls.Parse $href).Scheme) "tel" -}}{{- $href = $href | safeURL -}}{{- end -}}
+<a href="{{ $href }}"{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ .Text }}</a>
+{{- /* Keep Goldmark's rendered label and html/template URL/title escaping. */ -}}

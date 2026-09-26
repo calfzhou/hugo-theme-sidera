@@ -211,7 +211,7 @@ hugo --buildDrafts --buildFuture --buildExpired --destination "$run/all-states" 
 
 Bundled actual docs remain outside default content and need explicit mounts (DOCS.md); preset
 metadata never enables them. Standalone reading/shell, localization, dark/light/auto behavior,
-local resources and safety remain intact. No P3 service/renderers, full browser/accessibility
+local resources and safety remain intact. P3-A adds the [source-link contract](LINKS.md); no later P3 service/renderers, full browser/accessibility
 certification, distribution license grant or P2 visual completion is implied.
 
 ## Component instances
@@ -239,3 +239,11 @@ Social entries use native menu params.icon/image or the whitelisted onclick acti
 Sidera.cycleColorMode(). No arbitrary JavaScript, fetched icon content or template paths are
 accepted. Owner color-mode defaults are separate from page/instance settings and visitor storage.
 SHELL.md defines exact behavior, local-image safety, six-entry bound and no-JS fallback.
+
+## Source-link diagnostics
+
+[LINKS.md](LINKS.md) is the authoring/override contract. Site/language-only
+`params.link_heading_checks` is a boolean, default false; it is not inherited through
+page/cascade/preset settings. Unresolved sources warn by default through native
+`sidera-link-source`; native-heading checks are opt-in because non-heading IDs are valid.
+No native markup or security setting is changed to activate the theme link hook.

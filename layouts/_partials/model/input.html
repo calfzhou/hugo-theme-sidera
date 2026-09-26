@@ -4,7 +4,7 @@
   {{- range $key, $_ := partial "model/defaults.html" . -}}
     {{- if and (ne $key "menu") (isset $fm $key) -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}
   {{- end -}}
-  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
+  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" "link_heading_checks" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
   {{- if isset $params "sidera" -}}
     {{- if not (reflect.IsMap $params.sidera) -}}{{- errorf "Sidera private metadata namespace must be a map: %s" $source -}}
     {{- else -}}{{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
@@ -15,6 +15,7 @@
 {{- end -}}
 {{- if isset $params "appearance" -}}{{- errorf "Sidera params.appearance was renamed to site/language params.color_mode: %s" $source -}}{{- end -}}
 {{- if isset $params "color_mode" -}}{{- errorf "Sidera color-mode defaults belong in site/language params.color_mode: %s" $source -}}{{- end -}}
+{{- if isset $params "link_heading_checks" -}}{{- errorf "Sidera link_heading_checks belongs in site/language params, not page/cascade params: %s" $source -}}{{- end -}}
 {{- if isset $params "widgets" -}}{{- errorf "Sidera widget definitions belong in site/language params.widgets, not page/cascade params: %s" $source -}}{{- end -}}
 {{- if isset $params "scope_root" -}}
   {{- if or (not .section) (ne (printf "%T" $params.scope_root) "bool") -}}{{- errorf "Sidera scope_root must be a section boolean: %s" $source -}}{{- end -}}

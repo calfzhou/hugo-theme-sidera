@@ -1,0 +1,75 @@
+{{- /* Resolve parsed link nodes, never raw Markdown. Native Pages/resources own URLs.
+     Source paths are content-root-relative after resolving against PageInner.File.Dir;
+     exact File.Path checks prevent logical lookup from inventing a source filename. */ -}}
+{{- $page := .PageInner -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- $target := false -}}
+{{- $sourceLink := and (not $u.IsAbs) (not $u.Host) (eq (lower (path.Ext $u.Path)) ".md") -}}
+{{- if and (not $u.IsAbs) (not $u.Host) $u.Path -}}
+  {{- $base := "" -}}{{- with $page.File -}}{{- $base = replace .Dir "\\" "/" -}}{{- end -}}
+  {{- $source := path.Clean (path.Join $base $u.Path) -}}
+  {{- if hasPrefix $u.Path "/" -}}{{- $source = path.Clean (strings.TrimPrefix "/" $u.Path) -}}{{- end -}}
+  {{- $bounded := not (or (eq $source "..") (hasPrefix $source "../") (strings.Contains $u.Path "\\") (findRE `[\x00-\x1f\x7f]` $u.Path)) -}}
+  {{- if $bounded -}}
+    {{- if $sourceLink -}}
+      {{- /* Explicit source filenames select their actual language, never an invented
+           translation. Current language wins if a source is mounted in several sites. */ -}}
+      {{- $sites := slice $page.Site -}}
+      {{- range hugo.Sites -}}{{- if ne .Language.Name $page.Site.Language.Name -}}{{- $sites = $sites | append . -}}{{- end -}}{{- end -}}
+      {{- range $sites -}}
+        {{- with .GetPage (printf "/%s" $source) -}}
+          {{- $candidate := . -}}
+          {{- with .File -}}{{- if eq (replace .Path "\\" "/") $source -}}
+            {{- if $target -}}{{- errorf "Sidera ambiguous source link %q (%s): exact source occurs in multiple other languages" $.Destination $.Position -}}{{- end -}}
+            {{- $target = $candidate -}}
+          {{- end -}}{{- end -}}
+        {{- end -}}
+        {{- if and $target (eq .Language.Name $page.Site.Language.Name) -}}{{- break -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- /* Exact, non-glob resources only. No GetPage fallback for ordinary web paths. */ -}}
+    {{- if not $target -}}{{- $target = $page.Resources.Get $u.Path -}}{{- end -}}
+    {{- if not $target -}}
+      {{- /* Cross-bundle files follow their owning bundle's native URL, even with a
+           dated permalink. Walk only virtual content ancestors, not the filesystem. */ -}}
+      {{- $dir := path.Dir $source -}}
+      {{- range seq (len (split $source "/")) -}}
+        {{- with $page.Site.GetPage (printf "/%s" $dir) -}}
+          {{- $owner := . -}}
+          {{- with .File -}}
+            {{- if eq (strings.TrimSuffix "/" (replace .Dir "\\" "/")) $dir -}}
+              {{- $target = $owner.Resources.Get (strings.TrimPrefix (printf "%s/" $dir) $source) -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if or $target (eq $dir ".") -}}{{- break -}}{{- end -}}
+        {{- $dir = path.Dir $dir -}}
+      {{- end -}}
+    {{- end -}}
+    {{- if not $target -}}{{- $target = resources.Get $u.Path -}}{{- end -}}
+  {{- end -}}
+  {{- if and $target $target.RelPermalink -}}
+    {{- $href = $target.RelPermalink -}}
+    {{- if or $u.RawQuery $u.ForceQuery -}}{{- $href = printf "%s?%s" $href $u.RawQuery -}}{{- end -}}
+    {{- if strings.Contains .Destination "#" -}}{{- $href = printf "%s#%s" $href $u.EscapedFragment -}}{{- end -}}
+    {{- if and $sourceLink $u.Fragment (reflect.IsPage $target) $page.Site.Params.link_heading_checks -}}
+      {{- if not ($target.Fragments.Identifiers.Contains $u.Fragment) -}}
+        {{- warnidf "sidera-link-heading" "Sidera link heading: %q has no native heading %q (%s -> %s); non-heading IDs require separate verification" .Destination $u.Fragment .Position $target.File.Path -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else if $sourceLink -}}
+    {{- $reason := "unresolved source (missing or unavailable in the active content mounts)" -}}
+    {{- $static := false -}}
+    {{- if not $bounded -}}
+      {{- $reason = "source path leaves the content root or contains unsafe path characters" -}}
+    {{- else -}}
+      {{- /* Existence only, never read a body or use filesystem paths as destinations.
+           This local hint is not a second Hugo loader or arbitrary mount inventory. */ -}}
+      {{- if os.FileExists (path.Join "content" $source) -}}{{- $reason = "source exists locally but has no published URL (excluded, disabled language, or a content resource)" -}}{{- end -}}
+      {{- if hasPrefix $u.Path "/" -}}{{- $static = os.FileExists (path.Join "static" (strings.TrimPrefix "/" $u.Path)) -}}{{- end -}}
+    {{- end -}}
+    {{- if not $static -}}{{- warnidf "sidera-link-source" "Sidera link source: %s: %q (%s; content/%s)" $reason .Destination .Position $source -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $href -}}

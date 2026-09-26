@@ -12,6 +12,6 @@ This small theme-owned sample proves optional documentation publishing. It is no
 
 ## Explore the model
 
-Read [the authoring example]({{< relref "./authoring" >}}) and [the mounting note]({{< relref "./publishing" >}}).
+Read [the authoring example](authoring/_index.md) and [the mounting note](publishing/_index.md).
 
 ![Three linked nodes](nodes.svg)

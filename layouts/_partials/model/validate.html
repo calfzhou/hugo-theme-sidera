@@ -1,3 +1,6 @@
+{{- if and (isset site.Params "link_heading_checks") (ne (printf "%T" site.Params.link_heading_checks) "bool") -}}
+  {{- errorf "Sidera site/language params.link_heading_checks must be boolean" -}}
+{{- end -}}
 {{- $widgets := partialCached "sidera/widgets.html" site "widgets" -}}
 {{- range site.Pages -}}
   {{- $page := . -}}

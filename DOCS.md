@@ -80,7 +80,7 @@ The first entry preserves normal site content when the site overrides its conten
 The showcase keeps this in `docs-on.toml`; normal config is off. Its site-owned handbook remains
 ordinary content independent of the optional sample. An alternate nested prefix also works;
 the sample root explicitly declares scope_root so its browsing identity survives that mount.
-Native relref/resource links follow the mounted Page, not hard-coded URL concatenation.
+Native source-relative Markdown/resource links follow the mounted Page, not hard-coded URL concatenation.
 
 Site files at the same source path override theme/mounted content natively, not as a two-body merge.
 Filename-translated authored sample nodes are supported within the tested mount contract. This is
@@ -117,3 +117,6 @@ List mode instead follows the collection's actual main list. For a children-mode
 its ordered immediate-child list. List mode omits Parent; deeper pages not in that list have
 no reading controls. Use siblings or sequential for full tree navigation. The controls appear
 on canonical content pages only, not later child pagers, and do not change series navigation.
+
+The optional sample now authors ordinary `_index.md` links (see [LINKS.md](LINKS.md));
+there is still one source under `docs/content`, no copied site docs or default-on mount.

@@ -124,6 +124,13 @@ Footnotes remain in the body, independent of configured article/site footers. Th
 new script assets, plugins, fonts or dependencies in this body pass.
 
 
+## Source links
+
+Ordinary editor-relative `.md` links now resolve to native Page/resource URLs, including
+custom dated blog routes. [LINKS.md](LINKS.md) defines exact source matching, language/resource
+boundaries, diagnostics, safe rendering and native project-hook precedence. P3-A is a scoped
+implementation for review, not completion of the remaining P3 capabilities.
+
 ## External article links
 
 Article text links to a different HTTP(S) origin show a small `↗` suffix. It is muted at rest
@@ -137,7 +144,7 @@ article body. Browser URL parsing compares the resolved destination's scheme/hos
 current page origin, correctly handling protocol-relative URLs, case and default ports. A link
 to a production host from a localhost preview is external to that preview, not silently remapped.
 No href, title, target or rel is changed; no new tab, link interception or destination fetch.
-Hugo's built-in/custom link rendering and multilingual resource resolution remain untouched.
+Sidera's [source-link hook](LINKS.md) supplies native destinations; this decoration never rewrites them.
 Without JavaScript, links retain their native appearance and behavior without the suffix.
 There is no observer for dynamically inserted content, new configuration or separate asset.
 

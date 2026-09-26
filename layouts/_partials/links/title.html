@@ -1,0 +1,14 @@
+{{- /* Hugo 0.166 passes the raw parsed title to hooks (including backslash escapes
+     and entities). Decode those tokens once, then let html/template escape the
+     attribute. Do not render the title as Markdown or trust it as HTML. */ -}}
+{{- $title := "" -}}
+{{- range findRE `\\[[:punct:]]|&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[a-zA-Z][a-zA-Z0-9]+);|[^\\&]+|[\\&]` . -}}
+  {{- $token := . -}}
+  {{- if and (hasPrefix . "\\") (eq (len .) 2) -}}
+    {{- $token = strings.TrimPrefix "\\" . -}}
+  {{- else -}}
+    {{- $token = htmlUnescape . -}}
+  {{- end -}}
+  {{- $title = printf "%s%s" $title $token -}}
+{{- end -}}
+{{- return $title -}}
