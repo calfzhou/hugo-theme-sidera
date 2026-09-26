@@ -19,5 +19,5 @@
     {{- end -}}
     {{- with $target -}}{{- $links = $links | append (dict "Page" . "Label" $label "Current" $current) -}}{{- end -}}
   {{- end -}}
-  {{- with $links -}}<nav class="collection-nav-tabs" data-collection-nav aria-label="{{ T "collection_navigation" }}">{{ range . }}<a href="{{ .Page.RelPermalink }}"{{ with .Current }} aria-current="{{ . }}"{{ end }}>{{ .Label }}</a>{{ end }}</nav>{{- end -}}
+  {{- with $links -}}<div class="collection-nav-surface"><nav class="collection-nav-tabs" data-collection-nav aria-label="{{ T "collection_navigation" }}">{{ range . }}<a href="{{ .Page.RelPermalink }}"{{ with .Current }} aria-current="{{ . }}"{{ end }}>{{ .Label }}</a>{{ end }}</nav></div>{{- end -}}
 {{- end -}}

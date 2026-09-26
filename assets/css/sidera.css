@@ -510,12 +510,22 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 /* Stellar collection navbar: real scoped links, compact selected tabs, sticky main placement. */
 .top-region { margin-bottom: 18px; }
 .top-region:has([data-collection-nav]) { position: sticky; top: var(--page-gap); z-index: 5; }
-.collection-nav-tabs { display: flex; align-items: center; gap: 4px; padding: 4px; margin: 0 18px; overflow-x: auto; scrollbar-width: none; border-radius: 12px; background: var(--surface); box-shadow: var(--card-shadow); }
+.collection-nav-surface { position: relative; isolation: isolate; margin: 0 18px; border-radius: 12px; background: var(--surface); box-shadow: var(--card-shadow); }
+.collection-nav-tabs { display: flex; align-items: center; gap: 4px; padding: 4px; margin: 0; overflow-x: auto; scrollbar-width: none; border-radius: inherit; }
 .collection-nav-tabs::-webkit-scrollbar { display: none; }
 .collection-nav-tabs a { flex: none; padding: .25rem .75rem; font-size: 16px; line-height: 2; font-weight: 500; color: var(--muted); border-radius: 8px; text-decoration: none; white-space: nowrap; }
 .collection-nav-tabs a:is(:hover,:focus-visible) { color: var(--text); background: var(--surface-hover); }
 .collection-nav-tabs a[aria-current] { color: var(--text); background: var(--tab-selected); box-shadow: 0 0 4px #00000014; backdrop-filter: saturate(300%); }
-.top-region.is-stuck .collection-nav-tabs { background: color-mix(in srgb,var(--surface) 75%,transparent); backdrop-filter: blur(20px) saturate(180%); }
+/* Stellar navbar-blur.pinned / newblur: translucent center plus saturated glass edges. */
+.collection-nav-surface { --nav-glass-fill: #fff3; --nav-glass-edge: inset 0 0 2px 1px #fff3; --nav-glass-text: 0 0 2px #0003, 0 0 4px #0006; }
+:root[data-color-scheme="light"] .collection-nav-surface { --nav-glass-fill: #ffffff4d; --nav-glass-edge: inset 0 0 4px 1px #ffffff80; --nav-glass-text: 0 0 4px #fff, 0 0 8px #ffffffcc, 0 0 16px #fff9; }
+.top-region.is-stuck .collection-nav-surface { box-shadow: 0 0 2px #0000000a, 0 2px 8px #0000000a, 0 4px 16px #0000000a; }
+@supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+  .top-region.is-stuck .collection-nav-surface { background: transparent; text-shadow: var(--nav-glass-text); }
+  .top-region.is-stuck .collection-nav-surface::before,.top-region.is-stuck .collection-nav-surface::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit; }
+  .top-region.is-stuck .collection-nav-surface::before { margin: 1px; background: var(--nav-glass-fill); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .top-region.is-stuck .collection-nav-surface::after { -webkit-backdrop-filter: saturate(300%) blur(16px); backdrop-filter: saturate(300%) blur(16px); mask-image: linear-gradient(white,20%,transparent,80%,white), linear-gradient(90deg,white,20%,transparent,80%,white); -webkit-mask-image: linear-gradient(white,20%,transparent,80%,white), linear-gradient(90deg,white,20%,transparent,80%,white); box-shadow: var(--nav-glass-edge); }
+}
 main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .taxonomy-index-list { list-style: none; padding: 0; margin: 18px; }
 .taxonomy-index-list .taxonomy-node { list-style: none; min-width: 0; }

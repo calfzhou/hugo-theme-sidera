@@ -114,9 +114,11 @@ if (topRegion) {
   const update = () => {
     scheduled = false;
     const inset = parseFloat(getComputedStyle(topRegion).top) || 0;
-    topRegion.classList.toggle('is-stuck', scrollY > 0 && topRegion.getBoundingClientRect().top <= inset + 1);
+    topRegion.classList.toggle('is-stuck', scrollY >= 2 && topRegion.getBoundingClientRect().top <= inset + 2);
   };
   addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } }, {passive: true});
   addEventListener('resize', update);
+  addEventListener('pageshow', update);
+  window.visualViewport?.addEventListener('resize', update);
   update();
 }

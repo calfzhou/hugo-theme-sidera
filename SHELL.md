@@ -851,3 +851,15 @@ feeds card badges, article outline and neighbor links. Native pins/series_weight
 cannot alter this sequence. The prior series_order=weight mode now diagnoses; omission or
 publication remains valid. Global series term results are chronological too, but each owned
 article's badge/outline counts only the current collection's members. No new Series tab is added.
+
+
+## Top-bar resting and pinned surfaces
+
+Collection tabs use Stellar's solid-card surface at rest. Once scrollY reaches 2px and the top
+region reaches its actual sticky inset (2px tolerance), the surface becomes layered glass:
+8px center blur with a light translucent fill, plus a 16px/300%-saturation masked edge and inset
+highlight. The existing active-tab treatment stays; geometry and link destinations do not change.
+A separate surface wraps the horizontally scrollable nav so mobile tab scrolling cannot drag the
+glass layers away. Pseudo-layers are pointer-transparent. Actual geometry is rechecked on scroll,
+resize, pageshow and visualViewport resize, reverting at the page top. No scroll-direction hiding.
+Without JavaScript or backdrop-filter support, the solid readable card surface remains available.
