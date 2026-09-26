@@ -794,3 +794,41 @@ sidebar/navigation components. Only directly assigned terms render, retaining na
 link policy and full hierarchy keys. Categories remain supported alongside tags. No assignment,
 term membership or URL changes. Empty lists disappear, icons=false removes decorative glyphs,
 and repeated/header-opt-in terms retain their unique IDs. Terms stay outside the boxed footer.
+
+
+## Previous, Parent and Next
+
+A separate reading-navigation block follows the article footer, using Stellar read-next's quiet
+paired dashed rules and destination titles. It is independent of article_footer configuration,
+series sequence, tag filters, referrer/browser state, date priority and list pagination. No
+additional JavaScript or paginator is created. On recursive section views it follows the main
+list; on content/children-mode sections it follows the actual article body/footer.
+
+Configure the **collection root**, not each descendant:
+
+```yaml
+# Collection _index.md
+params:
+  navigation_mode: sequential # list | siblings | sequential
+```
+
+| Mode | Complete Previous/Next sequence |
+|---|---|
+| list | The root's main list: scoped regular descendants with list_order and pins, or ordered direct children when list_mode=children. Never just the current pager. |
+| siblings | The current Page's actual parent's ordered eligible children, using children.order and its fallback sort. |
+| sequential | Root then recursively each ordered child subtree, depth-first preorder; branch documents are included. |
+
+Minimal/Blog/Notes default to list; Docs defaults to siblings. All modes work with any preset or
+none. Resolve the mode from root params, its selecting preset defaults.params, then native
+site/language params and the minimal fallback. Ordinary nested/member-page choices or cascading
+navigation_mode are rejected so one sequence cannot disagree with its reverse. Preset descendant
+maps must not set it. A nested independent root owns a separate policy and sequence.
+
+Parent always targets the real immediate native parent if within the same collection, regardless
+of mode. A root has no Parent. No synthetic parent pages or cross-collection links; missing
+Previous/Next are omitted with no wrap or dead placeholders. If a page is not in the selected
+list sequence, only its valid parent is offered. Generated taxonomy/archive routes, standalone
+pages without a collection, and later list/child paginator pages have no reading controls.
+Published eligibility follows native Pages (current language, draft/future/list/render settings);
+known excluded or untranslated nodes do not become navigation links. Hidden child cards do not
+truncate the tree sequence. Labels are Previous / Parent / Next and 上一页 / 上级页面 / 下一页.

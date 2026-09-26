@@ -12,3 +12,5 @@
   {{ end }}
 </ul>
 {{ partial "lists/navigation.html" $pager }}
+
+{{ if and .navigation (eq $pager.PageNumber 1) }}{{ partial "navigation/render.html" .page }}{{ end }}

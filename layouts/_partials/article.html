@@ -17,4 +17,5 @@
       {{ partial "sidera/footer.html" (dict "Page" . "Owner" $owner "Settings" $settings "Region" "article-footer") }}
     {{ end }}
   </article>
+  {{ if $showBody }}{{ partial "navigation/render.html" . }}{{ end }}
   {{ end }}

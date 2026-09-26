@@ -2,7 +2,7 @@
 {{- $maps := slice -}}
 {{- if isset .Params.defaults "params" -}}{{- $maps = $maps | append .Params.defaults.params -}}{{- end -}}
 {{- if isset .Params.defaults "cascade" -}}
-  {{- if and (reflect.IsMap .Params.defaults.cascade) (isset .Params.defaults.cascade "params") -}}{{- $maps = $maps | append .Params.defaults.cascade.params -}}{{- end -}}
+  {{- if and (reflect.IsMap .Params.defaults.cascade) (isset .Params.defaults.cascade "params") -}}{{- if isset .Params.defaults.cascade.params "navigation_mode" -}}{{- errorf "Sidera navigation_mode belongs in preset defaults.params, not cascade: %s" .Path -}}{{- end -}}{{- $maps = $maps | append .Params.defaults.cascade.params -}}{{- end -}}
 {{- end -}}
 {{- range $maps -}}
   {{- if not (reflect.IsMap .) -}}{{- errorf "Sidera preset parameter defaults must be a map: %s" $term.Path -}}

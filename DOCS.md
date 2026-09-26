@@ -98,3 +98,22 @@ P2-GR places the existing native ancestor trail inside the shared article banner
 than stacking a second owner bar above it. Parent links and native complete tree/order
 semantics remain. Narrow page-tree/TOC regions use the same progressive native drawers
 as other pages, with open in-flow fallback when JS/Popover support is absent.
+
+
+## Reading navigation modes
+
+All collections—not only Docs—support root params.navigation_mode. Docs presets default to
+siblings: Previous/Next follow the parent's complete children.order/fallback sequence, and Parent
+links to the direct native parent. The root does not link outside its collection.
+
+Set `params.navigation_mode: sequential` in the collection root's _index.md for depth-first
+parent-before-children navigation. This includes the root and real branch Pages. Previous before
+a following branch is the preceding branch's last descendant, so directions are reciprocal.
+Both modes use docs/children.html, the same native ordering/eligibility as the page tree. They
+ignore child-card pagination and children.list visibility, exclude independent nested roots and
+generated taxonomy/archive pages, and never invent missing parents or translations.
+
+List mode instead follows the collection's actual main list. For a children-mode root this is
+its ordered immediate-child list; deeper pages not in that list retain Parent but no invented
+Previous/Next targets. Use siblings or sequential for full tree navigation. The controls appear
+on canonical content pages only, not later child pagers, and do not change series navigation.

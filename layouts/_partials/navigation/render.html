@@ -1,0 +1,14 @@
+{{- $links := partial "navigation/links.html" . -}}
+{{- if or $links.previous $links.next $links.parent -}}
+<nav class="page-navigation" aria-label="{{ T "page_navigation" }}" data-navigation-mode="{{ $links.mode }}">
+  {{- with $links.parent -}}
+    <a class="page-parent" data-navigation="parent" href="{{ .RelPermalink }}"><span>{{ T "navigation_parent" }}</span><span>{{ .LinkTitle }}</span></a>
+  {{- end -}}
+  {{- if or $links.previous $links.next -}}
+  <div class="page-neighbors">
+    {{- with $links.previous -}}<a class="page-neighbor page-previous" data-navigation="previous" href="{{ .RelPermalink }}"><span class="neighbor-label">{{ T "navigation_previous" }}</span><span class="neighbor-title">{{ .LinkTitle }}</span></a>{{- end -}}
+    {{- with $links.next -}}<a class="page-neighbor page-next" data-navigation="next" href="{{ .RelPermalink }}"><span class="neighbor-label">{{ T "navigation_next" }}</span><span class="neighbor-title">{{ .LinkTitle }}</span></a>{{- end -}}
+  </div>
+  {{- end -}}
+</nav>
+{{- end -}}

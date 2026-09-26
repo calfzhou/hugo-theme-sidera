@@ -16,11 +16,6 @@
     {{ end }}
   </header>
   {{ else }}<h1 class="visually-hidden">{{ .Title }}</h1>{{ end }}
-  {{ $pages := slice }}
-  {{ range .RegularPagesRecursive }}
-    {{ if eq (partial "collection-owner.html" .) $owner }}
-      {{ $pages = $pages | append . }}
-    {{ end }}
-  {{ end }}
-  {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages "policy" (partial "lists/policy.html" .)) }}
+  {{ $pages := partial "lists/collection-pages.html" . }}
+  {{ partial "lists/render.html" (dict "page" . "owner" $owner "pages" $pages "policy" (partial "lists/policy.html" .) "navigation" true) }}
   {{ end }}

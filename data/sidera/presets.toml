@@ -3,6 +3,7 @@
 [blog]
 title_key = 'collection_blog'
 [blog.defaults.params]
+navigation_mode = "list"
 primary_date = "published"
 show_updated = true
 top = ["collection-nav"]
@@ -23,6 +24,7 @@ recent_sections = false
 [notes]
 title_key = 'collection_notebook'
 [notes.defaults.params]
+navigation_mode = "list"
 primary_date = "updated"
 show_updated = true
 list_mode = 'recursive'
@@ -41,6 +43,7 @@ recent_sections = false
 [docs]
 title_key = 'collection_docs'
 [docs.defaults.params]
+navigation_mode = "siblings"
 primary_date = "updated"
 show_updated = true
 list_mode = 'children'

@@ -261,3 +261,15 @@ other = "QR code for {{ .title }}"
 
 [share_qr_hint]
 other = "Scan with WeChat to share this article."
+
+[page_navigation]
+other = "Page navigation"
+
+[navigation_previous]
+other = "Previous"
+
+[navigation_next]
+other = "Next"
+
+[navigation_parent]
+other = "Parent"

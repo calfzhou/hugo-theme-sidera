@@ -1,0 +1,8 @@
+{{- /* The collection's main-list membership, shared with adjacent-page navigation. */ -}}
+{{- $owner := partial "collection-owner.html" . -}}{{- $pages := slice -}}
+{{- if eq (partialCached "sidera/settings.html" . .Path).list_mode "children" -}}
+  {{- $pages = partial "docs/children.html" . -}}
+{{- else -}}
+  {{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- return $pages -}}

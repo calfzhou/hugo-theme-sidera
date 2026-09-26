@@ -112,6 +112,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 |---|---|
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
+| navigation_mode | Collection-root policy: list (minimal/blog/notes), siblings (docs), or sequential. Root params override root preset then site/language default; not cascaded or set on member pages. Previous/Next stay within the complete collection sequence; Parent is the actual in-scope parent. |
 | primary_date | published (minimal/blog) or updated (notes/docs). Per-page date priority shared by cards/headers, independent of sorting; normal params/cascade/preset/site precedence. |
 | show_authors / show_updated | Footer native author visibility (true; no duplicate header attribution) / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |

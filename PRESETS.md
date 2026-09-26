@@ -130,3 +130,9 @@ not create a second date below the body. Notes/docs also enable show_updated for
 Date priority is separate from ordering: primary_date=published in blog, updated in notes/docs,
 for both defaults.params and defaults.cascade.params. A title-ordered docs section or a
 publication-ordered notes section still emphasizes updates. Page/cascade overrides work normally.
+
+
+Reading navigation is capability-based: navigation_mode defaults to list for Blog/Notes and
+siblings for Docs. Any collection root can select list, siblings or sequential, independent of
+preset and primary_date. The mode is a root policy; preset definitions use defaults.params only,
+not defaults.cascade. Independent nested roots resolve their own policy normally.

@@ -1,0 +1,17 @@
+{{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}
+{{- $previous := false -}}{{- $next := false -}}{{- $parent := false -}}{{- $mode := "" -}}
+{{- if and $owner (or .IsPage .IsSection) (not .Params.sidera.tag_view) (not .Params.sidera.archive_view) -}}
+  {{- $mode = (partialCached "sidera/settings.html" $owner $owner.Path).navigation_mode -}}
+  {{- if ne $page $owner -}}{{- with .Parent -}}
+    {{- if and .RelPermalink (not .IsHome) (eq (partial "collection-owner.html" .) $owner) -}}{{- $parent = . -}}{{- end -}}
+  {{- end -}}{{- end -}}
+  {{- $sequence := slice -}}
+  {{- if eq $mode "siblings" -}}
+    {{- with $parent -}}{{- $sequence = partialCached "docs/children.html" . .Path -}}{{- end -}}
+  {{- else -}}{{- $sequence = partialCached "navigation/sequence.html" $owner $owner.Path -}}{{- end -}}
+  {{- range $index, $item := $sequence -}}{{- if eq $item $page -}}
+    {{- if gt $index 0 -}}{{- $previous = index $sequence (sub $index 1) -}}{{- end -}}
+    {{- if lt (add $index 1) (len $sequence) -}}{{- $next = index $sequence (add $index 1) -}}{{- end -}}
+  {{- end -}}{{- end -}}
+{{- end -}}
+{{- return (dict "previous" $previous "next" $next "parent" $parent "mode" $mode) -}}

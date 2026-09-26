@@ -1,0 +1,11 @@
+{{- $settings := partialCached "sidera/settings.html" . .Path -}}
+{{- $pages := slice -}}
+{{- if eq $settings.navigation_mode "sequential" -}}
+  {{- $pages = partial "navigation/tree.html" . -}}
+{{- else -}}
+  {{- $pages = partial "lists/collection-pages.html" . -}}
+  {{- if ne $settings.list_mode "children" -}}
+    {{- $pages = partial "lists/order.html" (dict "pages" $pages "order" $settings.list_order "pins" true) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $pages -}}

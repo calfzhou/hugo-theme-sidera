@@ -1,6 +1,7 @@
 {{- $widgets := partialCached "sidera/widgets.html" site "widgets" -}}
 {{- range site.Pages -}}
   {{- $page := . -}}
+  {{- if and (isset .Params "navigation_mode") (not (partial "model/is-root.html" .)) -}}{{- errorf "Sidera navigation_mode belongs on a collection root: %s" .Path -}}{{- end -}}
   {{- with .File -}}{{- if not .IsContentAdapter -}}
     {{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}
       {{- if isset ($page.Params.sidera | default dict) $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $page.Path -}}{{- end -}}

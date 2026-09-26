@@ -33,6 +33,10 @@
 {{- range $key := slice "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
 {{- end -}}
+{{- if isset $params "navigation_mode" -}}
+  {{- if or (ne (printf "%T" $params.navigation_mode) "string") (not (in (slice "list" "siblings" "sequential") $params.navigation_mode)) -}}{{- errorf "Sidera navigation_mode must be list, siblings or sequential: %s" $source -}}{{- end -}}
+  {{- if not .section -}}{{- errorf "Sidera navigation_mode belongs on a collection root: %s" $source -}}{{- end -}}
+{{- end -}}
 {{- if isset $params "primary_date" -}}
   {{- if or (ne (printf "%T" $params.primary_date) "string") (not (in (slice "published" "updated") $params.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $source -}}{{- end -}}
 {{- end -}}
@@ -52,6 +56,7 @@
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
 {{- range $cascades -}}
   {{- $cascadeParams := .params | default dict -}}
+  {{- if isset $cascadeParams "navigation_mode" -}}{{- errorf "Sidera navigation_mode is collection-root policy; do not cascade it: %s" $source -}}{{- end -}}
   {{- range $key := slice "references" "license" "share" "edit_url" -}}
     {{- if isset $cascadeParams $key -}}{{- $valid := partial "model/footer-value.html" (dict "Key" $key "Value" (index $cascadeParams $key) "Source" $source) -}}{{- end -}}
   {{- end -}}

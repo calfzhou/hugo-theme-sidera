@@ -3,6 +3,7 @@
 Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
 hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers, pagination and toast. Site notification motion also follows
 Stellar main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.ejs and bread-nav.styl; Sidera uses plain-text messages instead of upstream innerHTML.
+Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This notice applies to those adaptations; it does not grant a distribution license

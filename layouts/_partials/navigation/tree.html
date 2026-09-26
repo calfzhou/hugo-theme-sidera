@@ -1,0 +1,7 @@
+{{- /* Preorder over actual native Pages, using the same ordered children as the sidebar. */ -}}
+{{- $pages := slice -}}{{- if .RelPermalink -}}{{- $pages = $pages | append . -}}{{- end -}}
+{{- range partial "docs/children.html" . -}}
+  {{- if .IsSection -}}{{- $pages = $pages | append (partial "navigation/tree.html" .) -}}
+  {{- else -}}{{- $pages = $pages | append . -}}{{- end -}}
+{{- end -}}
+{{- return $pages -}}

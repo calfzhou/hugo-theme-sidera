@@ -47,4 +47,5 @@
 {{- range $key := slice "references" "license" "share" "edit_url" -}}
   {{- $valid := partial "model/footer-value.html" (dict "Key" $key "Value" (index $settings $key) "Source" $page.Path) -}}
 {{- end -}}
+{{- if or (ne (printf "%T" $settings.navigation_mode) "string") (not (in (slice "list" "siblings" "sequential") $settings.navigation_mode)) -}}{{- errorf "Sidera navigation_mode must be list, siblings or sequential: %s" $page.Path -}}{{- end -}}
 {{- return $settings -}}
