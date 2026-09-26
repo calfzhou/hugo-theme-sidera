@@ -315,9 +315,9 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose :is(li,blockquote) > :last-child { margin-bottom: 0; }
 .prose li:has(> input[type="checkbox"],> p > input[type="checkbox"]) { list-style: none; }
 .prose li > input[type="checkbox"],.prose li > p > input[type="checkbox"] { width: .9em; height: .9em; margin: 0 .5em 0 -1.4em; vertical-align: -.05em; accent-color: var(--accent); }
-.prose blockquote { margin-inline: 0; padding-inline: 1em; border-inline-start: 4px solid var(--line); }
+.prose blockquote { margin-inline: 0; padding-inline: 1em; border-inline-start: 4px solid var(--line); color: color-mix(in srgb,var(--text) 60%,transparent); }
 .prose blockquote blockquote { font-size: inherit; }
-.prose blockquote:is(:hover,:focus-within) { border-color: var(--accent); }
+.prose blockquote:is(:hover,:focus-within) { border-color: color-mix(in srgb,var(--accent) 50%,transparent); }
 /* Native image sizes/alt/link semantics remain; transparent diagrams keep a pale backing. */
 .prose img { display: block; max-width: 100%; height: auto; margin-inline: auto; border-radius: 8px; background: var(--image-background); }
 .prose figure { margin-inline: 0; }
