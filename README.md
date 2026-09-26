@@ -132,3 +132,10 @@ and per-language term Pages. The full consumer migration is implemented, includi
 semantics and old-key removal. Actual theme docs still need explicit opt-in (DOCS.md); publishing
 the docs preset term does not publish that documentation tree. Remaining H whole-page/Markdown
 finishing, P3 special features and distribution licensing remain separate.
+
+
+Article footers now group References, License, Authors and Share into a configurable panel,
+while existing terms/series remain outside it. Authors no longer repeat in the article header.
+The default content notice is neutral, not an automatic Creative Commons grant. WeChat QR images
+are generated locally by Hugo images.QR (Hugo >=0.141.0); no QR service or client library is used.
+See SHELL.md for params, native collection cascades, empty/false behavior and share fallbacks.

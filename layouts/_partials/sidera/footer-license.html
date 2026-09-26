@@ -1,0 +1,8 @@
+{{- $text := .Settings.license -}}
+{{- if eq (printf "%T" $text) "bool" -}}{{- if $text -}}{{- $text = T "license_default" -}}{{- else -}}{{- $text = "" -}}{{- end -}}{{- end -}}
+{{- if strings.TrimSpace $text -}}
+<section class="footer-section" aria-labelledby="{{ .Instance }}-heading">
+  <h2 id="{{ .Instance }}-heading" class="footer-heading">{{ T "license" }}</h2>
+  <div class="authored-text">{{ .Page.RenderString (dict "display" "block") $text }}</div>
+</section>
+{{- end -}}

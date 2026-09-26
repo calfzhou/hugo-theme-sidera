@@ -36,6 +36,9 @@
 {{- if isset $params "primary_date" -}}
   {{- if or (ne (printf "%T" $params.primary_date) "string") (not (in (slice "published" "updated") $params.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $source -}}{{- end -}}
 {{- end -}}
+{{- range $key := slice "references" "license" "share" "edit_url" -}}
+  {{- if isset $params $key -}}{{- $valid := partial "model/footer-value.html" (dict "Key" $key "Value" (index $params $key) "Source" $source) -}}{{- end -}}
+{{- end -}}
 {{- if isset $params "cover" -}}
   {{- if not (reflect.IsMap $params.cover) -}}{{- errorf "Sidera cover must be an image/alt map: %s" $source -}}
   {{- else -}}
@@ -48,6 +51,10 @@
 {{- if isset $fm "series_weight" -}}{{- if not (in (slice "int" "int64" "uint64") (printf "%T" $fm.series_weight)) -}}{{- errorf "Sidera series_weight must be an integer: %s" $source -}}{{- end -}}{{- end -}}
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
 {{- range $cascades -}}
+  {{- $cascadeParams := .params | default dict -}}
+  {{- range $key := slice "references" "license" "share" "edit_url" -}}
+    {{- if isset $cascadeParams $key -}}{{- $valid := partial "model/footer-value.html" (dict "Key" $key "Value" (index $cascadeParams $key) "Source" $source) -}}{{- end -}}
+  {{- end -}}
   {{- if or (isset . "preset") (isset (.params | default dict) "scope_root") -}}{{- errorf "Sidera preset/scope_root must not be cascaded: %s" $source -}}{{- end -}}
 {{- end -}}
 {{- range $key := slice "top" "left" "right" "left_footer" "article_footer" "site_footer" -}}

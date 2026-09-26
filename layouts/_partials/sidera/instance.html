@@ -12,11 +12,11 @@
   "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
   "text" (dict "title" "" "text" "text")
   "links" (dict "menu" "links_menu" "icons" "icons") -}}
-{{- $builtins := merge $schemas (dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "credit" dict) -}}
+{{- $builtins := merge $schemas (dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "credit" dict) -}}
 {{- if eq .Region "widget-definition" -}}{{- $schemas = $builtins -}}{{- end -}}
 {{- with .Definition -}}{{- if isset $builtins . -}}{{- errorf "Sidera widget %q cannot shadow a built-in component" . -}}{{- end -}}{{- end -}}
 {{- if eq .Region "article-footer" -}}
-  {{- $schemas = dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors") "series" dict "text" (dict "title" "" "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
+  {{- $schemas = dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "text" (dict "title" "" "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
 {{- else if eq .Region "site-footer" -}}
   {{- $schemas = dict "text" (dict "title" "" "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
 {{- end -}}
@@ -56,7 +56,11 @@
 {{- range $key, $value := $config -}}
   {{- if not (isset $schema $key) -}}{{- errorf "Sidera %s: unknown %s config option %s" $source $name $key -}}
   {{- else -}}
-    {{- if in (slice "icons" "sections" "show") $key -}}
+    {{- if or (in (slice "references" "license" "share") $name) (eq $key "edit_url") -}}
+      {{- if ne $key "icons" -}}
+        {{- $valid := partial "model/footer-value.html" (dict "Key" (index $schema $key) "Value" $value "Source" $source) -}}
+      {{- else if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera %s: share config.icons must be boolean" $source -}}{{- end -}}
+    {{- else if in (slice "icons" "sections" "show") $key -}}
       {{- if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera %s: %s config.%s must be boolean" $source $name $key -}}{{- end -}}
     {{- else if eq $key "items" -}}
       {{- if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: collection-nav config.items must be an array" $source -}}

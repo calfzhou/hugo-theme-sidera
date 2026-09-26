@@ -113,7 +113,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
 | primary_date | published (minimal/blog) or updated (notes/docs). Per-page date priority shared by cards/headers, independent of sorting; normal params/cascade/preset/site precedence. |
-| show_authors / show_updated | Linked native author visibility (true) / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
+| show_authors / show_updated | Footer native author visibility (true; no duplicate header attribution) / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
 | list_header | Boolean, default true. Show the recursive section title/intro/tools. false keeps an accessible title and full counts/pagination, but emits no hidden-body TOC. Does not hide taxonomy result titles or docs bodies. |
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
@@ -134,8 +134,12 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See SHELL.md. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see SHELL.md). |
 | icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see SHELL.md). |
-| article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,series,text,links]. Optional authors. []/false hides the region and its hook. |
+| article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,references,license,authors,share,series,text,links]. Contiguous references/license/authors/share items form a box. []/false hides the region and its hook. |
 | site_footer | Ordered link/text/credit component or derived-widget references, or false; default [links,text,credit]. []/false hides the region and hook. |
+| references | Array of Markdown strings, default []; blank entries omitted. Authored references only, not automatic backlinks. |
+| license | Markdown string, true (localized neutral default), or false. Default true; empty string also hides. Content notice, not a theme software license. |
+| share | Ordered unique array of link/wechat/weibo/email or false; default [link,wechat,email]. []/false hides. Local Hugo QR, no QR service. |
+| edit_url | Explicit safe URL string, default empty; shown in the Authors section, no automatic repository mapping/API. show_authors=false hides that section including edit link. |
 | article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
 | footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
 | terms_in_header | Boolean, default false. Opt-in duplicate header terms; footer terms remain independently selectable. |

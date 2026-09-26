@@ -2,7 +2,9 @@
 {{- if eq .Name "terms" -}}
   {{- partial "sidera/article-terms.html" (merge . (dict "Prefix" .InstancePrefix)) -}}
 {{- else if eq .Name "authors" -}}
-  {{- partial "sidera/article-authors.html" (merge . (dict "Prefix" (printf "footer-%s" .InstancePrefix))) -}}
+  {{- partial "sidera/footer-authors.html" . -}}
+{{- else if in (slice "references" "license" "share") .Name -}}
+  {{- partial (printf "sidera/footer-%s.html" .Name) . -}}
 {{- else if eq .Name "series" -}}
   {{- partial "series/navigation.html" $page -}}
 {{- else if eq .Name "meta" -}}

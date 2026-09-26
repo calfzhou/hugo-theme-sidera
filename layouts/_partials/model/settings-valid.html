@@ -44,4 +44,7 @@
 {{- $childrenValid := partial "docs/options.html" (dict "settings" $settings.children "order" slice "source" $page.Path) -}}
 {{- if not (in (slice "list" "index") $settings.taxonomy_hubs) -}}{{- errorf "Sidera taxonomy_hubs must be list or index: %s" $page.Path -}}{{- end -}}
 {{- if or (ne (printf "%T" $settings.primary_date) "string") (not (in (slice "published" "updated") $settings.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $page.Path -}}{{- end -}}
+{{- range $key := slice "references" "license" "share" "edit_url" -}}
+  {{- $valid := partial "model/footer-value.html" (dict "Key" $key "Value" (index $settings $key) "Source" $page.Path) -}}
+{{- end -}}
 {{- return $settings -}}

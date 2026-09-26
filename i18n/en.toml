@@ -218,3 +218,46 @@ other = "Switched to light color mode."
 
 [color_mode_auto_notice]
 other = "Following system color mode."
+
+
+[references]
+other = "References"
+
+[license]
+other = "License"
+
+[license_default]
+other = "All rights reserved unless otherwise stated."
+
+[edit_article]
+other = "Edit this article"
+
+[share_article]
+other = "Share this article"
+
+[share_link]
+other = "Copy link"
+
+[share_wechat]
+other = "Share to WeChat"
+
+[share_weibo]
+other = "Share to Weibo"
+
+[share_email]
+other = "Share by email"
+
+[share_copied]
+other = "Link copied."
+
+[share_copy_failed]
+other = "Could not copy automatically. Select and copy the link below."
+
+[share_copy_manual]
+other = "Article link"
+
+[share_qr_alt]
+other = "QR code for {{ .title }}"
+
+[share_qr_hint]
+other = "Scan with WeChat to share this article."

@@ -380,8 +380,8 @@ Site/minimal fallback. Ordinary section params do not become descendant defaults
 
 | Region / default items | What renders |
 |---|---|
-| article_footer=[terms,series,text,links] | terms: actual assigned tags/categories and contextual hubs; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
-| Optional article item authors | Ordered native authors, local portrait if provided; show_authors still applies. Header attribution remains, so this is intentional extra closing attribution. |
+| article_footer=[terms,references,license,authors,share,series,text,links] | terms: actual assigned tags/categories and contextual hubs; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
+| Article item authors | Ordered native authors with optional local portrait cards and edit_url. show_authors still applies. Attribution is footer-only; the independent custom byline is unchanged. |
 | site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized built_with Markdown (default Built with Hugo · Sidera) |
 
 The `credit` item renders the native `built_with` translation as Markdown, using the same
@@ -400,7 +400,7 @@ choice. Omit `credit` from `site_footer` to hide it. No extra credit parameter i
 Article footer renders after a real shared article/section body, not on later child-list
 pagers without that body. Metadata/header byline and publication dates retain their behavior.
 Terms move to the footer by default; terms_in_header=true duplicates them with unique IDs.
-No terms, date, series, menu or text means no corresponding item/divider. A wholly empty footer
+Absent content means no corresponding item/divider (license/share have explicit defaults). A wholly empty footer
 has no container. No empty assigned-term list is emitted just to preserve an old DOM ID.
 `meta` may repeat the header's update date as a closing record; omit it if unwanted.
 
@@ -419,8 +419,8 @@ params:
 Menu columns use native entries with identifier/name and children with parent; a parent
 may have a real pageRef link or be a heading. Native weights/ordering/current states and
 URL/depth validation are shared with sidebar menus. Authored Markdown is rendered by
-RenderString with the site's normal raw-HTML policy. No inferred license, hidden service,
-placeholder share/comment control, external resource, or automatic copyright year.
+RenderString with the site's normal raw-HTML policy. No inferred Creative Commons license, hidden service, placeholder comment control,
+remote QR generation, or automatic copyright year.
 Arrays reject unknown components/options; repeated instances are supported; false/[] disables; empty strings clear text/menu.
 Unused preset maps also validate these fields. Excluded Page-level references/presentation
 values require the normal all-states build; draft is not an exemption.
@@ -701,3 +701,85 @@ owners may still explicitly select that item.
 Visible Lastmod wording is consistently Updated / 更新于, including cards and undated labels.
 The existing date_modified/modified_undated keys and modified card class are retained. Recent
 widgets keep their own date-order semantics, and archives remain publication-date navigation.
+
+
+## Boxed article footer
+
+The default article_footer order is `[terms,references,license,authors,share,series,text,links]`.
+References, License, Authors and Share form a Stellar-style box; empty items emit no section or
+divider. Consecutive boxed items share a panel. An intervening legacy component ends that panel,
+preserving configured order rather than silently moving components. Terms and series remain
+outside the box; their behavior is unchanged. The region renders only with the actual article
+body, never a later docs-child paginator body placeholder. []/false still disables the whole region.
+
+```yaml
+# Article front matter: native authors remain top-level.
+authors: [rowan]
+params:
+  references:
+    - "[A source title](https://example.org/source/)"
+    - "An explanatory **Markdown** note."
+  license: "Content licensed under [your chosen license](https://example.org/license/)."
+  share: [link, wechat, email] # Optional: weibo
+  edit_url: https://github.com/owner/repo/edit/main/content/article.md
+```
+
+`references` defaults to [], accepts Markdown strings, and skips blank entries. These are explicit
+source references, not automatic outgoing links or backlinks. The latter remain separate P3 work.
+
+`license=true` (default) renders the localized neutral Markdown notice **All rights reserved unless
+otherwise stated.** A string replaces it; false or an empty string hides it. The theme does not
+silently assign Creative Commons or any other reuse license. The notice concerns site content,
+not Sidera's software distribution license. References/license use Page.RenderString with the
+normal site-wide Goldmark raw-HTML policy; no arbitrary author substitutions or template execution.
+
+`authors` reuses native authors terms/portraits/profile links, now styled as footer cards. The
+header no longer repeats author attribution. No GitHub identities/history are fetched. Optional
+`edit_url` is a literal safe URL, not a repository-prefix mapping. Missing authors and edit URL
+omit the section. `show_authors=false` hides the whole section; byline remains separate.
+
+Site/language defaults, native collection cascades and page overrides use the existing resolver.
+Set collection descendant overrides in `cascade.params`, not ordinary section params:
+
+```yaml
+# Collection _index.md; add matching params if the section page needs the same policy.
+cascade:
+  params:
+    license: false
+    share: []
+```
+
+Supported per-instance options (also valid in named widget definitions):
+
+| Component | Options | Shared parameter fallback |
+|---|---|---|
+| references | entries | references |
+| license | text | license |
+| authors | show, edit_url | show_authors, edit_url |
+| share | targets, icons | share, icons |
+
+Use the existing component/config or widget/config syntax. False/empty options replace shared
+settings; repeated instances have unique headings/control contexts and do not mutate each other.
+Unknown/duplicate share targets, invalid types, unsupported regions, unsafe edit URLs and malformed
+unused widget/preset definitions diagnose. Draft structural metadata is validated too.
+
+### Share behavior
+
+- `link`: copy the page's absolute Permalink, then report through Sidera.toast. Denied clipboard
+  access reveals and selects a read-only URL field. Without the API or JS, the ordinary permalink
+  remains available for native browser copying; no inert button is exposed.
+- `wechat`: native details/summary reveals a QR generated by **images.QR** at build time, only
+  when this target renders. Output lives under images/qr; native resource URLs support subpaths.
+  No external QR service, generation dependency or QR JavaScript. Width/height come from the
+  image resource, with its quiet zone intact; no Hugo image resizing. A narrow viewport constrains
+  the image using pixelated rendering. Test scanning for unusually long URLs and print use.
+- `weibo`: fixed provider share URL containing encoded title/site title and permalink; opens a
+  new tab with noopener/noreferrer. There are no background requests to that provider.
+- `email`: encoded mailto subject/title and permalink body, using the visitor's mail handler.
+
+Targets follow configured order. share=false/[] or omitting the component disables sharing. Icons
+are original neutral action glyphs with localized accessible labels, not unverified vendor logos;
+icons=false uses text. Edit uses the existing verified Stellar/Solar icon source with attribution.
+Native QR disclosure, email/edit/provider links and authored Markdown work without JavaScript.
+No comments, related-post recommendations, new previous/next logic, automated references or
+Git-derived contributors are introduced in this slice.

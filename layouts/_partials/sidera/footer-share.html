@@ -1,0 +1,36 @@
+{{- with .Settings.share -}}
+{{- $ctx := $ -}}{{- $page := $.Page -}}{{- $url := $page.Permalink -}}
+{{- $urlCheck := partial "sidera/url.html" (dict "url" $url "source" $page.Path) -}}
+<section class="footer-section article-share" aria-labelledby="{{ $.Instance }}-heading" data-share-url="{{ $url }}">
+  <h2 id="{{ $.Instance }}-heading" class="footer-heading">{{ T "share_article" }}</h2>
+  <div class="share-actions">
+  {{- range . -}}
+    {{- $label := "" -}}{{- $icon := "" -}}
+    {{- if eq . "link" -}}{{- $label = T "share_link" -}}{{- $icon = "link" -}}
+    {{- else if eq . "wechat" -}}{{- $label = T "share_wechat" -}}{{- $icon = "qr" -}}
+    {{- else if eq . "weibo" -}}{{- $label = T "share_weibo" -}}{{- $icon = "broadcast" -}}
+    {{- else -}}{{- $label = T "share_email" -}}{{- $icon = "email" -}}{{- end -}}
+    {{- $content := $label -}}{{- if $ctx.Settings.icons -}}{{- $content = partial "sidera/icon.html" $icon -}}{{- end -}}
+    {{- if eq . "link" -}}
+      <button type="button" class="share-action" data-share-copy hidden aria-label="{{ $label }}" title="{{ $label }}" data-success="{{ T "share_copied" }}" data-failure="{{ T "share_copy_failed" }}">{{ $content }}</button>
+      <a class="share-action share-link-fallback" href="{{ $url }}" aria-label="{{ T "share_copy_manual" }}" title="{{ T "share_copy_manual" }}">{{ $content }}</a>
+    {{- else if eq . "wechat" -}}
+      <details class="share-qr">
+        <summary class="share-action" aria-label="{{ $label }}" title="{{ $label }}">{{ $content }}</summary>
+        <div class="share-qr-panel">
+          {{- $qr := images.QR $url (dict "targetDir" "images/qr" "scale" 4 "level" "medium") -}}
+          <img src="{{ $qr.RelPermalink }}" width="{{ $qr.Width }}" height="{{ $qr.Height }}" alt="{{ T "share_qr_alt" (dict "title" $page.Title) }}">
+          <p>{{ T "share_qr_hint" }}</p>
+        </div>
+      </details>
+    {{- else -}}
+      {{- $title := printf "%s - %s" $page.Title $page.Site.Title -}}
+      {{- $href := printf "mailto:?subject=%s&body=%s" (urlquery $title) (urlquery $url) -}}
+      {{- if eq . "weibo" -}}{{- $href = printf "https://service.weibo.com/share/share.php?url=%s&title=%s" (urlquery $url) (urlquery $title) -}}{{- end -}}
+      <a class="share-action" href="{{ $href | safeURL }}"{{ if eq . "weibo" }} target="_blank" rel="nofollow noopener noreferrer"{{ end }} aria-label="{{ $label }}" title="{{ $label }}">{{ $content }}</a>
+    {{- end -}}
+  {{- end -}}
+  </div>
+  {{- if in . "link" -}}<div class="share-copy-fallback" hidden><label>{{ T "share_copy_manual" }}<input type="text" readonly value="{{ $url }}"></label></div>{{- end -}}
+</section>
+{{- end -}}

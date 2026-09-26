@@ -1,0 +1,20 @@
+{{- /* Validate authored values without rendering Markdown or mutating their inheritance. */ -}}
+{{- $key := .Key -}}{{- $value := .Value -}}{{- $where := .Source -}}
+{{- if eq $key "references" -}}
+  {{- if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: references must be an array of Markdown strings" $where -}}
+  {{- else -}}{{- range $value -}}{{- if ne (printf "%T" .) "string" -}}{{- errorf "Sidera %s: references entries must be Markdown strings" $where -}}{{- end -}}{{- end -}}{{- end -}}
+{{- else if eq $key "license" -}}
+  {{- if not (in (slice "string" "bool") (printf "%T" $value)) -}}{{- errorf "Sidera %s: license must be Markdown text, true or false" $where -}}{{- end -}}
+{{- else if eq $key "share" -}}
+  {{- if eq (printf "%T" $value) "bool" -}}
+    {{- if $value -}}{{- errorf "Sidera %s: share must be an array or false" $where -}}{{- end -}}
+  {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: share must be an array or false" $where -}}
+  {{- else -}}{{- $seen := slice -}}{{- range $value -}}
+    {{- if or (ne (printf "%T" .) "string") (not (in (slice "link" "wechat" "weibo" "email") .)) (in $seen .) -}}{{- errorf "Sidera %s: invalid/duplicate share target %v" $where . -}}{{- end -}}
+    {{- $seen = $seen | append . -}}
+  {{- end -}}{{- end -}}
+{{- else if eq $key "edit_url" -}}
+  {{- if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera %s: edit_url must be a URL string or empty" $where -}}
+  {{- else if $value -}}{{- $valid := partial "sidera/url.html" (dict "url" $value "source" $where) -}}{{- end -}}
+{{- end -}}
+{{- return true -}}

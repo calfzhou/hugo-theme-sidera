@@ -215,3 +215,46 @@ other = "已切换到浅色配色。"
 
 [color_mode_auto_notice]
 other = "已切换到跟随系统配色。"
+
+
+[references]
+other = "参考资料"
+
+[license]
+other = "许可协议"
+
+[license_default]
+other = "除另有声明外，保留所有权利。"
+
+[edit_article]
+other = "编辑本文"
+
+[share_article]
+other = "分享文章"
+
+[share_link]
+other = "复制链接"
+
+[share_wechat]
+other = "分享到微信"
+
+[share_weibo]
+other = "分享到微博"
+
+[share_email]
+other = "通过邮件分享"
+
+[share_copied]
+other = "链接已复制。"
+
+[share_copy_failed]
+other = "无法自动复制，请选中并复制下方链接。"
+
+[share_copy_manual]
+other = "文章链接"
+
+[share_qr_alt]
+other = "「{{ .title }}」的二维码"
+
+[share_qr_hint]
+other = "使用微信扫码分享本文。"

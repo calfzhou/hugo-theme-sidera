@@ -1,0 +1,7 @@
+{{- $items := slice -}}{{- range .Settings.references -}}{{- if strings.TrimSpace . -}}{{- $items = $items | append . -}}{{- end -}}{{- end -}}
+{{- with $items -}}
+<section class="footer-section" aria-labelledby="{{ $.Instance }}-heading">
+  <h2 id="{{ $.Instance }}-heading" class="footer-heading">{{ T "references" }}</h2>
+  <ul class="reference-list authored-text">{{ range . }}<li>{{ $.Page.RenderString (dict "display" "block") . }}</li>{{ end }}</ul>
+</section>
+{{- end -}}
