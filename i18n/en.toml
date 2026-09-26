@@ -282,3 +282,6 @@ other = "Home"
 
 [breadcrumbs]
 other = "Breadcrumbs"
+
+[heading_permalink]
+other = "Link to heading: {{ .title }}"

@@ -66,7 +66,12 @@ and highlighted code lines; global shell colors/fonts are unchanged. No new para
 Native Hugo/Goldmark renders paragraphs, emphasis/strong/strikethrough, ordered/unordered/task
 lists, links, rules, tables and footnotes with the site's enabled extensions. Tasks retain
 native disabled checkbox semantics; Sidera does not turn them into an interactive service.
-Heading IDs, TOC fragments and footnote/backlink roles are not rewritten. Raw HTML remains
+Heading IDs, TOC fragments and footnote/backlink roles are not rewritten. The native heading
+render hook adds Stellar-style linked markers for H2 `#`, H3 `=`, H4 `|`, H5 `:`; H1/H6
+have no prefix glyph. Compact cyan blocks turn orange on hover or keyboard focus. Accessible
+link names/tooltips use native EN/ZH `heading_permalink`; formatted heading text and Hugo's
+sanitized attributes remain intact. Long headings wrap beside the marker. These controls
+are visible only in `.prose`, not in site/footer Markdown text. Raw HTML remains
 subject to Hugo's normal safe default; do not enable `markup.goldmark.renderer.unsafe` just
 for ordinary Markdown.
 
@@ -92,7 +97,7 @@ and are centered without forced enlargement. Transparent diagrams keep their neu
 backing. Markdown image titles are not invented captions. Hugo's native `figure` shortcode
 supplies caption/title markup; both stay compact rather than acquiring article-heading gaps.
 Footnotes remain in the body, independent of configured article/site footers. There are no
-new theme-owned UI strings, scripts, plugins, fonts or dependencies in this body pass.
+new scripts, plugins, fonts or dependencies in this body pass.
 
 
 ## Use and develop

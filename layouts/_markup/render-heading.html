@@ -1,0 +1,13 @@
+{{- /* Keep Hugo's native anchor and sanitized attributes; only add a permalink marker.
+      Stellar's tech defaults define glyphs for H2–H5, not H1/H6. */ -}}
+{{- $marker := index (dict "2" "#" "3" "=" "4" "|" "5" ":") (string .Level) -}}
+<h{{ .Level }} id="{{ .Anchor }}"
+  {{- range $name, $value := .Attributes }}
+    {{- if ne $name "id" }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end -}}
+  {{- end -}}>
+  {{- if $marker -}}
+    <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="{{ T "heading_permalink" (dict "title" .PlainText) }}" title="{{ T "heading_permalink" (dict "title" .PlainText) }}"><span aria-hidden="true">{{ $marker }}</span></a><span class="heading-text">{{ .Text }}</span>
+  {{- else -}}
+    {{ .Text }}
+  {{- end -}}
+</h{{ .Level }}>

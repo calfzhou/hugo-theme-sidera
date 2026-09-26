@@ -287,12 +287,18 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose :is(p,ul,ol,blockquote,pre,table,figure,.highlight) { margin-block: 1rem; }
 .prose :is(h1,h2,h3,h4,h5,h6) { font-family: var(--ui); color: var(--text); font-weight: 500; line-height: 1.5; margin-block: 1.5em .75em; overflow-wrap: anywhere; scroll-margin-top: 1.5rem; }
 .prose h1 { font-size: 1.8em; font-weight: 600; }
-.prose h2 { font-size: 1.6em; position: relative; padding-inline-start: 13px; }
+.prose h2 { font-size: 1.6em; }
 .prose h3 { font-size: 1.4em; }
 .prose h4 { font-size: 1.2em; }
 .prose h5 { font-size: 1.05em; font-weight: 600; }
 .prose h6 { font-size: 1em; font-weight: 600; }
-.prose h2::before { content: ""; position: absolute; inset-inline-start: 0; top: .3em; width: 4px; height: .9em; border-radius: 2px; background: var(--accent); }
+/* Stellar tech heading prefixes: glyph, compact color block and permalink hit target.
+   RenderString headings outside article prose retain their unmarked presentation. */
+.heading-anchor { display: none; }
+.prose :is(h2,h3,h4,h5):has(> .heading-anchor) { display: flex; align-items: baseline; gap: 8px; }
+.prose .heading-text { min-width: 0; }
+.prose a.heading-anchor { display: inline-block; flex: none; padding: 0 2px; border-radius: 2px; background: var(--accent); color: #fff; font-size: .5em; line-height: 2.4; font-weight: 700; text-decoration: none; user-select: none; }
+.prose a.heading-anchor:is(:hover,:focus-visible,:active) { background: hsl(14 100% 57%); color: #fff; text-decoration: none; }
 .prose > :first-child { margin-top: 0; }
 .prose > :last-child { margin-bottom: 0; }
 .prose ::selection { background: color-mix(in srgb,var(--accent) 80%,var(--text)); color: var(--canvas); }

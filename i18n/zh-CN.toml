@@ -279,3 +279,6 @@ other = "首页"
 
 [breadcrumbs]
 other = "面包屑导航"
+
+[heading_permalink]
+other = "链接到标题：{{ .title }}"
