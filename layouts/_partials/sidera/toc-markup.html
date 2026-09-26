@@ -1,0 +1,13 @@
+{{- /* Keep native filtering/links/list type. Hugo inserts empty leading parents when
+      the first body heading is below startLevel; do not indent for missing headings. */ -}}
+{{- $toc := .TableOfContents -}}
+{{- $headings := slice -}}
+{{- with .Fragments }}{{ $headings = .Headings }}{{ end -}}
+{{- range seq 6 -}}
+  {{- if ne (len $headings) 1 }}{{ break }}{{ end -}}
+  {{- $heading := index $headings 0 -}}
+  {{- if or $heading.ID (not (findRE `^<nav[^>]*>\s*<[ou]l>\s*<li>\s*<[ou]l>` $toc 1)) }}{{ break }}{{ end -}}
+  {{- $toc = $toc | replaceRE `^(<nav[^>]*>\s*)<[ou]l>\s*<li>\s*` "${1}" | replaceRE `\s*</li>\s*</[ou]l>(\s*</nav>)$` "${1}" -}}
+  {{- $headings = $heading.Headings -}}
+{{- end -}}
+{{- return $toc -}}

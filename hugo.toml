@@ -25,3 +25,8 @@ order = 'modification'
 component = 'recent'
 [params.widgets.recent-published.config]
 order = 'publication'
+
+# Stellar's default heading range, consumed through a narrow site-side import.
+[markup.tableOfContents]
+startLevel = 1
+endLevel = 6

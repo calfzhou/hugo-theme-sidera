@@ -606,6 +606,15 @@ labels and saved color-mode behavior remain unchanged.
 
 ## TOC presentation
 
+Default range is **H1–H6**, matching Stellar. The theme owns the native values in
+`[markup.tableOfContents]`; consuming sites import that category with `_merge='shallow'`
+(see CONTRACT.md). The page's front-matter title is not a body heading and is not added.
+Hugo otherwise defaults to H2–H3, which explains a two-level outline on sites without the import.
+Owners can set native startLevel/endLevel explicitly to narrow the range; ordered remains native.
+The renderer removes only leading empty fragment ancestors, so a body starting at H2/H3 does
+not get an invented H1 row or extra root indentation. Native heading IDs, links, filtering and
+real hierarchy are preserved. No parallel depth parameter or client-side TOC generator.
+
 The native Hugo outline follows Stellar's hierarchy and rail geometry: 17px/500 top entries,
 16px/400 nested entries, shallow first indentation then 16px increments, wrapped labels and a
 4px rounded track/current marker. Indentation is link padding, not nested-list offsets, so the

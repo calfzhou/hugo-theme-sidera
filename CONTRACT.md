@@ -19,11 +19,14 @@ theme = 'sidera'
 _merge = 'shallow'
 [permalinks.term]
 _merge = 'shallow'
+[markup.tableOfContents]
+_merge = 'shallow'
 ```
 
 The theme provides tag→tags, category→categories, author→authors, series→series and
-preset→preset. Site keys override or extend those native tables. No global/security/markup
-merge is enabled. Date chains, baseURL, language, timezone, page permalinks and pagination
+preset→preset. Site keys override or extend those native tables. The last import supplies the theme
+TOC range H1–H6 (Stellar defaults); explicit site startLevel/endLevel values still win.
+No global/security or broad markup merge is enabled. Date chains, baseURL, language, timezone, page permalinks and pagination
 remain deliberate site policy. The verified showcase retains:
 
 ```toml

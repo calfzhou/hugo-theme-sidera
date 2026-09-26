@@ -6,17 +6,21 @@ are bundled defaults, not types or capability gates. Scope is independent (CONTR
 ## Supplied by Sidera
 
 The theme owns the five native taxonomy definitions and term-URL defaults. Consumers import
-only those categories; no duplicated definitions or preset registration:
+only the relevant categories (including the separate native H1–H6 TOC default); no
+duplicated definitions or preset registration:
 
 ```toml
 [taxonomies]
 _merge = 'shallow'
 [permalinks.term]
 _merge = 'shallow'
+[markup.tableOfContents]
+_merge = 'shallow'
 ```
 
 Hugo 0.166 requires this site-side permission. Theme `_merge` cannot grant itself permission.
-Do not enable root-wide/security/markup merging as a shortcut. Site entries can extend/override
+The TOC import is leaf-scoped; do not enable root-wide/security or broad markup merging
+as a shortcut. Site entries can extend/override
 these tables; native source assignment keys and public URL patterns are different concerns.
 
 A small native per-language adapter supplies real preset term Pages from the theme's single

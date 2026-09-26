@@ -69,7 +69,10 @@ Stellar; there is no global or article-only selection-color override.
 Native Hugo/Goldmark renders paragraphs, emphasis/strong/strikethrough, ordered/unordered/task
 lists, links, rules, tables and footnotes with the site's enabled extensions. Tasks retain
 native disabled checkbox semantics; Sidera does not turn them into an interactive service.
-Heading IDs, TOC fragments and footnote/backlink roles are not rewritten. The native heading
+Heading IDs, TOC fragments and footnote/backlink roles are not rewritten. The native TOC
+range defaults to H1–H6, matching Stellar, through the narrow `markup.tableOfContents` import
+in CONTRACT.md. Explicit site range settings still win; leading missing heading levels do not
+create extra root indentation. The native heading
 render hook adds Stellar-style linked markers for H2 `#`, H3 `=`, H4 `|`, H5 `:`; H1/H6
 have no prefix glyph. Compact cyan blocks turn orange on hover or keyboard focus. Accessible
 link names/tooltips use native EN/ZH `heading_permalink`; formatted heading text and Hugo's
