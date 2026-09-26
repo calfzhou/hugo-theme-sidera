@@ -7,11 +7,12 @@
       {{- $trail = $trail | append (dict "Page" . "Label" .LinkTitle) -}}
     {{- end -}}
   {{- end -}}
-  {{- $trail = $trail | append (dict "Page" $page "Label" $page.LinkTitle) -}}
 {{- end -}}
 <nav class="page-breadcrumbs" aria-label="{{ T "breadcrumbs" }}">
   <a href="{{ $page.Site.Home.RelPermalink }}">{{ T "home" }}</a>
   {{- range $trail -}}
-    <span class="breadcrumb-step"><span class="breadcrumb-separator" aria-hidden="true">/</span><a{{ if eq .Page $owner }} data-collection-link{{ end }} href="{{ .Page.RelPermalink }}"{{ if eq .Page $page }} aria-current="page"{{ end }}>{{ .Label }}</a></span>
+    {{- if ne .Page $page -}}
+    <span class="breadcrumb-step"><span class="breadcrumb-separator" aria-hidden="true">/</span><a{{ if eq .Page $owner }} data-collection-link{{ end }} href="{{ .Page.RelPermalink }}">{{ .Label }}</a></span>
+    {{- end -}}
   {{- end -}}
 </nav>

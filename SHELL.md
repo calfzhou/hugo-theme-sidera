@@ -900,11 +900,12 @@ the compact default. Custom byline remains an independent owner-authored line.
 
 ## Header breadcrumbs
 
-Article, docs and visible section headers share `Home / Collection / Ancestors / Current page`.
-Home uses the current language's native home URL; standalone pages omit the collection.
+Article, docs and visible section headers show only the path back: `Home / Collection / Ancestors`.
+The current page is omitted because its heading appears below. No trailing slash.
+Home uses the current language's native home URL; standalone pages and collection roots show only Home.
 An independent nested scope starts at its own root rather than exposing outer collections.
-Collection roots appear once; native page links preserve permalinks, including dated articles.
+Collection links appear once on descendant pages; native ancestor permalinks remain unchanged.
 Scoped taxonomy result headers use the same row with their real hub/term ancestry. No preset/type
-label masquerades as a path segment. Current links retain aria-current; all links have hover and
+label masquerades as a path segment. No ancestor is marked aria-current; all links have hover and
 keyboard-focus feedback. Labels wrap without separating a slash from its following link. Existing
 list_header=false and compact taxonomy-index layouts remain unchanged.

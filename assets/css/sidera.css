@@ -266,7 +266,6 @@ article[data-renderer] { padding: 0; }
 .breadcrumb-step { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; max-width: 100%; }
 .breadcrumb-separator { flex: none; color: var(--quiet); }
 .page-breadcrumbs a { min-width: 0; color: var(--muted); text-decoration: none; }
-.page-breadcrumbs a[aria-current] { color: var(--text); }
 .page-breadcrumbs a:is(:hover,:focus-visible) { color: var(--accent); text-decoration: underline; }
 .page-breadcrumbs a:active { color: var(--text); }
 .article-header :is(.author-list,.byline) { margin: 4px 0; }
