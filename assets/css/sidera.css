@@ -372,6 +372,27 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose table:not(.lntable) :is(th,td) { border-bottom: 1px dashed var(--line); padding: .5em 1em; }
 .prose table:not(.lntable) th { background: var(--panel); border-block: 1px solid var(--line); text-align: start; font-weight: 600; color: var(--text); }
 .prose table:not(.lntable) tbody tr:hover { background: var(--panel); }
+/* Stellar scrollbar-codeblock: slim transparent track, rounded thumb on interaction.
+   Keep native high-contrast controls; hidden rails and the document scrollbar are separate. */
+@media (forced-colors: none) {
+  .prose :is(pre,.highlight,table,.code-copy-fallback) { --scrollbar-thumb: transparent; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+  .prose :is(pre,.highlight,table,.code-copy-fallback):is(:hover,:focus-within),
+  .prose .code-block:is(:hover,:focus-within) :is(pre,.highlight) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
+  @media (hover: none), (pointer: coarse) {
+    .prose :is(pre,.highlight,table,.code-copy-fallback) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
+  }
+  @supports selector(::-webkit-scrollbar) {
+    /* Non-auto standard properties would override the precise WebKit 4px geometry. */
+    .prose :is(pre,.highlight,table,.code-copy-fallback) { scrollbar-width: auto; scrollbar-color: auto; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar { width: 4px; height: 4px; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-track,
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-track-piece,
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-corner { background: transparent; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 12px; cursor: pointer; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-thumb:hover { background: var(--quiet); }
+    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-button { display: none; }
+  }
+}
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
 .prose .footnotes { font-size: .85em; line-height: 1.6; margin-top: 2rem; }
 .prose .footnotes hr { margin-block: 0 1rem; }

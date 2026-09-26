@@ -105,8 +105,12 @@ without a toolbar; the built-in highlight shortcode is not replaced by this fenc
 
 A pointer click no longer paints a thick/double border. Keyboard focus draws one 2px outline
 around the highlighted scrollport, suppressing the redundant inner pre outline. This is focus
-feedback, not a code border or syntax-highlighting state. Wide tables/code retain visible native
-scrollbars; keyboard scrolling is spot-checked in Chromium, not certified across browsers.
+feedback, not a code border or syntax-highlighting state. Wide tables/code use Stellar-style 4px transparent tracks with rounded, muted thumbs on
+hover or keyboard focus (visible on touch). The thumb strengthens when hovered. A standard
+thin-scrollbar fallback covers browsers without WebKit pseudo-elements; forced-colors mode
+retains native controls. This also covers the manual-copy textarea, not the document scrollbar
+or already-hidden rails/TOC. Keyboard scrolling is spot-checked in Chromium, not certified
+across browsers.
 Native table column alignment is preserved, with quiet headers and row separators.
 
 Images retain native URLs/alt text and explicit figure sizes, scale down to available width,
