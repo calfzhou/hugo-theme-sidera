@@ -220,6 +220,9 @@ summary { cursor: pointer; }
 .article-dates { gap: 4px 8px; width: fit-content; max-width: 100%; }
 .article-dates > span { display: inline-flex; align-items: baseline; gap: 8px; }
 .article-dates .date-separator { opacity: .5; }
+.article-dates > .header-authors { display: block; min-width: 0; max-width: 100%; }
+.header-authors a { color: var(--muted); text-decoration: none; }
+.header-authors a:is(:hover,:focus-visible) { color: var(--accent); text-decoration: underline; }
 @media (hover: hover) {
   .article-dates .date-secondary { visibility: hidden; }
   .article-dates:is(:hover,:focus-within) .date-secondary { visibility: visible; }

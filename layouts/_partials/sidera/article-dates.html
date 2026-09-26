@@ -1,7 +1,12 @@
-{{- $dates := partial "sidera/dates.html" . -}}
-{{- with $dates -}}
-  <div class="article-dates"{{ if gt (len .) 1 }} tabindex="0"{{ end }}>
-    {{- range $index, $date := . -}}
+{{- $page := .Page -}}{{- $dates := partial "sidera/dates.html" . -}}{{- $authors := slice -}}
+{{- if .Settings.show_authors -}}{{- $authors = $page.GetTerms "authors" | uniq -}}{{- end -}}
+{{- if or $dates $authors -}}
+  <div class="article-dates"{{ if gt (len $dates) 1 }} tabindex="0"{{ end }}>
+    {{- with $authors -}}
+      <span class="header-authors" id="header-assigned-authors" role="group" aria-label="{{ T "authors" }}">{{ range $index, $author := . }}{{ if $index }}, {{ end }}<a href="{{ (partial "taxonomies/link.html" (dict "page" $page "term" .)).RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}</span>
+      {{- if $dates -}}<span class="date-separator author-date-separator" aria-hidden="true">|</span>{{- end -}}
+    {{- end -}}
+    {{- range $index, $date := $dates -}}
       <span class="{{ if $index }}date-secondary{{ else }}date-primary{{ end }}">{{ if $index }}<span class="date-separator" aria-hidden="true">|</span>{{ end }}{{ partial "date.html" $date }}</span>
     {{- end -}}
   </div>

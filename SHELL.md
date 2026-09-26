@@ -380,8 +380,8 @@ Site/minimal fallback. Ordinary section params do not become descendant defaults
 
 | Region / default items | What renders |
 |---|---|
-| article_footer=[terms,references,license,authors,share,series,text,links] | terms: actual assigned tag/category pills, without collection-hub links; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
-| Article item authors | Ordered native authors with optional local portrait cards and edit_url. show_authors still applies. Attribution is footer-only; the independent custom byline is unchanged. |
+| article_footer=[terms,references,license,share,series,text,links] | terms: actual assigned tag/category pills, without collection-hub links; optional meta: native Lastmod only when show_updated; series: existing scoped sequence; text: article_text; links: article_links_menu |
+| Article item authors | Ordered native authors with optional local portrait cards and edit_url. show_authors still applies. This is an explicit opt-in; default attribution is compact header names. The independent custom byline is unchanged. |
 | site_footer=[links,text,credit] | links: footer_menu with native two-level columns; text: footer_text; credit: localized built_with Markdown (default Built with Hugo · Sidera) |
 
 The `credit` item renders the native `built_with` translation as Markdown, using the same
@@ -705,7 +705,7 @@ widgets keep their own date-order semantics, and archives remain publication-dat
 
 ## Boxed article footer
 
-The default article_footer order is `[terms,references,license,authors,share,series,text,links]`.
+The default article_footer order is `[terms,references,license,share,series,text,links]`.
 References, License, Authors and Share form a Stellar-style box; empty items emit no section or
 divider. Consecutive boxed items share a panel. An intervening legacy component ends that panel,
 preserving configured order rather than silently moving components. Terms and series remain
@@ -733,8 +733,8 @@ silently assign Creative Commons or any other reuse license. The notice concerns
 not Sidera's software distribution license. References/license use Page.RenderString with the
 normal site-wide Goldmark raw-HTML policy; no arbitrary author substitutions or template execution.
 
-`authors` reuses native authors terms/portraits/profile links, now styled as footer cards. The
-header no longer repeats author attribution. No GitHub identities/history are fetched. Optional
+`authors` is still available as an explicit optional footer component with native portraits/profile
+links. It is no longer in the default footer; default attribution is text-only in the header. No GitHub identities/history are fetched. Optional
 `edit_url` is a literal safe URL, not a repository-prefix mapping. Missing authors and edit URL
 omit the section. `show_authors=false` hides the whole section; byline remains separate.
 
@@ -881,3 +881,18 @@ later child pagers and generated/index views, and does not depend on article_foo
 The small `sidera/article-end.html` partial accepts Page, Owner and Settings. A future comment
 integration can replace this final slot without moving the footer or collection navigation. No
 comment provider, external request or new runtime script is introduced now.
+
+
+## Compact header authors
+
+Assigned native authors appear before the dates as linked names, separated by comma-space:
+`First Writer, Second Writer | Updated …`. A divider appears only when both authors and dates
+exist. Missing authors or show_authors=false emits no names/divider; authors-only pages have no
+trailing bar. No avatars or author heading in this row. Native GetTerms order/uniqueness and
+existing global/scoped author-link policy remain. Date priority and secondary-date reveal are
+unchanged; focus within the author links also reveals the secondary date.
+
+The default boxed footer now contains references/license/share, with no Authors section. The
+existing authors component (including edit_url) remains available only when explicitly selected
+in article_footer. This preserves configured footer cards/edit links without forcing them into
+the compact default. Custom byline remains an independent owner-authored line.

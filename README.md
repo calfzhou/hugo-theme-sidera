@@ -135,7 +135,8 @@ finishing, P3 special features and distribution licensing remain separate.
 
 
 Article footers now group References, License, Authors and Share into a configurable panel,
-while existing terms/series remain outside it. Authors no longer repeat in the article header.
+while existing terms/series remain outside it. Authors now default to compact linked header names;
+footer author cards are an explicit opt-in.
 The default content notice is neutral, not an automatic Creative Commons grant. WeChat QR images
 are generated locally by Hugo images.QR (Hugo >=0.141.0); no QR service or client library is used.
 See SHELL.md for params, native collection cascades, empty/false behavior and share fallbacks.
