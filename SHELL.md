@@ -2,8 +2,9 @@
 
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
 configuration API. The collection-overview home remains the default. Reusable cards and
-configurable article/site footers are implemented. P2-GR now refines whole-site/non-content composition; detailed Markdown and the
-selected-collection home option remain separate; this is not whole-P2 acceptance.
+configurable article/site footers are implemented. P2-GR covers whole-site/non-content composition. P2-H refines ordinary Markdown inside
+that frame (README); it does not redesign these regions or implement a selected-home option.
+Final integrated acceptance is deferred until after P3.
 
 ## Defaults and configuration
 

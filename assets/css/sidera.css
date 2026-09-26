@@ -1,4 +1,4 @@
-/* Sidera's native shell and components. Component styling adapted from Stellar
+/* Sidera's native shell, prose and components. Styling adapted from Stellar
    1.44.0: collection/list/sidebar/widgets/footer (MIT, copyright 2021 xaoxuu).
    See THIRD-PARTY-NOTICES.md. No Hexo/Stylus runtime or remote assets. */
 :root {
@@ -169,7 +169,6 @@ summary { cursor: pointer; }
 .toc-footer::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 1px; background: var(--line); }
 .toc-top { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 16px; text-decoration: none; }
 .toc-top .icon { width: 16px; height: 16px; }
-.prose h1[id] { scroll-margin-top: 1.5rem; }
 @media (min-width: 1441px) { .article-toc [data-toc] { max-height: 70dvh; } }
 @media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } .toc-top { background: var(--panel); } }
 .view-header { padding: 0 18px 12px; margin-bottom: 12px; }
@@ -281,34 +280,78 @@ article[data-renderer] { padding: 0; }
 .tag-chips a:is(:hover,:focus-visible) .icon { color: var(--accent); opacity: 1; }
 .tag-chips a:active { box-shadow: inset 0 0 0 2px var(--accent); }
 .tag-chips:empty { display: none; }
-article[data-renderer] .prose { max-width: 65ch; margin-inline: auto; }
-.prose { color: var(--muted); font-family: var(--reading); font-size: 1rem; line-height: 1.85; }
-.prose :is(h2, h3, h4, h5, h6) { font-family: var(--ui); margin-top: 2em; scroll-margin-top: 1.5rem; }
-.prose :is(ul, ol) { padding-left: 1.5rem; }
-.prose li + li { margin-top: .3rem; }
-/* Neutral backing keeps transparent technical figures readable without inversion. */
-.prose img { max-width: 100%; height: auto; background: var(--image-background); }
-.prose figure { margin: 1.5rem 0; }
-.prose figcaption { margin-top: .5rem; color: var(--muted); font-size: .85rem; line-height: 1.6; }
-.prose figcaption p { margin: 0; }
-.prose :is(pre, table) { max-width: 100%; overflow-x: auto; }
-.prose pre { padding: 1rem; background: var(--canvas); border: 1px solid var(--line); border-radius: 8px; line-height: 1.6; }
-.prose code { font: .83em/1.6 var(--code); overflow-wrap: anywhere; }
-.prose :not(pre) > code { padding: .1em .3em; background: var(--canvas); border-radius: 4px; }
-.prose pre code { overflow-wrap: normal; }
-/* Ordinary native Chroma tokens inherit readable text unless distinguished here. */
+/* Ordinary Markdown: Stellar md/base/title/blockquote/highlight rhythm, adapted
+   to native Goldmark/Chroma markup. No changes to the surrounding article frame. */
+article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
+.prose { color: color-mix(in srgb,var(--text) 80%,transparent); font-family: var(--reading); font-size: 1rem; line-height: 1.7; overflow-wrap: anywhere; }
+.prose :is(p,ul,ol,blockquote,pre,table,figure,.highlight) { margin-block: 1rem; }
+.prose :is(h1,h2,h3,h4,h5,h6) { font-family: var(--ui); color: var(--text); font-weight: 500; line-height: 1.5; margin-block: 1.5em .75em; overflow-wrap: anywhere; scroll-margin-top: 1.5rem; }
+.prose h1 { font-size: 1.8em; font-weight: 600; }
+.prose h2 { font-size: 1.6em; position: relative; padding-inline-start: 13px; }
+.prose h3 { font-size: 1.4em; }
+.prose h4 { font-size: 1.2em; }
+.prose h5 { font-size: 1.05em; font-weight: 600; }
+.prose h6 { font-size: 1em; font-weight: 600; }
+.prose h2::before { content: ""; position: absolute; inset-inline-start: 0; top: .3em; width: 4px; height: .9em; border-radius: 2px; background: var(--accent); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose ::selection { background: color-mix(in srgb,var(--accent) 80%,var(--text)); color: var(--canvas); }
+.prose strong { color: var(--text); font-weight: 700; }
+.prose a { color: color-mix(in srgb,var(--link) 85%,var(--text)); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.prose a:is(:hover,:focus-visible) { color: color-mix(in srgb,var(--link) 85%,var(--text)); background: var(--accent-soft); text-decoration-color: currentColor; }
+.prose a:has(img) { display: block; width: fit-content; max-width: 100%; margin-inline: auto; background: none; text-decoration: none; }
+.prose :is(ul,ol) { padding-inline-start: 1.5em; }
+.prose > :is(ul,ol),.prose blockquote { font-size: .944em; line-height: 1.6; }
+.prose li + li { margin-top: .3em; }
+.prose li::marker { color: var(--muted); font-variant-numeric: tabular-nums; }
+.prose :is(li,blockquote) > :is(p,ul,ol) { margin-block: .5em; }
+.prose :is(li,blockquote) > :first-child { margin-top: 0; }
+.prose :is(li,blockquote) > :last-child { margin-bottom: 0; }
+.prose li:has(> input[type="checkbox"],> p > input[type="checkbox"]) { list-style: none; }
+.prose li > input[type="checkbox"],.prose li > p > input[type="checkbox"] { width: .9em; height: .9em; margin: 0 .5em 0 -1.4em; vertical-align: -.05em; accent-color: var(--accent); }
+.prose blockquote { margin-inline: 0; padding-inline: 1em; border-inline-start: 4px solid var(--line); }
+.prose blockquote blockquote { font-size: inherit; }
+.prose blockquote:is(:hover,:focus-within) { border-color: var(--accent); }
+/* Native image sizes/alt/link semantics remain; transparent diagrams keep a pale backing. */
+.prose img { display: block; max-width: 100%; height: auto; margin-inline: auto; border-radius: 8px; background: var(--image-background); }
+.prose figure { margin-inline: 0; }
+.prose figcaption { margin-top: .5rem; color: var(--muted); font-size: .85em; line-height: 1.5; text-align: center; }
+.prose figcaption :is(h4,p) { font: inherit; margin: .25em 0 0; }
+.prose figcaption h4 { color: var(--text); font-weight: 500; }
+.prose code { font-family: var(--code); font-size: .85em; overflow-wrap: anywhere; }
+.prose :not(pre) > code { padding: .15em .3em; background: var(--panel); border-radius: 4px; }
+.prose pre { max-width: 100%; overflow: auto; padding: .85rem 1rem; background: var(--panel); border: 0; border-radius: 8px; font: .85rem/1.6 var(--code); tab-size: 4; }
+.prose pre code { padding: 0; font: inherit; overflow-wrap: normal; word-break: normal; }
+.prose .highlight { max-width: 100%; }
+.prose .highlight pre { margin: 0; }
+/* Chroma's optional line-number table is layout, never an ordinary data table.
+   One outer scrollport keeps gutter and code lines aligned at every width. */
+.prose .highlight:has(.lntable) { overflow-x: auto; border-radius: 8px; background: var(--panel); }
+.prose .highlight:has(.lntable):focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+.prose .chroma .lntable { display: table; margin: 0; border: 0; border-spacing: 0; border-collapse: collapse; width: 100%; max-width: none; overflow: visible; }
+.prose .chroma .lntd { padding: 0; border: 0; vertical-align: top; }
+.prose .chroma .lntd:first-child { width: 1%; }
+.prose .chroma .lntd pre { overflow: visible; max-width: none; background: none; border-radius: 0; }
+.prose .chroma .lntd + .lntd pre { padding-inline-start: 0; }
+.prose .chroma :is(.ln,.lnt) { user-select: none; -webkit-user-select: none; white-space: pre; }
+.prose .chroma .ln { margin-inline-end: 1em; }
+.prose .chroma .line { display: flex; }
+.prose .chroma .cl { flex: 1; }
+.prose .chroma .hl { background: var(--line); }
+/* Ordinary tokens reuse palette-aware, readable colors instead of fixed inline colors. */
 .prose .chroma { color: var(--text); }
-.prose .chroma :is(.c, .ch, .cm, .c1, .cs, .cp, .cpf, .ln, .lnt) { color: var(--muted); }
-.prose .chroma :is(.k, .kc, .kd, .kn, .kp, .kr, .kt, .nb, .nt) { color: var(--accent); }
-.prose .chroma :is(.s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss, .m, .mb, .mf, .mh, .mi, .il, .mo) { color: var(--pin); }
-.prose blockquote { border-left: 3px solid var(--accent); margin: 1.5rem 0; padding: .1rem 1rem; color: var(--muted); }
-.prose table { display: block; border-collapse: collapse; font-size: .9rem; }
-.prose th, .prose td { border: 1px solid var(--line); padding: .5rem .75rem; text-align: left; }
+.prose .chroma :is(.c,.ch,.cm,.c1,.cs,.cp,.cpf,.ln,.lnt) { color: var(--muted); }
+.prose .chroma :is(.k,.kc,.kd,.kn,.kp,.kr,.kt,.nb,.nt) { color: color-mix(in srgb,var(--accent) 70%,var(--text)); }
+.prose .chroma :is(.s,.sa,.sb,.sc,.dl,.sd,.s2,.se,.sh,.si,.sx,.sr,.s1,.ss,.m,.mb,.mf,.mh,.mi,.il,.mo) { color: color-mix(in srgb,var(--pin) 80%,var(--text)); }
+.prose table:not(.lntable) { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: .9em; line-height: 1.5; overflow-wrap: normal; }
+.prose table:not(.lntable) :is(th,td) { border-bottom: 1px dashed var(--line); padding: .5em 1em; }
+.prose table:not(.lntable) th { background: var(--panel); border-block: 1px solid var(--line); text-align: start; font-weight: 600; color: var(--text); }
+.prose table:not(.lntable) tbody tr:hover { background: var(--panel); }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
-
-article[data-renderer] .prose { padding: 0 18px; max-width: none; }
-.prose h2::before { content: ""; display: inline-block; width: 4px; height: .9em; margin-right: 9px; vertical-align: -.05em; border-radius: 2px; background: var(--accent); }
-.prose pre { background: var(--panel); border-color: transparent; }
+.prose .footnotes { font-size: .85em; line-height: 1.6; margin-top: 2rem; }
+.prose .footnotes hr { margin-block: 0 1rem; }
+.prose :is(.footnotes li,sup[id]) { scroll-margin-top: 1.5rem; }
+.prose .footnote-ref,.prose .footnote-backref { padding-inline: .2em; }
 /* Footer panels and sitemap columns adapt Stellar's restrained closing hierarchy. */
 .article-footer { margin: 36px 18px 18px; font-size: 15px; line-height: 1.6; }
 .article-footer > * + * { margin-top: 18px; }
@@ -423,7 +466,6 @@ article[data-renderer] .prose { padding: 0 18px; max-width: none; }
   .excerpt { -webkit-line-clamp: 3; margin: 12px 0; }
   .tree-row a { min-height: 44px; }
   .tree-branch > summary { min-height: 44px; }
-  .prose { line-height: 1.8; }
   .site-footer { margin-bottom: 96px; }
 }
 .region-toggle { position: fixed; z-index: 9; bottom: 24px; align-items: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--muted); box-shadow: 0 4px 12px #0002; font: 14px var(--ui); cursor: pointer; }
@@ -479,7 +521,6 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.prose :is(h2,h3,h4,h5,h6) { color: var(--text); }
 
 /* Stellar tags/cats indexes: compact chips and directory rows, not article-sized boxes. */
 .taxonomy-cloud { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px 18px; }

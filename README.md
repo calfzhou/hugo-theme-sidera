@@ -15,8 +15,8 @@ left-anchored soft-glass identity/navigation, bounded compact main, optional rig
 region, complete notes/docs trees, native menus and scoped components. See
 [SHELL.md](SHELL.md) for the **implemented** settings and extensions. P2-A–W's
 organization, appearance, localization and opt-in docs foundations remain intact.
-P2-G now refines cards, both rails and functional configurable footers; whole-page/Markdown
-and selected-home integration remain H. This is
+P2-G/GR covers cards, both rails and functional configurable footers. P2-H now refines
+ordinary Markdown inside that accepted frame; final integrated acceptance follows P3. This is
 not whole-theme completion, a production migration or an official Stellar port.
 Distribution licensing is a separate unresolved gate.
 
@@ -58,13 +58,41 @@ JavaScript unavailable, CSS follows the owner/OS default and hides the inert act
 ordinary links. No remote resources, framework or mandatory appearance select are required.
 A restrictive CSP must authorize the existing head script; no full CSP compatibility claim is made.
 
-Native Hugo/Chroma code highlighting uses a small render hook with palette-aware
-classes, preserving ordinary fenced-code options and avoiding fixed inline theme
-colors. Comments, keywords, strings/numbers and ordinary text reuse readable tokens;
-advanced code-file tooling and special renderers remain outside this slice. Native
-figures/captions keep full mobile width; transparent images keep their neutral pale
-backing in both palettes. Wide code/tables use native local scrolling, not widgets.
-The dependency-free font stacks remain local/system fallbacks; no fonts are bundled.
+Ordinary Markdown uses the existing 18px local/system reading stack and bounded article
+track, with 1.7 line height, explicit heading hierarchy and compact nested lists/quotes.
+Body links and code tokens adapt the existing palette for contrast, including selected text
+and highlighted code lines; global shell colors/fonts are unchanged. No new parameter is needed.
+
+Native Hugo/Goldmark renders paragraphs, emphasis/strong/strikethrough, ordered/unordered/task
+lists, links, rules, tables and footnotes with the site's enabled extensions. Tasks retain
+native disabled checkbox semantics; Sidera does not turn them into an interactive service.
+Heading IDs, TOC fragments and footnote/backlink roles are not rewritten. Raw HTML remains
+subject to Hugo's normal safe default; do not enable `markup.goldmark.renderer.unsafe` just
+for ordinary Markdown.
+
+The existing code render hook calls native `transform.HighlightCodeBlock`, overriding only
+`noClasses=false` for palette-aware CSS. Hugo itself consumes fence options. Line numbers
+(inline/table), line anchors, `lineNoStart` and `hl_lines` remain native; for example:
+
+````md
+```python {linenos=table linenostart=8 hl_lines=[3]}
+# Lines begin at 8; the third source line is highlighted.
+value = 3
+print(value)
+```
+````
+
+Code/line-number tables have one local horizontal scrollport, separate from ordinary data
+tables. Line numbers are not selected with code. Wide tables/code retain visible native
+scrollbars; keyboard scrolling is spot-checked in Chromium, not certified across browsers.
+Native table column alignment is preserved, with quiet headers and row separators.
+
+Images retain native URLs/alt text and explicit figure sizes, scale down to available width,
+and are centered without forced enlargement. Transparent diagrams keep their neutral pale
+backing. Markdown image titles are not invented captions. Hugo's native `figure` shortcode
+supplies caption/title markup; both stay compact rather than acquiring article-heading gaps.
+Footnotes remain in the body, independent of configured article/site footers. There are no
+new theme-owned UI strings, scripts, plugins, fonts or dependencies in this body pass.
 
 
 ## Use and develop
@@ -130,8 +158,8 @@ between collection folders without rewriting its taxonomy metadata.
 [PRESETS.md](PRESETS.md) explains the narrow native import permission, theme-supplied definitions
 and per-language term Pages. The full consumer migration is implemented, including false/empty
 semantics and old-key removal. Actual theme docs still need explicit opt-in (DOCS.md); publishing
-the docs preset term does not publish that documentation tree. Remaining H whole-page/Markdown
-finishing, P3 special features and distribution licensing remain separate.
+the docs preset term does not publish that documentation tree. P2-H ordinary-Markdown implementation is a review checkpoint, not final acceptance.
+P3 special features and distribution licensing remain separate.
 
 
 Article footers now group References, License, Authors and Share into a configurable panel,

@@ -6,6 +6,10 @@ Stellar main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.
 Pinned collection tabs also adapt navbar.styl and the bar-glass/newblur mixins in _defines/func.styl; geometry tracking follows main.js navbarPin.
 Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
+Ordinary Markdown styles also adapt _components/md.styl, pages/article-tech.styl and
+_common/base.styl, title.styl, blockquote.styl, pre.styl and highlight.styl. Native
+Goldmark/Chroma structure replaces Hexo markup; readable palette tokens and keyboard
+scrollbars are retained rather than copying hidden scrollbars or low-contrast colors.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This notice applies to those adaptations; it does not grant a distribution license
 for the rest of Sidera or site content. No third-party fonts are bundled. The small local icon subset below has a separate license.

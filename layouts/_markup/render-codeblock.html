@@ -1,4 +1,4 @@
-{{- /* Native highlighting; palette-aware classes instead of fixed inline colors. */ -}}
-{{- $options := merge .Options (dict "noClasses" false) -}}
-{{- $result := transform.HighlightCodeBlock . $options -}}
+{{- /* HighlightCodeBlock already consumes .Options. Passing them again normalizes
+      hl_lines twice; override only the palette policy, leaving native options intact. */ -}}
+{{- $result := transform.HighlightCodeBlock . (dict "noClasses" false) -}}
 {{- $result.Wrapped -}}

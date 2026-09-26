@@ -2,7 +2,8 @@
 
 Implemented P2-M model on Hugo **0.166.0**. This is an independent Hugo theme, not a
 Stellar configuration port. P2-G adds reusable component styling and configurable footers;
-P2-GR corrects whole-site/non-content composition against Stellar. Detailed Markdown and selected-home integration remain separate.
+P2-GR corrects whole-site/non-content composition against Stellar. Ordinary Markdown is refined in P2-H (see README); unverified homepage capabilities remain
+for the post-P3 integrated review, not this body-only checkpoint.
 No Hexo, Node runtime, downloaded dependency, duplicated source repo or Go-module switch is
 required to build. Showcase tests use Python stdlib; browser tests use its pinned Node/Chrome.
 
