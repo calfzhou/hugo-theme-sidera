@@ -5,9 +5,7 @@
   {{ .Store.Set "sidera-body" (partialCached "sidera/settings.html" . .Path).list_header }}
   {{ if (partialCached "sidera/settings.html" . .Path).list_header }}
   <header class="view-header">
-    {{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
-    {{ end }}
+    {{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}
     <h1>{{ .Title }}</h1>
     <div class="intro prose">{{ .Content }}</div>
     {{ if and $owner (in (partialCached "sidera/settings.html" . .Path).taxonomy_navigation "tags") }}

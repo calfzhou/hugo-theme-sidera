@@ -4,9 +4,7 @@
   {{ with .page }}
   <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
-    {{ if $breadcrumbs }}{{ $breadcrumbs }}{{ else }}{{ with $owner }}
-      <nav aria-label="{{ T "collection" }}"><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="eyebrow">/ {{ partial "collection-label.html" . }}</span></nav>
-    {{ else }}<p class="eyebrow">{{ T "standalone_page" }}</p>{{ end }}{{ end }}
+    {{ if $breadcrumbs }}{{ $breadcrumbs }}{{ else }}{{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}{{ end }}
     <h1>{{ .Title }}</h1>
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     {{ partial "sidera/article-dates.html" (dict "Page" . "Settings" $settings) }}

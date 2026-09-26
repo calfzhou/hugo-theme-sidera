@@ -260,7 +260,15 @@ article[data-renderer] { padding: 0; }
 .article-header { display: flex; flex-direction: column; background: var(--panel); padding: 18px; border-radius: var(--radius); margin-bottom: 36px; min-height: 186px; }
 .article-header h1 { order: 2; margin: auto 0 14px; padding-top: 42px; font-size: 27px; line-height: 1.2; }
 .article-header nav { margin-bottom: 4px; }
-.article-header nav a { color: var(--text); text-decoration: none; }
+/* One baseline and inset for article, docs and list ancestry. Keep each slash
+   with its following link when wrapping; long labels can still break on mobile. */
+.page-breadcrumbs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0 0 4px; font-size: 14px; line-height: 1.6; }
+.breadcrumb-step { display: inline-flex; align-items: baseline; gap: 8px; min-width: 0; max-width: 100%; }
+.breadcrumb-separator { flex: none; color: var(--quiet); }
+.page-breadcrumbs a { min-width: 0; color: var(--muted); text-decoration: none; }
+.page-breadcrumbs a[aria-current] { color: var(--text); }
+.page-breadcrumbs a:is(:hover,:focus-visible) { color: var(--accent); text-decoration: underline; }
+.page-breadcrumbs a:active { color: var(--text); }
 .article-header :is(.author-list,.byline) { margin: 4px 0; }
 .article-header .article-terms { order: 3; }
 .byline { margin: 8px 0; font-size: 15px; }

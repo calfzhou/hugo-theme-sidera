@@ -273,3 +273,9 @@ other = "上级页面"
 
 [series_part]
 other = "第 {{ .current }} 篇，共 {{ .total }} 篇"
+
+[home]
+other = "首页"
+
+[breadcrumbs]
+other = "面包屑导航"

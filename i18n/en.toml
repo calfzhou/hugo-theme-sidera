@@ -276,3 +276,9 @@ other = "Parent"
 
 [series_part]
 other = "Part {{ .current }} of {{ .total }}"
+
+[home]
+other = "Home"
+
+[breadcrumbs]
+other = "Breadcrumbs"

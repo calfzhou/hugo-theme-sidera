@@ -896,3 +896,15 @@ The default boxed footer now contains references/license/share, with no Authors 
 existing authors component (including edit_url) remains available only when explicitly selected
 in article_footer. This preserves configured footer cards/edit links without forcing them into
 the compact default. Custom byline remains an independent owner-authored line.
+
+
+## Header breadcrumbs
+
+Article, docs and visible section headers share `Home / Collection / Ancestors / Current page`.
+Home uses the current language's native home URL; standalone pages omit the collection.
+An independent nested scope starts at its own root rather than exposing outer collections.
+Collection roots appear once; native page links preserve permalinks, including dated articles.
+Scoped taxonomy result headers use the same row with their real hub/term ancestry. No preset/type
+label masquerades as a path segment. Current links retain aria-current; all links have hover and
+keyboard-focus feedback. Labels wrap without separating a slash from its following link. Existing
+list_header=false and compact taxonomy-index layouts remain unchanged.
