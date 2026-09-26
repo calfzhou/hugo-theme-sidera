@@ -824,10 +824,10 @@ site/language params and the minimal fallback. Ordinary nested/member-page choic
 navigation_mode are rejected so one sequence cannot disagree with its reverse. Preset descendant
 maps must not set it. A nested independent root owns a separate policy and sequence.
 
-Parent always targets the real immediate native parent if within the same collection, regardless
-of mode. A root has no Parent. No synthetic parent pages or cross-collection links; missing
+Parent is shown only in siblings/sequential modes and targets the real immediate native parent
+within the same collection. List mode omits Parent. A root has no Parent. No synthetic parent pages or cross-collection links; missing
 Previous/Next are omitted with no wrap or dead placeholders. If a page is not in the selected
-list sequence, only its valid parent is offered. Generated taxonomy/archive routes, standalone
+list sequence, no reading controls are emitted for it. Generated taxonomy/archive routes, standalone
 pages without a collection, and later list/child paginator pages have no reading controls.
 Published eligibility follows native Pages (current language, draft/future/list/render settings);
 known excluded or untranslated nodes do not become navigation links. Hidden child cards do not

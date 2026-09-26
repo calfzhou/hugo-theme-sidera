@@ -2,7 +2,7 @@
 {{- $previous := false -}}{{- $next := false -}}{{- $parent := false -}}{{- $mode := "" -}}
 {{- if and $owner (or .IsPage .IsSection) (not .Params.sidera.tag_view) (not .Params.sidera.archive_view) -}}
   {{- $mode = (partialCached "sidera/settings.html" $owner $owner.Path).navigation_mode -}}
-  {{- if ne $page $owner -}}{{- with .Parent -}}
+  {{- if and (ne $mode "list") (ne $page $owner) -}}{{- with .Parent -}}
     {{- if and .RelPermalink (not .IsHome) (eq (partial "collection-owner.html" .) $owner) -}}{{- $parent = . -}}{{- end -}}
   {{- end -}}{{- end -}}
   {{- $sequence := slice -}}

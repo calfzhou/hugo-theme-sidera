@@ -114,6 +114,6 @@ ignore child-card pagination and children.list visibility, exclude independent n
 generated taxonomy/archive pages, and never invent missing parents or translations.
 
 List mode instead follows the collection's actual main list. For a children-mode root this is
-its ordered immediate-child list; deeper pages not in that list retain Parent but no invented
-Previous/Next targets. Use siblings or sequential for full tree navigation. The controls appear
+its ordered immediate-child list. List mode omits Parent; deeper pages not in that list have
+no reading controls. Use siblings or sequential for full tree navigation. The controls appear
 on canonical content pages only, not later child pagers, and do not change series navigation.
