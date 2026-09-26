@@ -122,3 +122,24 @@ if (topRegion) {
   window.visualViewport?.addEventListener('resize', update);
   update();
 }
+
+
+// Decorate resolved article links, without replacing Hugo's native link/resource
+// renderer or changing href/target/rel. No-script pages keep ordinary usable links.
+for (const body of document.querySelectorAll('article[data-renderer] .prose[data-external-link-label]')) {
+  for (const link of body.querySelectorAll('a[href]')) {
+    if (!link.textContent.trim() || link.querySelector('.external-link-marker')) continue;
+    let destination;
+    try { destination = new URL(link.href); } catch { continue; }
+    if (!['http:', 'https:'].includes(destination.protocol) || destination.origin === location.origin) continue;
+    const marker = document.createElement('span');
+    marker.className = 'external-link-marker';
+    marker.setAttribute('aria-hidden', 'true');
+    // A word joiner and narrow nonbreaking space keep the suffix with its label.
+    marker.textContent = '\u2060\u202f↗';
+    const description = document.createElement('span');
+    description.className = 'visually-hidden';
+    description.textContent = ' ' + body.dataset.externalLinkLabel;
+    link.append(marker, description);
+  }
+}

@@ -305,6 +305,8 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose strong { color: var(--text); font-weight: 700; }
 .prose a { color: color-mix(in srgb,var(--link) 85%,var(--text)); text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .prose a:is(:hover,:focus-visible) { color: color-mix(in srgb,var(--link) 85%,var(--text)); background: var(--accent-soft); text-decoration-color: currentColor; }
+.prose .external-link-marker { font-size: .7em; vertical-align: .15em; font-style: normal; font-weight: 400; white-space: nowrap; opacity: .65; user-select: none; }
+.prose a:is(:hover,:focus-visible) .external-link-marker { opacity: 1; }
 .prose a:has(img) { display: block; width: fit-content; max-width: 100%; margin-inline: auto; background: none; text-decoration: none; }
 .prose :is(ul,ol) { padding-inline-start: 1.5em; }
 .prose > :is(ul,ol),.prose blockquote { font-size: .944em; line-height: 1.6; }

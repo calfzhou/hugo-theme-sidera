@@ -11,7 +11,7 @@
     {{ if $settings.terms_in_header }}<div class="article-terms">{{ partial "sidera/article-terms.html" (dict "Page" . "Owner" $owner "Settings" $settings "Prefix" "header-") }}</div>{{ end }}
     </header>
     {{ .Store.Set "sidera-body" $showBody }}
-    {{ if $showBody }}<div class="prose">{{ .Content }}</div>
+    {{ if $showBody }}<div class="prose" data-external-link-label="{{ T "external_link_suffix" }}">{{ .Content }}</div>
       {{ partial "sidera/footer.html" (dict "Page" . "Owner" $owner "Settings" $settings "Region" "article-footer") }}
     {{ end }}
   </article>

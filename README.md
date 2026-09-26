@@ -99,8 +99,25 @@ and are centered without forced enlargement. Transparent diagrams keep their neu
 backing. Markdown image titles are not invented captions. Hugo's native `figure` shortcode
 supplies caption/title markup; both stay compact rather than acquiring article-heading gaps.
 Footnotes remain in the body, independent of configured article/site footers. There are no
-new scripts, plugins, fonts or dependencies in this body pass.
+new script assets, plugins, fonts or dependencies in this body pass.
 
+
+## External article links
+
+Article text links to a different HTTP(S) origin show a small `↗` suffix. It is muted at rest
+and follows the link color on hover/focus; a nonbreaking spacer keeps it with the final word.
+The arrow is decorative, with a native EN/ZH screen-reader suffix. Internal paths/fragments,
+same-origin absolute URLs, mail/tel links and image-only links stay unmarked. Headings with an
+authored external text link are included; TOC, menus, metadata and configured footers are not.
+
+This is a small progressive enhancement in the existing navigation script, scoped to the shared
+article body. Browser URL parsing compares the resolved destination's scheme/host/port with the
+current page origin, correctly handling protocol-relative URLs, case and default ports. A link
+to a production host from a localhost preview is external to that preview, not silently remapped.
+No href, title, target or rel is changed; no new tab, link interception or destination fetch.
+Hugo's built-in/custom link rendering and multilingual resource resolution remain untouched.
+Without JavaScript, links retain their native appearance and behavior without the suffix.
+There is no observer for dynamically inserted content, new configuration or separate asset.
 
 ## Use and develop
 

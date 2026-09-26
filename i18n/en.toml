@@ -285,3 +285,6 @@ other = "Breadcrumbs"
 
 [heading_permalink]
 other = "Link to heading: {{ .title }}"
+
+[external_link_suffix]
+other = "(external link)"
