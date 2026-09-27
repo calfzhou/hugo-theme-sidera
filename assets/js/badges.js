@@ -8,6 +8,7 @@
     const update=()=>{
       const state=failed.size?'error':done.size===images.length?'ready':'loading';
       group.dataset.state=state;status.textContent=status.dataset[state];
+      status.classList.toggle('visually-hidden',state!=='error');
       if(done.size===images.length)clearTimeout(timer);
     };
     for(const image of images){

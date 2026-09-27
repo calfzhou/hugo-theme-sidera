@@ -162,10 +162,14 @@ C2 link cards are unchanged; no metadata preview fetch or GitHub API/backend is 
 **User-approved automatic loading:** native lazy images contact **img.shields.io**
 without a consent button. No referrer is sent by those image elements; Shields still
 receives visitor IP and requested repository/branch. No snapshots, stored counts,
-polling, token or retries. Scripted loading/ready/error messages use native EN/ZH keys;
+polling, token or retries. Routine loading/loaded/disabled messages are assistive-only,
+not visible notes; the explicit repository link remains. Errors remain visible and
+use native EN/ZH keys;
 failed images become labeled unavailable values, and the repo link remains. A visible
 load that waits 15 seconds gets that fallback; late image success can recover. No-JS
 still has ordinary image/alt behavior and the repo link. Disabled means no images.
+The badge img background is transparent instead of inheriting the general image
+backdrop. Colored areas drawn inside Shields SVGs are not altered or removed.
 Image success proves delivery, **not freshness, accuracy or the absence of an error
 message inside the provider's SVG**. Provider reliability is not theme acceptance.
 

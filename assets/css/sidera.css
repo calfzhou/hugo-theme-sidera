@@ -837,7 +837,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
   [data-state="ready"] > .diagram-canvas > .diagram-tools::after { display:none; }
 }
 
-.github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status,.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
+.github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { background:transparent; display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status:not(.visually-hidden),.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
 /* A B inversion wrapper filters the whole component. Pair its chrome with the
    same fixed light palette as the SVG instead of dark-theming it a second time. */
 :is(.invert-when-dark,.invert-when-light) .content-diagram,

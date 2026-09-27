@@ -24,8 +24,8 @@
 {{- end -}}
 <div class="github-badges"{{ if not (.Get "disabled") }} data-sidera-badges{{ end }}>
   <a class="badge-repo" href="{{ $href }}" rel="noreferrer">{{ $label }}</a>
-  {{ if .Get "disabled" }}<p class="badge-status">{{ T "badge_disabled" }}</p>{{ else }}
+  {{ if .Get "disabled" }}<p class="badge-status visually-hidden">{{ T "badge_disabled" }}</p>{{ else }}
   <div class="badge-images">{{ range $badges }}<span><img src="{{ .src }}" alt="{{ .alt }}" height="20" loading="lazy" referrerpolicy="no-referrer"><span class="badge-failed" hidden>{{ .alt }}: {{ T "badge_unavailable" }}</span></span>{{ end }}</div>
-  <p class="badge-status" role="status" data-loading="{{ T "badge_loading" }}" data-ready="{{ T "badge_ready" }}" data-error="{{ T "badge_error" }}">{{ T "badge_notice" }}</p>
+  <p class="badge-status visually-hidden" role="status" data-loading="{{ T "badge_loading" }}" data-ready="{{ T "badge_ready" }}" data-error="{{ T "badge_error" }}">{{ T "badge_notice" }}</p>
   {{ end }}
 </div>
