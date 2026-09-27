@@ -110,18 +110,21 @@ Markdown, alerts, figures, source links and math. Markdown `%` notation sends ge
 HTML into the safe Markdown pass and is unsupported; strict builds reject the omitted
 raw HTML. Do not enable unsafe HTML to force it through.
 
-Nested shortcode composition is explicitly rejected, including inside B's `block`.
-C1 does not change B or claim future folding/grid composition; those require C2's
-root-cause rendering work and tests. No heading is synthesized from the filename;
-use an ordinary heading before the snippet when it belongs in the TOC.
+C2 supports snippets inside block/folding/box/cell containers: outer container `%`,
+nested snippet `<`. The original source/resource/selection/highlighting runs unchanged;
+only its trusted generated output crosses a page-local native-node bridge. No source
+is run through Markdown. Native ancestor ordinals give unique nested line-anchor
+prefixes; standalone default prefixes remain unchanged. [COMPONENTS.md](COMPONENTS.md)
+defines the complete contract. No filename heading is synthesized.
 
-Native site `layouts/_shortcodes/snippet.html` overrides the theme shortcode. Both H
+Native site `layouts/_shortcodes/snippet.html` overrides the theme shortcode. For nested use, preserve its small leaf-bridge wrapper
+as documented in COMPONENTS.md; overriding the renderer partial is another focused option. Both H
 fences and inclusions reuse `layouts/_partials/code-block.html` for the same toolbar,
 copy/toast/manual fallback and scroll presentation. A custom fenced-code hook is still
 independent of the inclusion highlighter; a site partial override can affect both UIs.
 No new registry, dependency, parser import or unsafe setting is required. Bundled docs
-remain default-off. Existing previews do not require a new template rename in C1;
-the one-time B block-rename restart guidance still applies to older running previews.
+remain default-off. C2 changes the block template format: restart an already-running preview once.
+No cache deletion or user-server operation is performed by the theme.
 
 ## Hexo conversion
 

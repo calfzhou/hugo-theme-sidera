@@ -1,0 +1,10 @@
+{{- $result := "" -}}
+{{- if not (findRE `^sidera-leaf-(?:[a-z]+-[0-9]+)(?:-[a-z]+-[0-9]+)*$` .key) -}}
+  {{- errorf "Sidera component: invalid native key (%s)" .context.Position -}}
+{{- else -}}
+  {{- with .context.PageInner.Store.Get .key -}}
+    {{- $result = .html -}}
+    {{- $.context.PageInner.Store.DeleteInMap "sidera-pending-nodes" $.key -}}
+  {{- else -}}{{- errorf "Sidera component: unknown native leaf (%s)" $.context.Position -}}{{- end -}}
+{{- end -}}
+{{- return $result -}}

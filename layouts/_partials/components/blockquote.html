@@ -1,0 +1,14 @@
+{{- $key := index .Attributes "data-sidera-container" -}}
+{{- $leaf := index .Attributes "data-sidera-leaf" -}}
+{{- if $key -}}
+  {{- if not (findRE `^sidera-container-(?:[a-z]+-[0-9]+)(?:-[a-z]+-[0-9]+)*$` $key) -}}{{- errorf "Sidera container: invalid native key (%s)" .Position -}}{{- else -}}
+  {{- .PageInner.Store.DeleteInMap "sidera-pending-nodes" $key -}}
+  {{- with .PageInner.Store.Get $key -}}{{- partial "components/render-container.html" (dict "options" . "context" $) -}}
+  {{- else -}}{{- errorf "Sidera container: unknown native node (%s)" $.Position -}}{{- end -}}
+{{- end -}}
+{{- else if $leaf -}}
+  {{- partial "components/render-leaf.html" (dict "context" . "key" $leaf) -}}
+{{- else if eq .Type "alert" -}}{{- partial "sidera/alert.html" . -}}
+{{- else -}}
+<blockquote{{ range $name, $value := .Attributes }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end }}>{{ .Text }}</blockquote>
+{{- end -}}

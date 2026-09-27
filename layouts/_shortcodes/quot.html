@@ -1,7 +1,2 @@
-{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text" "ornament") "required" (slice "text")) -}}
-{{- $ornament := true -}}
-{{- if isset .Params "ornament" -}}
-  {{- if ne (printf "%T" (.Get "ornament")) "bool" -}}{{- errorf "Sidera quot: ornament must be a boolean (%s)" .Position -}}
-  {{- else -}}{{- $ornament = .Get "ornament" -}}{{- end -}}
-{{- end -}}
-<div class="content-quot"><p>{{ if $ornament }}<span class="quot-ornament" aria-hidden="true">“</span>{{ end }}<span class="quot-text">{{ .Get "text" }}</span>{{ if $ornament }}<span class="quot-ornament" aria-hidden="true">”</span>{{ end }}</p></div>
+{{- $html := partial "components/quot.html" . -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" false) | safeHTML -}}

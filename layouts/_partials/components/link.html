@@ -1,0 +1,9 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "href" "text" "icon") "required" (slice "href" "text")) -}}
+{{- $href := partial "sidera/url.html" (dict "url" (.Get "href") "source" .Position) -}}
+{{- $href = partial "links/destination.html" (dict "PageInner" .Page "Destination" $href "Position" .Position) -}}
+{{- /* Native static URLs need the deployment prefix too. Resource/Page URLs above
+     already contain it and must never be prefixed twice. */ -}}
+{{- $original := .Get "href" -}}
+{{- if and (eq $original $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
+{{- $icon := "" -}}{{- with .Get "icon" -}}{{- $icon = partial "components/image-url.html" (dict "src" . "shortcode" $) -}}{{- end -}}
+<div class="content-link"><a class="content-link-card" href="{{ $href }}"><span class="content-link-label"><span class="content-link-title">{{ .Get "text" }}</span><span class="content-link-url">{{ $href }}</span></span>{{ with $icon }}<img src="{{ . }}" alt="" loading="lazy" width="44" height="44">{{ else }}{{ partial "sidera/icon.html" "link" }}{{ end }}</a></div>

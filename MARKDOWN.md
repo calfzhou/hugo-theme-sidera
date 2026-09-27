@@ -72,26 +72,11 @@ Markdown content here.
 {{% /block %}}
 ```
 
-`block` is a **top-level Markdown-notation** shortcode, not an inversion component.
-`class` and `id` are its only optional named parameters. Class tokens and IDs use
-ASCII letters/underscore initially, then letters/digits/underscore/hyphen; class
-lists use spaces. Unsafe/unknown attributes diagnose instead of emitting arbitrary
-HTML. No arbitrary tags, event handlers or inline styles are accepted by the shortcode.
-Native attributes elsewhere retain Hugo's own sanitization rules.
-
-Headings/IDs/TOC, ordinary nested quotes/alerts/lists, links, images and fenced code
-remain in the page's native Markdown pass. The implementation emits a native blockquote
-node carrying a private marker; the quote hook renders that node as a `div`, not a
-quotation. It never rewrites whole-page Markdown or enables raw HTML. Its `.md`
-template limits lookup to Markdown notation; standard `{{< block >}}` is unsupported.
-The private marker is not a second public authoring syntax.
-
-**Boundary:** Hugo pre-renders inner content of nested shortcodes before the outer
-Markdown pass. Nested `block` shortcodes therefore fail explicitly; ordinary nested
-Markdown is supported. General arbitrary shortcode composition (including future
-D diagrams) is not certified by this wrapper. No real used wrapper nesting was found.
-Do not solve this by enabling unsafe HTML or promise that any HTML-producing shortcode
-can be dropped inside. D must verify its actual diagram integration separately.
+`block` is a general container with optional safe named class/id tokens. In C2,
+use `%` when outermost and `<` when nested in folding/box/grid/cell/block. Ordinary
+content and headings remain in one native Markdown pass. Supported nested shortcodes
+now use the bounded native-node bridge; see [COMPONENTS.md](COMPONENTS.md) for exact
+arguments, contexts, hook overrides, safety and diagnostics. No arbitrary raw HTML.
 
 ## Default automatic figures and image sizes
 
@@ -188,15 +173,10 @@ Markdown. Unescaped paired dollars intentionally mean math. Set native passthrou
 
 ## Inspection and overrides
 
-**Restart an existing preview after the B template rename.** If General Markdown
-blocks appear as literal `> ### …` and `{data-sidera-block=…}`, stop `hugo server`
-and rerun your usual command once. Hugo 0.166 can retain the removed `block.html`
-lookup after it becomes `block.md`; page edits, browser refresh and
-`--disableFastRender` do not clear that stale lookup. A cold server renders the
-committed `.md` template correctly. Restart recovery was verified with the **same**
-cache directory; no cache/content deletion or unsafe HTML setting is needed. This
-is an observed live-template-rename limitation, not a change to block authoring.
-
+**Restart an existing preview once after C2's block.md → block.html transition.**
+The B-era opposite rename/recovery remains historical evidence; C2 needs a single
+HTML shortcode template to carry native Markdown in both approved contexts. A cold
+server and same-cache restart are verified; no cache clearing or compatibility alias.
 
 The committed showcase is `/handbook/reference/advanced-markdown/`; Reading List also
 proves a note-to-dated-Journal link inside an alert. New block links retain queries
@@ -205,7 +185,7 @@ record source/config/security, asset and actual rendering checks.
 
 Project render hooks retain native precedence. Explicit `useEmbedded='always'`
 intentionally bypasses theme link/image hooks; it is never forced here. A custom
-blockquote hook must preserve the block marker branch to retain the `block` shortcode.
+blockquote hook must preserve the private-node branch documented in COMPONENTS.md.
 Theme documentation remains opt-in. C–F, diagram implementations and real migration
 remain separate; this B checkpoint is not whole-P3 acceptance.
 
@@ -214,4 +194,5 @@ remain separate; this B checkpoint is not whole-P3 acceptance.
 Use `{{< snippet src="solution.py" >}}` on its own line for an adjacent bundle resource.
 [SNIPPETS.md](SNIPPETS.md) covers inclusive bounds, native options, exact downloads,
 shared resources and line endings. Code is escaped data, not a Markdown fence generated
-from file contents. Do not nest inside `block`; C1 preserves B's composition boundary.
+from file contents. Standard snippet calls can now nest in C2 containers; the
+container at the outermost level uses Markdown `%` notation.

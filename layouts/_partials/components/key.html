@@ -1,0 +1,5 @@
+{{- /* Ordinal is local to a parent. Include the native ancestor path so siblings
+     in different cells cannot overwrite each other's output or line anchors. */ -}}
+{{- $key := printf "%s-%d" .Name .Ordinal -}}
+{{- with .Parent -}}{{- $key = printf "%s-%s" (partial "components/key.html" .) $key -}}{{- end -}}
+{{- return $key -}}

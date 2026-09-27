@@ -1,0 +1,75 @@
+{{- $body := .inner -}}{{- $sc := .shortcode -}}{{- with .shortcode -}}
+{{- $allowed := slice "class" "id" -}}
+{{- if in (slice "folding" "box") .Name -}}{{- $allowed = $allowed | append "title" "color" "child" -}}{{- end -}}
+{{- if eq .Name "folding" -}}{{- $allowed = $allowed | append "open" -}}{{- end -}}
+{{- if eq .Name "grid" -}}{{- $allowed = $allowed | append "columns" "min_width" -}}{{- end -}}
+{{- if and .Params (not .IsNamedParams) -}}{{- errorf "Sidera %s accepts named parameters only (%s)" .Name .Position -}}{{- end -}}
+{{- range $k, $v := .Params -}}
+  {{- if not (in $allowed $k) -}}{{- errorf "Sidera %s: unsupported parameter %q (%s)" $sc.Name $k $sc.Position -}}{{- end -}}
+  {{- if in (slice "class" "id" "title" "color" "child") $k -}}
+    {{- if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera %s: %s must be a string (%s)" $sc.Name $k $sc.Position -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range $k := slice "class" "id" -}}
+  {{- with $sc.Get $k -}}
+    {{- $pattern := `^[A-Za-z_][A-Za-z0-9_-]*(?: [A-Za-z_][A-Za-z0-9_-]*)*$` -}}
+    {{- if eq $k "id" -}}{{- $pattern = `^[A-Za-z_][A-Za-z0-9_-]*$` -}}{{- end -}}
+    {{- if not (findRE $pattern .) -}}{{- errorf "Sidera %s: invalid %s token(s) (%s)" $sc.Name $k $sc.Position -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $options := dict "kind" .Name "class" (.Get "class") "id" (.Get "id") -}}
+{{- if in (slice "folding" "box") .Name -}}
+  {{- $title := .Get "title" | default "" -}}
+  {{- if and (eq .Name "folding") (not (strings.ContainsNonSpace $title)) -}}{{- errorf "Sidera folding requires a nonblank title (%s)" .Position -}}{{- end -}}
+  {{- $color := .Get "color" | default "neutral" -}}
+  {{- if not (in (slice "neutral" "red" "yellow" "green") $color) -}}{{- errorf "Sidera %s: color must be neutral, red, yellow or green (%s)" .Name .Position -}}{{- end -}}
+  {{- $child := .Get "child" | default "" -}}
+  {{- if not (in (slice "" "codeblock") $child) -}}{{- errorf "Sidera %s: child must be codeblock or omitted (%s)" .Name .Position -}}{{- end -}}
+  {{- $open := false -}}
+  {{- if and .IsNamedParams (isset .Params "open") -}}
+    {{- if ne (printf "%T" (.Get "open")) "bool" -}}{{- errorf "Sidera folding: open must be a boolean (%s)" .Position -}}
+    {{- else -}}{{- $open = .Get "open" -}}{{- end -}}
+  {{- end -}}
+  {{- /* Titles are small inline Markdown fragments, rendered once with native hooks.
+       They are labels, not whole-page headings; math still marks the owning Page. */ -}}
+  {{- $titleHTML := .Page.RenderString (dict "display" "inline") $title -}}
+  {{- if findRE `<(?:h[1-6]|p|div|pre|ul|ol|blockquote|figure|table)(?:[ >])` (string $titleHTML) -}}{{- errorf "Sidera %s: title must contain inline Markdown only (%s)" .Name .Position -}}{{- end -}}
+  {{- $options = merge $options (dict "title" $titleHTML "color" $color "child" $child "open" $open) -}}
+{{- else if eq .Name "grid" -}}
+  {{- if and .IsNamedParams (isset .Params "columns") (isset .Params "min_width") -}}{{- errorf "Sidera grid: choose columns or min_width, not both (%s)" .Position -}}{{- end -}}
+  {{- $columns := "" -}}{{- $width := 240 -}}
+  {{- range $k := slice "columns" "min_width" -}}
+    {{- if and $sc.IsNamedParams (isset $sc.Params $k) -}}
+      {{- $v := string ($sc.Get $k) -}}
+      {{- if not (findRE `^[1-9][0-9]{0,3}$` $v) -}}{{- errorf "Sidera grid: %s must be a positive integer (%s)" $k $sc.Position -}}
+      {{- else if eq $k "columns" -}}
+        {{- if gt (int $v) 6 -}}{{- errorf "Sidera grid: columns must be 1..6 (%s)" $sc.Position -}}{{- end -}}
+        {{- $columns = int $v -}}
+      {{- else -}}
+        {{- if or (lt (int $v) 64) (gt (int $v) 720) -}}{{- errorf "Sidera grid: min_width must be 64..720 pixels (%s)" $sc.Position -}}{{- end -}}
+        {{- $width = int $v -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $options = merge $options (dict "columns" $columns "width" $width) -}}
+{{- else if eq .Name "cell" -}}
+  {{- if not .Parent -}}{{- errorf "Sidera cell requires a grid parent (%s)" .Position -}}
+  {{- else if ne .Parent.Name "grid" -}}{{- errorf "Sidera cell requires a grid parent (%s)" .Position -}}{{- end -}}
+{{- end -}}
+{{- $inner := strings.TrimSpace $body -}}
+{{- if eq .Name "grid" -}}
+  {{- $cells := .Store.Get "sidera-cells" -}}
+  {{- if not $cells -}}{{- errorf "Sidera grid requires at least one cell (%s)" .Position -}}{{- end -}}
+  {{- $rest := $inner -}}
+  {{- range $cells -}}{{- $rest = replace $rest (strings.TrimSpace .) "" -}}{{- end -}}
+  {{- if strings.ContainsNonSpace $rest -}}{{- errorf "Sidera grid accepts only cell children and whitespace (%s)" .Position -}}{{- end -}}
+{{- end -}}
+{{- $key := printf "sidera-container-%s" (partial "components/key.html" .) -}}
+{{- .Page.Store.Set $key $options -}}
+{{- .Page.Store.SetInMap "sidera-pending-nodes" $key .Position -}}
+{{- /* Native blockquote node; no raw HTML or regex parsing of Markdown. */ -}}
+{{- $node := printf "\n\n> %s\n{data-sidera-container=%q}\n\n" (replace $inner "\n" "\n> ") $key -}}
+{{- if eq .Name "cell" -}}{{- with .Parent -}}{{- .Store.Add "sidera-cells" (slice $node) -}}{{- end -}}{{- end -}}
+{{- return $node -}}
+
+{{- end -}}

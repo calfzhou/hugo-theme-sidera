@@ -1,175 +1,191 @@
-# Content components — partial C2 checkpoint
+# Content components
 
-Hugo **0.166.0**, independent native shortcodes. This is an implemented **partial**
-checkpoint, not the complete C2 authoring contract. Container composition needs the
-explicit decision described below. The user has retired emoji, timeline and enhanced
-image components; ordinary Markdown images remain supported.
+Hugo **0.166.0**. Native Markdown/render hooks, a small set of shortcodes, and the
+existing shared copy UI. No Hexo interpreter, extra library, remote preview service
+or unsafe HTML setting. C2 is implemented for user review; later P3 slices are separate.
 
-## Working syntax
+## Authoring and composition
 
-Use **standard `{{< … >}}` notation**. Every argument is named. These components are
-self-contained: no closing tag or `.Inner`. Inline components can occur in ordinary
-paragraphs, tables, lists and native blockquotes/alerts. `quot`, `link` and `copy` go
-on their own lines, with blank lines around them. Nested *shortcodes* currently fail
-explicitly; ordinary Markdown structure is not shortcode nesting.
+Use **Markdown `%` notation for the outermost container**, and **standard `<` notation
+for every nested component**. A container used alone takes `%`; the same container
+nested in another takes `<`. Self-contained components (`snippet`, `link`, `copy`,
+`quot`, `kbd`, `mark`, `u`) always take `<`, including when used alone.
+
+```text
+{{% folding title="Supporting material" %}}
+Ordinary Markdown, a [source link](../article/index.md) and $x^2$.
+
+{{< grid columns=2 >}}
+{{< cell >}}
+![A captioned image|160](image.svg)
+
+{{< link href="../article/index.md#heading" text="Read the article" >}}
+{{< /cell >}}
+{{< cell class="no-caption" >}}
+{{< box color="red" child="codeblock" >}}
+{{< snippet src="solution.py" from=2 to=5 >}}
+{{< /box >}}
+{{< /cell >}}
+{{< /grid >}}
+{{% /folding %}}
+```
+
+Use blank lines around block content. There is no `<!-- cell -->` syntax: each cell
+has explicit opening/closing tags. A cell may contain several cards, images, ordinary
+Markdown or supported shortcodes. A grid accepts **only cells and whitespace**, and
+requires at least one cell. Cells require an immediate grid parent.
+
+`block`, `folding`, `box`, `grid` and `cell` are supported parents. Unknown shortcode
+parents fail, rather than sending already-generated HTML through Markdown. Site-owned
+future embeds need their own integration; neither AnimCube nor D embeds are supplied.
+Four-level real-use compositions are tested; this is not arbitrary plugin nesting.
+
+### Container arguments
+
+All arguments are named. Unknown options/types and unsafe tokens fail with source
+position. **Common optional strings:** `class=""`, `id=""`. ASCII class/ID tokens begin
+with a letter or underscore, then letters/digits/underscore/hyphen; classes may be
+space-separated. No HTML tag, script, style string, event handler or arbitrary SVG.
+
+| Container | Additional arguments | Behavior/defaults |
+|---|---|---|
+| `folding` | Required nonblank string `title`; boolean `open=false`; string `color="neutral"`; string `child=""` | Native `details`/`summary`. Enter/Space/touch and no-JS disclosure work. No custom accordion JS. |
+| `box` | Optional string `title=""`, `color="neutral"`, `child=""` | A named/unnamed presentation box; not a sixth alert type. Use B's native five alert types when that is the intended meaning. |
+| `grid` | `columns` or `min_width`, mutually exclusive | Omit both: **240px** minimum with auto-fill. `columns`: integer 1–6, fixed count (including partially occupied rows). `min_width`: integer 64–720 CSS pixels, capped to available width. Numeric values or decimal strings accepted; no arbitrary CSS units. Gap fixed at 16px. |
+| `cell` | Common class/id only | One explicit grid cell; no mandatory card or figure wrapper. |
+| `block` | Common class/id only | B's general div-like Markdown container, now composable; existing root `%` syntax unchanged. |
+
+`color` allows **neutral, red, yellow, green**. `child` allows **empty or codeblock**:
+codeblock adjusts padding/surfaces but does not hide C1's title, language, copy or full
+source download. This is the audited presentation subset, not every Stellar option.
+
+Container titles support **inline Markdown** with native hooks, including emphasis,
+links and math. They are labels, not TOC headings; block content in a title diagnoses.
+Title HTML written by the author still triggers the safe renderer's raw-HTML policy.
+Math in a title alone loads B's conditional matched local KaTeX assets. Ordinary pages
+without math do not load them. No client math library is added.
+
+### Headings, summaries and rendering safety
+
+Container bodies participate in **one whole-page Markdown pass**, so native headings,
+fragments, links, attributes, images, alerts, fences and math retain their context.
+Headings can naturally remain in Hugo's TOC; **special fold-heading behavior is not a
+requirement** and no automatic disclosure-opening/hidden-heading navigation machinery
+is supplied. Ordinary folds are useful without any heading inside them.
+
+Containers emit native block nodes carrying private keys. The blockquote hook changes
+only those known nodes into the requested container. HTML-producing children render
+through their normal validated templates, then return a private native block/inline
+node instead of raw HTML. The hook restores only that already-rendered template output.
+It never turns `.Inner`, file contents or author-provided HTML into trusted markup.
+
+Keys include the **full native ancestor/ordinal path**, not only a child's ordinal:
+Hugo reuses child ordinals in different parents. Page-scoped Store entries prevent
+sibling/language/page collisions and preserve distinct snippet line anchors. These
+are transient rendering slots, not a global cache, resource registry or link graph.
+Forged/missing/private keys diagnose; a key can never name a template or filesystem
+path. Snippet resource boundaries and selected-only payloads remain unchanged.
+
+At native end-of-render validation, an unconsumed generated node fails with a useful
+notation/hook/parser diagnostic. Wrong `%` nesting can also trigger native raw-HTML
+warnings. Plain text can accidentally survive wrong notation; that is **not supported
+syntax**. Do not suppress warnings or enable unsafe HTML to make it appear to work.
+
+Hugo's normal Summary behavior remains. For a concise excerpt excluding controls/code
+labels, author an explicit summary. Actual rendered container Content and Summary
+embedded through the shared shell retain conditional math resources. Tested page-local
+stores do not promise arbitrary third-party layouts/output formats or source inclusion.
+
+**Preview transition:** C2 changes B's `block.md` template to `block.html` to carry the
+same named component in both contexts. Restart an already-running `hugo server` once
+after updating. Cold builds/server and restart with the same cache are verified. No
+cache clearing, legacy template alias, user-server manipulation or watcher fix.
+
+## Self-contained components
 
 ```text
 {{< kbd text="Ctrl" >}} + {{< kbd text="`" >}}
 {{< mark text="✓" color="green" >}}
-{{< u text="3, -2, 3" >}}
-{{< quot text="Keep the useful parts | leave room to think" >}}
-{{< quot text="Without ornament" ornament=false >}}
+{{< u text="aa" >}}bcc
+{{< quot text="A thought | worth keeping" ornament=false >}}
 {{< link href="../article/index.md?from=card#heading" text="Read the article" icon="icon.svg" >}}
-{{< link href="example.txt" text="Open the adjacent example" >}}
 {{< copy text="AAAA BBBB  CCCC DDDD" prefix="Example fingerprint" >}}
 ```
 
-| Component | Arguments, types and defaults | Result |
+| Component | Arguments/types/defaults | Result |
 |---|---|---|
-| `kbd` | Required nonblank string `text` | Escaped native `kbd`, including literal backtick/Unicode keys. |
-| `mark` | Required nonblank string `text`; string `color`: `red`, `green`, `yellow` (default) | Escaped native `mark`, palette-aware background. Status glyph/text remains meaningful without color. |
-| `u` | Required nonblank string `text` | Escaped native `u`, accent underline; not a link. |
-| `quot` | Required nonblank string `text`; **boolean** `ornament=true` | Centered standout paragraph with optional decorative quotation marks. No heading/TOC entry or invented attribution. `ornament="false"` is invalid; use the boolean. |
-| `link` | Required nonblank strings `href`, `text`; optional string `icon` (empty/omitted = generic local link symbol) | One native link card; label and resolved destination remain readable. No automatic description/metadata fetch. |
-| `copy` | Required nonblank string `text`; optional string `prefix` (empty/omitted = no label) | Selectable value, shared progressive Copy/Copied/toast/manual fallback; prefix is never copied. |
+| `kbd` | Required nonblank string `text` | Escaped native keyboard token, including backtick/Unicode. |
+| `mark` | Required nonblank string `text`; string `color="yellow"`: red/green/yellow | Escaped native highlighted text. Status glyphs remain meaningful without color. |
+| `u` | Required nonblank string `text` | Native underline, not a link. Adds no whitespace: the example displays `aabcc`. |
+| `quot` | Required nonblank string `text`; boolean `ornament=true` | Standout paragraph with optional typographic ornaments, no invented heading/attribution. |
+| `link` | Required nonblank strings `href`, `text`; optional string `icon=""` | One real link card, authored label/icon, native destination; no metadata fetch. |
+| `copy` | Required nonblank string `text`; optional string `prefix=""` | Selectable value and progressive shared Copy/Copied/toast/manual fallback. Prefix is not copied. |
 
-Inline `u`, `kbd` and `mark` add **no template whitespace** before/after their output.
-For example, `{{< u text="aa" >}}bcc` displays `aabcc`; spaces you author remain.
+Text arguments are **literal escaped text**, not Markdown/HTML/math. Quote numeric
+text (`text="9"`, not `text=9`). Boolean options use `false`, not `"false"`. Inline
+u/kbd/mark preserve adjacent and explicitly spaced text in paragraphs, lists and
+tables, including inside supported containers. Their use inside another Markdown
+link/image label is not a certified nesting context; use an ordinary text label there.
+Block link/copy/quot/snippet calls belong on their own lines, not inside a paragraph.
 
-Text arguments are **literal escaped text**, not Markdown, raw HTML, CSS or math.
-This matches the audited inline/standout/copy uses. Quotes around numeric text matter:
-`text="9"`, not `text=9`. Spaces in copy text are retained exactly; browser manual
-textarea copying normalizes CRLF, as in SNIPPETS.md. Do not put secrets in published
-shortcode arguments. Copy is not a redaction mechanism.
+Copy shares H/C1's button/handler and localized EN/ZH feedback. Missing/denied clipboard
+selects a readonly manual-copy field and reports failure. No-JS hides the action and
+keeps the value selectable. Exact API text excludes labels/line numbers; browser manual
+textarea normalizes CRLF. Tests mock all clipboard writes. Selection is not redaction.
 
-Unknown options, invalid types/enums/paths and blank required arguments fail with the
-shortcode source position. Standard notation merges this trusted template output
-**after** the page's Markdown rendering; passing its generated HTML through `%`
-notation instead fails under `unsafe=false`. No unsafe renderer setting is installed.
+### Links and resources
 
-### Link and image resources
+Cards reuse **A's exact source/native Page/resource destination partial**, including
+editor-relative `.md`, dated/custom/language URLs, query/fragment and source warnings.
+Ordinary public URLs are not fetched/existence-checked. Leading-slash public URLs get
+the deployment prefix; native resource/Page URLs are not prefixed twice. Local file
+links point to real resources/native URLs, not fabricated download metadata.
 
-Card destinations reuse **A's `links/destination.html`** exact editor-relative `.md`
-and native Page/resource resolver, with its warning policy and native query/fragment/
-language/permalink behavior. Ordinary public URLs are not fetched or existence-checked.
-Local resource links use native resource URLs; unresolved ordinary non-`.md` web paths
-retain A's public-URL behavior. Leading-slash public URLs get the native deployment
-prefix. No per-article URL map, filesystem body read, relref requirement or link graph.
+Card destinations allow local/public URLs, HTTP(S) and mailto. Unsafe schemes,
+protocol-relative URLs, controls, backslashes and URL spaces diagnose. Normal Markdown
+links keep A's contract, including tel; this does not change their resolver policy.
 
-Only local/public URLs, HTTP(S) and `mailto:` card destinations are accepted. Unsafe
-schemes, protocol-relative paths, control characters, spaces in URLs and backslashes
-diagnose. Percent-encode URL spaces. Normal Markdown links keep A's existing broader
-contract, including `tel:`; this component does not change that render hook.
+Icons use exact page resources, assets, then static, or an explicit HTTP(S) image URL.
+Local extensions: SVG, PNG, JPEG, GIF, WebP, AVIF, ICO. Local keys allow no traversal,
+encoding, query/fragment, glob, backslash or scheme. Missing local images fail. Remote
+icons request only the explicitly authored image in the reader's browser; no build-time
+fetch or favicon discovery. Prefer approved local images. SVG stays an `img` resource,
+never injected inline. Decorative icon alt is empty; the card label supplies its name.
 
-Icons use exact page resources, assets, then site static paths, or an **explicit
-HTTP(S) image URL**. Local extensions: SVG, PNG, JPEG, GIF, WebP, AVIF, ICO. Paths are
-literal resource keys: no dot/dot-dot segments, encoding, glob, query/fragment,
-backslash or scheme. Missing/unsupported local images diagnose. Remote icons may
-request that exact image in the reader's browser; there is no build-time fetch,
-page scraper, automatic favicon discovery or metadata service. Prefer approved local
-assets. SVG is loaded through `img`, never interpolated as executable inline markup.
-Decorative card icons have empty alt; the authored card label supplies the name.
+## Native overrides
 
-Emoji/sticker shortcodes, timeline and enhanced-image shortcodes are **retired by
-user choice**. No blobcat asset/license decision remains necessary. Ordinary Markdown
-images, dimensions, captions, inversion classes and native image/resource links remain
-unchanged; retirement does not claim a right to redistribute any old image.
+Site shortcode and render-hook lookup precedence is unchanged. A shortcode used **inside
+a container** must preserve the bridge: render its trusted HTML into `$html`, then call
+`components/leaf.html` with `shortcode`, `html`, and `inline` (true only for text-like
+inline output), passing the result through `safeHTML` in the shortcode template.
+The existing theme wrappers are minimal working examples; renderer partials live in
+`layouts/_partials/components/`. H/C1 still share `code-block.html`/`copy-button.html`.
 
-### Copy, summaries, assets and overrides
+A custom blockquote/alert hook must retain `components/blockquote.html` for private
+container/leaf nodes. A custom link hook must retain the `sidera-inline:` branch calling
+`components/render-leaf.html`; normal destinations stay site-owned. Cooperating overrides
+are tested. `useEmbedded='always'` intentionally bypasses theme hooks and is incompatible
+with nested inline leaves; it diagnoses instead of silently dropping them. A's embedded
+control tests separately exercise native resolution with ordinary text at that point.
+No setting forces embedded hooks or overrides a site's native lookup choice.
 
-Copy shares the H/C1 button partial and handler; only its label/success/failure/manual
-strings are separate, translated in EN/ZH. Keyboard and touch work without hover.
-Missing/denied Clipboard API exposes a focused, selected readonly textarea and an
-honest failure toast. No-JS hides the button and retains the selectable original text.
-No clipboard writes are performed by tests: all API calls are mocked.
+## Hexo → Hugo: every used C2 row
 
-These primitives synthesize no headings. Surrounding Markdown headings remain in the
-whole-page native TOC. Hugo's native summary behavior applies; use an explicit summary
-when a short article preview should exclude controls/resource text. These components
-add no library or per-page math assets. The existing B math detection for native body/
-summary content remains unchanged. They do not interpret math inside text arguments.
-
-Native site `_shortcodes/<name>.html` overrides win. Card destinations share the A
-partial override; a site **Markdown render-link hook** still overrides Markdown links,
-not the markup of the independent card shortcode. Image/alert/math hooks are unchanged.
-No component registry, arbitrary template-path argument or new params namespace.
-
-## Actual-use Hexo → Hugo conversion coverage
-
-**Working** means only the independent scope above. **Pending** is not an authoring API
-or permission to discard a required result during P4 conversion.
-
-| Used row / precise options | Conversion / disposition |
+| Used row / audited forms | Conversion / disposition |
 |---|---|
-| `folding` (32/5): title, `open:false`, `child:codeblock`; contains headings, code and grid | **Pending composition decision.** Native details/summary is the target. Preserve Warehouse Modeling's actual inner H2/H3 headings/TOC, not merely plain text. |
-| `grid` (47/6): default 240px minimum, `c:2`, `c:5`, `w:150px`; `<!-- cell -->` boundaries | **Pending.** Explicit native cells; preserve multiple cards in one cell, quote-contained and numbered/no-caption images. No comment-marker/Hexo interpreter. |
-| `box` (3/3): red, optional title, codeblock child | **Pending.** Two actual fenced-code bodies, one named resource link; required snippet composition remains a C2 checkpoint too. B's five alerts are not a blanket replacement. |
-| `blockquote` (1/1): author `Bruce Schneier`, source `Applied Cryptography` | **Pending.** Native attributed quote, preserving attribution even though the inspected Stellar implementation does not consume those positional fields. |
-| `quot` (6/3): default ornament and `icon:none`, literal pipe in text | **Working:** named `text`; `icon:none` → `ornament=false`. Standout paragraph, not a heading; typographic ornaments instead of unverified icon assets. |
-| `image` (7/4): alt/caption, `bg:#f9fafb`, `width:320px`, alternate-original `fancybox:<file>`, `download:true`, `fancybox:true` | **Retired by user choice (D-091):** no dedicated enhanced-image component/viewer/download UI. Use existing Markdown image/caption/size/resource support as needed; no automatic source conversion. |
-| `kbd` (30/3): key text/backtick/Unicode | **Working:** `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`; literal backtick example above. |
-| `mark` (36/3): ✓/✗/? with green/red/yellow | **Working:** `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
-| `u` (120/10): letters, digits, comma-separated selections | **Working:** `{% u 9 %}` → `{{< u text="9" >}}`; keep quoted text exactly. |
-| `timeline` (1/1): six authored `<!-- node label -->` groups, containing grids/cards | **Retired by user choice (D-091).** No timeline shortcode implementation or compatibility obligation. |
-| `link` (12/4 including wiki wrapper): authored title/icon; adjacent/HTTPS icons and public-key local target | **Working independently:** URL → `href`, label → `text`, `icon` stays explicit. Nested grid/card placement still **Pending**. Local file remains a real native link; no fake Download action or remote metadata. |
-| `copy` (1/1): fingerprint text and prefix | **Working:** `{% copy AAAA BBBB prefix:"Key fingerprint" %}` → `{{< copy text="AAAA BBBB" prefix="Key fingerprint" >}}`; exact text excludes prefix. |
-| `emoji` (1/1): blobcat party | **Retired by user choice (D-091).** The shortcode/specimen/style were removed; no blobcat asset required. |
+| folding 32/5: title, open:false, child:codeblock | `{% folding Title open:false %}` → `{{% folding title="Title" open=false %}} … {{% /folding %}}`; nested container uses `<`. |
+| grid 47/6: default, c:2/c:5, w:150px | `c:2` → `columns=2`; `w:150px` → `min_width=150`; each `<!-- cell -->` segment → paired `< cell >`. Multiple cards in one cell work. |
+| box 3/3: optional title, red, codeblock | Named title/color/child on `box`; keep ordinary fences or use C1 snippet. Native alert syntax stays an alternative only when semantically appropriate. |
+| attributed blockquote 1/1 | **No dedicated shortcode by user choice.** Ordinary `>` paragraphs plus `> — Author, *Source*` retain credit. |
+| quot 6/3: text/pipe, icon:none | Named literal text; `icon:none` → boolean `ornament=false`. Paragraph, not a heading. |
+| image 7/4: background/width/original viewer/download | **Enhanced-image component retired by user choice.** Existing Markdown image/resource/dimension/caption behavior remains; no viewer parity claim or real-source conversion. |
+| kbd 30/3: keys/backtick/Unicode | `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`. |
+| mark 36/3: ✓/✗/? and three colors | `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
+| u 120/10: letters/digits/selections | `{% u 9 %}` → `{{< u text="9" >}}`; adjacent characters stay adjacent. |
+| timeline 1/1 | **Retired by user choice.** No timeline interpreter/component. |
+| link 12/4 including wrapper: label/icon/local target | URL → href, label → text, icon explicit. Works inside cells/folds/boxes; no remote metadata service. |
+| copy 1/1: fingerprint + prefix | Named text/prefix; exact value only copied, no git-command modes. |
+| emoji 1/1: blobcat party | **Retired by user choice.** No emoji shortcode or blobcat asset/license requirement. |
 
-`snippet` remains the accepted C1 contract in SNIPPETS.md. AnimCube is site-owned P4.
-Diagrams, video, GitHub badge and other D embeds, E references/search and F comments
-are outside this partial C2 implementation.
-
-## Composition decision required before the remaining family
-
-Hugo 0.166 pre-renders a nested `%` shortcode's `.Inner`. In B's `.md` wrapper, that
-HTML then enters the outer safe Markdown pass, where it is omitted. Dropping Parent
-guards is not a fix. Standard HTML children have the same problem if their parent
-runs the combined `.Inner` through RenderString. No unsafe HTML or marker-regex escape
-hatch has been added.
-
-A small **isolated probe**, not a live theme API, demonstrates a possible native route:
-
-```text
-{{% frame %}}
-## Outer heading
-{{< slot >}}
-### Nested heading
-Native Markdown, then another standard slot if needed.
-{{< /slot >}}
-{{% /frame %}}
-```
-
-Here the outer `%` frame and nested `<` slots all deliberately emit **native Markdown
-block nodes**; the existing safe Markdown pass renders them once. Three levels retain
-native headings/TOC and links, and authored raw HTML still fails. Extending B's private
-node hook can supply details/grid/event semantics. HTML-producing leaves such as
-snippet/card need an explicit, validated native-node bridge; dropping their existing
-HTML into this probe still fails. That integration is **not yet implemented or proved**.
-
-**Proposed decision:** keep whole-page TOC and accept this mixed outer-`%`/nested-`<`
-authoring convention plus a bounded native-node bridge for known components. It is a
-real syntax/implementation choice, not arbitrary plugin timing. The simpler standard
-RenderString-container alternative excludes inner headings from the page TOC and
-still needs an explicit safe child-output strategy; it is **not** an accepted fallback.
-No consequential compromise has been imposed. C2 remains partial until this is settled,
-implemented and verified against actual nesting, assets, summaries and interactions.
-
-### What the authoring choice means
-
-The remaining real requirement is simple: a folding/box/grid container must be able
-to hold Markdown, code snippets and links without losing content or headings in the
-page TOC. The implementation must also keep raw HTML disabled.
-
-The proposed author-facing rule is **`%` for the outermost container, `<` for nested
-components**. A grid used on its own would use `%`; that same grid nested in a folding
-container would use `<`. Existing self-contained leaf calls such as `snippet` retain
-`<`. This is an extra notation rule, not a request to enable unsafe rendering.
-
-The isolated frame/slot test above shows the heading-preserving part works. Actual
-folding/grid/box and the safe handling of HTML-producing children still need work.
-The proposal remains unapproved; this explanation does not change the live API.
-
-An **attributed blockquote** simply shows a quoted passage plus its author/source,
-e.g. a quote credited to Bruce Schneier and *Applied Cryptography*. Ordinary Markdown
-can already retain that credit; a dedicated shortcode is not inherently necessary.
-Its final presentation/replacement remains under discussion.
+[SNIPPETS.md](SNIPPETS.md) is authoritative for C1 scopes/selection/options/full bytes.
+AnimCube stays site-owned P4. D embeds, E references/search and F comments are not C2.

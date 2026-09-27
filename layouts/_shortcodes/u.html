@@ -1,2 +1,2 @@
-{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text") "required" (slice "text")) -}}
-<u class="content-u">{{ .Get "text" }}</u>{{- /* Inline output must not add whitespace after the closing tag. */ -}}
+{{- $html := partial "components/u.html" . -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" true) | safeHTML -}}

@@ -8,6 +8,7 @@
   <meta charset="utf-8">
   {{ $mathContext := dict "page" . }}
   {{ with (templates.Defer (dict "data" $mathContext)) }}
+    {{ range .page.Store.Get "sidera-pending-nodes" }}{{ errorf "Sidera component was not consumed by native Markdown (%s): use %% for the outer container, < for nested components, and preserve the theme link/blockquote hooks and parser attributes" . }}{{ end }}
     {{ if .page.Store.Get "sidera-math" }}{{ partialCached "sidera/math-resources.html" .page "katex-0.18.4" }}{{ end }}
   {{ end }}
   <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,0 +1,10 @@
+{{- $o := .options -}}{{- $text := .context.Text -}}
+{{- if eq $o.kind "folding" -}}
+<details class="content-folding {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ if $o.open }} open{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}><summary>{{ $o.title }}<span class="folding-toggle" aria-hidden="true"></span></summary><div class="container-body">{{ $text }}</div></details>
+{{- else if eq $o.kind "box" -}}
+<div class="content-box {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}>{{ with $o.title }}<div class="container-title"><strong>{{ . }}</strong></div>{{ end }}<div class="container-body">{{ $text }}</div></div>
+{{- else if eq $o.kind "grid" -}}
+<div class="content-grid {{ $o.class }}"{{ with $o.id }} id="{{ . }}"{{ end }} style="{{ if $o.columns }}--grid-columns:{{ $o.columns }}{{ else }}--grid-min:{{ $o.width }}px{{ end }}"{{ with $o.columns }} data-columns="{{ . }}"{{ end }}>{{ $text }}</div>
+{{- else -}}
+<div{{ if eq $o.kind "cell" }} class="content-cell {{ $o.class }}"{{ else }}{{ with $o.class }} class="{{ . }}"{{ end }}{{ end }}{{ with $o.id }} id="{{ . }}"{{ end }}>{{ $text }}</div>
+{{- end -}}

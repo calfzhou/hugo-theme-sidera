@@ -1,0 +1,17 @@
+{{- $sc := .shortcode -}}
+{{- $result := .html -}}
+{{- if $sc.Parent -}}
+  {{- partial "components/parent.html" $sc -}}
+  {{- $key := printf "sidera-leaf-%s" (partial "components/key.html" $sc) -}}
+  {{- $sc.Page.Store.Set $key (dict "html" $result) -}}
+  {{- $sc.Page.Store.SetInMap "sidera-pending-nodes" $key $sc.Position -}}
+  {{- if .inline -}}
+    {{- /* Escape a literal label, not raw Markdown. Keeps native heading/plain text
+         meaningful, without treating math/HTML/punctuation in a text arg as syntax. */ -}}
+    {{- $label := replaceRE "([\\\\`*_{}\\[\\]()#+.!<>|$&~-])" "\\$1" ($sc.Get "text") -}}
+    {{- $result = printf "[%s](sidera-inline:%s)" $label $key -}}
+  {{- else -}}
+    {{- $result = printf "\n\n> component\n{data-sidera-leaf=%q}\n\n" $key -}}
+  {{- end -}}
+{{- end -}}
+{{- return $result -}}

@@ -252,7 +252,7 @@ No native markup or security setting is changed to activate the theme link hook.
 ## Advanced Markdown and math (B)
 
 [MARKDOWN.md](MARKDOWN.md) defines the native parser/passthrough leaf imports, default
-figures, Obsidian dimensions, palette classes, top-level general `block` shortcode
+figures, Obsidian dimensions, palette classes, general `block` shortcode
 and native build-time KaTeX HTML+MathML. Matching local 0.18.4 CSS/fonts are bundled;
 no runtime Node, client math JavaScript or remote CDN is required. Root parser import
 uses `deep` only on `markup.goldmark.parser`, not all markup or renderer security.
@@ -262,9 +262,9 @@ page/native-cascade → preset → language/site → minimal-default resolution.
 opts out; `.no-caption` suppresses a single image. The default/preset validator and
 local excluded-draft/cascade checks include it. Native field placement stays native.
 
-The supported container is top-level Markdown notation with safe class/ID tokens;
-ordinary nested content participates in native TOC/link rendering. Nested shortcode
-composition is explicitly rejected/unverified, not permission for unsafe HTML.
+Outer containers use Markdown notation; nested C2 containers/components use standard
+notation with a bounded native-node bridge. Safe class/ID tokens and ordinary native
+TOC/link rendering remain; see COMPONENTS.md. Raw HTML is not enabled.
 Theme docs remain opt-in; C–F and combined final review remain separate.
 
 ## Code-file inclusion (C1)
@@ -274,13 +274,14 @@ inclusive selection, text/UTF-8 policy, native page resources and the explicit s
 `assets/snippets/` namespace. Full downloads retain original bytes; browser highlighting
 normalizes CRLF while mocked/real Clipboard API inputs preserve selected source text.
 H and snippets share one code UI. No arbitrary filesystem/network access or execution,
-new configuration import or nested-shortcode support. C2 remains separate.
+or new configuration import. C2 adds supported container composition without widening
+resource access.
 
-## Independent content primitives (partial C2)
+## Content components (C2)
 
 [COMPONENTS.md](COMPONENTS.md) is the authoritative typed-argument/conversion guide
 for kbd/mark/u, standout quot, link cards and copy text. These standard-notation
-primitives are implemented independently; remaining container/attribution families
-and actual nested shortcode composition remain Pending. Emoji, timeline and enhanced
+primitives compose with folding/box/grid/cell/block via the approved notation.
+Attribution uses ordinary Markdown, not a dedicated shortcode. Emoji, timeline and enhanced
 image components are retired by user choice; existing Markdown images remain intact.
 No new config import, library, renderer safety exception or params wrapper is added.

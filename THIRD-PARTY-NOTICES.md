@@ -135,10 +135,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Used content primitives (partial C2)
+## Used content components (C2)
 
 The content primitive CSS also adapts Stellar 1.44.0
-`source/css/_components/tag-plugins/{inline-labels,mark,quot,link,copy}.styl`,
+`source/css/_components/tag-plugins/{inline-labels,mark,quot,link,copy,folding,grid,note}.styl`,
 covered by the xaoxuu MIT notice above. Native shortcodes, typed arguments and the
 existing Sidera Clipboard handler replace Hexo tags/browser onclick strings.
 Quote ornaments are typographic characters, not copied icon paths. No new third-party

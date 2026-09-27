@@ -232,11 +232,12 @@ The default content notice is neutral, not an automatic Creative Commons grant. 
 are generated locally by Hugo images.QR (Hugo >=0.141.0); no QR service or client library is used.
 See SHELL.md for params, native collection cascades, empty/false behavior and share fallbacks.
 
-## Content primitives (partial C2)
+## Content components (C2)
 
-[COMPONENTS.md](COMPONENTS.md) documents working inline treatments, standout quotes,
-explicit link cards and exact copy text. The root showcase's
-`/handbook/reference/content-components/` is inspectable. Required container composition
-and attributed quotes remain an explicit decision/work gate; this is not full C2
-delivery. Emoji, timeline and enhanced-image components are retired by user choice.
-Existing ordinary Markdown image/caption/dimension support stays unchanged.
+[COMPONENTS.md](COMPONENTS.md) documents native folds, boxes, grids/cells, general
+blocks, inline treatments, standout quotes, cards and exact copy. The root showcase
+`/handbook/reference/content-components/` combines them with snippets, images and math.
+Use `%` for outer containers and `<` for nested components. Ordinary Markdown retains
+attribution; emoji, timeline and enhanced-image components are retired. C2 awaits user
+review, not all-P3 acceptance. Restart an already-running preview once for C2's block
+template transition; no cache clearing is needed.

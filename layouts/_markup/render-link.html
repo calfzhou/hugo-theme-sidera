@@ -1,3 +1,6 @@
+{{- if hasPrefix .Destination "sidera-inline:" -}}
+  {{- partial "components/render-leaf.html" (dict "context" . "key" (strings.TrimPrefix "sidera-inline:" .Destination)) -}}
+{{- else -}}
 {{- $href := partial "links/destination.html" . -}}
 {{- /* Go html/template does not allow tel by default; allow this scheme only. */ -}}
 {{- if eq (lower (urls.Parse $href).Scheme) "tel" -}}{{- $href = $href | safeURL -}}{{- end -}}
@@ -10,3 +13,5 @@
 {{- end -}}
 <a href="{{ $href }}"{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
 {{- /* Keep Goldmark's rendered label and html/template URL/title escaping. */ -}}
+
+{{- end -}}

@@ -1,0 +1,4 @@
+{{- with .Parent -}}
+  {{- if not (in (slice "block" "folding" "box" "grid" "cell") .Name) -}}{{- errorf "Sidera %s: unsupported parent shortcode %q (%s)" $.Name .Name $.Position -}}{{- end -}}
+  {{- if and (eq .Name "grid") (ne $.Name "cell") -}}{{- errorf "Sidera grid requires cell children (%s)" $.Position -}}{{- end -}}
+{{- end -}}
