@@ -118,18 +118,21 @@ Native table column alignment is preserved, with quiet headers and row separator
 
 Images use native resource permalinks and alt text (with optional Obsidian dimensions), scale down to available width,
 and are centered without forced enlargement. Transparent diagrams keep their neutral pale
-backing. Markdown image titles are not invented captions. Hugo's native `figure` shortcode
-supplies caption/title markup; both stay compact rather than acquiring article-heading gaps.
+backing. Direct standalone Markdown images now use title then cleaned alt for a caption by
+default, with params.auto_caption=false or .no-caption opt-out (see MARKDOWN.md).
+Hugo's native `figure` shortcode retains explicit caption/title markup.
 Footnotes remain in the body, independent of configured article/site footers. There are no
 new script assets, plugins, fonts or dependencies in this body pass.
 
 
-## Advanced Markdown checkpoint
+## Advanced Markdown and math
 
-[MARKDOWN.md](MARKDOWN.md) documents implemented basic alerts/image sizing, the native
-inline/display MathML candidate and its **known visual compatibility gaps**, and the
-unapproved attribute/container/automatic-caption changes. This is a partial B checkpoint,
-not all-P3 or real-site rendering acceptance. No new library/assets have been bundled.
+[MARKDOWN.md](MARKDOWN.md) documents basic alerts, native attrs/image sizing, general
+palette classes, a top-level `block` container and default-on automatic captions.
+Build-time Hugo KaTeX HTML+MathML now uses matching local 0.18.4 CSS/fonts, correcting
+native MathML-only visual omissions. No client math renderer or remote CDN. Supported
+syntax conversions, safe inputs, conditional assets and composition boundaries are
+explicit; this B checkpoint is not all-P3 or real-site acceptance.
 
 ## Source links
 

@@ -1,0 +1,12 @@
+{{- /* Match the used plugin's five basic designators, case-insensitively.
+     Titled/signed designators were ordinary quotes in the reference; do not
+     silently promote the actual `[!tip] Goal` source to a different component. */ -}}
+{{- if and (in (slice "note" "tip" "important" "warning" "caution") .AlertType) (not .AlertTitle) (not .AlertSign) -}}
+  {{- $label := T (printf "alert_%s" .AlertType) -}}
+  <aside class="markdown-alert markdown-alert-{{ .AlertType }}" role="note" aria-label="{{ $label }}">
+    <p class="markdown-alert-title"><strong>{{ $label }}</strong></p>
+    {{ .Text }}
+  </aside>
+{{- else -}}
+  <blockquote><p>[!{{ .AlertType }}]{{ .AlertSign }}{{ with .AlertTitle }} {{ . }}{{ end }}</p>{{ .Text }}</blockquote>
+{{- end -}}

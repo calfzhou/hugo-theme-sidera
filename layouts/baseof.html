@@ -6,6 +6,10 @@
 <html lang="{{ site.Language.Locale }}" data-color-mode-default="{{ $defaultColorMode }}" data-color-scheme="{{ $defaultColorMode }}">
 <head>
   <meta charset="utf-8">
+  {{ $mathContext := dict "page" . }}
+  {{ with (templates.Defer (dict "data" $mathContext)) }}
+    {{ if .page.Store.Get "sidera-math" }}{{ partialCached "sidera/math-resources.html" .page "katex-0.18.4" }}{{ end }}
+  {{ end }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="sidera:icon-attribution" content="Solar icons by 480 Design · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/480-Design/Solar-Icon-Set · adapted sizing and semantics; original paths retained from Stellar 1.44.0">
   <meta name="color-scheme" content="light dark">

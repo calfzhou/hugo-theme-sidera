@@ -1,0 +1,5 @@
+{{- if (index .Attributes "data-sidera-block") -}}
+<div{{ with .Attributes.class }} class="{{ . }}"{{ end }}{{ with .Attributes.id }} id="{{ . }}"{{ end }}>{{ .Text }}</div>
+{{- else -}}
+<blockquote{{ range $name, $value := .Attributes }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end }}>{{ .Text }}</blockquote>
+{{- end -}}

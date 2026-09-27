@@ -1,5 +1,12 @@
 {{- $href := partial "links/destination.html" . -}}
 {{- /* Go html/template does not allow tel by default; allow this scheme only. */ -}}
 {{- if eq (lower (urls.Parse $href).Scheme) "tel" -}}{{- $href = $href | safeURL -}}{{- end -}}
-<a href="{{ $href }}"{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ .Text }}</a>
+{{- /* An image-only link is still wrapped by Goldmark in a paragraph. Keep it
+     an image link, not an invalid figure nested inside p/a. No active source
+     requires linked auto-captions; direct standalone figures are the contract. */ -}}
+{{- $text := .Text -}}
+{{- if hasPrefix (string $text) `<figure class="md-figure">` -}}
+  {{- $text = replaceRE `^<figure class="md-figure">(<img[^>]*>)[\s\S]*</figure>$` "$1" (string $text) | safeHTML -}}
+{{- end -}}
+<a href="{{ $href }}"{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
 {{- /* Keep Goldmark's rendered label and html/template URL/title escaping. */ -}}

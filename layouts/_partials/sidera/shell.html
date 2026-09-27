@@ -1,4 +1,7 @@
 {{- $page := .Page -}}
+{{- /* Rendered summaries/content may contain math from other Pages. Detect only
+     native rendered math markup, never raw Markdown or arbitrary source grammar. */ -}}
+{{- if strings.Contains (string .Content) `class="katex"` -}}{{- $page.Store.Set "sidera-math" true -}}{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
 {{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings -}}
 {{- $top := partial "sidera/region.html" (merge $ctx (dict "Region" "top")) -}}

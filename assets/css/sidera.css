@@ -3,6 +3,7 @@
    See THIRD-PARTY-NOTICES.md. No Hexo/Stylus runtime or remote assets. */
 :root {
   color-scheme: dark;
+  --invert-dark: invert(1) hue-rotate(180deg); --invert-light: none;
   --canvas: hsl(210 8% 12%); --surface: hsl(210 10% 24%); --panel: hsl(210 24% 72% / .08);
   --surface-hover: hsl(210 24% 72% / .12); --line: hsl(210 24% 72% / .16);
   --item-hover: linear-gradient(180deg,#ffffff14,transparent 50%), #00000033;
@@ -16,7 +17,7 @@
   font: 18px/1.6 var(--ui); background: var(--canvas); color: var(--text);
 }
 :root[data-color-scheme="light"] {
-  color-scheme: light; --tab-selected: var(--panel);
+  color-scheme: light; --invert-dark: none; --invert-light: invert(1) hue-rotate(180deg); --tab-selected: var(--panel);
   --canvas: hsl(210 20% 98%); --surface: #fff; --panel: hsl(210 50% 12% / .04);
   --surface-hover: hsl(210 50% 12% / .08); --line: hsl(210 50% 12% / .12); --rail-background: linear-gradient(165deg,#dce5ebaa,transparent 85%);
   --item-hover: linear-gradient(180deg,#ffffff61,transparent 60%), #ffffff80;
@@ -26,7 +27,7 @@
 }
 @media (prefers-color-scheme: light) {
 :root[data-color-scheme="auto"] {
-  color-scheme: light; --tab-selected: var(--panel);
+  color-scheme: light; --invert-dark: none; --invert-light: invert(1) hue-rotate(180deg); --tab-selected: var(--panel);
   --canvas: hsl(210 20% 98%); --surface: #fff; --panel: hsl(210 50% 12% / .04);
   --surface-hover: hsl(210 50% 12% / .08); --line: hsl(210 50% 12% / .12); --rail-background: linear-gradient(165deg,#dce5ebaa,transparent 85%);
   --item-hover: linear-gradient(180deg,#ffffff61,transparent 60%), #ffffff80;
@@ -375,22 +376,22 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 /* Stellar scrollbar-codeblock: slim transparent track, rounded thumb on interaction.
    Keep native high-contrast controls; hidden rails and the document scrollbar are separate. */
 @media (forced-colors: none) {
-  .prose :is(pre,.highlight,table,.code-copy-fallback) { --scrollbar-thumb: transparent; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
-  .prose :is(pre,.highlight,table,.code-copy-fallback):is(:hover,:focus-within),
+  .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display) { --scrollbar-thumb: transparent; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+  .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display):is(:hover,:focus-within),
   .prose .code-block:is(:hover,:focus-within) :is(pre,.highlight) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
   @media (hover: none), (pointer: coarse) {
-    .prose :is(pre,.highlight,table,.code-copy-fallback) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
   }
   @supports selector(::-webkit-scrollbar) {
     /* Non-auto standard properties would override the precise WebKit 4px geometry. */
-    .prose :is(pre,.highlight,table,.code-copy-fallback) { scrollbar-width: auto; scrollbar-color: auto; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar { width: 4px; height: 4px; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-track,
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-track-piece,
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-corner { background: transparent; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 12px; cursor: pointer; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-thumb:hover { background: var(--quiet); }
-    .prose :is(pre,.highlight,table,.code-copy-fallback)::-webkit-scrollbar-button { display: none; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display) { scrollbar-width: auto; scrollbar-color: auto; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar { width: 4px; height: 4px; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-track,
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-track-piece,
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-corner { background: transparent; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 12px; cursor: pointer; }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-thumb:hover { background: var(--quiet); }
+    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display)::-webkit-scrollbar-button { display: none; }
   }
 }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }
@@ -702,3 +703,16 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
    but collapse for long formulas so their left edge remains scroll-accessible. */
 .prose .math-display { display: flex; overflow-x: auto; margin-block: 1rem; padding-block: .25em; }
 .prose .math-display > .katex { flex: none; margin-inline: auto; }
+
+/* Explicit opt-in on the element itself, not a descendant-image heuristic.
+   A marked block filters all its contents as one group. Nested marked elements
+   compound filters naturally; do not mark both wrapper and child unintentionally. */
+.invert-when-dark { filter: var(--invert-dark); }
+.invert-when-light { filter: var(--invert-light); }
+.invert-when-dark.invert-when-light { filter: invert(1) hue-rotate(180deg); }
+.prose .math-display .katex-display { margin: 0; }
+.prose .math-display .katex-display > .katex { text-align: start; }
+.prose p > img { display: inline-block; vertical-align: middle; }
+.prose .math-display > .katex-display { flex: none; margin: 0 auto; }
+/* Native list/block attrs can suppress a group's captions without losing image alt. */
+.prose .no-caption figcaption { display: none; }

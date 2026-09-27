@@ -140,3 +140,11 @@ Reading navigation is capability-based: navigation_mode defaults to list for Blo
 siblings for Docs. Any collection root can select list, siblings or sequential, independent of
 preset and primary_date. The mode is a root policy; preset definitions use defaults.params only,
 not defaults.cascade. Independent nested roots resolve their own policy normally.
+
+## Automatic captions
+
+`auto_caption` is an inheritable boolean with minimal default true. Existing presets
+do not override it; custom preset `defaults.params` / `defaults.cascade.params` may
+set it, including false. Actual Page.Params/native cascade still wins. See MARKDOWN.md
+for direct-standalone image scope and per-image `.no-caption`. No parser configuration
+is emulated through presets; native parser imports remain site-owned.

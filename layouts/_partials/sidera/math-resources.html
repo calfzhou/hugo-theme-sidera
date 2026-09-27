@@ -1,0 +1,10 @@
+{{- /* Publish the exact versioned package assets adjacent to upstream CSS.
+     Missing assets fail the build instead of producing a partially styled formula. */ -}}
+{{- $manifest := resources.Get "vendor/katex-0.18.4/provenance.json" -}}
+{{- if not $manifest -}}{{- errorf "Sidera math: bundled KaTeX asset manifest is missing" -}}{{- end -}}
+{{- range $name, $_ := (transform.Unmarshal $manifest.Content).files -}}
+  {{- $resource := resources.Get (printf "vendor/katex-0.18.4/%s" $name) -}}
+  {{- if not $resource -}}{{- errorf "Sidera math: bundled KaTeX 0.18.4 asset missing: %s" $name -}}
+  {{- else if ne $name "katex.min.css" -}}{{- $published := $resource.RelPermalink -}}{{- end -}}
+{{- end -}}
+{{- with resources.Get "vendor/katex-0.18.4/katex.min.css" | fingerprint -}}<link rel="stylesheet" data-sidera-math href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{- end -}}

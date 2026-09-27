@@ -11,6 +11,12 @@
   {{- $width = index $dimensions 0 -}}
   {{- if eq (len $dimensions) 2 -}}{{- $height = index $dimensions 1 -}}{{- end -}}
 {{- end -}}
+{{- $settings := partialCached "sidera/settings.html" .PageInner .PageInner.Path -}}
+{{- $caption := "" -}}
+{{- if and .IsBlock $settings.auto_caption (not (in (split (.Attributes.class | default "") " ") "no-caption")) -}}
+  {{- $caption = $alt -}}{{- with .Title -}}{{- $caption = partial "links/title.html" . -}}{{- end -}}
+{{- end -}}
+{{- if $caption -}}<figure class="md-figure">{{- end -}}
 <img src="{{ $src }}" alt="{{ $alt }}"
   {{- with .Title }} title="{{ partial "links/title.html" . }}"{{ end -}}
   {{- with $width }} width="{{ . }}"{{ end -}}
@@ -27,4 +33,4 @@
     {{- end -}}
   {{- end -}}
 >
-{{- /* No automatic alt-to-caption change until the B figure policy is agreed. */ -}}
+{{- with $caption -}}<figcaption>{{ . }}</figcaption></figure>{{- end -}}

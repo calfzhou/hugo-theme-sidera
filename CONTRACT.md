@@ -114,6 +114,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 
 | Setting | Meaning / default |
 |---|---|
+| auto_caption | Boolean, true. Direct standalone Markdown image title then cleaned alt becomes an escaped caption; false opts out using normal page/cascade/preset/site precedence. See MARKDOWN.md. |
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
 | navigation_mode | Collection-root policy: list (minimal/blog/notes), siblings (docs), or sequential. Root params override root preset then site/language default; not cascaded or set on member pages. Previous/Next stay within the complete collection sequence; Parent is the actual in-scope parent in siblings/sequential only; omitted in list mode. |
@@ -248,10 +249,20 @@ page/cascade/preset settings. Unresolved sources warn by default through native
 `sidera-link-source`; native-heading checks are opt-in because non-heading IDs are valid.
 No native markup or security setting is changed to activate the theme link hook.
 
-## B native Markdown checkpoint
+## Advanced Markdown and math (B)
 
-See [MARKDOWN.md](MARKDOWN.md) for basic alerts, image dimensions and the explicit
-`markup.goldmark.extensions.passthrough` leaf import. These use native configuration,
-not new custom params or presets. The native MathML candidate has known visible
-compatibility gaps; local KaTeX CSS/fonts and syntax conversions await approval.
-No broad markup/security merge or default documentation mount is introduced.
+[MARKDOWN.md](MARKDOWN.md) defines the native parser/passthrough leaf imports, default
+figures, Obsidian dimensions, palette classes, top-level general `block` shortcode
+and native build-time KaTeX HTML+MathML. Matching local 0.18.4 CSS/fonts are bundled;
+no runtime Node, client math JavaScript or remote CDN is required. Root parser import
+uses `deep` only on `markup.goldmark.parser`, not all markup or renderer security.
+
+`params.auto_caption` is boolean, **true by default**. It follows the existing
+page/native-cascade → preset → language/site → minimal-default resolution. False
+opts out; `.no-caption` suppresses a single image. The default/preset validator and
+local excluded-draft/cascade checks include it. Native field placement stays native.
+
+The supported container is top-level Markdown notation with safe class/ID tokens;
+ordinary nested content participates in native TOC/link rendering. Nested shortcode
+composition is explicitly rejected/unverified, not permission for unsafe HTML.
+Theme docs remain opt-in; C–F and combined final review remain separate.
