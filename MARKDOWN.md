@@ -188,6 +188,16 @@ Markdown. Unescaped paired dollars intentionally mean math. Set native passthrou
 
 ## Inspection and overrides
 
+**Restart an existing preview after the B template rename.** If General Markdown
+blocks appear as literal `> ### …` and `{data-sidera-block=…}`, stop `hugo server`
+and rerun your usual command once. Hugo 0.166 can retain the removed `block.html`
+lookup after it becomes `block.md`; page edits, browser refresh and
+`--disableFastRender` do not clear that stale lookup. A cold server renders the
+committed `.md` template correctly. Restart recovery was verified with the **same**
+cache directory; no cache/content deletion or unsafe HTML setting is needed. This
+is an observed live-template-rename limitation, not a change to block authoring.
+
+
 The committed showcase is `/handbook/reference/advanced-markdown/`; Reading List also
 proves a note-to-dated-Journal link inside an alert. New block links retain queries
 and native headings. `tests/check_advanced_markdown.py` and its browser companion
