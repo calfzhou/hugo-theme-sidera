@@ -266,3 +266,12 @@ The supported container is top-level Markdown notation with safe class/ID tokens
 ordinary nested content participates in native TOC/link rendering. Nested shortcode
 composition is explicitly rejected/unverified, not permission for unsafe HTML.
 Theme docs remain opt-in; C–F and combined final review remain separate.
+
+## Code-file inclusion (C1)
+
+[SNIPPETS.md](SNIPPETS.md) defines the standard-notation `snippet` shortcode, exact
+inclusive selection, text/UTF-8 policy, native page resources and the explicit shared
+`assets/snippets/` namespace. Full downloads retain original bytes; browser highlighting
+normalizes CRLF while mocked/real Clipboard API inputs preserve selected source text.
+H and snippets share one code UI. No arbitrary filesystem/network access or execution,
+new configuration import or nested-shortcode support. C2 remains separate.

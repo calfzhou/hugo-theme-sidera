@@ -208,3 +208,10 @@ intentionally bypasses theme link/image hooks; it is never forced here. A custom
 blockquote hook must preserve the block marker branch to retain the `block` shortcode.
 Theme documentation remains opt-in. C–F, diagram implementations and real migration
 remain separate; this B checkpoint is not whole-P3 acceptance.
+
+## Include code files (C1)
+
+Use `{{< snippet src="solution.py" >}}` on its own line for an adjacent bundle resource.
+[SNIPPETS.md](SNIPPETS.md) covers inclusive bounds, native options, exact downloads,
+shared resources and line endings. Code is escaped data, not a Markdown fence generated
+from file contents. Do not nest inside `block`; C1 preserves B's composition boundary.

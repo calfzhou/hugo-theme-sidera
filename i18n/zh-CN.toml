@@ -319,3 +319,6 @@ other = '警告'
 other = '注意'
 [math_display]
 other = '独立公式；可按需水平滚动'
+
+[code_download]
+other = "下载完整源码"

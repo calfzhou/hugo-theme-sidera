@@ -716,3 +716,9 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .prose .math-display > .katex-display { flex: none; margin: 0 auto; }
 /* Native list/block attrs can suppress a group's captions without losing image alt. */
 .prose .no-caption figcaption { display: none; }
+
+/* Inclusion metadata stays outside the existing code scrollport and copy corner. */
+.prose .code-source { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem 1rem; flex-wrap: wrap; padding: .5rem .75rem; font: .8rem/1.5 var(--ui); }
+.code-source > span { min-width: 0; overflow-wrap: anywhere; }
+.code-source > a { flex: none; }
+.prose .code-block:has(> .code-source) > .code-toolbar { top: auto; margin-top: 4px; }

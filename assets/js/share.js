@@ -47,7 +47,10 @@
       reset();
       const plain = code.cloneNode(true);
       plain.querySelectorAll('.ln, .lnt').forEach(number => number.remove());
-      const text = plain.textContent;
+      // Chroma/HTML normalize CRLF. Inclusions retain their exact selected UTF-8
+      // source separately; ordinary fences keep their existing rendered-text behavior.
+      const text = block.hasAttribute('data-code-source')
+        ? JSON.parse(block.dataset.codeSource) : plain.textContent;
       try {
         if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
         await navigator.clipboard.writeText(text);

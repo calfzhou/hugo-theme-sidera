@@ -1,0 +1,89 @@
+{{- /* Standard notation only: code is data, never piped through Markdown. */ -}}
+{{- if not .IsNamedParams -}}{{- errorf "Sidera snippet requires named src (%s)" .Position -}}{{- end -}}
+{{- with .Parent -}}{{- errorf "Sidera snippet must be top-level, not nested in another shortcode (%s)" $.Position -}}{{- end -}}
+{{- range $key, $value := .Params -}}
+  {{- if not (in (slice "src" "scope" "title" "lang" "from" "to" "options") $key) -}}{{- errorf "Sidera snippet: unsupported parameter %q (%s)" $key $.Position -}}{{- end -}}
+{{- end -}}
+{{- $src := .Get "src" | default "" -}}
+{{- $scope := .Get "scope" | default "page" -}}
+{{- /* Native resource namespace, not a filesystem path or URL. Reject traversal
+     before lookup, including encoded separators and platform-specific paths. */ -}}
+{{- $valid := and (ne $src "") (not (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $src)) -}}
+{{- if not $valid -}}{{- errorf "Sidera snippet: invalid resource path %q (%s)" $src .Position -}}{{- end -}}
+{{- if not (in (slice "page" "shared") $scope) -}}{{- errorf "Sidera snippet: scope must be page or shared (%s)" .Position -}}{{- $valid = false -}}{{- end -}}
+{{- if $valid -}}
+  {{- $resource := false -}}
+  {{- if eq $scope "page" -}}{{- $resource = .Page.Resources.Get $src -}}
+  {{- else -}}{{- $resource = resources.Get (printf "snippets/%s" $src) -}}{{- end -}}
+  {{- if not $resource -}}
+    {{- errorf "Sidera snippet: resource %q not found in %s scope (%s)" $src $scope .Position -}}
+  {{- else if eq $resource.ResourceType "page" -}}
+    {{- errorf "Sidera snippet: %q is a content Page, not a text resource (%s)" $src .Position -}}
+  {{- else -}}
+    {{- $code := $resource.Content | string -}}
+    {{- /* JSON round-trip detects invalid UTF-8 (Go replaces invalid bytes).
+         Reject binary controls; tab, LF and CRLF are the supported text controls. */ -}}
+    {{- $roundtrip := dict "text" $code | jsonify | transform.Unmarshal -}}
+    {{- if or (ne $code $roundtrip.text) (findRE `[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]|\r(?:[^\n]|$)` $code) -}}
+      {{- errorf "Sidera snippet: %q must be UTF-8 text with LF or CRLF, no binary controls (%s)" $src .Position -}}
+    {{- else -}}
+      {{- /* Each record keeps its terminator. No phantom line after final LF. */ -}}
+      {{- $lines := findRE `[^\n]*\n|[^\n]+$` $code -}}
+      {{- $count := len $lines -}}
+      {{- $from := 1 -}}{{- $to := $count -}}{{- $boundsOK := true -}}
+      {{- range $key := slice "from" "to" -}}
+        {{- if isset $.Params $key -}}
+          {{- $value := string ($.Get $key) -}}
+          {{- if not (findRE `^[1-9][0-9]{0,8}$` $value) -}}
+            {{- errorf "Sidera snippet: %s must be a positive one-based line number (%s)" $key $.Position -}}{{- $boundsOK = false -}}
+          {{- else -}}
+            {{- if eq $key "from" -}}{{- $from = int $value -}}{{- else -}}{{- $to = int $value -}}{{- end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if and (or (isset .Params "from") (isset .Params "to")) (or (gt $from $to) (gt $to $count) (eq $count 0)) -}}
+        {{- errorf "Sidera snippet: bounds %d..%d outside %d lines in %q (%s)" $from $to $count $src .Position -}}{{- $boundsOK = false -}}
+      {{- end -}}
+      {{- if $boundsOK -}}
+        {{- if gt $count 0 -}}{{- $code = delimit (first (add (sub $to $from) 1) (after (sub $from 1) $lines)) "" -}}{{- end -}}
+        {{- $lang := strings.TrimPrefix "." (path.Ext $src) | lower -}}
+        {{- if isset .Params "lang" -}}{{- $lang = string (.Get "lang") -}}{{- end -}}
+        {{- if not (findRE `^[A-Za-z0-9_+-]*$` $lang) -}}{{- errorf "Sidera snippet: invalid language %q (%s)" $lang .Position -}}{{- end -}}
+        {{- $lexer := $lang -}}
+        {{- if not (transform.CanHighlight $lang) -}}{{- $lexer = "text" -}}{{- end -}}
+        {{- $language := $lang | default (T "code_language_text") -}}
+        {{- $title := path.Base $src -}}
+        {{- if isset .Params "title" -}}{{- $title = string (.Get "title") -}}{{- end -}}
+        {{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera snippet: title must not be empty (%s)" .Position -}}{{- end -}}
+        {{- $options := dict -}}
+        {{- with .Get "options" -}}
+          {{- /* A native comma-separated options string, limited to presentation.
+               Never allow code/type overrides to replace the included source. */ -}}
+          {{- range split . "," -}}
+            {{- $pair := split . "=" -}}
+            {{- $key := lower (strings.TrimSpace (index $pair 0)) -}}
+            {{- if or (ne (len $pair) 2) (not (in (slice "linenos" "linenumbersintable" "linenostart" "hl_lines" "anchorlinenos" "lineanchors") $key)) -}}
+              {{- errorf "Sidera snippet: unsupported highlight option %q (%s)" . $.Position -}}
+            {{- else -}}
+              {{- $value := strings.TrimSpace (index $pair 1) -}}
+              {{- $pattern := `^(true|false)$` -}}
+              {{- if eq $key "linenos" -}}{{- $pattern = `^(true|false|inline|table)$` -}}
+              {{- else if eq $key "linenostart" -}}{{- $pattern = `^[1-9][0-9]{0,8}$` -}}
+              {{- else if eq $key "hl_lines" -}}{{- $pattern = `^[1-9][0-9]*(?:-[1-9][0-9]*)?(?: +[1-9][0-9]*(?:-[1-9][0-9]*)?)*$` -}}
+              {{- else if eq $key "lineanchors" -}}{{- $pattern = `^[A-Za-z_][A-Za-z0-9_-]*$` -}}{{- end -}}
+              {{- if not (findRE $pattern $value) -}}{{- errorf "Sidera snippet: invalid highlight option %s=%q (%s)" $key $value $.Position -}}{{- end -}}
+              {{- $options = merge (dict $key $value) $options -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if not (isset $options "linenostart") -}}{{- $options = merge $options (dict "linenostart" $from) -}}{{- end -}}
+        {{- if not (isset $options "lineanchors") -}}{{- $options = merge $options (dict "lineanchors" (printf "snippet-%d" .Ordinal)) -}}{{- end -}}
+        {{- /* Block/palette/exact-source invariants override site inline/guess settings. */ -}}
+        {{- $options = merge (dict "noClasses" false "hl_inline" false "guessSyntax" false "wrapperClass" "highlight") $options -}}
+        {{- $result := try (transform.Highlight $code $lexer $options) -}}
+        {{- with $result.Err -}}{{- errorf "Sidera snippet: highlight failed for %q (%s): %s" $src $.Position . -}}
+        {{- else -}}{{- partial "code-block.html" (dict "html" $result.Value "language" $language "title" $title "url" $resource.RelPermalink "source" $code) -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

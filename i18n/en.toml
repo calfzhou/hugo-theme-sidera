@@ -322,3 +322,6 @@ other = 'Warning'
 other = 'Caution'
 [math_display]
 other = 'Display equation; scroll horizontally if needed'
+
+[code_download]
+other = "Download full source"
