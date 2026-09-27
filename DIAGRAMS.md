@@ -73,6 +73,22 @@ hosted lightbox or full editor. This is a source-driven viewer, not a claim to p
 editing/tooltip/layer features. **Editing:** download the original and edit in your
 chosen local diagrams.net application. No online editor button or automatic XML transfer.
 
+### Source colors and transparent canvas
+
+The source can specify shape fills, strokes and text colors; otherwise drawio defaults
+apply. Native drawio light/dark adaptation is retained. The viewer now uses the
+background restored from the file's `mxGraphModel`, rather than forcing white:
+
+- Missing/empty background, `none` or `transparent`: transparent SVG canvas.
+- Explicit background color: passed to the native exporter, including its theme adaptation.
+- Shape fills are independent and are not removed to make the canvas transparent.
+
+Transparency reveals the page or any enclosing/inversion-wrapper backdrop; it does
+not remove CSS backgrounds around the component. Original files/downloads are unchanged.
+The current demo omits a canvas background and therefore exports transparently.
+The SVG-in-img viewer and native image downloading remain; the selectable-document
+switch is paused, not implemented.
+
 ## Safety, loading and composition
 
 One lazily created opaque sandbox per renderer **per page**, with a serialized render

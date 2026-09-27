@@ -39,8 +39,10 @@
         viewer.darkModeChanged();
         viewer.setGraphXml(doc.documentElement);
       }
-      // Let the exporter adapt a neutral white background, not an already-dark one.
-      const svg = viewer.graph.getSvg('#ffffff',1,8);
+      // Native readGraphState restores this value per file (null when omitted).
+      // No forced canvas: preserve transparent exports and explicit source colors.
+      const background=viewer.graph.background;
+      const svg=viewer.graph.getSvg(background==='none'||background==='transparent'?null:background,1,8);
       // Export creates a new SVG root; preserve the viewer's light-dark() context.
       svg.style.colorScheme=palette;
       // Links are not active in the published SVG image; strip them defensively.
