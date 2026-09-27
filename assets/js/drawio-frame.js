@@ -39,7 +39,10 @@
         viewer.darkModeChanged();
         viewer.setGraphXml(doc.documentElement);
       }
-      const svg = viewer.graph.getSvg(palette === 'dark' ? '#1b1e22' : '#ffffff',1,8);
+      // Let the exporter adapt a neutral white background, not an already-dark one.
+      const svg = viewer.graph.getSvg('#ffffff',1,8);
+      // Export creates a new SVG root; preserve the viewer's light-dark() context.
+      svg.style.colorScheme=palette;
       // Links are not active in the published SVG image; strip them defensively.
       for (const link of svg.querySelectorAll('a')) link.replaceWith(...link.childNodes);
       parent.postMessage({type:'rendered',request,svg:new XMLSerializer().serializeToString(svg)}, '*');
