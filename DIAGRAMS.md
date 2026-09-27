@@ -35,7 +35,9 @@ reviewed integration rather than enabling trusted source. Limit: 50,000 characte
 ```
 
 Named `src` is required; optional plain nonblank `caption` has the same caption/label
-behavior as Mermaid. For file access without rendering, use a normal Markdown link.
+behavior as Mermaid. Captions sit below the diagram, centered and styled like normal
+image captions; diagrams are horizontally centered when they fit. Popup captions are
+also below/centered. For file access without rendering, use a normal Markdown link.
 There is no diagram `disabled` option or `title` alias. Only exact
 current-page `.drawio` resources: no absolute/parent/dot/encoded/glob paths, URLs,
 static/global fallback or arbitrary filesystem access. Missing files/invalid options
@@ -166,3 +168,18 @@ for actual commands/results and deliberately unrun broad/cross-browser checks.
 quiet states, icon-only controls, source/download differences, modal fit/focus/Escape/
 backdrop/return behavior, and inversion across top-layer placement. It does not change
 the separately documented video `title` API or badge/video disabled options.
+
+### Why the image URL starts with blob:
+
+The current viewer already displays SVG, not a bitmap. JavaScript creates an
+`image/svg+xml` Blob and an object URL in the visitor's browser, then uses it as an
+`img` source. It works on ordinary static hosting with the supplied local scripts;
+the localhost/domain portion reflects the current page origin, not a backend route.
+The URL is temporary and is not a permanent/shareable file URL. Original drawio
+files retain real native resource URLs.
+
+SVG inside `img` remains sharp when zoomed but its internal text is not selectable.
+A selectable SVG document is a different display model. A future read-only isolated
+SVG frame could permit text selection without inserting vendor markup into the page;
+it needs explicit navigation/network/markup restrictions and revised pan/selection
+interaction tests. This is a proposed option, not a delivered selectable-text feature.

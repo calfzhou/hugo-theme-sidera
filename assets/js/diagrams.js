@@ -45,11 +45,11 @@
   const makeDialog=()=>{
     if(dialog)return;
     dialog=document.createElement('dialog');dialog.className='diagram-dialog prose';
-    const title=document.createElement('div');title.className='diagram-dialog-title';
+    const caption=document.createElement('div');caption.className='diagram-dialog-caption';
     const close=document.createElement('button');close.type='button';close.className='diagram-action diagram-close';
     close.title=script.dataset.close;close.setAttribute('aria-label',script.dataset.close);
     const icon=document.createElement('span');icon.textContent='×';icon.setAttribute('aria-hidden','true');close.append(icon);
-    close.addEventListener('click',()=>dialog.close());dialog.append(title,close);document.body.append(dialog);
+    close.addEventListener('click',()=>dialog.close());dialog.append(caption,close);document.body.append(dialog);
     dialog.addEventListener('keydown',event=>{
       if(event.key!=='Tab')return;
       const items=[...dialog.querySelectorAll('button,a[href],[tabindex],summary')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
@@ -88,6 +88,8 @@
       if(!image.naturalWidth)return;
       const fit=inModal()?Math.min(view.clientWidth/image.naturalWidth,view.clientHeight/image.naturalHeight):Math.min(1,view.clientWidth/image.naturalWidth);
       image.style.width=Math.max(1,image.naturalWidth*fit*scale)+'px';
+      // Float at the centered image edge, not the full article-column edge.
+      tools.style.right=Math.max(4,(view.clientWidth-Math.min(view.clientWidth,image.width))/2+4)+'px';
     };
     const modalPalette=()=>{
       if(!inModal())return;
@@ -142,7 +144,8 @@
           const placeholder=document.createElement('div');placeholder.style.height=canvas.getBoundingClientRect().height+'px';placeholder.setAttribute('aria-hidden','true');
           modal={figure,canvas,opener:button,home,placeholder,restore:()=>{scale=previousScale;size();view.scrollTo(left,top);}};
           home.replaceChild(placeholder,canvas);
-          dialog.setAttribute('aria-label',image.alt);dialog.querySelector('.diagram-dialog-title').textContent=image.alt;
+          dialog.setAttribute('aria-label',image.alt);
+          const caption=dialog.querySelector('.diagram-dialog-caption');caption.textContent=figure.querySelector('figcaption')?.textContent||'';caption.hidden=!caption.textContent;
           dialog.append(canvas);scale=1;modalPalette();dialog.showModal();document.documentElement.classList.add('diagram-modal-open');size();view.focus();break;
         }
       }

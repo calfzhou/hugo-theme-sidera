@@ -1,6 +1,5 @@
 {{- $label := .caption -}}{{- if not $label -}}{{- if eq .kind "mermaid" -}}{{- $label = T "diagram_mermaid" -}}{{- else -}}{{- $label = T "diagram_drawio" -}}{{- end -}}{{- end -}}
 <figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }} data-sidera-diagram="{{ .kind }}" data-diagram-label="{{ $label }}" data-state="idle"{{ if eq .kind "drawio" }} data-diagram-source="{{ .source | jsonify }}"{{ end }}>
-  {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ end }}
   <div class="diagram-canvas">
     <div class="diagram-view" hidden></div>
     <div class="diagram-tools"{{ if eq .kind "mermaid" }} hidden{{ end }} role="group" aria-label="{{ T "diagram_controls" }}">
@@ -12,4 +11,5 @@
   <p class="diagram-status visually-hidden" role="status" data-loading="{{ T "diagram_loading" }}" data-ready="{{ T "diagram_ready" }}" data-error="{{ T "diagram_error" }}">{{ T "diagram_nojs" }}</p>
   </div>
   <noscript><p class="diagram-note">{{ T "diagram_nojs" }}</p></noscript>
+  {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ end }}
 </figure>

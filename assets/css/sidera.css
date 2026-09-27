@@ -806,10 +806,9 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 
 /* Diagrams stay unframed; controls reveal on hover/focus, not as a permanent row. */
 .prose .content-diagram { margin:1.25rem 0; min-width:0; }
-.prose .content-diagram > figcaption { color:var(--text); text-align:start; font-size:.94em; font-weight:500; margin-bottom:8px; }
 .diagram-canvas { position:relative; min-width:0; min-height:1px; }
 .diagram-view { overflow:auto; max-height:520px; border:0; background:transparent; cursor:grab; overscroll-behavior:contain; }
-.prose .diagram-view img { background:transparent; display:block; max-width:none; height:auto; margin:0; border-radius:0; }
+.prose .diagram-view img { background:transparent; display:block; max-width:none; height:auto; margin:0 auto; border-radius:0; }
 .diagram-tools { display:flex; gap:2px; flex-wrap:wrap; width:max-content; max-width:100%; z-index:1; }
 [data-state="ready"] > .diagram-canvas > .diagram-tools,.diagram-dialog .diagram-tools { position:absolute; right:4px; top:4px; padding:3px; border-radius:6px; background:var(--surface); box-shadow:0 1px 5px #0002; opacity:0; pointer-events:none; transition:opacity .15s; }
 .diagram-canvas:hover > .diagram-tools,.diagram-canvas:focus-within > .diagram-tools,.diagram-dialog .diagram-tools { opacity:1; pointer-events:auto; }
@@ -819,10 +818,10 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .prose .diagram-status:not(.visually-hidden),.diagram-note { color:var(--muted); font-size:.8em; margin:8px 0; }
 .diagram-source { margin:8px 0; }[data-state="ready"] .diagram-source:not([open]),.diagram-dialog .diagram-source:not([open]) { display:none; }.diagram-source summary { font-size:.82em; color:var(--link); }.diagram-source pre { max-height:320px; overflow:auto; }
 .diagram-renderer { position:fixed; left:-10000px; top:0; width:800px; height:600px; border:0; visibility:hidden; pointer-events:none; }
-.diagram-dialog { width:96vw; max-width:none; height:94dvh; max-height:none; padding:16px; margin:auto; border:0; border-radius:10px; background:var(--canvas); color:var(--text); }
+.diagram-dialog { width:96vw; max-width:none; height:94dvh; max-height:none; padding:52px 16px 16px; margin:auto; border:0; border-radius:10px; background:var(--canvas); color:var(--text); }
 .diagram-dialog[open] { display:flex; flex-direction:column; gap:12px; }
 .diagram-dialog::backdrop { background:#000b; }
-.diagram-dialog-title { flex:none; padding-right:40px; font-size:1rem; }
+.diagram-dialog-caption { flex:none; order:1; margin:0; font-size:.85em; line-height:1.5; color:var(--muted); text-align:center; }
 .diagram-action.diagram-close { position:absolute; top:12px; right:12px; width:32px; height:32px; font-size:26px; }
 .diagram-dialog > .diagram-canvas { flex:1; min-height:0; display:flex; flex-direction:column; }
 .diagram-dialog .diagram-view { flex:1; min-height:0; max-height:none; }
