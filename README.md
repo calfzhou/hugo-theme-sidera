@@ -116,13 +116,20 @@ or already-hidden rails/TOC. Keyboard scrolling is spot-checked in Chromium, not
 across browsers.
 Native table column alignment is preserved, with quiet headers and row separators.
 
-Images retain native URLs/alt text and explicit figure sizes, scale down to available width,
+Images use native resource permalinks and alt text (with optional Obsidian dimensions), scale down to available width,
 and are centered without forced enlargement. Transparent diagrams keep their neutral pale
 backing. Markdown image titles are not invented captions. Hugo's native `figure` shortcode
 supplies caption/title markup; both stay compact rather than acquiring article-heading gaps.
 Footnotes remain in the body, independent of configured article/site footers. There are no
 new script assets, plugins, fonts or dependencies in this body pass.
 
+
+## Advanced Markdown checkpoint
+
+[MARKDOWN.md](MARKDOWN.md) documents implemented basic alerts/image sizing, the native
+inline/display MathML candidate and its **known visual compatibility gaps**, and the
+unapproved attribute/container/automatic-caption changes. This is a partial B checkpoint,
+not all-P3 or real-site rendering acceptance. No new library/assets have been bundled.
 
 ## Source links
 

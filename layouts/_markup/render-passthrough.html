@@ -1,0 +1,11 @@
+{{- /* Native Goldmark preserves TeX before Markdown; Hugo embeds KaTeX.
+     MathML needs no downloaded CSS, fonts, client renderer, or trusted TeX. */ -}}
+{{- $block := eq .Type "block" -}}
+{{- $opts := dict "output" "mathml" "displayMode" $block "strict" "error" "throwOnError" true -}}
+{{- with try (transform.ToMath .Inner $opts) -}}
+  {{- with .Err -}}
+    {{- errorf "Sidera math: %s (%s)" . $.Position -}}
+  {{- else -}}
+    {{- if $block -}}<div class="math-display" tabindex="0" role="group" aria-label="{{ T "math_display" }}">{{ .Value }}</div>{{- else -}}{{ .Value }}{{- end -}}
+  {{- end -}}
+{{- end -}}

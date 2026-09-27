@@ -309,3 +309,16 @@ other = "Could not copy. Copy the selected code manually."
 
 [code_copy_manual]
 other = "Code for manual copying"
+
+[alert_note]
+other = 'Note'
+[alert_tip]
+other = 'Tip'
+[alert_important]
+other = 'Important'
+[alert_warning]
+other = 'Warning'
+[alert_caution]
+other = 'Caution'
+[math_display]
+other = 'Display equation; scroll horizontally if needed'

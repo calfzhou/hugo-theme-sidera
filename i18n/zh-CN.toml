@@ -306,3 +306,16 @@ other = "无法自动复制，请手动复制已选中的代码。"
 
 [code_copy_manual]
 other = "供手动复制的代码"
+
+[alert_note]
+other = '说明'
+[alert_tip]
+other = '提示'
+[alert_important]
+other = '重要'
+[alert_warning]
+other = '警告'
+[alert_caution]
+other = '注意'
+[math_display]
+other = '独立公式；可按需水平滚动'

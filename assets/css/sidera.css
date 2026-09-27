@@ -687,3 +687,18 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 
 .article-end { margin: 36px 18px; padding-top: 18px; border-top: 1px solid var(--line); }
 .article-end .authored-text { padding: 0; }
+
+/* B: source-led callout spacing/bar, not a restyle of ordinary quotations.
+   Labels carry meaning without color; no copied icon assets or live-region noise. */
+.prose .markdown-alert { margin-block: 1rem; padding: 8px 16px; border-inline-start: .25em solid var(--alert-color); }
+.prose .markdown-alert > :first-child { margin-top: 0; }
+.prose .markdown-alert > :last-child { margin-bottom: 0; }
+.markdown-alert-note { --alert-color: #2f81f7; }
+.markdown-alert-tip { --alert-color: #3fb950; }
+.markdown-alert-important { --alert-color: #a371f7; }
+.markdown-alert-warning { --alert-color: #d29922; }
+.markdown-alert-caution { --alert-color: #f85149; }
+/* Native MathML owns glyph layout/baselines. Auto margins center short blocks,
+   but collapse for long formulas so their left edge remains scroll-accessible. */
+.prose .math-display { display: flex; overflow-x: auto; margin-block: 1rem; padding-block: .25em; }
+.prose .math-display > .katex { flex: none; margin-inline: auto; }

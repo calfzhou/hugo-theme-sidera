@@ -247,3 +247,11 @@ SHELL.md defines exact behavior, local-image safety, six-entry bound and no-JS f
 page/cascade/preset settings. Unresolved sources warn by default through native
 `sidera-link-source`; native-heading checks are opt-in because non-heading IDs are valid.
 No native markup or security setting is changed to activate the theme link hook.
+
+## B native Markdown checkpoint
+
+See [MARKDOWN.md](MARKDOWN.md) for basic alerts, image dimensions and the explicit
+`markup.goldmark.extensions.passthrough` leaf import. These use native configuration,
+not new custom params or presets. The native MathML candidate has known visible
+compatibility gaps; local KaTeX CSS/fonts and syntax conversions await approval.
+No broad markup/security merge or default documentation mount is introduced.

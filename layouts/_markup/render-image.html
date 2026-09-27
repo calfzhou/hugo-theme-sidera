@@ -1,0 +1,30 @@
+{{- /* Resolve parsed resources with A's native permalink helper. Do not parse
+     trailing source attributes or containers here: they are outside this node. */ -}}
+{{- $src := partial "links/destination.html" . -}}
+{{- $alt := .PlainText -}}
+{{- $width := "" -}}{{- $height := "" -}}
+{{- $size := findRE `\|[1-9][0-9]*(?:x[1-9][0-9]*)?$` $alt 1 -}}
+{{- with $size -}}
+  {{- $suffix := index . 0 -}}
+  {{- $alt = strings.TrimSuffix $suffix $alt -}}
+  {{- $dimensions := split (strings.TrimPrefix "|" $suffix) "x" -}}
+  {{- $width = index $dimensions 0 -}}
+  {{- if eq (len $dimensions) 2 -}}{{- $height = index $dimensions 1 -}}{{- end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ $alt }}"
+  {{- with .Title }} title="{{ partial "links/title.html" . }}"{{ end -}}
+  {{- with $width }} width="{{ . }}"{{ end -}}
+  {{- with $height }} height="{{ . }}"{{ end -}}
+  {{- /* Native attributes are available only on configured standalone nodes.
+       Do not allow attributes to replace the resolved URL, alt or event policy. */ -}}
+  {{- range $name, $value := .Attributes -}}
+    {{- if in (slice "id" "class") $name }} {{ $name | safeHTMLAttr }}="{{ $value }}"
+    {{- else if and (in (slice "width" "height") $name) (not (or (and (eq $name "width") $width) (and (eq $name "height") $height))) -}}
+      {{- if findRE `^[1-9][0-9]*$` (string $value) }} {{ $name | safeHTMLAttr }}="{{ $value }}"
+      {{- else -}}{{- warnidf "sidera-image-attribute" "Sidera image: %s must be a positive integer (%s)" $name $.Position -}}{{- end -}}
+    {{- else if not (in (slice "width" "height") $name) -}}
+      {{- warnidf "sidera-image-attribute" "Sidera image: unsupported attribute %q (%s); supported native attributes are id, class, width and height" $name $.Position -}}
+    {{- end -}}
+  {{- end -}}
+>
+{{- /* No automatic alt-to-caption change until the B figure policy is agreed. */ -}}

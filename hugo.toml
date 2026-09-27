@@ -30,3 +30,10 @@ order = 'publication'
 [markup.tableOfContents]
 startLevel = 1
 endLevel = 6
+
+# Opt in through this leaf only; never import renderer.unsafe or all markup.
+[markup.goldmark.extensions.passthrough]
+enable = true
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [['$$', '$$']]
+inline = [['$', '$']]
