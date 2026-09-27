@@ -723,7 +723,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .code-source > a { flex: none; }
 .prose .code-block:has(> .code-source) > .code-toolbar { top: auto; margin-top: 4px; }
 
-/* Used content primitives: Stellar inline-labels/mark/quot/link/copy/emoji.
+/* Used content primitives: Stellar inline-labels/mark/quot/link/copy.
    Native semantics, readable palette tokens and visible keyboard/touch controls. */
 .prose .content-kbd { padding: 2px 4px 1px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--surface); font: 700 .85em var(--code); }
 .prose .content-u { text-decoration: none; border-bottom: 2px solid var(--accent); }
@@ -750,8 +750,6 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .content-copy .code-copy { grid-area: auto; flex: none; opacity: 1; pointer-events: auto; min-height: 44px; }
 .content-copy .code-copy-fallback { flex-basis: 100%; }
 .content-copy.is-copied .code-copy { color: var(--accent); }
-.prose .content-emoji { display: inline-block; vertical-align: middle; margin: -4px 2px 0; }
-.prose .content-emoji > img { display: block; width: auto; height: 1.75em; margin: 0; border-radius: 0; object-fit: contain; }
 @media (prefers-reduced-motion: no-preference) and (hover: hover) {
   .content-quot > p { transition: transform .2s ease; }
   .content-quot:hover > p { transform: translateY(-4px) scale(1.03); }

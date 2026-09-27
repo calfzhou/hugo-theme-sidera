@@ -2,7 +2,8 @@
 
 Hugo **0.166.0**, independent native shortcodes. This is an implemented **partial**
 checkpoint, not the complete C2 authoring contract. Container composition needs the
-explicit decision described below; no used row is retired by this boundary.
+explicit decision described below. The user has retired emoji, timeline and enhanced
+image components; ordinary Markdown images remain supported.
 
 ## Working syntax
 
@@ -21,7 +22,6 @@ explicitly; ordinary Markdown structure is not shortcode nesting.
 {{< link href="../article/index.md?from=card#heading" text="Read the article" icon="icon.svg" >}}
 {{< link href="example.txt" text="Open the adjacent example" >}}
 {{< copy text="AAAA BBBB  CCCC DDDD" prefix="Example fingerprint" >}}
-{{< emoji src="approved-local-image.gif" alt="Describe the sticker" >}}
 ```
 
 | Component | Arguments, types and defaults | Result |
@@ -32,7 +32,9 @@ explicitly; ordinary Markdown structure is not shortcode nesting.
 | `quot` | Required nonblank string `text`; **boolean** `ornament=true` | Centered standout paragraph with optional decorative quotation marks. No heading/TOC entry or invented attribution. `ornament="false"` is invalid; use the boolean. |
 | `link` | Required nonblank strings `href`, `text`; optional string `icon` (empty/omitted = generic local link symbol) | One native link card; label and resolved destination remain readable. No automatic description/metadata fetch. |
 | `copy` | Required nonblank string `text`; optional string `prefix` (empty/omitted = no label) | Selectable value, shared progressive Copy/Copied/toast/manual fallback; prefix is never copied. |
-| `emoji` | Required nonblank strings `src`, `alt` | Local image at 1.75em, accessible alt. No implicit catalog/CDN/license; actual blobcat asset remains unresolved. |
+
+Inline `u`, `kbd` and `mark` add **no template whitespace** before/after their output.
+For example, `{{< u text="aa" >}}bcc` displays `aabcc`; spaces you author remain.
 
 Text arguments are **literal escaped text**, not Markdown, raw HTML, CSS or math.
 This matches the audited inline/standout/copy uses. Quotes around numeric text matter:
@@ -68,13 +70,10 @@ page scraper, automatic favicon discovery or metadata service. Prefer approved l
 assets. SVG is loaded through `img`, never interpolated as executable inline markup.
 Decorative card icons have empty alt; the authored card label supplies the name.
 
-`emoji` accepts only those **local** image inputs, and requires meaningful alt. It
-neither copies a third-party asset nor grants rights to one. The original call
-`{% emoji blobcat party %}` resolves via Stellar 1.44.0 configuration to
-`https://gcore.jsdelivr.net/gh/cdn-x/emoticons@3.1/blobcat/party.gif`. This locates the
-reference, **not the original author/license**. Those rights have not been verified;
-no image/library was downloaded or redistributed. The committed geometric green
-signal is an original synthetic test placeholder, not licensed blobcat parity.
+Emoji/sticker shortcodes, timeline and enhanced-image shortcodes are **retired by
+user choice**. No blobcat asset/license decision remains necessary. Ordinary Markdown
+images, dimensions, captions, inversion classes and native image/resource links remain
+unchanged; retirement does not claim a right to redistribute any old image.
 
 ### Copy, summaries, assets and overrides
 
@@ -107,14 +106,14 @@ or permission to discard a required result during P4 conversion.
 | `box` (3/3): red, optional title, codeblock child | **Pending.** Two actual fenced-code bodies, one named resource link; required snippet composition remains a C2 checkpoint too. B's five alerts are not a blanket replacement. |
 | `blockquote` (1/1): author `Bruce Schneier`, source `Applied Cryptography` | **Pending.** Native attributed quote, preserving attribution even though the inspected Stellar implementation does not consume those positional fields. |
 | `quot` (6/3): default ornament and `icon:none`, literal pipe in text | **Working:** named `text`; `icon:none` → `ornament=false`. Standout paragraph, not a heading; typographic ornaments instead of unverified icon assets. |
-| `image` (7/4): alt/caption, `bg:#f9fafb`, `width:320px`, alternate-original `fancybox:<file>`, `download:true`, `fancybox:true` | **Pending.** B already covers ordinary Markdown images/attrs/captions. Enhanced original-image viewing/download interaction must not be silently replaced by a thumbnail or competing caption renderer. |
+| `image` (7/4): alt/caption, `bg:#f9fafb`, `width:320px`, alternate-original `fancybox:<file>`, `download:true`, `fancybox:true` | **Retired by user choice (D-091):** no dedicated enhanced-image component/viewer/download UI. Use existing Markdown image/caption/size/resource support as needed; no automatic source conversion. |
 | `kbd` (30/3): key text/backtick/Unicode | **Working:** `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`; literal backtick example above. |
 | `mark` (36/3): ✓/✗/? with green/red/yellow | **Working:** `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
 | `u` (120/10): letters, digits, comma-separated selections | **Working:** `{% u 9 %}` → `{{< u text="9" >}}`; keep quoted text exactly. |
-| `timeline` (1/1): six authored `<!-- node label -->` groups, containing grids/cards | **Pending.** Native ordered events/cells, not a comments regex parser or remote data service. |
-| `link` (12/4 including wiki wrapper): authored title/icon; adjacent/HTTPS icons and public-key local target | **Working independently:** URL → `href`, label → `text`, `icon` stays explicit. Nested timeline/grid/card placement still **Pending**. Local file remains a real native link; no fake Download action or remote metadata. |
+| `timeline` (1/1): six authored `<!-- node label -->` groups, containing grids/cards | **Retired by user choice (D-091).** No timeline shortcode implementation or compatibility obligation. |
+| `link` (12/4 including wiki wrapper): authored title/icon; adjacent/HTTPS icons and public-key local target | **Working independently:** URL → `href`, label → `text`, `icon` stays explicit. Nested grid/card placement still **Pending**. Local file remains a real native link; no fake Download action or remote metadata. |
 | `copy` (1/1): fingerprint text and prefix | **Working:** `{% copy AAAA BBBB prefix:"Key fingerprint" %}` → `{{< copy text="AAAA BBBB" prefix="Key fingerprint" >}}`; exact text excludes prefix. |
-| `emoji` (1/1): blobcat party | **Component working independently**, approved local `src` + meaningful `alt`. **Actual asset/license Pending**, not a completed conversion. |
+| `emoji` (1/1): blobcat party | **Retired by user choice (D-091).** The shortcode/specimen/style were removed; no blobcat asset required. |
 
 `snippet` remains the accepted C1 contract in SNIPPETS.md. AnimCube is site-owned P4.
 Diagrams, video, GitHub badge and other D embeds, E references/search and F comments
@@ -154,3 +153,23 @@ RenderString-container alternative excludes inner headings from the page TOC and
 still needs an explicit safe child-output strategy; it is **not** an accepted fallback.
 No consequential compromise has been imposed. C2 remains partial until this is settled,
 implemented and verified against actual nesting, assets, summaries and interactions.
+
+### What the authoring choice means
+
+The remaining real requirement is simple: a folding/box/grid container must be able
+to hold Markdown, code snippets and links without losing content or headings in the
+page TOC. The implementation must also keep raw HTML disabled.
+
+The proposed author-facing rule is **`%` for the outermost container, `<` for nested
+components**. A grid used on its own would use `%`; that same grid nested in a folding
+container would use `<`. Existing self-contained leaf calls such as `snippet` retain
+`<`. This is an extra notation rule, not a request to enable unsafe rendering.
+
+The isolated frame/slot test above shows the heading-preserving part works. Actual
+folding/grid/box and the safe handling of HTML-producing children still need work.
+The proposal remains unapproved; this explanation does not change the live API.
+
+An **attributed blockquote** simply shows a quoted passage plus its author/source,
+e.g. a quote credited to Bruce Schneier and *Applied Cryptography*. Ordinary Markdown
+can already retain that credit; a dedicated shortcode is not inherently necessary.
+Its final presentation/replacement remains under discussion.

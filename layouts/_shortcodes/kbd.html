@@ -1,2 +1,2 @@
 {{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text") "required" (slice "text")) -}}
-<kbd class="content-kbd">{{ .Get "text" }}</kbd>
+<kbd class="content-kbd">{{ .Get "text" }}</kbd>{{- /* Inline output must not add whitespace after the closing tag. */ -}}

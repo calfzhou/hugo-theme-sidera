@@ -279,8 +279,8 @@ new configuration import or nested-shortcode support. C2 remains separate.
 ## Independent content primitives (partial C2)
 
 [COMPONENTS.md](COMPONENTS.md) is the authoritative typed-argument/conversion guide
-for kbd/mark/u, standout quot, link cards, copy text and local emoji images. These
-standard-notation primitives are implemented independently; remaining container/image/
-attribution/timeline families and actual nested shortcode composition remain Pending.
-The blobcat source/license is unresolved; a synthetic placeholder is not final parity.
+for kbd/mark/u, standout quot, link cards and copy text. These standard-notation
+primitives are implemented independently; remaining container/attribution families
+and actual nested shortcode composition remain Pending. Emoji, timeline and enhanced
+image components are retired by user choice; existing Markdown images remain intact.
 No new config import, library, renderer safety exception or params wrapper is added.

@@ -235,7 +235,8 @@ See SHELL.md for params, native collection cascades, empty/false behavior and sh
 ## Content primitives (partial C2)
 
 [COMPONENTS.md](COMPONENTS.md) documents working inline treatments, standout quotes,
-explicit link cards, exact copy text and local sticker images. The root showcase's
-`/handbook/reference/content-components/` is inspectable. Required container composition,
-enhanced images, attributed quotes and timelines remain an explicit decision/work gate;
-this is not full C2 delivery. The actual blobcat party asset is not bundled or licensed.
+explicit link cards and exact copy text. The root showcase's
+`/handbook/reference/content-components/` is inspectable. Required container composition
+and attributed quotes remain an explicit decision/work gate; this is not full C2
+delivery. Emoji, timeline and enhanced-image components are retired by user choice.
+Existing ordinary Markdown image/caption/dimension support stays unchanged.
