@@ -7,7 +7,7 @@ The normal specimen is `/handbook/reference/diagrams/` in the showcase.
 ## Mermaid stays a fence
 
 ````text
-```mermaid {title="A useful description"}
+```mermaid {caption="A useful description"}
 flowchart LR
   A[Read] --> B@{ shape: f-circ } --> C[Render]
 ```
@@ -19,8 +19,10 @@ including the actual f-circ shape syntax, subgraphs, CJK labels and multi-target
 All 30 audited fences rendered in the local check; this is not every Mermaid grammar,
 label/font combination or visual-parity certification. Ordinary B math remains separate.
 
-Optional fence attributes: plain nonblank `title`, safe `class`/`id`, `disabled=true`
-or `false`. Disabled means visible source without renderer resources. Do not pass
+Optional fence attributes: plain nonblank `caption` and safe `class`/`id`. A caption
+is optional: omission shows no generic visible caption, while a localized diagram
+label remains for accessibility. To display code only, use a `text` fence. The former
+`title` and `disabled` options are removed, not aliases. Do not pass
 highlighter options to this diagram hook. Init directives/YAML configuration and other
 diagram grammars are rejected by the bounded renderer; use source-only or a separately
 reviewed integration rather than enabling trusted source. Limit: 50,000 characters,
@@ -29,17 +31,18 @@ reviewed integration rather than enabling trusted source. Limit: 50,000 characte
 ## Native drawio source
 
 ```text
-{{< diagramsnet src="flow.drawio" title="Source to local view" >}}
-{{< diagramsnet src="flow.drawio" disabled=true >}}
+{{< diagramsnet src="flow.drawio" caption="Source to local view" >}}
 ```
 
-Named `src` is required; optional plain `title` and boolean `disabled`. Only exact
+Named `src` is required; optional plain nonblank `caption` has the same caption/label
+behavior as Mermaid. For file access without rendering, use a normal Markdown link.
+There is no diagram `disabled` option or `title` alias. Only exact
 current-page `.drawio` resources: no absolute/parent/dot/encoded/glob paths, URLs,
 static/global fallback or arbitrary filesystem access. Missing files/invalid options
 fail with shortcode position. Native RelPermalink and full original bytes supply the
 source download under dated/base-path/language/mounted-doc routes. Files are never
 changed, uploaded or replaced by their rendered image. Resource publication is not
-redaction; disabling rendering does not make a bundle file private.
+redaction; using an ordinary link instead of a viewer does not make a file private.
 
 The current renderer covers **one uncompressed mxfile page**, up to 1 MB / 2,500 cells,
 finite geometry coordinates/dimensions within ±100,000. This matches all 40 stored
@@ -47,11 +50,24 @@ sources, which rendered in the local check. Native tables/rows/partial rectangle
 arrows, brackets, waypoints and the needed basic polygon stencil stay available.
 No external images/fonts, custom executable stencils, drawio math, compressed pages,
 multiple-page/layer UI or arbitrary stencil library downloads are promised. These
-unsupported inputs fail to source fallback; they are not silently converted to boxes.
+unsupported models fail to an error/download fallback; they are not silently converted
+to boxes. XML is escaped JSON in a data attribute, not displayed as readable source or
+added as XML text to page excerpts. Original downloads retain their native bytes.
 
-**Viewing:** local SVG image, zoom in/out/fit, keyboard arrow-key panning, native touch scrolling and mouse
-panning. Expand view increases the scrollport height; it is not a hosted lightbox or
-full editor. This is a source-driven viewer, not a claim to preserve unused upstream
+**Viewing:** an unframed local SVG image. Small icon-only controls (28px desktop,
+localized tooltips/accessible names) float on hover or keyboard focus. Touch uses a
+persistent compact row with 44px targets so controls do not cover a short diagram.
+Zoom in/out/fit, arrow-key panning, native touch scrolling and mouse panning remain.
+Mermaid's source disclosure and drawio's download are toolbar controls; drawio has no
+XML source viewer or persistent editing note.
+
+**Large view:** the expand icon opens a native modal at 96vw × 94dvh. It fits/upscales
+the image to the available space, supports the same controls and Mermaid source pane,
+and closes with Escape, ×, or the backdrop. Controls stay clear of the image. Focus
+is contained and restored; page layout/scroll and inline zoom/pan are preserved. The
+same canvas/image is moved, not re-rendered or duplicated. Explicit ancestor inversion
+is transferred once to the modal canvas and follows palette changes. This is not a
+hosted lightbox or full editor. This is a source-driven viewer, not a claim to preserve unused upstream
 editing/tooltip/layer features. **Editing:** download the original and edit in your
 chosen local diagrams.net application. No online editor button or automatic XML transfer.
 
@@ -68,8 +84,9 @@ explicitly disabled. Mermaid uses strict sanitization and fixed integration sett
 Only source-window-checked messages reach the owned sandbox. Returned SVG is displayed
 as an **inert Blob-backed image**, never inserted as HTML into the article. Source,
 caption, download and control labels remain native parent HTML. The images expose their
-authored alternative labels; this is not a screen-reader graph navigator. Supply useful
-prose descriptions/titles for meaningful diagrams; source is always available.
+caption-derived alternative labels (localized fallback when omitted); this is not a
+screen-reader graph navigator. Supply useful prose descriptions/captions for meaningful
+diagrams. Mermaid source and original drawio downloads remain available.
 
 Both palettes and System changes work. An author-marked `invert-when-dark` or
 `invert-when-light` ancestor selects a **fixed light renderer palette**: the existing
@@ -85,7 +102,7 @@ keys now permit underscore-separated shortcode names for badge_github, without d
 missing/forged-key checks. Site overrides retain their documented bridge obligations.
 
 The shared shell detects actual rendered Content/HTML Summary before deferred resources.
-Plainified card excerpts, plain pages, literal code and disabled-only pages request no
+Plainified card excerpts, plain pages, literal code and ordinary file links request no
 diagram libraries. Custom layouts must preserve that shell integration. Libraries and
 frames are fingerprinted; manifests validate bundled bytes before publication. Opaque
 frames cannot use script SRI without CORS-enabled hosting, so **build-time hashes plus
@@ -94,10 +111,12 @@ server-header prerequisite. The parent controller still has SRI. Frame CSP permi
 local scripts and inline vendor styles only; a site CSP must allow its local frames
 and Blob images. No global unsafe HTML or unsafe-eval is enabled.
 
-Visible states: source-only/no-JS, loading, ready, disabled and error. Failed input does
-not poison a later diagram. Missing libraries or a 15-second wait show source fallback;
+Loading/ready messages are assistive-only, not visible page furniture. Errors remain
+visible. No-JS/errors retain Mermaid source or the drawio download, never a raw XML
+viewer. Failed input does not poison a later diagram. Missing libraries or a 15-second
+wait expose the appropriate fallback;
 there is no retry daemon. A stalled third-party renderer is not a universal browser-DoS
-sandbox guarantee. Source fallback is **not equivalent visual rendering**. Local assets
+sandbox guarantee. The fallback is **not equivalent visual rendering**. Local assets
 are needed on the initial visit; there is no service worker/offline-cache promise.
 
 ## Automatic GitHub badges
@@ -142,3 +161,8 @@ free port, stopping its own server. `check_diagrams_browser.mjs` uses the existi
 isolated harness, mocks all Shields requests, checks the 30/40 actual diagram sources
 in memory only, and captures only synthetic examples. See the coordination P3-D report
 for actual commands/results and deliberately unrun broad/cross-browser checks.
+
+`check_diagram_controls_browser.mjs` additionally covers hover/focus/touch visibility,
+quiet states, icon-only controls, source/download differences, modal fit/focus/Escape/
+backdrop/return behavior, and inversion across top-layer placement. It does not change
+the separately documented video `title` API or badge/video disabled options.

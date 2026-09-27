@@ -1,13 +1,15 @@
-<figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }}{{ if not .disabled }} data-sidera-diagram="{{ .kind }}"{{ end }} data-state="{{ if .disabled }}disabled{{ else }}idle{{ end }}">
-  <figcaption>{{ .title }}</figcaption>
-  <div class="diagram-view" hidden></div>
-  <div class="diagram-tools" hidden role="group" aria-label="{{ T "diagram_controls" }}">
-    <button type="button" data-diagram-action="out" aria-label="{{ T "diagram_zoom_out" }}">−</button>
-    <button type="button" data-diagram-action="fit">{{ T "diagram_fit" }}</button>
-    <button type="button" data-diagram-action="in" aria-label="{{ T "diagram_zoom_in" }}">+</button>
-    <button type="button" data-diagram-action="expand" aria-pressed="false">{{ T "diagram_expand" }}</button>
+{{- $label := .caption -}}{{- if not $label -}}{{- if eq .kind "mermaid" -}}{{- $label = T "diagram_mermaid" -}}{{- else -}}{{- $label = T "diagram_drawio" -}}{{- end -}}{{- end -}}
+<figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }} data-sidera-diagram="{{ .kind }}" data-diagram-label="{{ $label }}" data-state="idle"{{ if eq .kind "drawio" }} data-diagram-source="{{ .source | jsonify }}"{{ end }}>
+  {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+  <div class="diagram-canvas">
+    <div class="diagram-view" hidden></div>
+    <div class="diagram-tools"{{ if eq .kind "mermaid" }} hidden{{ end }} role="group" aria-label="{{ T "diagram_controls" }}">
+      {{ $labels := dict "out" "diagram_zoom_out" "fit" "diagram_fit" "in" "diagram_zoom_in" "expand" "diagram_expand" }}{{ range $action := slice "out" "fit" "in" "expand" }}{{ $label := index $labels $action }}<button type="button" class="diagram-action" data-diagram-action="{{ $action }}" aria-label="{{ T $label }}" title="{{ T $label }}" hidden>{{ partial "diagrams/icon.html" $action }}</button>{{ end }}
+      {{ if eq .kind "mermaid" }}<button type="button" class="diagram-action" data-diagram-action="source" aria-label="{{ T "diagram_source" }}" title="{{ T "diagram_source" }}" aria-expanded="false" hidden>{{ partial "diagrams/icon.html" "source" }}</button>{{ end }}
+      {{ with .url }}<a class="diagram-action diagram-download" href="{{ . }}" download aria-label="{{ T "diagram_download" }}" title="{{ T "diagram_download" }}">{{ partial "diagrams/icon.html" "download" }}</a>{{ end }}
+    </div>
+    {{ if eq .kind "mermaid" }}<details class="diagram-source" open><summary>{{ T "diagram_source" }}</summary><pre><code>{{ .source }}</code></pre></details>{{ end }}
+  <p class="diagram-status visually-hidden" role="status" data-loading="{{ T "diagram_loading" }}" data-ready="{{ T "diagram_ready" }}" data-error="{{ T "diagram_error" }}">{{ T "diagram_nojs" }}</p>
   </div>
-  <p class="diagram-status" role="status" data-loading="{{ T "diagram_loading" }}" data-ready="{{ T "diagram_ready" }}" data-error="{{ T "diagram_error" }}">{{ if .disabled }}{{ T "diagram_disabled" }}{{ else }}{{ T "diagram_nojs" }}{{ end }}</p>
-  <details class="diagram-source" open><summary>{{ T "diagram_source" }}</summary><pre><code>{{ .source }}</code></pre></details>
-  {{ with .url }}<a class="diagram-download" href="{{ . }}" download>{{ T "diagram_download" }}</a><p class="diagram-edit-note">{{ T "diagram_edit_local" }}</p>{{ end }}
+  <noscript><p class="diagram-note">{{ T "diagram_nojs" }}</p></noscript>
 </figure>

@@ -804,27 +804,54 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .prose .content-video :is(.video-status,.video-note) { margin: 8px 0; font-size: .82em; line-height: 1.5; color: var(--muted); }
 .content-video .video-source { display: inline-block; font-size: .82em; padding-block: 4px; }
 
-/* Local SVG viewers. Vendor runtimes stay in a single opaque frame per family. */
+/* Diagrams stay unframed; controls reveal on hover/focus, not as a permanent row. */
 .prose .content-diagram { margin:1.25rem 0; min-width:0; }
 .prose .content-diagram > figcaption { color:var(--text); text-align:start; font-size:.94em; font-weight:500; margin-bottom:8px; }
-.diagram-view { overflow:auto; max-height:520px; border:1px solid var(--line); border-radius:8px; background:var(--panel); cursor:grab; overscroll-behavior:contain; }
+.diagram-canvas { position:relative; min-width:0; min-height:1px; }
+.diagram-view { overflow:auto; max-height:520px; border:0; background:transparent; cursor:grab; overscroll-behavior:contain; }
 .prose .diagram-view img { background:transparent; display:block; max-width:none; height:auto; margin:0; border-radius:0; }
-.content-diagram.is-expanded .diagram-view { max-height:80vh; }
-.diagram-tools { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-.diagram-tools button { min-width:44px; min-height:44px; padding:6px 12px; font:inherit; font-size:.82em; color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:6px; cursor:pointer; }
-.diagram-tools button:hover,.diagram-tools button[aria-pressed="true"] { background:var(--accent-soft); }
-.prose :is(.diagram-status,.diagram-edit-note) { color:var(--muted); font-size:.8em; margin:8px 0; }
-.diagram-source { margin:8px 0; }.diagram-source summary { font-size:.82em; color:var(--link); }.diagram-source pre { max-height:320px; overflow:auto; }
-.diagram-download { font-size:.82em; }
+.diagram-tools { display:flex; gap:2px; flex-wrap:wrap; width:max-content; max-width:100%; z-index:1; }
+[data-state="ready"] > .diagram-canvas > .diagram-tools,.diagram-dialog .diagram-tools { position:absolute; right:4px; top:4px; padding:3px; border-radius:6px; background:var(--surface); box-shadow:0 1px 5px #0002; opacity:0; pointer-events:none; transition:opacity .15s; }
+.diagram-canvas:hover > .diagram-tools,.diagram-canvas:focus-within > .diagram-tools,.diagram-dialog .diagram-tools { opacity:1; pointer-events:auto; }
+.diagram-tools .diagram-action,.diagram-action.diagram-close { display:inline-flex; align-items:center; justify-content:center; flex:none; width:28px; height:28px; padding:0; border:0; border-radius:4px; background:transparent; color:var(--text); cursor:pointer; text-decoration:none; }
+.diagram-action:hover,.diagram-action[aria-expanded="true"] { background:var(--accent-soft); }
+.diagram-action svg { flex:none; }
+.prose .diagram-status:not(.visually-hidden),.diagram-note { color:var(--muted); font-size:.8em; margin:8px 0; }
+.diagram-source { margin:8px 0; }[data-state="ready"] .diagram-source:not([open]),.diagram-dialog .diagram-source:not([open]) { display:none; }.diagram-source summary { font-size:.82em; color:var(--link); }.diagram-source pre { max-height:320px; overflow:auto; }
 .diagram-renderer { position:fixed; left:-10000px; top:0; width:800px; height:600px; border:0; visibility:hidden; pointer-events:none; }
+.diagram-dialog { width:96vw; max-width:none; height:94dvh; max-height:none; padding:16px; margin:auto; border:0; border-radius:10px; background:var(--canvas); color:var(--text); }
+.diagram-dialog[open] { display:flex; flex-direction:column; gap:12px; }
+.diagram-dialog::backdrop { background:#000b; }
+.diagram-dialog-title { flex:none; padding-right:40px; font-size:1rem; }
+.diagram-action.diagram-close { position:absolute; top:12px; right:12px; width:32px; height:32px; font-size:26px; }
+.diagram-dialog > .diagram-canvas { flex:1; min-height:0; display:flex; flex-direction:column; }
+.diagram-dialog .diagram-view { flex:1; min-height:0; max-height:none; }
+.diagram-dialog .diagram-source { flex:none; max-height:35%; overflow:auto; }
+.diagram-dialog [data-diagram-action="expand"] { display:none; }
+@media (hover:none),(pointer:coarse) {
+  [data-state="ready"] > .diagram-canvas > .diagram-tools { opacity:1; pointer-events:auto; }
+  .diagram-tools .diagram-action,.diagram-action.diagram-close { width:44px; height:44px; }
+}
 
 .github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status,.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
 /* A B inversion wrapper filters the whole component. Pair its chrome with the
    same fixed light palette as the SVG instead of dark-theming it a second time. */
 :is(.invert-when-dark,.invert-when-light) .content-diagram,
-.content-diagram:is(.invert-when-dark,.invert-when-light) {
+.content-diagram:is(.invert-when-dark,.invert-when-light),
+.diagram-dialog[data-fixed-light] > .diagram-canvas {
   --canvas:#fff; --surface:#fff; --panel:#0000000a; --surface-hover:#00000014;
   --text:#17191b; --muted:#000000b3; --quiet:#00000080; --line:#00000029;
   --link:#087cb9; --accent:#007f9e; --accent-soft:#00697e12;
-  color:var(--text); background:var(--canvas); padding:10px; border-radius:8px; color-scheme:light;
+  color:var(--text); background:var(--canvas); color-scheme:light;
 }
+
+html.diagram-modal-open { overflow:hidden; }
+/* Keep modal/touch controls out of the image: short, wide diagrams must not be covered. */
+.diagram-dialog .diagram-tools { position:static; flex:none; align-self:flex-end; order:-1; }
+.diagram-dialog .diagram-view { display:flex; align-items:safe center; justify-content:safe center; }
+.diagram-dialog .diagram-view img { flex:none; }
+@media (hover:none),(pointer:coarse) {
+  [data-state="ready"] > .diagram-canvas > .diagram-tools { position:static; margin-top:4px; margin-left:auto; }
+}
+
+@media (prefers-reduced-motion:reduce) { .diagram-tools { transition:none; } }

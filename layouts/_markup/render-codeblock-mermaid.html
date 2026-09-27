@@ -1,17 +1,13 @@
 {{- with .Options -}}{{- errorf "Sidera Mermaid: highlight options are not diagram attributes (%s)" $.Position -}}{{- end -}}
-{{- $title := T "diagram_mermaid" -}}{{- $disabled := false -}}{{- $class := "" -}}{{- $id := "" -}}
+{{- $caption := "" -}}{{- $class := "" -}}{{- $id := "" -}}
 {{- range $key, $value := .Attributes -}}
-  {{- if not (in (slice "title" "disabled" "class" "id") $key) -}}{{- errorf "Sidera Mermaid: unsupported attribute %q (%s)" $key $.Position -}}{{- end -}}
-  {{- if eq $key "title" -}}{{- $title = string $value -}}{{- end -}}
-  {{- if eq $key "disabled" -}}
-    {{- if not (in (slice "true" "false") (string $value)) -}}{{- errorf "Sidera Mermaid: disabled must be true or false (%s)" $.Position -}}{{- end -}}
-    {{- $disabled = eq (string $value) "true" -}}
-  {{- end -}}
+  {{- if not (in (slice "caption" "class" "id") $key) -}}{{- errorf "Sidera Mermaid: unsupported attribute %q (%s)" $key $.Position -}}{{- end -}}
+  {{- if eq $key "caption" -}}{{- $caption = string $value -}}{{- end -}}
   {{- if in (slice "class" "id") $key -}}
     {{- $pattern := `^[A-Za-z_][A-Za-z0-9_-]*(?: [A-Za-z_][A-Za-z0-9_-]*)*$` -}}{{- if eq $key "id" -}}{{- $pattern = `^[A-Za-z_][A-Za-z0-9_-]*$` -}}{{- end -}}
     {{- if not (findRE $pattern (string $value)) -}}{{- errorf "Sidera Mermaid: invalid %s (%s)" $key $.Position -}}{{- end -}}
     {{- if eq $key "class" -}}{{- $class = string $value -}}{{- else -}}{{- $id = string $value -}}{{- end -}}
   {{- end -}}
 {{- end -}}
-{{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera Mermaid: title must be nonblank (%s)" .Position -}}{{- end -}}
-{{- partial "diagrams/figure.html" (dict "kind" "mermaid" "source" .Inner "title" $title "disabled" $disabled "class" $class "id" $id) -}}
+{{- if and (isset .Attributes "caption") (not (strings.ContainsNonSpace $caption)) -}}{{- errorf "Sidera Mermaid: caption must be nonblank (%s)" .Position -}}{{- end -}}
+{{- partial "diagrams/figure.html" (dict "kind" "mermaid" "source" .Inner "caption" $caption "class" $class "id" $id) -}}

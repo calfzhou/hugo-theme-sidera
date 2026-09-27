@@ -15,7 +15,7 @@
       {{ if .page.Store.Get "sidera-mermaid" }}{{ $mermaid = partialCached "diagrams/resources.html" "mermaid" "mermaid" site.Language.Lang }}{{ end }}
       {{ if .page.Store.Get "sidera-drawio" }}{{ $drawio = partialCached "diagrams/resources.html" "drawio" "drawio" site.Language.Lang }}{{ end }}
       {{ $controller := resources.Get "js/diagrams.js" | minify | fingerprint }}
-      <script data-sidera-diagrams-script data-mermaid="{{ $mermaid }}" data-drawio="{{ $drawio }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}" defer></script>
+      <script data-sidera-diagrams-script data-close="{{ T "diagram_close" }}" data-mermaid="{{ $mermaid }}" data-drawio="{{ $drawio }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}" defer></script>
     {{ end }}
     {{ if .page.Store.Get "sidera-badges" }}
       {{ $badges := resources.Get "js/badges.js" | minify | fingerprint }}

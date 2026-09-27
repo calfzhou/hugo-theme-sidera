@@ -375,10 +375,10 @@ other = "Zoom out"
 other = "Zoom in"
 
 [diagram_fit]
-other = "Fit"
+other = "Fit diagram"
 
 [diagram_expand]
-other = "Expand view"
+other = "Open large view"
 
 [diagram_loading]
 other = "Rendering diagram…"
@@ -387,22 +387,16 @@ other = "Rendering diagram…"
 other = "Diagram ready. Zoom or scroll to inspect."
 
 [diagram_error]
-other = "Diagram could not be rendered. The source remains available below."
-
-[diagram_disabled]
-other = "Diagram rendering is disabled. Source is shown below."
+other = "Diagram could not be displayed. Use the source or download control."
 
 [diagram_nojs]
-other = "Diagram rendering requires JavaScript. Source remains available."
+other = "Diagram display requires JavaScript. Source or download remains available."
 
 [diagram_source]
 other = "View source"
 
 [diagram_download]
 other = "Download original .drawio"
-
-[diagram_edit_local]
-other = "Edit the downloaded file in your local diagrams.net application. No online editor is opened."
 
 [diagram_mermaid]
 other = "Mermaid diagram"
@@ -442,3 +436,6 @@ other = "Some badges are unavailable. Use the repository link for current inform
 
 [badge_notice]
 other = "Badge images are served directly by Shields; the repository link also works without them."
+
+[diagram_close]
+other = "Close diagram"

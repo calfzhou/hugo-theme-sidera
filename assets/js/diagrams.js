@@ -39,35 +39,95 @@
     frame.src = script.dataset[kind];document.body.append(frame);
     const api = {render};services.set(kind,api);return api;
   }
+  // A single native modal moves the active canvas; it does not duplicate renderers,
+  // source data or listeners. Native modal focus containment/Escape remain intact.
+  let dialog, modal;
+  const makeDialog=()=>{
+    if(dialog)return;
+    dialog=document.createElement('dialog');dialog.className='diagram-dialog prose';
+    const title=document.createElement('div');title.className='diagram-dialog-title';
+    const close=document.createElement('button');close.type='button';close.className='diagram-action diagram-close';
+    close.title=script.dataset.close;close.setAttribute('aria-label',script.dataset.close);
+    const icon=document.createElement('span');icon.textContent='×';icon.setAttribute('aria-hidden','true');close.append(icon);
+    close.addEventListener('click',()=>dialog.close());dialog.append(title,close);document.body.append(dialog);
+    dialog.addEventListener('keydown',event=>{
+      if(event.key!=='Tab')return;
+      const items=[...dialog.querySelectorAll('button,a[href],[tabindex],summary')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.getClientRects().length);
+      const first=items[0],last=items.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    });
+    dialog.addEventListener('click',event=>{
+      const r=dialog.getBoundingClientRect();
+      if(event.target===dialog&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))dialog.close();
+    });
+    dialog.addEventListener('close',()=>{
+      const current=modal;if(!current)return;modal=null;
+      current.home.replaceChild(current.canvas,current.placeholder);
+      document.documentElement.classList.remove('diagram-modal-open');
+      current.canvas.style.filter='';dialog.removeAttribute('data-fixed-light');
+      current.restore();current.opener.focus({preventScroll:true});
+    });
+  };
   const records=[];
   for (const figure of document.querySelectorAll('[data-sidera-diagram]')) {
     const view=figure.querySelector('.diagram-view'), status=figure.querySelector('.diagram-status');
-    const source=figure.querySelector('.diagram-source code').textContent;
-    const details=figure.querySelector('.diagram-source'), tools=figure.querySelector('.diagram-tools');
-    const image=new Image();image.alt=figure.querySelector('figcaption').textContent;image.draggable=false;
+    const canvas=figure.querySelector('.diagram-canvas'), details=figure.querySelector('.diagram-source');
+    const source=details?details.querySelector('code').textContent:JSON.parse(figure.dataset.diagramSource);
+    const tools=figure.querySelector('.diagram-tools');
+    const image=new Image();image.alt=figure.dataset.diagramLabel;image.draggable=false;
     view.tabIndex=0;view.setAttribute('role','group');view.setAttribute('aria-label',image.alt);
-    let palette, blob, scale=1, revision=0, visible=false;
-    const update = state => {figure.dataset.state=state;status.textContent=status.dataset[state];};
-    const size = () => {image.style.width=Math.max(1,Math.min(view.clientWidth,image.naturalWidth)*scale)+'px';};
+    if(details){details.open=false;details.querySelector('summary').hidden=true;details.id='diagram-source-'+(++serial);tools.querySelector('[data-diagram-action="source"]').setAttribute('aria-controls',details.id);}
+    let palette, blob, scale=1, revision=0, visible=false, hasRendered=false;
+    const inModal=()=>modal?.figure===figure;
+    const update = state => {
+      figure.dataset.state=state;status.textContent=status.dataset[state];
+      status.classList.toggle('visually-hidden',state!=='error');
+    };
+    const size = () => {
+      if(!image.naturalWidth)return;
+      const fit=inModal()?Math.min(view.clientWidth/image.naturalWidth,view.clientHeight/image.naturalHeight):Math.min(1,view.clientWidth/image.naturalWidth);
+      image.style.width=Math.max(1,image.naturalWidth*fit*scale)+'px';
+    };
+    const modalPalette=()=>{
+      if(!inModal())return;
+      const filters=[];
+      for(let el=figure;el;el=el.parentElement){
+        if(el.matches('.invert-when-dark,.invert-when-light')){
+          const filter=getComputedStyle(el).filter;if(filter!=='none')filters.push(filter);
+        }
+      }
+      // Top-layer content no longer receives ancestor filters. Reapply only the
+      // explicit author filters to this canvas, not to the whole modal or page.
+      canvas.style.filter=filters.join(' ');
+      dialog.toggleAttribute('data-fixed-light',!!figure.closest('.invert-when-dark,.invert-when-light'));
+    };
     const refresh = async () => {
-      if (!visible || !figure.getBoundingClientRect().width) return;
+      if (!(visible||inModal()) || !view.parentElement.getBoundingClientRect().width) return;
+      modalPalette();
       const explicit=figure.closest('.invert-when-dark,.invert-when-light');
       const next=explicit?'light':document.documentElement.dataset.colorScheme === 'dark'?'dark':'light';
       if (next===palette) {size();return;}
-      palette=next;view.style.backgroundColor=next==='dark'?'#1b1e22':'#ffffff';const current=++revision;update('loading');
+      palette=next;const current=++revision;update('loading');
       try {
         const svg=await service(figure.dataset.sideraDiagram).render(source,next);
         if(current!==revision)return;
-        const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
-        image.src=url;
+        const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));image.src=url;
         try {await image.decode();} catch(error) {URL.revokeObjectURL(url);throw error;}
         if(current!==revision){URL.revokeObjectURL(url);return;}
         if(blob)URL.revokeObjectURL(blob);blob=url;
-        view.replaceChildren(image);view.hidden=false;tools.hidden=false;details.open=false;
+        view.replaceChildren(image);view.hidden=false;tools.hidden=false;
+        for(const button of tools.querySelectorAll('button'))button.hidden=false;
+        if(details){if(!hasRendered)details.open=false;details.querySelector('summary').hidden=true;tools.querySelector('[data-diagram-action="source"]').setAttribute('aria-expanded',String(details.open));}
+        hasRendered=true;
         size();update('ready');
       } catch {
         if(current!==revision)return;
-        view.hidden=true;tools.hidden=true;details.open=true;update('error');
+        view.hidden=true;
+        for(const button of tools.querySelectorAll('button'))button.hidden=true;
+        tools.hidden=!!details;
+        if(details){details.open=true;details.querySelector('summary').hidden=false;}
+        update('error');
       }
     };
     for(const button of tools.querySelectorAll('button')) button.addEventListener('click',()=>{
@@ -75,19 +135,25 @@
         case 'in':scale=Math.min(8,scale*1.25);break;
         case 'out':scale=Math.max(.25,scale/1.25);break;
         case 'fit':scale=1;view.scrollTo(0,0);break;
-        case 'expand':button.setAttribute('aria-pressed',String(figure.classList.toggle('is-expanded')));break;
+        case 'source':details.open=!details.open;button.setAttribute('aria-expanded',String(details.open));break;
+        case 'expand':{
+          makeDialog();if(dialog.open)break;
+          const previousScale=scale,left=view.scrollLeft,top=view.scrollTop,home=canvas.parentNode;
+          const placeholder=document.createElement('div');placeholder.style.height=canvas.getBoundingClientRect().height+'px';placeholder.setAttribute('aria-hidden','true');
+          modal={figure,canvas,opener:button,home,placeholder,restore:()=>{scale=previousScale;size();view.scrollTo(left,top);}};
+          home.replaceChild(placeholder,canvas);
+          dialog.setAttribute('aria-label',image.alt);dialog.querySelector('.diagram-dialog-title').textContent=image.alt;
+          dialog.append(canvas);scale=1;modalPalette();dialog.showModal();document.documentElement.classList.add('diagram-modal-open');size();view.focus();break;
+        }
       }
       size();
     });
-    new ResizeObserver(()=>{if(visible)refresh();}).observe(figure);
-    // Keep keyboard panning deterministic after async SVG replacement and resize.
-    // Modifiers and keys outside this focused viewport retain browser behavior.
+    const resize=new ResizeObserver(()=>{if(visible||inModal())refresh();});resize.observe(figure);resize.observe(view);
     view.addEventListener('keydown',event=>{
       if(event.target!==view||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
       const delta={ArrowLeft:[-40,0],ArrowRight:[40,0],ArrowUp:[0,-40],ArrowDown:[0,40]}[event.key];
       if(delta){event.preventDefault();view.scrollLeft+=delta[0];view.scrollTop+=delta[1];}
     });
-    // Native scrolling supports touch; pointer drag is a convenience.
     let drag;
     view.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button===0){drag={x:event.clientX,y:event.clientY,left:view.scrollLeft,top:view.scrollTop};view.setPointerCapture(event.pointerId);}});
     view.addEventListener('pointermove',event=>{if(drag){view.scrollLeft=drag.left+drag.x-event.clientX;view.scrollTop=drag.top+drag.y-event.clientY;}});

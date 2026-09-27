@@ -1,25 +1,21 @@
 {{- if not .IsNamedParams -}}{{- errorf "Sidera diagramsnet requires named src (%s)" .Position -}}{{- end -}}
 {{- partial "components/parent.html" . -}}
 {{- range $k,$v := .Params -}}
-  {{- if not (in (slice "src" "title" "disabled") $k) -}}{{- errorf "Sidera diagramsnet: unsupported parameter %q (%s)" $k $.Position -}}{{- end -}}
-  {{- if and (ne $k "disabled") (ne (printf "%T" $v) "string") -}}{{- errorf "Sidera diagramsnet: %s must be a string (%s)" $k $.Position -}}{{- end -}}
+  {{- if not (in (slice "src" "caption") $k) -}}{{- errorf "Sidera diagramsnet: unsupported parameter %q (%s)" $k $.Position -}}{{- end -}}
+  {{- if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera diagramsnet: %s must be a string (%s)" $k $.Position -}}{{- end -}}
 {{- end -}}
 {{- $src := .Get "src" | default "" -}}
 {{- $valid := and (ne $src "") (not (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $src)) (eq (lower (path.Ext $src)) ".drawio") -}}
 {{- if not $valid -}}
   {{- errorf "Sidera diagramsnet: use an exact local .drawio resource key (%s)" .Position -}}
 {{- end -}}
-{{- $disabled := false -}}{{- if isset .Params "disabled" -}}
-  {{- if ne (printf "%T" (.Get "disabled")) "bool" -}}{{- errorf "Sidera diagramsnet: disabled must be boolean (%s)" .Position -}}
-  {{- else -}}{{- $disabled = .Get "disabled" -}}{{- end -}}
-{{- end -}}
-{{- $title := T "diagram_drawio" -}}{{- if isset .Params "title" -}}{{- $title = .Get "title" -}}{{- end -}}
-{{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera diagramsnet: title must be nonblank (%s)" .Position -}}{{- end -}}
+{{- $caption := "" -}}{{- if isset .Params "caption" -}}{{- $caption = .Get "caption" -}}{{- end -}}
+{{- if and (isset .Params "caption") (not (strings.ContainsNonSpace $caption)) -}}{{- errorf "Sidera diagramsnet: caption must be nonblank (%s)" .Position -}}{{- end -}}
 {{- if $valid -}}
 {{- with .Page.Resources.Get $src -}}
   {{- if eq .ResourceType "page" -}}{{- errorf "Sidera diagramsnet: source must be a file (%s)" $.Position -}}{{- else -}}
   {{- if gt (len .Content) 1000000 -}}{{- errorf "Sidera diagramsnet: source exceeds 1 MB limit (%s)" $.Position -}}{{- end -}}
-  {{- partial "diagrams/figure.html" (dict "kind" "drawio" "source" .Content "url" .RelPermalink "title" $title "disabled" $disabled) -}}
+  {{- partial "diagrams/figure.html" (dict "kind" "drawio" "source" .Content "url" .RelPermalink "caption" $caption) -}}
 {{- end -}}
 {{- else -}}{{- errorf "Sidera diagramsnet: missing page resource %q (%s)" $src .Position -}}{{- end -}}
 {{- end -}}

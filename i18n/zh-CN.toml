@@ -372,10 +372,10 @@ other = "缩小"
 other = "放大"
 
 [diagram_fit]
-other = "适应宽度"
+other = "适应视图"
 
 [diagram_expand]
-other = "展开视图"
+other = "放大查看"
 
 [diagram_loading]
 other = "正在绘制图表…"
@@ -384,22 +384,16 @@ other = "正在绘制图表…"
 other = "图表已就绪。可缩放或滚动查看。"
 
 [diagram_error]
-other = "图表未能绘制。仍可查看下方源码。"
-
-[diagram_disabled]
-other = "图表绘制已禁用。下方显示源码。"
+other = "图表无法显示。请查看源码或下载原始文件。"
 
 [diagram_nojs]
-other = "绘制图表需要 JavaScript。仍可查看源码。"
+other = "图表显示需要 JavaScript。仍可查看源码或下载文件。"
 
 [diagram_source]
 other = "查看源码"
 
 [diagram_download]
 other = "下载原始 .drawio 文件"
-
-[diagram_edit_local]
-other = "可在本地 diagrams.net 应用中编辑下载的文件。不会打开在线编辑器。"
 
 [diagram_mermaid]
 other = "Mermaid 图表"
@@ -439,3 +433,6 @@ other = "部分徽章不可用。请通过仓库链接查看最新信息。"
 
 [badge_notice]
 other = "徽章图片由 Shields 直接提供；没有图片时仍可访问仓库链接。"
+
+[diagram_close]
+other = "关闭图表"
