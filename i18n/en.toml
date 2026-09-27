@@ -364,3 +364,81 @@ other = "Embedded playback is disabled. You can open the video file below."
 
 [video_source]
 other = "Open video file"
+
+[diagram_controls]
+other = "Diagram controls"
+
+[diagram_zoom_out]
+other = "Zoom out"
+
+[diagram_zoom_in]
+other = "Zoom in"
+
+[diagram_fit]
+other = "Fit"
+
+[diagram_expand]
+other = "Expand view"
+
+[diagram_loading]
+other = "Rendering diagram…"
+
+[diagram_ready]
+other = "Diagram ready. Zoom or scroll to inspect."
+
+[diagram_error]
+other = "Diagram could not be rendered. The source remains available below."
+
+[diagram_disabled]
+other = "Diagram rendering is disabled. Source is shown below."
+
+[diagram_nojs]
+other = "Diagram rendering requires JavaScript. Source remains available."
+
+[diagram_source]
+other = "View source"
+
+[diagram_download]
+other = "Download original .drawio"
+
+[diagram_edit_local]
+other = "Edit the downloaded file in your local diagrams.net application. No online editor is opened."
+
+[diagram_mermaid]
+other = "Mermaid diagram"
+
+[diagram_drawio]
+other = "diagrams.net diagram"
+
+[badge_stars]
+other = "Stars"
+
+[badge_forks]
+other = "Forks"
+
+[badge_updated]
+other = "Last commit"
+
+[badge_release]
+other = "Latest release"
+
+[badge_release_date]
+other = "Release date"
+
+[badge_disabled]
+other = "Remote badges are disabled. The repository link remains available."
+
+[badge_unavailable]
+other = "unavailable"
+
+[badge_loading]
+other = "Loading Shields badges…"
+
+[badge_ready]
+other = "Badges loaded from Shields."
+
+[badge_error]
+other = "Some badges are unavailable. Use the repository link for current information."
+
+[badge_notice]
+other = "Badge images are served directly by Shields; the repository link also works without them."

@@ -1,0 +1,2 @@
+{{- $html := partial "components/diagramsnet.html" . -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" false) | safeHTML -}}

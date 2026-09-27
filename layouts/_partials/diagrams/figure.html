@@ -1,0 +1,13 @@
+<figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }}{{ if not .disabled }} data-sidera-diagram="{{ .kind }}"{{ end }} data-state="{{ if .disabled }}disabled{{ else }}idle{{ end }}">
+  <figcaption>{{ .title }}</figcaption>
+  <div class="diagram-view" hidden></div>
+  <div class="diagram-tools" hidden role="group" aria-label="{{ T "diagram_controls" }}">
+    <button type="button" data-diagram-action="out" aria-label="{{ T "diagram_zoom_out" }}">−</button>
+    <button type="button" data-diagram-action="fit">{{ T "diagram_fit" }}</button>
+    <button type="button" data-diagram-action="in" aria-label="{{ T "diagram_zoom_in" }}">+</button>
+    <button type="button" data-diagram-action="expand" aria-pressed="false">{{ T "diagram_expand" }}</button>
+  </div>
+  <p class="diagram-status" role="status" data-loading="{{ T "diagram_loading" }}" data-ready="{{ T "diagram_ready" }}" data-error="{{ T "diagram_error" }}">{{ if .disabled }}{{ T "diagram_disabled" }}{{ else }}{{ T "diagram_nojs" }}{{ end }}</p>
+  <details class="diagram-source" open><summary>{{ T "diagram_source" }}</summary><pre><code>{{ .source }}</code></pre></details>
+  {{ with .url }}<a class="diagram-download" href="{{ . }}" download>{{ T "diagram_download" }}</a><p class="diagram-edit-note">{{ T "diagram_edit_local" }}</p>{{ end }}
+</figure>

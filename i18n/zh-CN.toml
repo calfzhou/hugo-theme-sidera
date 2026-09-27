@@ -361,3 +361,81 @@ other = "嵌入播放已禁用。您可以通过下方链接打开视频文件�
 
 [video_source]
 other = "打开视频文件"
+
+[diagram_controls]
+other = "图表控件"
+
+[diagram_zoom_out]
+other = "缩小"
+
+[diagram_zoom_in]
+other = "放大"
+
+[diagram_fit]
+other = "适应宽度"
+
+[diagram_expand]
+other = "展开视图"
+
+[diagram_loading]
+other = "正在绘制图表…"
+
+[diagram_ready]
+other = "图表已就绪。可缩放或滚动查看。"
+
+[diagram_error]
+other = "图表未能绘制。仍可查看下方源码。"
+
+[diagram_disabled]
+other = "图表绘制已禁用。下方显示源码。"
+
+[diagram_nojs]
+other = "绘制图表需要 JavaScript。仍可查看源码。"
+
+[diagram_source]
+other = "查看源码"
+
+[diagram_download]
+other = "下载原始 .drawio 文件"
+
+[diagram_edit_local]
+other = "可在本地 diagrams.net 应用中编辑下载的文件。不会打开在线编辑器。"
+
+[diagram_mermaid]
+other = "Mermaid 图表"
+
+[diagram_drawio]
+other = "diagrams.net 图表"
+
+[badge_stars]
+other = "星标"
+
+[badge_forks]
+other = "分支数"
+
+[badge_updated]
+other = "最近提交"
+
+[badge_release]
+other = "最新发行版"
+
+[badge_release_date]
+other = "发行日期"
+
+[badge_disabled]
+other = "远程徽章已禁用。仍可访问仓库链接。"
+
+[badge_unavailable]
+other = "不可用"
+
+[badge_loading]
+other = "正在加载 Shields 徽章…"
+
+[badge_ready]
+other = "已从 Shields 加载徽章。"
+
+[badge_error]
+other = "部分徽章不可用。请通过仓库链接查看最新信息。"
+
+[badge_notice]
+other = "徽章图片由 Shields 直接提供；没有图片时仍可访问仓库链接。"

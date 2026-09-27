@@ -1,0 +1,19 @@
+{{- $kind := . -}}
+{{- $version := "mermaid-11.17.2" -}}{{- $file := "mermaid.min.js" -}}
+{{- if eq $kind "drawio" -}}{{- $version = "drawio-31.5.2" -}}{{- $file = "viewer-static.min.js" -}}{{- end -}}
+{{- $root := printf "vendor/%s/" $version -}}
+{{- $manifest := resources.Get (printf "%sprovenance.json" $root) -}}
+{{- if not $manifest -}}{{- errorf "Sidera diagram: missing %s manifest" $version -}}{{- end -}}
+{{- range $name, $sha := (transform.Unmarshal $manifest.Content).files -}}
+  {{- with resources.Get (printf "%s%s" $root $name) -}}
+    {{- if ne (crypto.SHA256 .Content) $sha -}}{{- errorf "Sidera diagram: integrity mismatch for %s%s" $root $name -}}{{- end -}}
+    {{- if strings.HasSuffix $name "LICENSE" -}}{{- $published := .RelPermalink -}}{{- end -}}
+  {{- else -}}{{- errorf "Sidera diagram: missing %s%s" $root $name -}}{{- end -}}
+{{- end -}}
+{{- $lib := resources.Get (printf "%s%s" $root $file) | fingerprint -}}
+{{- $setup := resources.Get (printf "js/%s-setup.js" $kind) | minify | fingerprint -}}
+{{- $controller := resources.Get (printf "js/%s-frame.js" $kind) | minify | fingerprint -}}
+{{- $stencil := "" -}}{{- if eq $kind "drawio" -}}{{- $stencil = (resources.Get (printf "%sbasic.xml" $root)).Content -}}{{- end -}}
+{{- $html := partial "diagrams/frame.html" (dict "library" $lib.RelPermalink "setup" $setup.RelPermalink "controller" $controller.RelPermalink "stencil" $stencil) -}}
+{{- $frame := resources.FromString (printf "diagrams/%s.html" $version) $html | fingerprint -}}
+{{- return $frame.RelPermalink -}}

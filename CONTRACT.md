@@ -292,3 +292,12 @@ No new config import, library, renderer safety exception or params wrapper is ad
 resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
 and file fallback. It composes with the C2 bridge; no player library, autoplay or
 build-time fetch. Other P3-D diagram/badge families remain separate.
+
+## Diagrams and used badges (P3-D)
+
+[DIAGRAMS.md](DIAGRAMS.md) is authoritative for ordinary Mermaid fences, local
+single-page drawio resources/viewing/source downloads, automatically loaded Shields
+badges, and native C2 composition. Pinned local renderers are isolated and shared per
+page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
+Conditional Content/Summary assets, supported input limits and honest source-only
+fallbacks are explicit. Video remains documented separately in VIDEO.md.

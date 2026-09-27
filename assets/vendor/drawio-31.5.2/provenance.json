@@ -1,0 +1,33 @@
+{
+  "name": "drawio viewer-static",
+  "version": "31.5.2",
+  "releaseCommit": "0037930",
+  "license": "Apache-2.0; embedded DOMPurify and pako notices retained verbatim",
+  "sourceBase": "https://raw.githubusercontent.com/jgraph/drawio/v31.5.2/",
+  "files": {
+    "LICENSE": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+    "viewer-static.min.js": "ee0c444be46c95dc1842999f133c92598fe43e7cdf279f7095d0f057c48771b1",
+    "basic.xml": "674166a4b4315f78cd6739bd5eb14869cc25abc48f71109d9a157976b5a1573f",
+    "pako-2.2.0-LICENSE": "a04665b3b2de56c66730c1f720f528175739e4104f79073614aa611da1e85539",
+    "dompurify-3.4.15-LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "upstreamPaths": {
+    "viewer-static.min.js": "src/main/webapp/js/viewer-static.min.js",
+    "basic.xml": "src/main/webapp/stencils/basic.xml",
+    "LICENSE": "LICENSE"
+  },
+  "licenseSources": {
+    "pako-2.2.0-LICENSE": {
+      "package": "pako@2.2.0",
+      "npmIntegrity": "sha512-zJq6RP/5q+TO2OpFV3FHzlPnFjmkb7Nc99a5SNjJE+uu/PkpChs+NIZSSzbBoD+6kjiISXjfYdwj1ZRQ81dz/w==",
+      "archiveSHA256": "62510b5d8ce95dd70942540dd5e9360dcd5b475a5cfe525be27b26d2908a2d64",
+      "member": "package/LICENSE"
+    },
+    "dompurify-3.4.15-LICENSE": {
+      "package": "dompurify@3.4.15",
+      "npmIntegrity": "sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==",
+      "archiveSHA256": "4f5d49223fa056790019d990e5e4207166a86ac13d9ec8c73d828c63d75b34b5",
+      "member": "package/LICENSE"
+    }
+  }
+}

@@ -1,4 +1,8 @@
 {{- $page := .Page -}}
+{{- $page.Store.Set "sidera-badges" (strings.Contains (string .Content) `<div class="github-badges" data-sidera-badges`) -}}
+{{- range $kind := slice "mermaid" "drawio" -}}
+  {{- $page.Store.Set (printf "sidera-%s" $kind) (ne (len (findRE (printf `<figure class="content-diagram[^">]*"[^>]* data-sidera-diagram="%s"` $kind) (string $.Content))) 0) -}}
+{{- end -}}
 {{- /* Inspect actual rendered Content/Summary, not source fences, HasShortcode or
      a child Page's flags. Plainified list excerpts never load a player controller. */ -}}
 {{- $page.Store.Set "sidera-video" (strings.Contains (string .Content) `<figure class="content-video" data-sidera-video`) -}}

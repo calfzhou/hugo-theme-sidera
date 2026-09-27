@@ -1,5 +1,5 @@
 {{- $result := "" -}}
-{{- if not (findRE `^sidera-leaf-(?:[a-z]+-[0-9]+)(?:-[a-z]+-[0-9]+)*$` .key) -}}
+{{- if not (findRE `^sidera-leaf-(?:[a-z]+(?:_[a-z]+)*-[0-9]+)(?:-[a-z]+(?:_[a-z]+)*-[0-9]+)*$` .key) -}}
   {{- errorf "Sidera component: invalid native key (%s)" .context.Position -}}
 {{- else -}}
   {{- with .context.PageInner.Store.Get .key -}}

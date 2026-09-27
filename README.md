@@ -241,3 +241,12 @@ Use `%` for outer containers and `<` for nested components. Ordinary Markdown re
 attribution; emoji, timeline and enhanced-image components are retired. C2 awaits user
 review, not all-P3 acceptance. Restart an already-running preview once for C2's block
 template transition; no cache clearing is needed.
+
+## Diagrams and used badges (P3-D)
+
+[DIAGRAMS.md](DIAGRAMS.md) is authoritative for ordinary Mermaid fences, local
+single-page drawio resources/viewing/source downloads, automatically loaded Shields
+badges, and native C2 composition. Pinned local renderers are isolated and shared per
+page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
+Conditional Content/Summary assets, supported input limits and honest source-only
+fallbacks are explicit. Video remains documented separately in VIDEO.md.

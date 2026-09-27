@@ -10,6 +10,17 @@
   {{ with (templates.Defer (dict "data" $mathContext)) }}
     {{ range .page.Store.Get "sidera-pending-nodes" }}{{ errorf "Sidera component was not consumed by native Markdown (%s): use %% for the outer container, < for nested components, and preserve the theme link/blockquote hooks and parser attributes" . }}{{ end }}
     {{ if .page.Store.Get "sidera-math" }}{{ partialCached "sidera/math-resources.html" .page "katex-0.18.4" }}{{ end }}
+    {{ if or (.page.Store.Get "sidera-mermaid") (.page.Store.Get "sidera-drawio") }}
+      {{ $mermaid := "" }}{{ $drawio := "" }}
+      {{ if .page.Store.Get "sidera-mermaid" }}{{ $mermaid = partialCached "diagrams/resources.html" "mermaid" "mermaid" site.Language.Lang }}{{ end }}
+      {{ if .page.Store.Get "sidera-drawio" }}{{ $drawio = partialCached "diagrams/resources.html" "drawio" "drawio" site.Language.Lang }}{{ end }}
+      {{ $controller := resources.Get "js/diagrams.js" | minify | fingerprint }}
+      <script data-sidera-diagrams-script data-mermaid="{{ $mermaid }}" data-drawio="{{ $drawio }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}" defer></script>
+    {{ end }}
+    {{ if .page.Store.Get "sidera-badges" }}
+      {{ $badges := resources.Get "js/badges.js" | minify | fingerprint }}
+      <script data-sidera-badges-script src="{{ $badges.RelPermalink }}" integrity="{{ $badges.Data.Integrity }}" defer></script>
+    {{ end }}
     {{ if .page.Store.Get "sidera-video" }}
       {{ $video := resources.Get "js/video.js" | minify | fingerprint }}
       <script data-sidera-video-script src="{{ $video.RelPermalink }}" integrity="{{ $video.Data.Integrity }}" defer></script>

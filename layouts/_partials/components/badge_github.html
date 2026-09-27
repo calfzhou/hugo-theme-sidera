@@ -1,0 +1,31 @@
+{{- if not .IsNamedParams -}}{{- errorf "Sidera badge_github requires named user and repo (%s)" .Position -}}{{- end -}}
+{{- partial "components/parent.html" . -}}
+{{- range $k,$v := .Params -}}
+  {{- if not (in (slice "user" "repo" "branch" "release" "disabled") $k) -}}{{- errorf "Sidera badge_github: unsupported parameter %q (%s)" $k $.Position -}}{{- end -}}
+  {{- if in (slice "release" "disabled") $k -}}
+    {{- if ne (printf "%T" $v) "bool" -}}{{- errorf "Sidera badge_github: %s must be boolean (%s)" $k $.Position -}}{{- end -}}
+  {{- else if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera badge_github: %s must be a string (%s)" $k $.Position -}}{{- end -}}
+{{- end -}}
+{{- $user := .Get "user" | default "" -}}{{- $repo := .Get "repo" | default "" -}}{{- $branch := .Get "branch" | default "" -}}
+{{- if or (not (findRE `^[A-Za-z0-9][A-Za-z0-9-]{0,38}$` $user)) (not (findRE `^[A-Za-z0-9_][A-Za-z0-9_.-]{0,99}$` $repo)) -}}
+  {{- errorf "Sidera badge_github: invalid GitHub user or repository name (%s)" .Position -}}
+{{- end -}}
+{{- if and $branch (or (gt (len $branch) 200) (not (findRE `^[A-Za-z0-9_][A-Za-z0-9_./-]*$` $branch)) (findRE `(^|/)\.{1,2}(/|$)|//|/$` $branch)) -}}{{- errorf "Sidera badge_github: invalid branch (%s)" .Position -}}{{- end -}}
+{{- $key := printf "%s/%s" $user $repo -}}{{- $href := printf "https://github.com/%s" $key -}}{{- $label := $key -}}
+{{- $identity := $repo -}}{{- with $branch -}}{{- $identity = printf "%s (%s)" $repo . -}}{{- $label = printf "%s (%s)" $key . -}}{{- end -}}
+{{- $last := printf "https://img.shields.io/github/last-commit/%s" $key -}}{{- with $branch -}}{{- $last = printf "%s/%s" $last (urlquery .) -}}{{- end -}}
+{{- $badges := slice
+  (dict "src" (printf "https://img.shields.io/static/v1?%s" (querify "label" $user "message" $identity "color" "blue" "logo" "github")) "alt" $label)
+  (dict "src" (printf "https://img.shields.io/github/stars/%s?logo=.&style=social" $key) "alt" (T "badge_stars"))
+  (dict "src" (printf "https://img.shields.io/github/forks/%s?logo=.&style=social" $key) "alt" (T "badge_forks"))
+  (dict "src" (printf "%s?label=" $last) "alt" (T "badge_updated")) -}}
+{{- if .Get "release" -}}
+  {{- $badges = $badges | append (dict "src" (printf "https://img.shields.io/github/v/release/%s?label=" $key) "alt" (T "badge_release")) (dict "src" (printf "https://img.shields.io/github/release-date/%s?label=" $key) "alt" (T "badge_release_date")) -}}
+{{- end -}}
+<div class="github-badges"{{ if not (.Get "disabled") }} data-sidera-badges{{ end }}>
+  <a class="badge-repo" href="{{ $href }}" rel="noreferrer">{{ $label }}</a>
+  {{ if .Get "disabled" }}<p class="badge-status">{{ T "badge_disabled" }}</p>{{ else }}
+  <div class="badge-images">{{ range $badges }}<span><img src="{{ .src }}" alt="{{ .alt }}" height="20" loading="lazy" referrerpolicy="no-referrer"><span class="badge-failed" hidden>{{ .alt }}: {{ T "badge_unavailable" }}</span></span>{{ end }}</div>
+  <p class="badge-status" role="status" data-loading="{{ T "badge_loading" }}" data-ready="{{ T "badge_ready" }}" data-error="{{ T "badge_error" }}">{{ T "badge_notice" }}</p>
+  {{ end }}
+</div>

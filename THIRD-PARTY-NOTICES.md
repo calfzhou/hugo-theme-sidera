@@ -144,3 +144,33 @@ existing Sidera Clipboard handler replace Hexo tags/browser onclick strings.
 Quote ornaments are typographic characters, not copied icon paths. No new third-party
 sticker/font/icon package was added. The emoji shortcode and blobcat requirement
 were subsequently retired by user choice; no third-party sticker was distributed.
+
+## P3-D local diagram runtimes
+
+**Mermaid 11.17.2**: unmodified npm `dist/mermaid.min.js`, root MIT LICENSE (Knut
+Sveidqvist) and upstream bundled notices. Release `mermaid@11.17.2`, `dcb694d`;
+https://github.com/mermaid-js/mermaid/releases/tag/mermaid%4011.17.2 . The npm archive's
+SHA-512 integrity is verified before extraction; archive/per-file hashes and origin
+are in `assets/vendor/mermaid-11.17.2/provenance.json`. The selected 11.x includes the
+previously reviewed 11.16.1 CSS/config security fixes and 11.17.2's edge-path fix;
+this is not a blind latest-major upgrade or a guarantee against future advisories.
+
+**drawio viewer 31.5.2**: unmodified tagged `src/main/webapp/js/viewer-static.min.js`,
+`stencils/basic.xml` and root Apache-2.0 LICENSE, JGraph. Release `v31.5.2`, `0037930`;
+https://github.com/jgraph/drawio/releases/tag/v31.5.2 . File hashes and exact upstream
+paths are in `assets/vendor/drawio-31.5.2/provenance.json`. Basic stencils are kept as
+upstream XML; no arbitrary remote package is fetched. No editor/backend is installed.
+
+Original embedded notices remain intact, including DOMPurify (Apache-2.0/MPL-2.0),
+pako (MIT/Zlib), Lodash and Cytoscape-related MIT notices. Additional full licenses
+for the explicitly identified bundled DOMPurify versions 3.4.12/3.4.15, pako 2.2.0
+and lodash-es 4.18.1 were extracted from their exact npm packages (ignore-scripts,
+no installation); source/archive integrity is recorded alongside each copied file.
+These preserve upstream obligations, not a Sidera distribution license grant or a
+complete legal certification of every upstream bundled dependency.
+
+Both vendored bundles remain byte-identical; Sidera's controller/setup/sandbox code
+is separate. No CDNs or fonts load for diagrams. Actual diagram pages publish the
+relevant original licenses as native resources. The opaque sandbox intentionally
+blocks unused networking/eval/editing; its output becomes an inert SVG image. See
+DIAGRAMS.md for the exact feature, security, source-only fallback and CSP boundaries.

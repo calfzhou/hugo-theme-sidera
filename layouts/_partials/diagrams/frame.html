@@ -1,0 +1,11 @@
+{{- /* Native generated resource: no author source/URLs are templated into executable
+     HTML. Input arrives via a bounded source-window-checked message in an opaque
+     sandbox. Only pinned same-site scripts and data images are permitted. */ -}}
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<style>html,body{margin:0;width:100%;height:100%;font:16px Arial,sans-serif}#stage{box-sizing:border-box;width:100%;height:100%;overflow:auto;outline-offset:-3px}#graph{position:relative;min-height:100%;touch-action:pan-x pan-y}svg{display:block}a{pointer-events:none}</style>
+<script src="{{ .setup }}" defer></script><script src="{{ .library }}" defer></script><script src="{{ .controller }}" defer></script>
+</head><body><div id="stage" tabindex="0"><div id="graph"></div></div>
+{{ with .stencil }}<template id="stencils">{{ . }}</template>{{ end }}
+</body></html>

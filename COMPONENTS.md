@@ -37,7 +37,8 @@ requires at least one cell. Cells require an immediate grid parent.
 
 `block`, `folding`, `box`, `grid` and `cell` are supported parents. Unknown shortcode
 parents fail, rather than sending already-generated HTML through Markdown. Site-owned
-future embeds need their own integration; neither AnimCube nor D embeds are supplied.
+future embeds need their own integration. D supplies video, diagramsnet and badge_github
+through this bridge; AnimCube remains site-owned P4.
 Four-level real-use compositions are tested; this is not arbitrary plugin nesting.
 
 ### Container arguments
@@ -196,3 +197,11 @@ AnimCube stays site-owned P4. D embeds, E references/search and F comments are n
 resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
 and file fallback. It composes with the C2 bridge; no player library, autoplay or
 build-time fetch. Other P3-D diagram/badge families remain separate.
+
+## Diagrams and GitHub badges (D)
+
+[DIAGRAMS.md](DIAGRAMS.md) defines native Mermaid fences, local `diagramsnet` and
+`badge_github` block leaves. Outermost containers still use `%`, nested leaves `<`.
+The underscore in badge_github is a native shortcode name, not an alternate bridge.
+No full editor, hosted diagram transfer, consent button for the approved automatic
+Shields images, or retired C2 component is added.

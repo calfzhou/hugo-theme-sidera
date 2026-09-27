@@ -1,0 +1,29 @@
+{
+  "name": "mermaid",
+  "version": "11.17.2",
+  "license": "MIT; bundled notices retained verbatim",
+  "source": "https://registry.npmjs.org/mermaid/-/mermaid-11.17.2.tgz",
+  "release": "https://github.com/mermaid-js/mermaid/releases/tag/mermaid%4011.17.2",
+  "npmIntegrity": "sha512-V6K3C8EBdEsPFZXSKMJe6ppQOENxuHARr9GvHX4hh47lAbhMRD9qf4oEK7LoaRQxULMa80/qt5gHO73aCleBBg==",
+  "archiveSHA256": "6ad2f42c3fc26bbf9e45cbb6d11898972573ea52b33a5f4ff51952899f950ffd",
+  "files": {
+    "mermaid.min.js": "581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8",
+    "LICENSE": "ec9fb67dcb25eccc416ed56e1aab819222c805a2a4bfe4cb19e7556bf2ffde80",
+    "dompurify-3.4.12-LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "lodash-es-4.18.1-LICENSE": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc"
+  },
+  "licenseSources": {
+    "dompurify-3.4.12-LICENSE": {
+      "package": "dompurify@3.4.12",
+      "npmIntegrity": "sha512-zQvGet8Z2sWbQhCmfFz/T5QWH2oBmjnqK3qvOjaqaNLrLEF912WamU+ohnTp0TCep/MFVHpdJuCZEdFOdTnEFg==",
+      "archiveSHA256": "4fd255d4cd435ffc74d59b7ffa8b4a92f8e4a7fc84faf1d0f9d298cd7d741616",
+      "member": "package/LICENSE"
+    },
+    "lodash-es-4.18.1-LICENSE": {
+      "package": "lodash-es@4.18.1",
+      "npmIntegrity": "sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==",
+      "archiveSHA256": "b0c810e5cd4cd580ed7b18fc71384b9a80c151dc5c85b1729bd656a49e3f16f8",
+      "member": "package/LICENSE"
+    }
+  }
+}
