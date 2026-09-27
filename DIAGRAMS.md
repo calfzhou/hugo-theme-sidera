@@ -60,6 +60,9 @@ added as XML text to page excerpts. Original downloads retain their native bytes
 localized tooltips/accessible names) float on hover or keyboard focus. Touch uses a
 persistent compact row with 44px targets so controls do not cover a short diagram.
 Zoom in/out/fit, arrow-key panning, native touch scrolling and mouse panning remain.
+Inline vertical wheel scrolling chains to the page when the diagram fits or reaches
+its scroll boundary. Real tall/zoomed content still scrolls locally. Horizontal
+containment remains; the modal contains scrolling while its background is locked.
 Mermaid's source disclosure and drawio's download are toolbar controls; drawio has no
 XML source viewer or persistent editing note.
 
