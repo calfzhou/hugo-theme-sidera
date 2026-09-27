@@ -325,3 +325,15 @@ other = 'Display equation; scroll horizontally if needed'
 
 [code_download]
 other = "Download full source"
+
+[content_copy_label]
+other = "Copy text"
+
+[content_copy_success]
+other = "Text copied to clipboard."
+
+[content_copy_failed]
+other = "Could not copy. Copy the selected text manually."
+
+[content_copy_manual]
+other = "Text for manual copying"

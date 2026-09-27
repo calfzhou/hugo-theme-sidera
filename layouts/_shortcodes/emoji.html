@@ -1,0 +1,5 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "src" "alt") "required" (slice "src" "alt")) -}}
+{{- /* A local asset is deliberate: no emoji library, implicit CDN or asset license. */ -}}
+{{- if findRE `(?i)^https?://` (.Get "src") -}}{{- errorf "Sidera emoji: use an approved local image (%s)" .Position -}}{{- end -}}
+{{- $url := partial "components/image-url.html" (dict "src" (.Get "src") "shortcode" .) -}}
+<span class="content-emoji"><img src="{{ $url }}" alt="{{ .Get "alt" }}" width="28" height="28"></span>

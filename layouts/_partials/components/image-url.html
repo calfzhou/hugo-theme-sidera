@@ -1,0 +1,16 @@
+{{- /* Authored URL only; no remote metadata/image fetch or SVG injection. */ -}}
+{{- $src := .src -}}{{- $url := "" -}}
+{{- if findRE `(?i)^https?://` $src -}}
+  {{- $url = partial "sidera/url.html" (dict "url" $src "source" .shortcode.Position) -}}
+{{- else if or (not $src) (findRE `[:%?#\\*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//` $src) -}}
+  {{- errorf "Sidera %s: invalid local image path %q (%s)" .shortcode.Name $src .shortcode.Position -}}
+{{- else if not (in (slice ".svg" ".png" ".jpg" ".jpeg" ".gif" ".webp" ".avif" ".ico") (lower (path.Ext $src))) -}}
+  {{- errorf "Sidera %s: unsupported image extension (%s)" .shortcode.Name .shortcode.Position -}}
+{{- else -}}
+  {{- $resource := .shortcode.Page.Resources.Get $src -}}
+  {{- if not $resource -}}{{- $resource = resources.Get (strings.TrimPrefix "/" $src) -}}{{- end -}}
+  {{- if $resource -}}{{- $url = $resource.RelPermalink -}}
+  {{- else if fileExists (printf "static/%s" (strings.TrimPrefix "/" $src)) -}}{{- $url = relURL (strings.TrimPrefix "/" $src) -}}
+  {{- else -}}{{- errorf "Sidera %s: missing local image %q (%s)" .shortcode.Name $src .shortcode.Position -}}{{- end -}}
+{{- end -}}
+{{- return $url -}}

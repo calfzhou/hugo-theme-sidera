@@ -1,0 +1,7 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text" "prefix") "required" (slice "text")) -}}
+<div class="content-copy" data-code-source="{{ .Get "text" | jsonify }}">
+  {{- with .Get "prefix" -}}<span class="copy-prefix">{{ . }}</span>{{- end -}}
+  <code class="copy-value">{{ .Get "text" }}</code>
+  {{- partial "copy-button.html" (dict "label" (T "content_copy_label") "success" (T "content_copy_success") "failure" (T "content_copy_failed")) -}}
+  <textarea class="code-copy-fallback" hidden readonly aria-label="{{ T "content_copy_manual" }}"></textarea>
+</div>

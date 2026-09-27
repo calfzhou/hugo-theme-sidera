@@ -322,3 +322,15 @@ other = '独立公式；可按需水平滚动'
 
 [code_download]
 other = "下载完整源码"
+
+[content_copy_label]
+other = "复制文本"
+
+[content_copy_success]
+other = "文本已复制到剪贴板。"
+
+[content_copy_failed]
+other = "无法复制，请手动复制所选文本。"
+
+[content_copy_manual]
+other = "供手动复制的文本"

@@ -275,3 +275,12 @@ inclusive selection, text/UTF-8 policy, native page resources and the explicit s
 normalizes CRLF while mocked/real Clipboard API inputs preserve selected source text.
 H and snippets share one code UI. No arbitrary filesystem/network access or execution,
 new configuration import or nested-shortcode support. C2 remains separate.
+
+## Independent content primitives (partial C2)
+
+[COMPONENTS.md](COMPONENTS.md) is the authoritative typed-argument/conversion guide
+for kbd/mark/u, standout quot, link cards, copy text and local emoji images. These
+standard-notation primitives are implemented independently; remaining container/image/
+attribution/timeline families and actual nested shortcode composition remain Pending.
+The blobcat source/license is unresolved; a synthetic placeholder is not final parity.
+No new config import, library, renderer safety exception or params wrapper is added.

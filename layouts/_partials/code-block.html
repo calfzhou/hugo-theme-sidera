@@ -4,7 +4,7 @@
   {{- with .title -}}<div class="code-source"><span>{{ . }}</span><a href="{{ $.url }}" download>{{ T "code_download" }}</a></div>{{- end -}}
   <div class="code-toolbar">
     <span class="code-language" title="{{ .language }}">{{ .language }}</span>
-    <button class="code-copy" type="button" hidden aria-label="{{ T "code_copy_label" (dict "language" .language) }}" data-copy="{{ T "code_copy" }}" data-copied="{{ T "code_copied" }}" data-success="{{ T "code_copy_success" }}" data-failure="{{ T "code_copy_failed" }}">{{ T "code_copy" }}</button>
+    {{ partial "copy-button.html" (dict "label" (T "code_copy_label" (dict "language" .language)) "success" (T "code_copy_success") "failure" (T "code_copy_failed")) }}
   </div>
   {{- .html -}}
   <textarea class="code-copy-fallback" hidden readonly aria-label="{{ T "code_copy_manual" }}"></textarea>

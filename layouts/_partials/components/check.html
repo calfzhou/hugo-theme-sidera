@@ -1,0 +1,11 @@
+{{- /* Small common argument check, not a component registry/renderer. */ -}}
+{{- $sc := .shortcode -}}
+{{- if not $sc.IsNamedParams -}}{{- errorf "Sidera %s requires named parameters (%s)" $sc.Name $sc.Position -}}{{- end -}}
+{{- with $sc.Parent -}}{{- errorf "Sidera %s: nested shortcode composition awaits the C2 contract (%s)" $sc.Name $sc.Position -}}{{- end -}}
+{{- range $key, $value := $sc.Params -}}
+  {{- if not (in $.allowed $key) -}}{{- errorf "Sidera %s: unsupported parameter %q (%s)" $sc.Name $key $sc.Position -}}{{- end -}}
+  {{- if and (ne $key "ornament") (ne (printf "%T" $value) "string") -}}{{- errorf "Sidera %s: %s must be a string (%s)" $sc.Name $key $sc.Position -}}{{- end -}}
+{{- end -}}
+{{- range .required -}}
+  {{- if not (strings.ContainsNonSpace (string ($sc.Get .))) -}}{{- errorf "Sidera %s: %s must be nonblank (%s)" $sc.Name . $sc.Position -}}{{- end -}}
+{{- end -}}

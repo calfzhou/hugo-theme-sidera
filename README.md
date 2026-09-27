@@ -231,3 +231,11 @@ footer author cards are an explicit opt-in.
 The default content notice is neutral, not an automatic Creative Commons grant. WeChat QR images
 are generated locally by Hugo images.QR (Hugo >=0.141.0); no QR service or client library is used.
 See SHELL.md for params, native collection cascades, empty/false behavior and share fallbacks.
+
+## Content primitives (partial C2)
+
+[COMPONENTS.md](COMPONENTS.md) documents working inline treatments, standout quotes,
+explicit link cards, exact copy text and local sticker images. The root showcase's
+`/handbook/reference/content-components/` is inspectable. Required container composition,
+enhanced images, attributed quotes and timelines remain an explicit decision/work gate;
+this is not full C2 delivery. The actual blobcat party asset is not bundled or licensed.

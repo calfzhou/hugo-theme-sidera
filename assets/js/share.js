@@ -25,9 +25,9 @@
 // Native fenced-code copy reuses the same Clipboard API, text-only toast and
 // selected-field fallback pattern. Never include line numbers or toolbar text.
 (() => {
-  for (const block of document.querySelectorAll('article[data-renderer] .prose .code-block')) {
+  for (const block of document.querySelectorAll('article[data-renderer] .prose :is(.code-block,.content-copy)')) {
     const button = block.querySelector('.code-copy');
-    const code = block.querySelector('.lntd:last-child code') || block.querySelector('pre code');
+    const code = block.querySelector('.lntd:last-child code') || block.querySelector('pre code') || block.querySelector('.copy-value');
     if (!button || !code) continue;
     const fallback = block.querySelector('.code-copy-fallback');
     const idleLabel = button.getAttribute('aria-label');
