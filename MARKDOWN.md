@@ -196,3 +196,10 @@ Use `{{< snippet src="solution.py" >}}` on its own line for an adjacent bundle r
 shared resources and line endings. Code is escaped data, not a Markdown fence generated
 from file contents. Standard snippet calls can now nest in C2 containers; the
 container at the outermost level uses Markdown `%` notation.
+
+## Native MP4 (P3-D video slice)
+
+[VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
+resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
+and file fallback. It composes with the C2 bridge; no player library, autoplay or
+build-time fetch. Other P3-D diagram/badge families remain separate.

@@ -1,0 +1,57 @@
+{{- /* MP4 only: native controls, exact page resources or an explicit HTTP(S) URL.
+     No source is attached until the reader activates the local controller. */ -}}
+{{- $sc := . -}}
+{{- if not .IsNamedParams -}}{{- errorf "Sidera video requires named src (%s)" .Position -}}{{- end -}}
+{{- partial "components/parent.html" . -}}
+{{- range $k, $v := .Params -}}
+  {{- if not (in (slice "src" "title" "width" "disabled") $k) -}}{{- errorf "Sidera video: unsupported parameter %q (%s)" $k $sc.Position -}}{{- end -}}
+  {{- if and (in (slice "src" "title") $k) (ne (printf "%T" $v) "string") -}}{{- errorf "Sidera video: %s must be a string (%s)" $k $sc.Position -}}{{- end -}}
+{{- end -}}
+{{- $src := .Get "src" | default "" -}}
+{{- $url := "" -}}
+{{- if findRE `(?i)^https?://` $src -}}
+  {{- $safe := partial "sidera/url.html" (dict "url" $src "source" (printf "video (%s)" .Position)) -}}
+  {{- $parsed := urls.Parse $safe -}}
+  {{- if or (not $parsed.Host) $parsed.User (ne (lower (path.Ext $parsed.Path)) ".mp4") -}}
+    {{- errorf "Sidera video: use an HTTP(S) MP4 URL without credentials (%s)" .Position -}}
+  {{- else -}}{{- $url = $safe -}}{{- end -}}
+{{- else if or (not $src) (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $src) -}}
+  {{- errorf "Sidera video: invalid page resource path %q (%s)" $src .Position -}}
+{{- else if ne (lower (path.Ext $src)) ".mp4" -}}
+  {{- errorf "Sidera video: only MP4 sources are supported (%s)" .Position -}}
+{{- else -}}
+  {{- with .Page.Resources.Get $src -}}
+    {{- if eq .ResourceType "page" -}}{{- errorf "Sidera video: source must be a file resource (%s)" $sc.Position -}}
+    {{- else -}}{{- $url = .RelPermalink -}}{{- end -}}
+  {{- else -}}{{- errorf "Sidera video: page resource %q not found (%s)" $src .Position -}}{{- end -}}
+{{- end -}}
+{{- $width := "100%" -}}
+{{- if isset .Params "width" -}}
+  {{- $value := string (.Get "width") -}}
+  {{- if not (findRE `^[1-9][0-9]{0,3}$` $value) -}}{{- errorf "Sidera video: width must be a positive integer in pixels, at most 8192 (%s)" .Position -}}
+  {{- else if gt (int $value) 8192 -}}{{- errorf "Sidera video: width must be at most 8192 pixels (%s)" .Position -}}
+  {{- else -}}{{- $width = printf "%spx" $value -}}{{- end -}}
+{{- end -}}
+{{- $title := T "video_title" -}}
+{{- if isset .Params "title" -}}
+  {{- $title = .Get "title" -}}
+  {{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera video: title must be nonblank (%s)" .Position -}}{{- end -}}
+{{- end -}}
+{{- $disabled := false -}}
+{{- if isset .Params "disabled" -}}
+  {{- if ne (printf "%T" (.Get "disabled")) "bool" -}}{{- errorf "Sidera video: disabled must be a boolean (%s)" .Position -}}
+  {{- else -}}{{- $disabled = .Get "disabled" -}}{{- end -}}
+{{- end -}}
+{{- /* Width is constructed solely from the validated numeric token above. */ -}}
+<figure class="content-video"{{ if not $disabled }} data-sidera-video{{ end }} data-state="{{ if $disabled }}disabled{{ else }}idle{{ end }}" style="{{ printf "--video-width:%s" $width | safeCSS }}">
+  <figcaption>{{ $title }}</figcaption>
+  {{- if not $disabled }}
+  <video controls playsinline preload="none" hidden aria-label="{{ $title }}" data-video-src="{{ $url }}"></video>
+  <button type="button" class="video-load" hidden>{{ T "video_load" }}</button>
+  <p class="video-status" role="status" data-loading="{{ T "video_loading" }}" data-ready="{{ T "video_ready" }}" data-error="{{ T "video_error" }}">{{ T "video_idle" }}</p>
+  <noscript><p class="video-note">{{ T "video_nojs" }}</p></noscript>
+  {{- else }}
+  <p class="video-status">{{ T "video_disabled" }}</p>
+  {{- end }}
+  <a class="video-source" href="{{ $url }}" rel="noreferrer">{{ T "video_source" }}</a>
+</figure>

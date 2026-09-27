@@ -793,3 +793,13 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .content-cell { min-width: 0; }
 .prose .content-cell > :first-child { margin-top: 0; }
 .prose .content-cell > :last-child { margin-bottom: 0; }
+
+/* Native MP4: the same quiet surfaces as the accepted content components.
+   No aspect-ratio override: the file supplies its own dimensions after loading. */
+.prose .content-video { width: 100%; max-width: var(--video-width,100%); margin: 1rem auto; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.prose .content-video > figcaption { margin: 0 0 8px; text-align: start; color: var(--text); font-size: .94em; font-weight: 500; }
+.content-video video { display: block; width: 100%; height: auto; background: #000; border-radius: 4px; }
+.content-video .video-load { min-height: 44px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; cursor: pointer; }
+.content-video .video-load:hover { background: var(--surface-hover); }
+.prose .content-video :is(.video-status,.video-note) { margin: 8px 0; font-size: .82em; line-height: 1.5; color: var(--muted); }
+.content-video .video-source { display: inline-block; font-size: .82em; padding-block: 4px; }

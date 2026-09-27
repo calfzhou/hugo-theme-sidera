@@ -337,3 +337,30 @@ other = "Could not copy. Copy the selected text manually."
 
 [content_copy_manual]
 other = "Text for manual copying"
+
+[video_title]
+other = "Video"
+
+[video_load]
+other = "Load video"
+
+[video_idle]
+other = "Video is not loaded. Loading connects to the video host."
+
+[video_loading]
+other = "Loading video…"
+
+[video_ready]
+other = "Video ready. Use the player controls to start playback."
+
+[video_error]
+other = "Video could not be loaded. Try the video file link below."
+
+[video_nojs]
+other = "JavaScript is unavailable. Open the video file using the link below."
+
+[video_disabled]
+other = "Embedded playback is disabled. You can open the video file below."
+
+[video_source]
+other = "Open video file"

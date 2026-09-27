@@ -334,3 +334,30 @@ other = "无法复制，请手动复制所选文本。"
 
 [content_copy_manual]
 other = "供手动复制的文本"
+
+[video_title]
+other = "视频"
+
+[video_load]
+other = "加载视频"
+
+[video_idle]
+other = "视频尚未加载。加载时将连接视频托管站点。"
+
+[video_loading]
+other = "正在加载视频…"
+
+[video_ready]
+other = "视频已就绪。请使用播放器控件开始播放。"
+
+[video_error]
+other = "视频未能加载。请尝试下方的视频文件链接。"
+
+[video_nojs]
+other = "JavaScript 不可用。请通过下方链接打开视频文件。"
+
+[video_disabled]
+other = "嵌入播放已禁用。您可以通过下方链接打开视频文件。"
+
+[video_source]
+other = "打开视频文件"

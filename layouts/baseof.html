@@ -10,6 +10,10 @@
   {{ with (templates.Defer (dict "data" $mathContext)) }}
     {{ range .page.Store.Get "sidera-pending-nodes" }}{{ errorf "Sidera component was not consumed by native Markdown (%s): use %% for the outer container, < for nested components, and preserve the theme link/blockquote hooks and parser attributes" . }}{{ end }}
     {{ if .page.Store.Get "sidera-math" }}{{ partialCached "sidera/math-resources.html" .page "katex-0.18.4" }}{{ end }}
+    {{ if .page.Store.Get "sidera-video" }}
+      {{ $video := resources.Get "js/video.js" | minify | fingerprint }}
+      <script data-sidera-video-script src="{{ $video.RelPermalink }}" integrity="{{ $video.Data.Integrity }}" defer></script>
+    {{ end }}
   {{ end }}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="sidera:icon-attribution" content="Solar icons by 480 Design · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/480-Design/Solar-Icon-Set · adapted sizing and semantics; original paths retained from Stellar 1.44.0">

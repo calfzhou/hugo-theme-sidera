@@ -285,3 +285,10 @@ primitives compose with folding/box/grid/cell/block via the approved notation.
 Attribution uses ordinary Markdown, not a dedicated shortcode. Emoji, timeline and enhanced
 image components are retired by user choice; existing Markdown images remain intact.
 No new config import, library, renderer safety exception or params wrapper is added.
+
+## Native MP4 (P3-D video slice)
+
+[VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
+resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
+and file fallback. It composes with the C2 bridge; no player library, autoplay or
+build-time fetch. Other P3-D diagram/badge families remain separate.

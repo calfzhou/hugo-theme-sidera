@@ -189,3 +189,10 @@ No setting forces embedded hooks or overrides a site's native lookup choice.
 
 [SNIPPETS.md](SNIPPETS.md) is authoritative for C1 scopes/selection/options/full bytes.
 AnimCube stays site-owned P4. D embeds, E references/search and F comments are not C2.
+
+## Native MP4 (P3-D video slice)
+
+[VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
+resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
+and file fallback. It composes with the C2 bridge; no player library, autoplay or
+build-time fetch. Other P3-D diagram/badge families remain separate.
