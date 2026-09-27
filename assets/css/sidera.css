@@ -819,3 +819,12 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .diagram-renderer { position:fixed; left:-10000px; top:0; width:800px; height:600px; border:0; visibility:hidden; pointer-events:none; }
 
 .github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status,.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
+/* A B inversion wrapper filters the whole component. Pair its chrome with the
+   same fixed light palette as the SVG instead of dark-theming it a second time. */
+:is(.invert-when-dark,.invert-when-light) .content-diagram,
+.content-diagram:is(.invert-when-dark,.invert-when-light) {
+  --canvas:#fff; --surface:#fff; --panel:#0000000a; --surface-hover:#00000014;
+  --text:#17191b; --muted:#000000b3; --quiet:#00000080; --line:#00000029;
+  --link:#087cb9; --accent:#007f9e; --accent-soft:#00697e12;
+  color:var(--text); background:var(--canvas); padding:10px; border-radius:8px; color-scheme:light;
+}

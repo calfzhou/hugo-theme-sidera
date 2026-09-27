@@ -49,7 +49,7 @@ No external images/fonts, custom executable stencils, drawio math, compressed pa
 multiple-page/layer UI or arbitrary stencil library downloads are promised. These
 unsupported inputs fail to source fallback; they are not silently converted to boxes.
 
-**Viewing:** local SVG image, zoom in/out/fit, native keyboard/touch scrolling and mouse
+**Viewing:** local SVG image, zoom in/out/fit, keyboard arrow-key panning, native touch scrolling and mouse
 panning. Expand view increases the scrollport height; it is not a hosted lightbox or
 full editor. This is a source-driven viewer, not a claim to preserve unused upstream
 editing/tooltip/layer features. **Editing:** download the original and edit in your
@@ -73,7 +73,9 @@ prose descriptions/titles for meaningful diagrams; source is always available.
 
 Both palettes and System changes work. An author-marked `invert-when-dark` or
 `invert-when-light` ancestor selects a **fixed light renderer palette**: the existing
-B filter alone performs that authored inversion. Explicit nested filters still compound.
+B filter alone performs that authored inversion. Diagram captions/controls/source chrome
+use paired light colors inside that wrapper too, avoiding double-themed unreadable text.
+Explicit nested filters still compound.
 Unmarked diagrams are renderer-themed, not automatically CSS-inverted. No image analysis.
 
 Use C2 **outer `%`, nested `<`** containers. Mermaid fences need no shortcode notation;

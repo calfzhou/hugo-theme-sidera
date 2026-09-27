@@ -80,7 +80,14 @@
       size();
     });
     new ResizeObserver(()=>{if(visible)refresh();}).observe(figure);
-    // Native scrolling supports touch/keyboard; pointer drag is a convenience.
+    // Keep keyboard panning deterministic after async SVG replacement and resize.
+    // Modifiers and keys outside this focused viewport retain browser behavior.
+    view.addEventListener('keydown',event=>{
+      if(event.target!==view||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey)return;
+      const delta={ArrowLeft:[-40,0],ArrowRight:[40,0],ArrowUp:[0,-40],ArrowDown:[0,40]}[event.key];
+      if(delta){event.preventDefault();view.scrollLeft+=delta[0];view.scrollTop+=delta[1];}
+    });
+    // Native scrolling supports touch; pointer drag is a convenience.
     let drag;
     view.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button===0){drag={x:event.clientX,y:event.clientY,left:view.scrollLeft,top:view.scrollTop};view.setPointerCapture(event.pointerId);}});
     view.addEventListener('pointermove',event=>{if(drag){view.scrollLeft=drag.left+drag.x-event.clientX;view.scrollTop=drag.top+drag.y-event.clientY;}});
