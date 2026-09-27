@@ -88,8 +88,10 @@
       if(!image.naturalWidth)return;
       const fit=inModal()?Math.min(view.clientWidth/image.naturalWidth,view.clientHeight/image.naturalHeight):Math.min(1,view.clientWidth/image.naturalWidth);
       image.style.width=Math.max(1,image.naturalWidth*fit*scale)+'px';
-      // Float at the centered image edge, not the full article-column edge.
-      tools.style.right=Math.max(4,(view.clientWidth-Math.min(view.clientWidth,image.width))/2+4)+'px';
+      // Align the reserved toolbar row with the centered image, clamped inside
+      // narrow cells; the modal uses the full viewport's right edge.
+      const inset=Math.max(4,(view.clientWidth-Math.min(view.clientWidth,image.width))/2+4);
+      tools.style.marginRight=(inModal()?0:Math.min(inset,Math.max(0,canvas.clientWidth-tools.offsetWidth)))+'px';
     };
     const modalPalette=()=>{
       if(!inModal())return;

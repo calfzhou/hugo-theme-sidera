@@ -804,13 +804,17 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .prose .content-video :is(.video-status,.video-note) { margin: 8px 0; font-size: .82em; line-height: 1.5; color: var(--muted); }
 .content-video .video-source { display: inline-block; font-size: .82em; padding-block: 4px; }
 
-/* Diagrams stay unframed; controls reveal on hover/focus, not as a permanent row. */
+/* Desktop tools float above the image without reserving a permanent blank row. */
 .prose .content-diagram { margin:1.25rem 0; min-width:0; }
-.diagram-canvas { position:relative; min-width:0; min-height:1px; }
+.diagram-canvas { position:relative; min-width:0; min-height:1px; display:flex; flex-direction:column; }
 .diagram-view { overflow:auto; max-height:520px; border:0; background:transparent; cursor:grab; overscroll-behavior-x:contain; overscroll-behavior-y:auto; }
 .prose .diagram-view img { background:transparent; display:block; max-width:none; height:auto; margin:0 auto; border-radius:0; }
-.diagram-tools { display:flex; gap:2px; flex-wrap:wrap; width:max-content; max-width:100%; z-index:1; }
-[data-state="ready"] > .diagram-canvas > .diagram-tools,.diagram-dialog .diagram-tools { position:absolute; right:4px; top:4px; padding:3px; border-radius:6px; background:var(--surface); box-shadow:0 1px 5px #0002; opacity:0; pointer-events:none; transition:opacity .15s; }
+.diagram-tools { display:flex; flex:none; align-self:flex-end; gap:2px; flex-wrap:wrap; width:max-content; max-width:100%; margin-bottom:6px; z-index:1; }
+[data-state="ready"] > .diagram-canvas > .diagram-tools,.diagram-dialog .diagram-tools { padding:3px; border-radius:6px; background:var(--surface); box-shadow:0 1px 5px #0002; opacity:0; pointer-events:none; transition:opacity .15s; }
+[data-state="ready"] > .diagram-canvas > .diagram-tools { position:absolute; right:0; bottom:calc(100% + 4px); margin-bottom:0; }
+/* Bridge the small gap so moving the pointer from image to controls keeps hover. */
+[data-state="ready"] > .diagram-canvas > .diagram-tools::after { content:""; position:absolute; left:0; right:0; top:100%; height:4px; }
+.diagram-dialog .diagram-tools { position:static; margin-bottom:6px; }
 .diagram-canvas:hover > .diagram-tools,.diagram-canvas:focus-within > .diagram-tools,.diagram-dialog .diagram-tools { opacity:1; pointer-events:auto; }
 .diagram-tools .diagram-action,.diagram-action.diagram-close { display:inline-flex; align-items:center; justify-content:center; flex:none; width:28px; height:28px; padding:0; border:0; border-radius:4px; background:transparent; color:var(--text); cursor:pointer; text-decoration:none; }
 .diagram-action:hover,.diagram-action[aria-expanded="true"] { background:var(--accent-soft); }
@@ -828,8 +832,9 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .diagram-dialog .diagram-source { flex:none; max-height:35%; overflow:auto; }
 .diagram-dialog [data-diagram-action="expand"] { display:none; }
 @media (hover:none),(pointer:coarse) {
-  [data-state="ready"] > .diagram-canvas > .diagram-tools { opacity:1; pointer-events:auto; }
+  [data-state="ready"] > .diagram-canvas > .diagram-tools { position:static; margin-bottom:6px; opacity:1; pointer-events:auto; }
   .diagram-tools .diagram-action,.diagram-action.diagram-close { width:44px; height:44px; }
+  [data-state="ready"] > .diagram-canvas > .diagram-tools::after { display:none; }
 }
 
 .github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status,.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
@@ -845,12 +850,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 }
 
 html.diagram-modal-open { overflow:hidden; }
-/* Keep modal/touch controls out of the image: short, wide diagrams must not be covered. */
-.diagram-dialog .diagram-tools { position:static; flex:none; align-self:flex-end; order:-1; }
 .diagram-dialog .diagram-view { display:flex; align-items:safe center; justify-content:safe center; }
 .diagram-dialog .diagram-view img { flex:none; }
-@media (hover:none),(pointer:coarse) {
-  [data-state="ready"] > .diagram-canvas > .diagram-tools { position:static; margin-top:4px; margin-left:auto; }
-}
 
 @media (prefers-reduced-motion:reduce) { .diagram-tools { transition:none; } }

@@ -57,8 +57,11 @@ to boxes. XML is escaped JSON in a data attribute, not displayed as readable sou
 added as XML text to page excerpts. Original downloads retain their native bytes.
 
 **Viewing:** an unframed local SVG image. Small icon-only controls (28px desktop,
-localized tooltips/accessible names) float on hover or keyboard focus. Touch uses a
-persistent compact row with 44px targets so controls do not cover a short diagram.
+localized tooltips/accessible names) float **just above** the image on hover or
+keyboard focus. Desktop spacing is unchanged: no row is reserved while hidden. The
+panel uses the existing gap and may overlap a little preceding prose while visible,
+by user choice. A small hover bridge keeps it reachable from the image. Touch and
+modal views use a compact row above the image; touch targets remain 44px.
 Zoom in/out/fit, arrow-key panning, native touch scrolling and mouse panning remain.
 Inline vertical wheel scrolling chains to the page when the diagram fits or reaches
 its scroll boundary. Real tall/zoomed content still scrolls locally. Horizontal
