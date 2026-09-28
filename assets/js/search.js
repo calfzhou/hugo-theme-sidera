@@ -81,7 +81,7 @@
   const input = wrapper.querySelector('input'), scope = wrapper.querySelector('select');
   const result = wrapper.querySelector('.search-results'), status = wrapper.querySelector('.search-status'), clear = wrapper.querySelector('.search-clear');
   let documents = null, pending = null, failed = false;
-  input.disabled=false; wrapper.querySelector('.search-fallback').hidden=true;
+  input.disabled=false; if (scope) scope.disabled=false; wrapper.querySelector('.search-fallback').hidden=true;
   const state = text => { status.textContent=text; status.hidden=!text; };
   function render() {
     const focused = result.contains(document.activeElement) ? document.activeElement.getAttribute('href') : null;
