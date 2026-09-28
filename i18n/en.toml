@@ -454,7 +454,7 @@ other = "Search"
 other = "Search in {{ .title }}"
 
 [search_global]
-other = "All content"
+other = "Search all content"
 
 [search_scope]
 other = "Search scope"

@@ -6,7 +6,7 @@
     <input id="search-input" type="search" class="search-input" disabled maxlength="160" autocomplete="off" spellcheck="false" aria-label="{{ $placeholder }}" placeholder="{{ $placeholder }}" aria-controls="search-results" data-global-label="{{ T "search_label" }}" data-local-label="{{ $placeholder }}">
     <button type="button" class="search-clear" hidden aria-label="{{ T "search_clear" }}">×</button>
   </div>
-  {{ with .Owner }}<select disabled class="search-scope" aria-label="{{ T "search_scope" }}"><option value="{{ .RelPermalink }}">{{ .Title }}</option><option value="">{{ T "search_global" }}</option></select>{{ end }}
+  {{ with .Owner }}<div class="search-scope-control" role="group" aria-label="{{ T "search_scope" }}" hidden><label class="search-scope-label"><input type="checkbox" class="search-scope" data-scope="{{ .RelPermalink }}" aria-controls="search-results" disabled><span>{{ T "search_global" }}</span></label></div>{{ end }}
   <p class="search-status" role="status" aria-live="polite" hidden></p>
   <div id="search-results" class="search-results" aria-label="{{ T "search_results" }}"></div>
   <p class="search-status search-fallback">{{ T "search_fallback" }}</p>

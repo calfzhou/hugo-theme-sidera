@@ -930,3 +930,10 @@ the scrolling widgets, matching Stellar; clearing restores them. No modal redesi
 now selected after manual `references` by default. Manual references remain independent.
 See [DISCOVERY.md](DISCOVERY.md) for scopes, eligibility, matching, destination highlights,
 privacy and opt-outs. These supersede older “search/backlinks remain P3” statements above.
+
+
+P3-E search refinement: search/form/results fill the sidebar's inner width. Stellar's
+rainbow underline animates on hover/focus/active query, with reduced-motion fallback.
+The scoped/global dropdown is replaced by a native **Search all content** checkbox,
+visible only with a nonempty scoped query. Clear resets to the current collection;
+global-only pages have no toggle. See DISCOVERY.md for keyboard/no-JS behavior.

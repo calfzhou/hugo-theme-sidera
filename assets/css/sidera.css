@@ -856,11 +856,11 @@ html.diagram-modal-open { overflow:hidden; }
 @media (prefers-reduced-motion:reduce) { .diagram-tools { transition:none; } }
 
 /* P3-E: Stellar's inline sidebar search, not a modal. Source/provenance in notices. */
-.search-wrapper { margin: 1.5rem 16px 0; min-width: 0; }
+.search-wrapper { margin: 1.5rem 0 0; min-width: 0; }
 .search-form { position: relative; display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 12px; border-radius: 8px; }
 .search-form::before, .search-form::after { content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 1px; background: var(--line); pointer-events: none; }
-.search-form::after { height: 2px; background: linear-gradient(90deg,#3dc550,#00b8d4,#ffbd2b); background-size: 200%; opacity: 0; transition: opacity .3s; }
-.search-form:hover::after, .search-form:focus-within::after, .searching .search-form::after { opacity: 1; }
+.search-form::after { height: 2px; background: linear-gradient(to right,#04f3ff,#08ffc6,#ddf730,#ffbd19,#ff1fe0,#c418ff,#3b5bff,#04f3ff); background-size: 200%; animation: sidera-search-glow 20s linear infinite; animation-play-state: paused; opacity: 0; transition: opacity .3s; }
+.search-form:hover::after, .search-form:focus-within::after, .searching .search-form::after { opacity: 1; animation-play-state: running; }
 .search-button { display: grid; place-items: center; flex: 0 0 24px; color: var(--muted); cursor: pointer; }
 .search-button svg { width: 18px; height: 18px; }
 .search-input { appearance: none; border: 0; background: none; padding: 10px 0; min-width: 0; width: 100%; font: 14px var(--ui); color: var(--text); outline: none; }
@@ -868,7 +868,11 @@ html.diagram-modal-open { overflow:hidden; }
 .search-input::placeholder { color: var(--muted); opacity: 1; }
 .search-input::-webkit-search-cancel-button, .search-input::-webkit-search-decoration { appearance: none; }
 .search-clear { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 20px; padding: 4px; }
-.search-scope { display: block; max-width: 100%; margin: 7px 12px; padding: 3px 0; border: 0; background: var(--canvas); color: var(--muted); font: 12px var(--ui); }
+.search-scope-control { margin: 4px 12px 0; }
+.search-scope-label { display: flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; min-height: 32px; color: var(--muted); font: 12px/1.4 var(--ui); cursor: pointer; }
+.search-scope-label:has(:checked), .search-scope-label:hover { color: var(--text); }
+.search-scope { margin: 0; width: 14px; height: 14px; flex: none; accent-color: var(--accent); cursor: pointer; }
+.search-scope:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .search-status { margin: 8px 0; padding: 16px; font: 14px/1.5 var(--ui); color: var(--muted); background: var(--panel); border-radius: 8px; }
 .search-results { max-height: 55vh; overflow: auto; scrollbar-width: none; padding: 0 2px 4px; }
 .search-result-list { list-style: none; padding: 0; margin: 8px 0; }
@@ -889,7 +893,7 @@ html.diagram-modal-open { overflow:hidden; }
 .sidebar:has(.searching) .site-menu { display: none; }
 .sidebar:has(.searching) .search-wrapper { min-height: 0; flex: 1; display: flex; flex-direction: column; }
 .sidebar .search-wrapper.searching .search-results { flex: 1; min-height: 0; max-height: none; }
-.sidebar .search-form, .sidebar .search-scope, .sidebar .search-status { flex-shrink: 0; }
+.sidebar .search-form, .sidebar .search-scope-control, .sidebar .search-status { flex-shrink: 0; }
 .sidebar:has(.search-wrapper) .site-heading { margin-bottom: 0; }
 .sidebar .search-wrapper:not(.searching) { margin-bottom: 16px; }
 .compact-header .search-wrapper { width: min(320px,100%); margin: 0; }
@@ -897,9 +901,13 @@ html.diagram-modal-open { overflow:hidden; }
   .search-result-link::after { content: ''; position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(180px circle at var(--pointer-x,50%) var(--pointer-y,50%), color-mix(in srgb,var(--text) 8%,transparent),transparent); transition: opacity .2s; }
   .search-result-link:hover::after { opacity: 1; }
 }
-@media (pointer: coarse) { .search-clear { min-width: 44px; min-height: 44px; } .search-form { height: 44px; } }
+@media (pointer: coarse) { .search-clear { min-width: 44px; min-height: 44px; } .search-form { height: 44px; } .search-scope-label { min-height: 44px; } }
 
 .search-wrapper.is-loading .search-button { color: #3dc550; }
 .search-wrapper.search-error .search-button { color: #e66; }
 
 :root[data-color-scheme="dark"] .search-keyword { color: #ffcf63; }
+
+/* Stellar search.styl: five seamless gradient cycles over twenty seconds. */
+@keyframes sidera-search-glow { from { background-position: 0%; } to { background-position: 1000%; } }
+@media (prefers-reduced-motion: reduce) { .search-form::after { animation: none; transition: none; } }

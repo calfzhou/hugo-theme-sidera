@@ -451,7 +451,7 @@ other = "搜索"
 other = "在 {{ .title }} 中搜索"
 
 [search_global]
-other = "全部内容"
+other = "搜索全部内容"
 
 [search_scope]
 other = "搜索范围"

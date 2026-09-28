@@ -186,3 +186,7 @@ Sidera's native eligibility/graph generation, shared text model and bounded lite
 matching are separately implemented, without copying query-as-HTML or raw-source filters.
 The tiny search magnifier is original SVG geometry, not an additional upstream asset.
 No search dependency, remote backend, CDN or distribution-license decision is introduced.
+
+Search's animated rainbow also follows Stellar 1.44.0 `_config.yml`'s
+`style.gradient.searchbar` and `search.styl`'s 20-second background-position motion;
+Sidera adds inactive pause and reduced-motion handling under the same retained MIT notice.

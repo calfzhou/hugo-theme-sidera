@@ -6,8 +6,8 @@ P3-E · Hugo 0.166.0 · no production Node dependency, remote backend or account
 
 In the showcase, open **Notes → A reading list with room to breathe**. The search
 box follows the identity and precedes the configured navigation, as in Stellar.
-It initially searches the nearest browsing collection. Choose **All content**, type
-**marginalia**, and follow the Journal result: its native dated URL opens with the
+It initially searches the nearest browsing collection. Type **marginalia**, check
+**Search all content**, and follow the Journal result: its native dated URL opens with the
 intro keyword highlighted. **Give a link a reason** opens that actual heading;
 **连接笔记** opens its bilingual section and reveals the containing fold. Searching
 Notes for **matching_pair** also finds actual included source code.
@@ -16,6 +16,18 @@ With a nonempty query, results occupy the sidebar's widget area; clear or Escape
 restores the original navigation. Page titles sit above result links, with section,
 scope and matching excerpt inside. Input/result/body highlighting use the same
 literal matching model. No generic modal or replacement of configured menus.
+
+The native **Search all content** checkbox appears only for a nonempty query on an
+owned page. Unchecked means the current collection; checked means all eligible content
+in the current language. Toggling updates results and the input's scope label immediately,
+without clearing the query or moving focus. Clearing/Escape/whitespace-only input hides
+and unchecks it, restoring the contextual default; no preference is stored. Global-only
+pages have no redundant checkbox, and no-JS leaves it hidden/disabled.
+
+Search and results use the full inner sidebar width, without an extra nested gutter.
+The underline uses Stellar's rainbow/background-position animation on hover, focus or
+an active query. It pauses when inactive; reduced-motion users get a static gradient.
+The existing sidebar/reading-column dimensions remain unchanged.
 
 ## Author/site controls
 

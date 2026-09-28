@@ -78,7 +78,8 @@
   addEventListener('pageshow', e => { if (e.persisted) highlight(false); });
   addEventListener('popstate', () => highlight(false));
   if (!wrapper) return;
-  const input = wrapper.querySelector('input'), scope = wrapper.querySelector('select');
+  const input = wrapper.querySelector('#search-input'), scope = wrapper.querySelector('.search-scope');
+  const scopeControl = wrapper.querySelector('.search-scope-control');
   const result = wrapper.querySelector('.search-results'), status = wrapper.querySelector('.search-status'), clear = wrapper.querySelector('.search-clear');
   let documents = null, pending = null, failed = false;
   input.disabled=false; if (scope) scope.disabled=false; wrapper.querySelector('.search-fallback').hidden=true;
@@ -87,9 +88,15 @@
     const focused = result.contains(document.activeElement) ? document.activeElement.getAttribute('href') : null;
     result.replaceChildren(); const query=input.value.trim(), words=SideraSearch.tokens(query);
     wrapper.classList.toggle('searching', !!query); clear.hidden=!query;
+    if (scope) {
+      scopeControl.hidden=!query;
+      if (!query) scope.checked=false;
+      input.placeholder=scope.checked ? input.dataset.globalLabel : input.dataset.localLabel;
+      input.setAttribute('aria-label',input.placeholder);
+    }
     if (!query) { state(''); return; }
     if (!documents) { state(failed ? wrapper.dataset.failed : wrapper.dataset.loading); return; }
-    const hits=SideraSearch.search(documents,query,scope?.value || '');
+    const hits=SideraSearch.search(documents,query,scope && !scope.checked ? scope.dataset.scope : '');
     state(hits.length ? '' : wrapper.dataset.empty);
     const list=document.createElement('ul'); list.className='search-result-list';
     for (const [index,hit] of hits.entries()) {
@@ -135,7 +142,7 @@
   input.addEventListener('input', event => { if(!event.isComposing) render(); });
   input.addEventListener('compositionend', render);
   input.addEventListener('focus', load);
-  scope?.addEventListener('change', () => { input.placeholder=scope.value ? input.dataset.localLabel : input.dataset.globalLabel; input.setAttribute('aria-label',input.placeholder); render(); });
+  scope?.addEventListener('change', render);
   const reset = () => { input.value=''; render(); input.focus(); };
   clear.addEventListener('click', reset);
   wrapper.addEventListener('keydown', e => {
