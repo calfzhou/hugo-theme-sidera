@@ -1,7 +1,9 @@
 {{- if hasPrefix .Destination "sidera-inline:" -}}
   {{- partial "components/render-leaf.html" (dict "context" . "key" (strings.TrimPrefix "sidera-inline:" .Destination)) -}}
 {{- else -}}
-{{- $href := partial "links/destination.html" . -}}
+{{- $resolved := partial "links/resolve.html" . -}}
+{{- $identity := partial "links/content-target.html" (dict "result" $resolved "page" .PageInner) -}}
+{{- $href := $resolved.href -}}
 {{- /* Go html/template does not allow tel by default; allow this scheme only. */ -}}
 {{- if eq (lower (urls.Parse $href).Scheme) "tel" -}}{{- $href = $href | safeURL -}}{{- end -}}
 {{- /* An image-only link is still wrapped by Goldmark in a paragraph. Keep it
@@ -11,7 +13,7 @@
 {{- if hasPrefix (string $text) `<figure class="md-figure">` -}}
   {{- $text = replaceRE `^<figure class="md-figure">(<img[^>]*>)[\s\S]*</figure>$` "$1" (string $text) | safeHTML -}}
 {{- end -}}
-<a href="{{ $href }}"{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
+<a href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
 {{- /* Keep Goldmark's rendered label and html/template URL/title escaping. */ -}}
 
 {{- end -}}

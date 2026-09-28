@@ -174,3 +174,15 @@ is separate. No CDNs or fonts load for diagrams. Actual diagram pages publish th
 relevant original licenses as native resources. The opaque sandbox intentionally
 blocks unused networking/eval/editing; its output becomes an inert SVG image. See
 DIAGRAMS.md for the exact feature, security, source-only fallback and CSP boundaries.
+
+### P3-E search presentation and journey
+
+The inline sidebar search layout, widget replacement while searching, title-above-link
+result structure, section/excerpt treatment, keyword accents and `?kw=`/heading journey
+are adapted from the read-only Stellar **1.44.0** reference: `layout/_partial/sidebar/search.ejs`,
+`source/css/_components/sidebar/{search,sidebar}.styl`, and `source/js/search/{local-search,highlight,shortcut}.js`.
+The existing Stellar MIT license above applies to these adaptations (copyright 2021 xaoxuu).
+Sidera's native eligibility/graph generation, shared text model and bounded literal DOM
+matching are separately implemented, without copying query-as-HTML or raw-source filters.
+The tiny search magnifier is original SVG geometry, not an additional upstream asset.
+No search dependency, remote backend, CDN or distribution-license decision is introduced.

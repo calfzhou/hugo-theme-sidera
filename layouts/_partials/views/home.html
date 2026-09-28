@@ -2,7 +2,7 @@
 <header class="view-header">
     <p class="eyebrow">{{ T "collection_overview" }}</p>
     <h1>{{ .Title }}</h1>
-    <div class="intro prose">{{ .Content }}</div>
+    <div class="intro prose" data-search-body data-clear-highlights="{{ T "search_highlights_clear" }}">{{ partial "discovery/body.html" . }}</div>
   </header>
   <h2 class="section-heading">{{ T "collections" }}</h2>
   <ul id="collections" class="collection-grid">

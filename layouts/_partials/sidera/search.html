@@ -1,0 +1,14 @@
+{{- if .Settings.search -}}
+{{- $placeholder := T "search_label" -}}{{- with .Owner -}}{{- $placeholder = T "search_in" (dict "title" .Title) -}}{{- end -}}
+<div class="search-wrapper" data-search-wrapper data-loading="{{ T "search_loading" }}" data-failed="{{ T "search_failed" }}" data-empty="{{ T "search_empty" }}" data-title-only="{{ T "search_title_only" }}">
+  <div class="search-form" role="search">
+    <label class="search-button" for="search-input"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span class="visually-hidden">{{ T "search_label" }}</span></label>
+    <input id="search-input" type="search" class="search-input" disabled maxlength="160" autocomplete="off" spellcheck="false" aria-label="{{ $placeholder }}" placeholder="{{ $placeholder }}" aria-controls="search-results" data-global-label="{{ T "search_label" }}" data-local-label="{{ $placeholder }}">
+    <button type="button" class="search-clear" hidden aria-label="{{ T "search_clear" }}">×</button>
+  </div>
+  {{ with .Owner }}<select class="search-scope" aria-label="{{ T "search_scope" }}"><option value="{{ .RelPermalink }}">{{ .Title }}</option><option value="">{{ T "search_global" }}</option></select>{{ end }}
+  <p class="search-status" role="status" aria-live="polite" hidden></p>
+  <div id="search-results" class="search-results" aria-label="{{ T "search_results" }}"></div>
+  <p class="search-status search-fallback">{{ T "search_fallback" }}</p>
+</div>
+{{- end -}}

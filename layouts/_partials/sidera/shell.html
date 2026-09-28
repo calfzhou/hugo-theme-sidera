@@ -20,7 +20,7 @@
   {{ if $hasLeft }}
     {{ partial "sidebar.html" (dict "Context" $ctx "Content" $left "Footer" $leftFooter) }}
   {{ else }}
-    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ if strings.TrimSpace $leftFooter }}<div class="sidebar-footer">{{ $leftFooter }}</div>{{ end }}</div>
+    <div class="compact-header">{{ partial "sidera/identity.html" $ctx }}{{ partial "sidera/search.html" $ctx }}<a href="{{ $page.Site.Home.RelPermalink }}">{{ T "overview" }}</a>{{ if strings.TrimSpace $leftFooter }}<div class="sidebar-footer">{{ $leftFooter }}</div>{{ end }}</div>
   {{ end }}
   {{ if $hasRight }}
     <aside id="right-region" class="right-region region-drawer" aria-label="{{ T "page_context" }}">

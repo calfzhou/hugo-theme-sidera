@@ -1,0 +1,10 @@
+{{- /* Native HTML attributes, quoted values consumed atomically. Words such as
+     "hidden" in a caption/label are not boolean attributes. */ -}}
+{{- $attrs := dict -}}
+{{- $source := replaceRE `(?s)^<[a-zA-Z0-9]+|/?>$` "" . -}}
+{{- range findRE `[^\s"'<>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>]+))?` $source -}}
+  {{- $name := lower (replaceRE `(?s)[\s=].*` "" .) -}}{{- $value := "" -}}
+  {{- if strings.Contains . "=" -}}{{- $value = replaceRE `(?s)^[^=]+=\s*` "" . -}}{{- $value = strings.TrimSuffix `"` (strings.TrimPrefix `"` $value) -}}{{- $value = strings.TrimSuffix "'" (strings.TrimPrefix "'" $value) -}}{{- end -}}
+  {{- $attrs = merge $attrs (dict $name (htmlUnescape $value)) -}}
+{{- end -}}
+{{- return $attrs -}}

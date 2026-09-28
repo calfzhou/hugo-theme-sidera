@@ -1,0 +1,18 @@
+{{- $ctx := .Context -}}{{- $body := "" -}}{{- $box := "" -}}
+{{- range .Items -}}
+  {{- $instance := .Instance -}}{{- $name := $instance.Name -}}{{- $item := .Content -}}
+  {{- if in (slice "outgoing" "backlinks") $name -}}{{- $item = partial "discovery/references.html" $instance -}}{{- end -}}
+  {{- if strings.TrimSpace $item -}}
+    {{- $wrapped := printf `<div class="footer-item" data-footer-item="%s" data-instance="%s">%s</div>` $name $instance.Instance $item -}}
+    {{- if and (eq $ctx.Region "article-footer") (in (slice "outgoing" "backlinks" "references" "license" "authors" "share") $name) -}}
+      {{- $box = printf "%s%s" $box $wrapped -}}
+    {{- else -}}
+      {{- with $box -}}{{- $body = printf `%s<div class="article-footer-box">%s</div>` $body . -}}{{- $box = "" -}}{{- end -}}
+      {{- $body = printf "%s%s" $body $wrapped -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $box -}}{{- $body = printf `%s<div class="article-footer-box">%s</div>` $body . -}}{{- end -}}
+{{- if or (strings.TrimSpace $body) (strings.TrimSpace .Extra) -}}
+  <footer class="{{ $ctx.Region }}" aria-label="{{ if eq $ctx.Region "article-footer" }}{{ T "article_footer" }}{{ else }}{{ T "site_footer" }}{{ end }}">{{ $body | safeHTML }}{{ .Extra }}</footer>
+{{- end -}}

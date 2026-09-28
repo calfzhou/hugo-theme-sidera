@@ -1,0 +1,4 @@
+{{- /* Called only at the Page's own body location, never from cards or summaries.
+     Idempotent Page-local readiness flag; consumers run after ALL HTML rendering. */ -}}
+{{- .Store.Set "sidera-content-rendered" true -}}
+{{- .Content -}}

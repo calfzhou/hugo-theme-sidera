@@ -119,3 +119,9 @@ needs care. Installed embedded source and `always` control builds were inspected
 Its broad `GetPage` lookup for web paths and fragment absolutization are not copied.
 H's external-link suffix still decorates links progressively without changing hrefs;
 heading markers, TOC, code and image behavior remain independent.
+
+P3-E now adds [content references and local search](DISCOVERY.md). Internally the href-only
+helper delegates to `links/resolve.html`, returning the same href and its native target;
+link hooks/cards can annotate that identity for the deferred graph. Exact native URLs
+are recognized separately without rewriting authored hrefs. A root-level File.Dir `/`
+is normalized before source matching. Native source diagnostics and C2 bridge remain.

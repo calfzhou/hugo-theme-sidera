@@ -919,3 +919,14 @@ Scoped taxonomy result headers use the same row with their real hub/term ancestr
 label masquerades as a path segment. No ancestor is marked aria-current; all links have hover and
 keyboard-focus feedback. Labels wrap without separating a slash from its following link. Existing
 list_header=false and compact taxonomy-index layouts remain unchanged.
+
+## Content discovery (P3-E)
+
+The sidebar search is deliberately between identity and the configured navigation;
+the compact-header fallback also supports it. `params.search=false` hides it without
+changing menu/region definitions. During a query, search results temporarily replace
+the scrolling widgets, matching Stellar; clearing restores them. No modal redesign.
+`outgoing` and `backlinks` are normal configurable article-footer components (no options),
+now selected after manual `references` by default. Manual references remain independent.
+See [DISCOVERY.md](DISCOVERY.md) for scopes, eligibility, matching, destination highlights,
+privacy and opt-outs. These supersede older “search/backlinks remain P3” statements above.

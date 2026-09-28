@@ -31,7 +31,7 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- range $key := slice "auto_caption" "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
+{{- range $key := slice "search" "search_index" "link_graph" "auto_caption" "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
 {{- end -}}
 {{- if isset $params "navigation_mode" -}}
@@ -58,6 +58,9 @@
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
 {{- range $cascades -}}
   {{- $cascadeParams := .params | default dict -}}
+  {{- range $key := slice "search" "search_index" "link_graph" -}}
+    {{- if and (isset $cascadeParams $key) (ne (printf "%T" (index $cascadeParams $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
+  {{- end -}}
   {{- if and (isset $cascadeParams "auto_caption") (ne (printf "%T" $cascadeParams.auto_caption) "bool") -}}{{- errorf "Sidera auto_caption must be boolean: %s" $source -}}{{- end -}}
   {{- if isset $cascadeParams "navigation_mode" -}}{{- errorf "Sidera navigation_mode is collection-root policy; do not cascade it: %s" $source -}}{{- end -}}
   {{- range $key := slice "references" "license" "share" "edit_url" -}}

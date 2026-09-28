@@ -26,6 +26,16 @@
       <script data-sidera-video-script src="{{ $video.RelPermalink }}" integrity="{{ $video.Data.Integrity }}" defer></script>
     {{ end }}
   {{ end }}
+  {{ $searchContext := dict "page" . }}
+  {{ with (templates.Defer (dict "data" $searchContext)) }}
+    {{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
+    {{ if or $settings.search $settings.search_index }}
+      {{ $index := "" }}{{ if $settings.search }}{{ $index = partialCached "discovery/resource.html" .page.Site "search-resource" }}{{ end }}
+      {{ $js := slice (resources.Get "js/search-core.js") (resources.Get "js/search.js") | resources.Concat "js/search.js" | minify | fingerprint }}
+      <script data-sidera-search data-index="{{ $index }}" data-rules="{{ hugo.Data.sidera_discovery | jsonify }}" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+    {{ end }}
+  {{ end }}
+  <meta name="referrer" content="strict-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="sidera:icon-attribution" content="Solar icons by 480 Design · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/480-Design/Solar-Icon-Set · adapted sizing and semantics; original paths retained from Stellar 1.44.0">
   <meta name="color-scheme" content="light dark">

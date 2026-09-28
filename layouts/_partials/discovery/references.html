@@ -1,0 +1,18 @@
+{{- $page := .Page -}}{{- $items := slice -}}
+{{- if .Settings.link_graph -}}
+  {{- $catalog := partialCached "discovery/catalog.html" .Page "catalog" -}}
+  {{- $own := dict -}}{{- range $catalog -}}{{- if eq .url $page.RelPermalink -}}{{- $own = . -}}{{- end -}}{{- end -}}
+  {{- if $own -}}
+  {{- range $catalog -}}
+    {{- if and .graph (ne .url $page.RelPermalink) -}}
+      {{- if or (and (eq $.Name "outgoing") (in $own.links .url)) (and (eq $.Name "backlinks") (in .links $page.RelPermalink)) -}}{{- $items = $items | append . -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $items -}}
+<section class="footer-section" aria-labelledby="{{ $.Instance }}-heading">
+  <h2 id="{{ $.Instance }}-heading" class="footer-heading">{{ T $.Name }}</h2>
+  <ul class="reference-list" data-content-relations="{{ $.Name }}">{{ range sort . "url" }}<li><a href="{{ .url }}"{{ if ne .language $page.Language.Lang }} hreflang="{{ .language }}"{{ end }}>{{ .title }}</a></li>{{ end }}</ul>
+</section>
+{{- end -}}

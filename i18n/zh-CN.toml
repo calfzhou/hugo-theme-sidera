@@ -436,3 +436,46 @@ other = "徽章图片由 Shields 直接提供；没有图片时仍可访问仓�
 
 [diagram_close]
 other = "关闭图表"
+
+# Local content discovery
+[outgoing]
+other = "本文引用"
+
+[backlinks]
+other = "反向引用"
+
+[search_label]
+other = "搜索"
+
+[search_in]
+other = "在 {{ .title }} 中搜索"
+
+[search_global]
+other = "全部内容"
+
+[search_scope]
+other = "搜索范围"
+
+[search_clear]
+other = "清除搜索"
+
+[search_loading]
+other = "正在加载搜索…"
+
+[search_failed]
+other = "搜索暂不可用。重新聚焦可重试，或使用导航浏览。"
+
+[search_empty]
+other = "没有找到匹配结果。"
+
+[search_results]
+other = "搜索结果（最多 40 条）"
+
+[search_fallback]
+other = "搜索需要 JavaScript。请使用导航浏览。"
+
+[search_title_only]
+other = "页面标题匹配"
+
+[search_highlights_clear]
+other = "清除关键词高亮"

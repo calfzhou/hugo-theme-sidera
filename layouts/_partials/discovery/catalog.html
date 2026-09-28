@@ -1,0 +1,20 @@
+{{- /* Deferred readers only. Site.Pages is the native publication/list boundary;
+     effective native build metadata + own-body rendering exclude link-only bodies.
+     Store flags alone can outlive a render-policy change in Hugo server.
+     Page-local flags are idempotent, never accumulated graph edges. No Content
+     calls in render hooks, no Site.Store, no dependency on page iteration order. */ -}}
+{{- $catalog := slice -}}
+{{- range hugo.Sites -}}{{- range sort .Pages "Path" -}}
+  {{- if and (in (slice "page" "section" "home") .Kind) .File (not .File.IsContentAdapter) (.OutputFormats.Get "html") (not (in (slice "link" "never" false) .Params.build.render)) (.Store.Get "sidera-content-rendered") .RelPermalink -}}
+    {{- $settings := partialCached "sidera/settings.html" . .Language.Lang .Path -}}
+    {{- if and .IsSection (eq $settings.list_mode "recursive") (not $settings.list_header) -}}{{- continue -}}{{- end -}}
+    {{- $owner := partial "collection-owner.html" . -}}{{- $scope := "" -}}{{- $label := .Site.Title -}}
+    {{- with $owner -}}{{- $scope = .RelPermalink -}}{{- $label = .Title -}}{{- end -}}
+    {{- $body := string .Content -}}{{- $links := slice -}}
+    {{- range findRE `<a\s[^>]*\sdata-content-page="[^"]*"[^>]*>` $body -}}
+      {{- $links = $links | append (htmlUnescape (replaceRE `.*\sdata-content-page="([^"]*)".*` "$1" .)) -}}
+    {{- end -}}
+    {{- $catalog = $catalog | append (dict "url" .RelPermalink "title" .Title "language" .Language.Lang "scope" $scope "context" $label "links" ($links | uniq | sort) "graph" $settings.link_graph "index" $settings.search_index "sections" (partial "discovery/text.html" $body)) -}}
+  {{- end -}}
+{{- end -}}{{- end -}}
+{{- return $catalog -}}

@@ -1,0 +1,14 @@
+{{- /* One target identity for native source links and exact published URL links.
+     Metadata only: never render Content/Fragments or collect mutable graph edges. */ -}}
+{{- $result := .result -}}{{- $page := .page -}}{{- $target := $result.target -}}
+{{- if not (reflect.IsPage $target) -}}
+  {{- $u := urls.Parse $result.href -}}
+  {{- if or (not $u.Scheme) (in (slice "http" "https") $u.Scheme) -}}
+    {{- $absolute := (urls.Parse $page.Permalink).ResolveReference $u -}}
+    {{- $url := printf "%s://%s%s" $absolute.Scheme $absolute.Host $absolute.EscapedPath -}}
+    {{- $targets := partialCached "links/page-urls.html" $page.Site "urls" -}}
+    {{- $target = index $targets $url -}}
+  {{- end -}}
+{{- end -}}
+{{- $identity := "" -}}{{- if reflect.IsPage $target -}}{{- $identity = $target.RelPermalink -}}{{- end -}}
+{{- return $identity -}}

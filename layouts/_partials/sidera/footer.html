@@ -1,27 +1,22 @@
-{{- $ctx := . -}}{{- $key := replace .Region "-" "_" -}}{{- $items := index .Settings $key -}}
+{{- $ctx := . -}}{{- $items := index .Settings (replace .Region "-" "_") -}}
 {{- if $items -}}
-  {{- $body := "" -}}{{- $box := "" -}}{{- $counts := dict -}}
+  {{- $prepared := slice -}}{{- $counts := dict -}}
   {{- range $items -}}
     {{- $instance := partial "sidera/instance.html" (dict "Entry" . "Page" $ctx.Page "Owner" $ctx.Owner "Region" $ctx.Region "Settings" $ctx.Settings) -}}
     {{- $name := $instance.Name -}}{{- $ordinal := add 1 (index $counts $name | default 0) -}}{{- $counts = merge $counts (dict $name $ordinal) -}}
     {{- $prefix := "" -}}{{- if gt $ordinal 1 -}}{{- $prefix = printf "%s-%d-" $name $ordinal -}}{{- end -}}
     {{- $instance = merge $instance (dict "InstancePrefix" $prefix "Instance" (printf "%s-%s-%d" $ctx.Region $name $ordinal)) -}}
-    {{- $item := partial "sidera/footer-item.html" $instance -}}
-    {{- if strings.TrimSpace $item -}}
-      {{- $wrapped := printf `<div class="footer-item" data-footer-item="%s" data-instance="%s">%s</div>` $name $instance.Instance $item -}}
-      {{- if and (eq $ctx.Region "article-footer") (in (slice "references" "license" "authors" "share") $name) -}}
-        {{- $box = printf "%s%s" $box $wrapped -}}
-      {{- else -}}
-        {{- with $box -}}{{- $body = printf `%s<div class="article-footer-box">%s</div>` $body . -}}{{- $box = "" -}}{{- end -}}
-        {{- $body = printf "%s%s" $body $wrapped -}}
-      {{- end -}}
-    {{- end -}}
+    {{- /* Authored footer content/hooks render NOW so math and resource detection
+         still precede the head's deferred asset pass. Only graph lookup is delayed. */ -}}
+    {{- $content := "" -}}
+    {{- if not (in (slice "outgoing" "backlinks") $name) -}}{{- $content = partial "sidera/footer-item.html" $instance -}}{{- end -}}
+    {{- $prepared = $prepared | append (dict "Instance" $instance "Content" $content) -}}
   {{- end -}}
-  {{- with $box -}}{{- $body = printf `%s<div class="article-footer-box">%s</div>` $body . -}}{{- end -}}
   {{- $extra := "" -}}
   {{- if eq .Region "article-footer" -}}{{- $extra = partial "sidera/article-footer-extra.html" . -}}
   {{- else -}}{{- $extra = partial "sidera/site-footer-extra.html" . -}}{{- end -}}
-  {{- if or (strings.TrimSpace $body) (strings.TrimSpace $extra) -}}
-    <footer class="{{ .Region }}" aria-label="{{ if eq .Region "article-footer" }}{{ T "article_footer" }}{{ else }}{{ T "site_footer" }}{{ end }}">{{ $body | safeHTML }}{{ $extra }}</footer>
-  {{- end -}}
+  {{- $data := dict "Context" . "Items" $prepared "Extra" $extra -}}
+  {{- if eq .Region "article-footer" -}}
+    {{- with (templates.Defer (dict "data" $data)) -}}{{- partial "sidera/footer-render.html" . -}}{{- end -}}
+  {{- else -}}{{- partial "sidera/footer-render.html" $data -}}{{- end -}}
 {{- end -}}

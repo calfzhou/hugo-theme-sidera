@@ -1,0 +1,5 @@
+{{- $urls := dict -}}
+{{- range hugo.Sites -}}{{- range .Pages -}}
+  {{- if .RelPermalink -}}{{- $urls = merge $urls (dict .Permalink .) -}}{{- end -}}
+{{- end -}}{{- end -}}
+{{- return $urls -}}

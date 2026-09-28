@@ -301,3 +301,12 @@ badges, and native C2 composition. Pinned local renderers are isolated and share
 page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
 Conditional Content/Summary assets, supported input limits and honest source-only
 fallbacks are explicit. Video remains documented separately in VIDEO.md.
+
+### P3-E discovery controls
+
+`search`, `search_index` and `link_graph` are public boolean params (all true by default),
+using the normal native/cascade/preset/site precedence and typed validation. Article footer
+adds `outgoing`/`backlinks` components with empty configs. See [DISCOVERY.md](DISCOVERY.md)
+for the full publication/text/scope contract; neither client scopes nor discoverability
+opt-outs replace publication security. Default-on indexing never overrides native draft,
+future, expiry, headless, list or actual body-render eligibility.

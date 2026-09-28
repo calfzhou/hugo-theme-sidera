@@ -1,0 +1,8 @@
+{{- $documents := slice -}}
+{{- range partialCached "discovery/catalog.html" . "catalog" -}}
+  {{- if and .index (eq .language $.Language.Lang) -}}
+    {{- $documents = $documents | append (dict "url" .url "title" .title "scope" .scope "context" .context "sections" .sections) -}}
+  {{- end -}}
+{{- end -}}
+{{- $json := dict "version" 1 "documents" $documents | jsonify -}}
+{{- return (resources.FromString (printf "search/%s.json" .Language.Lang) $json | fingerprint).RelPermalink -}}

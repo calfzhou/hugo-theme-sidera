@@ -439,3 +439,46 @@ other = "Badge images are served directly by Shields; the repository link also w
 
 [diagram_close]
 other = "Close diagram"
+
+# Local content discovery
+[outgoing]
+other = "Referenced here"
+
+[backlinks]
+other = "Links to this page"
+
+[search_label]
+other = "Search"
+
+[search_in]
+other = "Search in {{ .title }}"
+
+[search_global]
+other = "All content"
+
+[search_scope]
+other = "Search scope"
+
+[search_clear]
+other = "Clear search"
+
+[search_loading]
+other = "Loading search…"
+
+[search_failed]
+other = "Search unavailable. Refocus to retry, or browse the navigation."
+
+[search_empty]
+other = "No matching results."
+
+[search_results]
+other = "Results (up to 40)"
+
+[search_fallback]
+other = "Search needs JavaScript. Browse using the navigation."
+
+[search_title_only]
+other = "Page title match"
+
+[search_highlights_clear]
+other = "Clear keyword highlights"

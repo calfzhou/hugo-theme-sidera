@@ -250,3 +250,10 @@ badges, and native C2 composition. Pinned local renderers are isolated and share
 page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
 Conditional Content/Summary assets, supported input limits and honest source-only
 fallbacks are explicit. Video remains documented separately in VIDEO.md.
+
+### References and local full-text/heading search
+
+[DISCOVERY.md](DISCOVERY.md) documents generated outgoing/backlinks, scope-aware sidebar
+search and real destination body highlighting. Native rendered content supplies the
+index; no external service or production search dependency. Publication exclusions,
+text boundaries, opt-outs and `search`/`search_index`/`link_graph` are explicit.
