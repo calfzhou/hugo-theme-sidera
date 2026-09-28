@@ -257,3 +257,14 @@ fallbacks are explicit. Video remains documented separately in VIDEO.md.
 search and real destination body highlighting. Native rendered content supplies the
 index; no external service or production search dependency. Publication exclusions,
 text boundaries, opt-outs and `search`/`search_index`/`link_graph` are explicit.
+
+
+## Giscus comments (P3-F1)
+
+`params.comments` is an inheritable boolean, default false, independent of preset.
+The canonical article-end slot renders comments before the final `article_end_text`,
+after navigation/docs children, never on later pagers or generated/list views.
+Only Giscus ships; site/language-owned identity settings and native provider-partial
+overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
+privacy, loading, locale/palette and failure boundaries. No production IDs belong in
+the theme. This supersedes earlier future-comment-slot statements.

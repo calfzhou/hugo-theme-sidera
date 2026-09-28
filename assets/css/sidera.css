@@ -911,3 +911,12 @@ html.diagram-modal-open { overflow:hidden; }
 /* Stellar search.styl: five seamless gradient cycles over twenty seconds. */
 @keyframes sidera-search-glow { from { background-position: 0%; } to { background-position: 1000%; } }
 @media (prefers-reduced-motion: reduce) { .search-form::after { animation: none; transition: none; } }
+
+/* Canonical comment slot: outside prose/search and before the final authored text. */
+.article-comments { margin: 36px 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.article-comments p { color: var(--muted); font-size: .875rem; }
+.comments-status:empty { display: none; }
+.comments-load { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.comments-load:hover { background: var(--surface-hover); }
+.comments-load:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.article-comments .giscus-frame { width: 100%; border: 0; }

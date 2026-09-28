@@ -1,7 +1,9 @@
+{{- if and (isset site.Params "comments") (ne (printf "%T" site.Params.comments) "bool") -}}{{- errorf "Sidera comments must be boolean in site/language params" -}}{{- end -}}
 {{- if and (isset site.Params "auto_caption") (ne (printf "%T" site.Params.auto_caption) "bool") -}}{{- errorf "Sidera auto_caption must be boolean in site/language params" -}}{{- end -}}
 {{- if and (isset site.Params "link_heading_checks") (ne (printf "%T" site.Params.link_heading_checks) "bool") -}}
   {{- errorf "Sidera site/language params.link_heading_checks must be boolean" -}}
 {{- end -}}
+{{- $comments := partialCached "comments/config.html" site "comments-config" -}}
 {{- $widgets := partialCached "sidera/widgets.html" site "widgets" -}}
 {{- range site.Pages -}}
   {{- $page := . -}}

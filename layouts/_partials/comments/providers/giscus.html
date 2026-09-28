@@ -1,0 +1,25 @@
+{{- $g := .Config.Giscus -}}
+{{- $ready := and $g.repo $g.repo_id $g.category $g.category_id -}}
+<section class="article-comments" aria-labelledby="comments-heading" data-search-exclude>
+  <h2 id="comments-heading" class="section-heading">{{ T "comments_title" }}</h2>
+  {{- if not $ready }}
+  <p class="comments-status">{{ T "comments_unconfigured" }}</p>
+  {{- else -}}
+    {{- /* Match the provider's pathname transform, but from Hugo's canonical URL,
+          never location.search/hash/title or a preview hostname. */ -}}
+    {{- $path := (urls.Parse .Page.Permalink).EscapedPath -}}
+    {{- $term := "index" -}}{{- if ge (len $path) 2 -}}{{- $term = replaceRE `\.\w+$` "" (strings.TrimPrefix "/" $path) -}}{{- end -}}
+    {{- $lang := "en" -}}{{- if hasPrefix (lower .Page.Language.Locale) "zh" -}}{{- $lang = "zh-CN" -}}{{- end -}}
+    {{- $strict := false -}}{{- if isset $g "strict" -}}{{- $strict = $g.strict -}}{{- end -}}
+    {{- $reactions := true -}}{{- if isset $g "reactions" -}}{{- $reactions = $g.reactions -}}{{- end -}}
+  <div data-sidera-giscus data-backlink="{{ .Page.Permalink }}" data-repo="{{ $g.repo }}" data-repo-id="{{ $g.repo_id }}" data-category="{{ $g.category }}" data-category-id="{{ $g.category_id }}" data-term="{{ $term }}" data-lang="{{ $lang }}" data-strict="{{ cond $strict "1" "0" }}" data-reactions="{{ cond $reactions "1" "0" }}" data-input-position="{{ $g.input_position | default "top" }}" data-loading="{{ T "comments_loading" }}" data-unavailable="{{ T "comments_unavailable" }}" data-opened="{{ T "comments_opened" }}" data-empty="{{ T "comments_empty" }}">
+    <p>{{ T "comments_privacy" }}</p>
+    <button type="button" class="comments-load" hidden>{{ T "comments_load" }}</button>
+    <p class="comments-status" role="status">{{ T "comments_nojs" }}</p>
+    <div class="giscus" id="comments-thread"></div>
+    <p><a href="https://github.com/{{ $g.repo }}/discussions" target="_blank" rel="noopener noreferrer">{{ T "comments_github" }}</a></p>
+  </div>
+  {{- $js := resources.Get "js/giscus.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{- end }}
+</section>

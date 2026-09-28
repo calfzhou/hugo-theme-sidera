@@ -148,3 +148,14 @@ do not override it; custom preset `defaults.params` / `defaults.cascade.params` 
 set it, including false. Actual Page.Params/native cascade still wins. See MARKDOWN.md
 for direct-standalone image scope and per-image `.no-caption`. No parser configuration
 is emulated through presets; native parser imports remain site-owned.
+
+
+## Giscus comments (P3-F1)
+
+`params.comments` is an inheritable boolean, default false, independent of preset.
+The canonical article-end slot renders comments before the final `article_end_text`,
+after navigation/docs children, never on later pagers or generated/list views.
+Only Giscus ships; site/language-owned identity settings and native provider-partial
+overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
+privacy, loading, locale/palette and failure boundaries. No production IDs belong in
+the theme. This supersedes earlier future-comment-slot statements.

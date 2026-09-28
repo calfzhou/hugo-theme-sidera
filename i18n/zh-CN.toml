@@ -479,3 +479,33 @@ other = "页面标题匹配"
 
 [search_highlights_clear]
 other = "清除关键词高亮"
+
+[comments_title]
+other = "评论"
+
+[comments_unconfigured]
+other = "本站评论尚未配置。"
+
+[comments_privacy]
+other = "加载评论会连接 Giscus 和 GitHub，并向服务方发送当前页面网址（含查询参数）及网络信息。阅读无需登录 GitHub。"
+
+[comments_load]
+other = "加载评论"
+
+[comments_nojs]
+other = "嵌入评论需要 JavaScript，也可以前往 GitHub 浏览讨论。"
+
+[comments_loading]
+other = "正在连接 Giscus…"
+
+[comments_unavailable]
+other = "无法确认评论是否可用，服务可能暂不可用或被拦截。请前往 GitHub，或刷新页面重试。"
+
+[comments_opened]
+other = "Giscus 已响应，讨论是否可用请以下方内容为准。"
+
+[comments_empty]
+other = "暂无讨论。仅当有人提交评论或回应时，Giscus 才会创建讨论。"
+
+[comments_github]
+other = "在 GitHub 浏览讨论"

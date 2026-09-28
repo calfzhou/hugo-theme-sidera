@@ -310,3 +310,14 @@ adds `outgoing`/`backlinks` components with empty configs. See [DISCOVERY.md](DI
 for the full publication/text/scope contract; neither client scopes nor discoverability
 opt-outs replace publication security. Default-on indexing never overrides native draft,
 future, expiry, headless, list or actual body-render eligibility.
+
+
+## Giscus comments (P3-F1)
+
+`params.comments` is an inheritable boolean, default false, independent of preset.
+The canonical article-end slot renders comments before the final `article_end_text`,
+after navigation/docs children, never on later pagers or generated/list views.
+Only Giscus ships; site/language-owned identity settings and native provider-partial
+overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
+privacy, loading, locale/palette and failure boundaries. No production IDs belong in
+the theme. This supersedes earlier future-comment-slot statements.

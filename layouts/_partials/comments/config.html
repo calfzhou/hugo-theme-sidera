@@ -1,0 +1,26 @@
+{{- /* Site-owned provider selection. No executable paths/options from content. */ -}}
+{{- $provider := "giscus" -}}
+{{- if isset .Params "comment_provider" -}}{{- $provider = .Params.comment_provider -}}{{- end -}}
+{{- if or (ne (printf "%T" $provider) "string") (eq (len (findRE `^[a-z][a-z0-9-]*$` (printf "%v" $provider))) 0) -}}
+  {{- errorf "Sidera comment_provider must be a lowercase provider name" -}}
+{{- else if not (templates.Exists (printf "_partials/comments/providers/%s.html" $provider)) -}}
+  {{- errorf "Sidera comment_provider has no native provider partial: %s" $provider -}}
+{{- end -}}
+{{- $g := dict -}}{{- if isset .Params "giscus" -}}{{- $g = .Params.giscus -}}{{- end -}}
+{{- if not (reflect.IsMap $g) -}}{{- errorf "Sidera giscus must be a site/language map" -}}
+{{- else -}}
+  {{- range $key, $value := $g -}}
+    {{- if in (slice "strict" "reactions") $key -}}
+      {{- if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera giscus.%s must be boolean" $key -}}{{- end -}}
+    {{- else if in (slice "repo" "repo_id" "category" "category_id" "input_position") $key -}}
+      {{- if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera giscus.%s must be a string" $key -}}
+      {{- else if $value -}}
+        {{- if and (eq $key "repo") (or (not (findRE `^[A-Za-z0-9][A-Za-z0-9-]*/[A-Za-z0-9_.-]+$` $value)) (findRE `/\.\.?$` $value)) -}}{{- errorf "Sidera giscus.repo must be owner/repository" -}}{{- end -}}
+        {{- if and (in (slice "repo_id" "category_id") $key) (not (findRE `^[A-Za-z0-9_=-]+$` $value)) -}}{{- errorf "Sidera giscus.%s must be a GitHub node ID, not a name or URL" $key -}}{{- end -}}
+        {{- if and (eq $key "category") (or (gt (len $value) 100) (findRE `[\x00-\x1f\x7f]` $value)) -}}{{- errorf "Sidera giscus.category must be a short display name" -}}{{- end -}}
+        {{- if and (eq $key "input_position") (not (in (slice "top" "bottom") $value)) -}}{{- errorf "Sidera giscus.input_position must be top or bottom" -}}{{- end -}}
+      {{- end -}}
+    {{- else -}}{{- errorf "Sidera unknown giscus option: %s" $key -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "Provider" $provider "Giscus" $g) -}}

@@ -937,3 +937,14 @@ rainbow underline animates on hover/focus/active query, with reduced-motion fall
 The scoped/global dropdown is replaced by a native **Search all content** checkbox,
 visible only with a nonempty scoped query. Clear resets to the current collection;
 global-only pages have no toggle. See DISCOVERY.md for keyboard/no-JS behavior.
+
+
+## Giscus comments (P3-F1)
+
+`params.comments` is an inheritable boolean, default false, independent of preset.
+The canonical article-end slot renders comments before the final `article_end_text`,
+after navigation/docs children, never on later pagers or generated/list views.
+Only Giscus ships; site/language-owned identity settings and native provider-partial
+overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
+privacy, loading, locale/palette and failure boundaries. No production IDs belong in
+the theme. This supersedes earlier future-comment-slot statements.

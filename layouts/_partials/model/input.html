@@ -4,7 +4,7 @@
   {{- range $key, $_ := partial "model/defaults.html" . -}}
     {{- if and (ne $key "menu") (isset $fm $key) -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}
   {{- end -}}
-  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" "link_heading_checks" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
+  {{- range $key := slice "scope_root" "defaults" "avatar" "series_order" "cover" "link_heading_checks" "giscus" "comment_provider" -}}{{- if isset $fm $key -}}{{- errorf "Sidera custom %s belongs under params: %s" $key $source -}}{{- end -}}{{- end -}}
   {{- if isset $params "sidera" -}}
     {{- if not (reflect.IsMap $params.sidera) -}}{{- errorf "Sidera private metadata namespace must be a map: %s" $source -}}
     {{- else -}}{{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}{{- if isset $params.sidera $key -}}{{- errorf "Sidera %s is reserved generated metadata: %s" $key $source -}}{{- end -}}{{- end -}}{{- end -}}
@@ -16,6 +16,7 @@
 {{- if isset $params "appearance" -}}{{- errorf "Sidera params.appearance was renamed to site/language params.color_mode: %s" $source -}}{{- end -}}
 {{- if isset $params "color_mode" -}}{{- errorf "Sidera color-mode defaults belong in site/language params.color_mode: %s" $source -}}{{- end -}}
 {{- if isset $params "link_heading_checks" -}}{{- errorf "Sidera link_heading_checks belongs in site/language params, not page/cascade params: %s" $source -}}{{- end -}}
+{{- range $key := slice "giscus" "comment_provider" -}}{{- if isset $params $key -}}{{- errorf "Sidera %s belongs in site/language params: %s" $key $source -}}{{- end -}}{{- end -}}
 {{- if isset $params "widgets" -}}{{- errorf "Sidera widget definitions belong in site/language params.widgets, not page/cascade params: %s" $source -}}{{- end -}}
 {{- if isset $params "scope_root" -}}
   {{- if or (not .section) (ne (printf "%T" $params.scope_root) "bool") -}}{{- errorf "Sidera scope_root must be a section boolean: %s" $source -}}{{- end -}}
@@ -31,7 +32,7 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
-{{- range $key := slice "search" "search_index" "link_graph" "auto_caption" "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
+{{- range $key := slice "comments" "search" "search_index" "link_graph" "auto_caption" "pinned" "show_updated" "show_authors" "icons" "recent_sections" "list_header" "terms_in_header" -}}
   {{- if and (isset $params $key) (ne (printf "%T" (index $params $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
 {{- end -}}
 {{- if isset $params "navigation_mode" -}}
@@ -58,7 +59,8 @@
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
 {{- range $cascades -}}
   {{- $cascadeParams := .params | default dict -}}
-  {{- range $key := slice "search" "search_index" "link_graph" -}}
+  {{- range $key := slice "giscus" "comment_provider" -}}{{- if isset $cascadeParams $key -}}{{- errorf "Sidera %s belongs in site/language params: %s" $key $source -}}{{- end -}}{{- end -}}
+  {{- range $key := slice "comments" "search" "search_index" "link_graph" -}}
     {{- if and (isset $cascadeParams $key) (ne (printf "%T" (index $cascadeParams $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}
   {{- end -}}
   {{- if and (isset $cascadeParams "auto_caption") (ne (printf "%T" $cascadeParams.auto_caption) "bool") -}}{{- errorf "Sidera auto_caption must be boolean: %s" $source -}}{{- end -}}

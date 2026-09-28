@@ -1,0 +1,6 @@
+{{- /* Called once at the canonical article end, never as a footer component.
+     Native overrides receive Page, Owner, Settings; provider also receives Config. */ -}}
+{{- if and .Settings.comments .Page.File (or .Page.IsPage (and .Page.IsSection (eq .Settings.list_mode "children"))) -}}
+  {{- $config := partialCached "comments/config.html" .Page.Site "comments-config" -}}
+  {{- partial (printf "comments/providers/%s.html" $config.Provider) (merge . (dict "Config" $config)) -}}
+{{- end -}}

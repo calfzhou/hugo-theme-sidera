@@ -1,5 +1,6 @@
-{{- /* Final canonical article slot. May be overridden for a future comment integration.
+{{- /* Final canonical article slot. Comments precede the final authored text; native override supported.
       Context: Page, Owner, Settings. Separate from configurable article-footer components. */ -}}
+{{- partial "comments/render.html" . -}}
 {{- if strings.TrimSpace .Settings.article_end_text -}}
 <div class="article-end">
   {{ partial "sidera/text-block.html" (dict "Page" .Page "Text" .Settings.article_end_text) }}
