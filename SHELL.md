@@ -884,8 +884,9 @@ site/language/cascade/page precedence applies, and empty text clears an inherite
 the normal site-wide Markdown/raw-HTML policy, not an extra executable template format.
 
 This is separate from article_text, which still belongs to the configurable footer text component.
-Existing footer component ordering is not changed to move one site's contact sentence. The showcase
-now sets article_end_text instead, so Get in touch is the final article section. It is absent from
+Existing footer component ordering is not changed to move one site's contact sentence. A consuming site
+may set article_end_text when it needs final authored copy; the showcase now leaves it
+empty because comments replace its former Get in touch sentence. It is absent from
 later child pagers and generated/index views, and does not depend on article_footer being enabled.
 
 The small `sidera/article-end.html` partial accepts Page, Owner and Settings. A future comment
@@ -948,3 +949,10 @@ Only Giscus ships; site/language-owned identity settings and native provider-par
 overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
 privacy, loading, locale/palette and failure boundaries. No production IDs belong in
 the theme. This supersedes earlier future-comment-slot statements.
+
+F1 review refinement: configured comments load automatically when the section becomes
+visible (immediate fallback without IntersectionObserver). The TOC adds a native
+**Join the discussion** action beneath Back to top only for an actual comment slot.
+No descriptive normal-state copy/manual button/separate GitHub link; concise failure
+and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
+while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.

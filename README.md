@@ -268,3 +268,10 @@ Only Giscus ships; site/language-owned identity settings and native provider-par
 overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mapping,
 privacy, loading, locale/palette and failure boundaries. No production IDs belong in
 the theme. This supersedes earlier future-comment-slot statements.
+
+F1 review refinement: configured comments load automatically when the section becomes
+visible (immediate fallback without IntersectionObserver). The TOC adds a native
+**Join the discussion** action beneath Back to top only for an actual comment slot.
+No descriptive normal-state copy/manual button/separate GitHub link; concise failure
+and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
+while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.

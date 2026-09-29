@@ -489,26 +489,19 @@ other = "Comments"
 [comments_unconfigured]
 other = "Comments are not configured for this site yet."
 
-[comments_privacy]
-other = "Load comments to connect to Giscus and GitHub. The provider receives this page’s URL (including query parameters) and network information. GitHub sign-in is optional for reading."
 
-[comments_load]
-other = "Load comments"
 
 [comments_nojs]
-other = "Embedded comments require JavaScript. You can browse discussions on GitHub instead."
+other = "Comments require JavaScript."
 
 [comments_loading]
 other = "Connecting to Giscus…"
 
 [comments_unavailable]
-other = "Comments could not be confirmed. The service may be unavailable or blocked. Try GitHub, or reload this page to try again."
+other = "Comments are unavailable. Reload the page to try again."
 
-[comments_opened]
-other = "Giscus is responding. Discussion availability is shown in the frame below."
 
-[comments_empty]
-other = "No discussion yet. Giscus creates one only when someone submits a comment or reaction."
 
-[comments_github]
-other = "Browse discussions on GitHub"
+
+[comments_join]
+other = "Join the discussion"

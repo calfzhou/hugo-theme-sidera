@@ -52,7 +52,7 @@ No endorsement by the original author is implied.
 
 Local source/version: Stellar **1.44.0, commit 1f4cb4bc**, `_data/icons.yml`.
 Retained keys: default:documents, default:category, example:notebook,
-default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:arrow-left, default:arrow-right, default:edit.
+default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:tocomment, default:arrow-left, default:arrow-right, default:edit.
 Sidera changes only SVG root sizing/class/accessibility attributes and semantic
 names; paths and duotone opacity are unchanged. The home/link and email/QR/broadcast action icons remain
 original Sidera artwork; share actions do not reuse unverified vendor logos. No arbitrary authored SVG is interpreted as an icon.

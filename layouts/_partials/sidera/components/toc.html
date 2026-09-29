@@ -1,10 +1,17 @@
-{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
-  {{- if $page.Store.Get "sidera-body" -}}
-    {{- $toc := partial "sidera/toc-markup.html" $page -}}
-    {{- if strings.Contains $toc "<a " -}}
-    <details class="article-toc" open data-responsive-toc><summary id="toc-heading-{{ .IDScope }}"><span>{{ T "on_this_page" }}</span>{{ if $s.icons }}<span class="toc-toggle" aria-hidden="true">{{ partial "sidera/icon.html" "sidebar-right" }}</span>{{ end }}</summary>
-      <div class="toc-body">{{ $toc | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .IDScope .IDScope) | safeHTML }}</div>
-    </details>
-    <div class="toc-footer"><a class="toc-top" href="#main">{{ if $s.icons }}{{ partial "sidera/icon.html" "up" }}{{ end }}{{ T "back_to_top" }}</a></div>
-  {{- end -}}
-  {{- end -}}
+{{- $s := .Settings -}}
+{{- $toc := "" -}}
+{{- if .Page.Store.Get "sidera-body" -}}{{- $toc = partial "sidera/toc-markup.html" .Page -}}{{- end -}}
+{{- $hasToc := strings.Contains $toc "<a " -}}
+{{- if $hasToc -}}
+<details class="article-toc" open data-responsive-toc><summary id="toc-heading-{{ .IDScope }}"><span>{{ T "on_this_page" }}</span>{{ if $s.icons }}<span class="toc-toggle" aria-hidden="true">{{ partial "sidera/icon.html" "sidebar-right" }}</span>{{ end }}</summary>
+  <div class="toc-body">{{ $toc | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .IDScope .IDScope) | safeHTML }}</div>
+</details>
+{{- end -}}
+{{- if or $hasToc .HasComments -}}
+<div class="toc-footer">
+  <a class="toc-top" href="#main">{{ if $s.icons }}{{ partial "sidera/icon.html" "up" }}{{ end }}{{ T "back_to_top" }}</a>
+  {{- if .HasComments }}
+  <a class="toc-comments" href="#sidera-comments">{{ if $s.icons }}{{ partial "sidera/icon.html" "comments" }}{{ end }}{{ T "comments_join" }}</a>
+  {{- end }}
+</div>
+{{- end -}}

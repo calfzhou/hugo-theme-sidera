@@ -167,10 +167,10 @@ summary { cursor: pointer; }
 .article-toc [data-toc] a[aria-current]::after { content: none; }
 .toc-footer { position: relative; margin-top: 8px; padding-top: 8px; }
 .toc-footer::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 1px; background: var(--line); }
-.toc-top { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 16px; text-decoration: none; }
-.toc-top .icon { width: 16px; height: 16px; }
+.toc-top, .toc-comments { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 16px; text-decoration: none; }
+.toc-top .icon, .toc-comments .icon { width: 16px; height: 16px; }
 @media (min-width: 1441px) { .article-toc [data-toc] { max-height: 70dvh; } }
-@media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } .toc-top { background: var(--panel); } }
+@media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } .toc-top, .toc-comments { background: var(--panel); } }
 .view-header { padding: 0 18px 12px; margin-bottom: 12px; }
 .view-header h1 { font-size: 25px; margin: 8px 0; }
 .view-header .intro { font-size: 15px; line-height: 1.6; }
@@ -913,10 +913,7 @@ html.diagram-modal-open { overflow:hidden; }
 @media (prefers-reduced-motion: reduce) { .search-form::after { animation: none; transition: none; } }
 
 /* Canonical comment slot: outside prose/search and before the final authored text. */
-.article-comments { margin: 36px 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.article-comments { scroll-margin-top: 24px; margin: 36px 18px; padding-top: 18px; border-top: 1px solid var(--line); }
 .article-comments p { color: var(--muted); font-size: .875rem; }
 .comments-status:empty { display: none; }
-.comments-load { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
-.comments-load:hover { background: var(--surface-hover); }
-.comments-load:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .article-comments .giscus-frame { width: 100%; border: 0; }

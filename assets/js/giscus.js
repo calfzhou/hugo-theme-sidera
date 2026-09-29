@@ -1,15 +1,18 @@
-// One explicit activation per document. The provider owns authentication and its DOM.
+// One viewport-triggered activation per document. The provider owns authentication and its DOM.
 (() => {
   const host = document.querySelector('[data-sidera-giscus]');
   if (!host || host.dataset.initialized) return;
   host.dataset.initialized = 'true';
   const origin = 'https://giscus.app';
-  const button = host.querySelector('button');
   const status = host.querySelector('[role="status"]');
   const container = host.querySelector('.giscus');
-  let frame, timer, started = false, failed = false, lastTheme;
+  let frame, timer, visibility, started = false, failed = false, lastTheme;
   const theme = () => document.documentElement.dataset.colorScheme === 'light' ? 'light' : 'dark';
-  const state = (name, text) => { host.dataset.state = name; status.textContent = text; };
+  const state = (name, text = '') => {
+    host.dataset.state = name; status.textContent = text;
+    status.classList.toggle('visually-hidden', name === 'loading');
+    container.setAttribute('aria-busy', String(name === 'loading'));
+  };
   const unavailable = () => { failed = true; clearTimeout(timer); state('unavailable', host.dataset.unavailable); };
   const updateTheme = () => {
     if (!frame || lastTheme === theme()) return;
@@ -23,7 +26,7 @@
     // Never trust an unrelated frame supplied by an override/extension.
     if (new URL(candidate.src, location.href).origin !== origin) return;
     frame = candidate;
-    frame.title = document.getElementById('comments-heading').textContent;
+    frame.title = host.closest('.article-comments').getAttribute('aria-label');
     frame.referrerPolicy = 'no-referrer';
     frame.addEventListener('load', () => { lastTheme = undefined; updateTheme(); });
     updateTheme();
@@ -34,19 +37,18 @@
     if (!data || typeof data !== 'object') return;
     if (typeof data.error === 'string') {
       if (data.error.includes('Discussion not found')) {
-        clearTimeout(timer); failed = false; state('empty', host.dataset.empty);
+        clearTimeout(timer); failed = false; state('empty');
       } else unavailable();
     } else if (Number.isFinite(data.resizeHeight) && data.resizeHeight > 0) {
       // This proves widget communication, NOT a successful GitHub discussion fetch.
       clearTimeout(timer);
-      if (!failed && host.dataset.state !== 'empty') state('opened', host.dataset.opened);
+      if (!failed && host.dataset.state !== 'empty') state('opened');
     }
   };
-  button.hidden = false;
-  state('idle', '');
-  button.addEventListener('click', () => {
+  state('idle');
+  const load = () => {
     if (started) return;
-    started = true; button.hidden = true;
+    started = true; visibility?.disconnect();
     state('loading', host.dataset.loading);
     inserted.observe(container, {childList: true});
     palette.observe(document.documentElement, {attributes: true, attributeFilter: ['data-color-scheme']});
@@ -62,10 +64,16 @@
     Object.assign(script.dataset, {mapping: 'specific', theme: theme(), reactionsEnabled: host.dataset.reactions, emitMetadata: '0'});
     script.addEventListener('error', unavailable, {once: true});
     host.append(script);
-  });
+  };
+  if ('IntersectionObserver' in window) {
+    visibility = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) load();
+    });
+    visibility.observe(host.closest('.article-comments'));
+  } else load(); // Small progressive fallback: no separate manual/consent framework.
   // BFCache retains this bounded instance; ordinary navigation discards the document.
   addEventListener('pagehide', event => {
     if (event.persisted) return;
-    clearTimeout(timer); inserted.disconnect(); palette.disconnect(); removeEventListener('message', onMessage);
+    clearTimeout(timer); visibility?.disconnect(); inserted.disconnect(); palette.disconnect(); removeEventListener('message', onMessage);
   });
 })();

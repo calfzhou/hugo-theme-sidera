@@ -11,7 +11,8 @@ params:
   comments: true
 ```
 
-`comments` is a boolean using normal Page/native cascade → applicable preset →
+The showcase sets site `params.comments=true` for all eligible pages; a consuming
+site still chooses its own policy. `comments` is a boolean using normal Page/native cascade → applicable preset →
 site/language → minimal `false` precedence. `false` is a real opt-out. A section's
 ordinary params do not affect descendants: use `cascade.params.comments`, or a
 preset's `defaults.cascade.params`. Site `params.comments=true` opts in eligible
@@ -23,7 +24,16 @@ Home/recursive lists, terms, archives, generated indexes and later child/list
 pagers do not show comments. No comment footer component/shortcode exists: repeated
 footer instances cannot duplicate the widget. Order stays body → article footer →
 reading navigation → docs children (where present) → comments → `article_end_text`.
-The last authored text remains last; disabling the footer does not disable comments.
+Optional authored end text remains last; the showcase no longer adds its old contact
+sentence. Disabling the footer does not disable comments.
+
+The TOC footer adds **Join the discussion / 参与讨论** beneath Back to top, linking
+natively to `#sidera-comments` only when that output actually contains the comment
+slot. It also works on an eligible page without body headings (no empty heading
+list is invented), repeated TOCs, icons=false, no-JS and the existing mobile drawer.
+Later pagers, disabled and generated views have no dead comment link. The generic
+slot owns the reserved `sidera-comments` ID and focusable, accessibly labeled anchor;
+there is no duplicate visible Comments heading. Provider partials render inside it. No provider-specific TOC condition or cached render flag is needed.
 
 ## Site-owned configuration and prerequisites
 
@@ -107,33 +117,36 @@ those hashes or infer historical compatibility.
 
 ## Loading, privacy and honest states
 
-- Explicit per-document **Load comments** activation, not automatic viewport
-  fetching, persistent consent storage, preconnect, or a consent framework.
-  Until clicked, configured pages load only the small local controller. Disabled
-  and unconfigured pages load neither controller nor Giscus.
-- After activation, the official `https://giscus.app/client.js` owns the widget,
-  default stylesheet, GitHub authentication/session storage and provider requests.
-  Sidera does not read, log, transmit or implement auth tokens. The client is a live
-  external dependency, not vendored/pinned or certified by local fixture tests.
-- Giscus/GitHub receive network information and the embedding page URL. The official
-  client sends its `origin` parameter including **query parameters** (though they
-  never change the fixed discussion term). Do not put secrets in URLs; clear a
-  sensitive query before loading. The inline notice discloses this connection.
-- The document retains `strict-origin`; the injected script and fallback GitHub
-  link use no-referrer. The discovered iframe is given no-referrer for subsequent
-  navigation, but its first request is initiated by the provider client before
-  observation and follows the document policy. This does **not** suppress the
-  client's explicit URL parameter. No broad cross-origin CSS or DOM access.
-- No JS/local-controller failure: native GitHub link and localized explanation,
-  hidden inert load button. Unconfigured: localized explanation only. Pending:
-  bounded 15-second connection state. Script failure, provider error or deadline:
-  honest unavailable/unconfirmed message with GitHub/page-reload recovery.
-- Script insertion/load is **not successful provider loading**. An origin- and
-  source-checked widget resize only says Giscus is responding, not that GitHub
-  fetched a discussion. The frame reports its own availability. Verified provider
-  `Discussion not found` means an empty thread, not a test-created discussion.
-  Errors are not erased by later resize messages. No endless spinner or automatic
-  retries; reload is the deliberate retry, preventing duplicate upstream listeners.
+- On an enabled/configured page, the local controller waits until the **comment
+  section enters the viewport**, then loads Giscus once. Scrolling or the native
+  TOC link both work; a page opened at the comment fragment loads automatically.
+  Without IntersectionObserver the fallback loads immediately. There is no manual
+  load button, per-visitor consent store, preconnect or separate loading setting.
+- Disabled/unconfigured pages make **no Giscus requests**. Normal idle/loading/
+  responding/empty states add no visible descriptive paragraphs. Loading is a short
+  assistive status; no-JS/local-script failure, unavailable and unconfigured states
+  retain concise, honest messages. The separate “Browse discussions on GitHub” link
+  is removed; the third-party iframe's own links and controls remain provider-owned.
+- The official `https://giscus.app/client.js` owns its iframe, default stylesheet,
+  GitHub auth/session storage and provider requests. Sidera does not read, log or
+  implement auth tokens. This is a live external dependency, not vendored/pinned.
+- **Automatic loading contacts Giscus/GitHub** and sends network information and the
+  embedding page URL. The official client's origin parameter includes query
+  parameters, although they never change the fixed discussion term. Do not put
+  secrets in URLs. This provider policy is documented here rather than repeated
+  as a paragraph above every widget; site owners choose whether to enable comments.
+- HTTP policy is unchanged: document strict-origin, injected script no-referrer,
+  discovered iframe no-referrer for subsequent navigation. The first iframe request
+  is initiated by the provider before observation and follows document policy;
+  this does not hide its explicit URL parameter. No cross-origin CSS/DOM injection.
+- The connection deadline starts **on viewport activation**, not while the section
+  is offscreen. Script failure, provider error or 15-second timeout yields a visible
+  unavailable message with page-reload recovery. No endless spinner or auto retries.
+- Script insertion/load is not proof of provider success. A source/origin-checked
+  resize only marks responding internally; an explicit Discussion-not-found message
+  marks empty. Both stay visually quiet, letting the widget speak for itself. An
+  error is not erased by later resize events. No thread is created without a reader
+  submitting a comment/reaction; tests must not do that.
 
 Both `en` and `zh-CN` provider values are verified. Sidera selects zh-CN for a Chinese
 native locale, otherwise en; theme chrome uses native Hugo EN/ZH translations.
@@ -141,7 +154,7 @@ Provider language changes require navigation/reload. `light` / `dark` match Side
 resolved palette, including live OS changes in Auto. The documented `setConfig`
 message updates the existing iframe instead of recreating it. Messages handled by
 Sidera check **both** exact origin and that iframe's contentWindow; upstream's own
-client listeners remain provider-owned. Repeated local initialization/clicks are
+client listeners remain provider-owned. Repeated local initialization/viewport entries are
 bounded to one activation per document. Standard navigation discards the instance;
 BFCache preserves it. Arbitrary SPA/hot-swapped DOM is not a supported new router.
 
@@ -153,7 +166,7 @@ one cold restart for template lookup. No cache deletion or user-server manipulat
 ## The small native extension seam
 
 `comments/render.html` receives `{Page, Owner, Settings}`, performs placement
-eligibility and dispatches to `comments/providers/<comment_provider>.html` with
+eligibility, owns the accessible anchor wrapper and dispatches to `comments/providers/<comment_provider>.html` with
 `Config` added (`Provider`, `Giscus`). The name is a validated lowercase slug and
 the partial must exist; it is **not an arbitrary path or executable config value**.
 Override either partial in the consuming site's `layouts/_partials/` normally.
