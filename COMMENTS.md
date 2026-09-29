@@ -138,7 +138,8 @@ those hashes or infer historical compatibility.
 - HTTP policy is unchanged: document strict-origin, injected script no-referrer,
   discovered iframe no-referrer for subsequent navigation. The first iframe request
   is initiated by the provider before observation and follows document policy;
-  this does not hide its explicit URL parameter. No cross-origin CSS/DOM injection.
+  this does not hide its explicit URL parameter. Styling uses the supported theme
+  API below, never cross-origin DOM access.
 - The connection deadline starts **on viewport activation**, not while the section
   is offscreen. Script failure, provider error or 15-second timeout yields a visible
   unavailable message with page-reload recovery. No endless spinner or auto retries.
@@ -150,8 +151,8 @@ those hashes or infer historical compatibility.
 
 Both `en` and `zh-CN` provider values are verified. Sidera selects zh-CN for a Chinese
 native locale, otherwise en; theme chrome uses native Hugo EN/ZH translations.
-Provider language changes require navigation/reload. `light` / `dark` match Sidera's
-resolved palette, including live OS changes in Auto. The documented `setConfig`
+Provider language changes require navigation/reload. The two fixed theme styles below
+match Sidera's resolved light/dark palette, including live OS changes in Auto. The documented `setConfig`
 message updates the existing iframe instead of recreating it. Messages handled by
 Sidera check **both** exact origin and that iframe's contentWindow; upstream's own
 client listeners remain provider-owned. Repeated local initialization/viewport entries are
@@ -162,6 +163,43 @@ If a CSP is supplied by the consuming site, it must separately allow the provide
 script/frame/style/auth resources. Sidera does not weaken CSP or bypass blockers.
 A native Hugo preview open before the new partial/controller was added may require
 one cold restart for template lookup. No cache deletion or user-server manipulation.
+
+## Simple Sidera styling
+
+The fixed `assets/css/giscus.css` asset matches **Sidera's baseline UI font stack and
+light/dark colors**: normal/muted text, page/input/panel backgrounds, borders, links
+and button accents. Giscus retains its own layout, sizing, controls, Markdown/code
+syntax and semantic error/success colors. No selector-heavy redesign, hosted fonts,
+font downloads, custom-theme settings or runtime CSS-token synchronization.
+
+Hugo renders/minifies the same small asset twice, with the literal `light` and `dark`
+inputs. `comments/themes.html` returns two fixed CSS **data URLs**, supplied through
+Giscus's supported `theme` / `setConfig` API. Each stylesheet imports the matching
+built-in `https://giscus.app/themes/light.css` or `dark.css`, then overrides only the
+font and palette tokens. The imported base keeps all provider defaults and controls
+intact; it is served by Giscus, not copied into Sidera. Giscus's current custom-theme
+URL resolver/stylesheet loader and read-only live rendering were verified for this
+mechanism. No iframe DOM access, inline script, user-authored URL or new backend.
+
+This avoids separate site CSS hosting/CORS setup, including in normal local previews.
+Each encoded style is under 2 KiB; only configured widgets carry it. No visitor/page
+content or credentials are included. The same iframe adopts palette changes. The
+provider loads its ordinary base CSS on activation, not before the section is visible.
+
+The font stack uses locally installed fonts and ordinary system fallbacks, like the
+site. This matches the current Sidera baseline, **not arbitrary future site CSS
+customizations automatically**. A trusted consuming site can override the native asset
+or provider partial later. Keep larger customization/hosted-font needs separate.
+Provider CSS/CSP changes can affect custom themes; no all-browser/CSP guarantee or
+permission relaxation is implied. A preview open before the new asset/partial was
+added may need one cold restart; the owned preview verified same-cache recovery,
+without clearing user caches.
+
+Provider references inspected for styling:
+[creating themes](https://github.com/giscus/giscus/blob/main/CONTRIBUTING.md#creating-new-themes),
+[custom theme variables](https://github.com/giscus/giscus/blob/main/styles/themes/custom_example.css),
+[URL resolution](https://github.com/giscus/giscus/blob/main/lib/utils.ts),
+[stylesheet loading](https://github.com/giscus/giscus/blob/main/lib/hooks.ts).
 
 ## The small native extension seam
 

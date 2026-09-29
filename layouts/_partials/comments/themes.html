@@ -1,0 +1,8 @@
+{{- /* Fixed CSS data URLs use Giscus's custom-theme API without a hosted CSS/CORS
+      service. Only trusted native theme/site asset overrides can author this CSS. */ -}}
+{{- $themes := dict -}}
+{{- range slice "light" "dark" -}}
+  {{- $css := resources.Get "css/giscus.css" | resources.ExecuteAsTemplate (printf "css/giscus-%s.css" .) . | minify -}}
+  {{- $themes = merge $themes (dict . (printf "data:text/css;base64,%s" ($css.Content | base64Encode))) -}}
+{{- end -}}
+{{- return $themes -}}

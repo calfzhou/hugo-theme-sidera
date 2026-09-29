@@ -7,7 +7,7 @@
   const status = host.querySelector('[role="status"]');
   const container = host.querySelector('.giscus');
   let frame, timer, visibility, started = false, failed = false, lastTheme;
-  const theme = () => document.documentElement.dataset.colorScheme === 'light' ? 'light' : 'dark';
+  const theme = () => document.documentElement.dataset.colorScheme === 'light' ? host.dataset.themeLight : host.dataset.themeDark;
   const state = (name, text = '') => {
     host.dataset.state = name; status.textContent = text;
     status.classList.toggle('visually-hidden', name === 'loading');

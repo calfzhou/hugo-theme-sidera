@@ -1,0 +1,50 @@
+/* Giscus owns layout, controls, syntax and semantic status colors. Override only
+   Sidera's baseline font/palette. Fixed light/dark input, not executable config. */
+@import url("https://giscus.app/themes/{{ . }}.css");
+body {
+  font-family: "LXGW WenKai", "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+}
+main {
+  color-scheme: {{ . }};
+  {{ if eq . "light" }}
+  --color-fg-default: #17191b;
+  --color-fg-muted: #000000b3;
+  --color-fg-subtle: #00000080;
+  --color-canvas-default: hsl(210 20% 98%);
+  --color-canvas-inset: hsl(210 20% 98%);
+  --color-canvas-overlay: #fff;
+  --color-canvas-subtle: hsl(210 50% 12% / .04);
+  --color-border-default: hsl(210 50% 12% / .12);
+  --color-border-muted: hsl(210 50% 12% / .12);
+  --color-accent-fg: #087cb9;
+  --color-accent-emphasis: #007f9e;
+  --color-accent-subtle: #00697e12;
+  --color-btn-primary-text: #fff;
+  {{ else }}
+  --color-fg-default: #fff;
+  --color-fg-muted: #ffffffb3;
+  --color-fg-subtle: #ffffff80;
+  --color-canvas-default: hsl(210 8% 12%);
+  --color-canvas-inset: hsl(210 8% 12%);
+  --color-canvas-overlay: hsl(210 10% 24%);
+  --color-canvas-subtle: hsl(210 24% 72% / .08);
+  --color-border-default: hsl(210 24% 72% / .16);
+  --color-border-muted: hsl(210 24% 72% / .16);
+  --color-accent-fg: #38a8ff;
+  --color-accent-emphasis: #1bcdfc;
+  --color-accent-subtle: #67d9ef18;
+  --color-btn-primary-text: #17191b;
+  {{ end }}
+  --color-btn-text: var(--color-fg-default);
+  --color-btn-bg: var(--color-canvas-subtle);
+  --color-btn-border: var(--color-border-default);
+  --color-btn-hover-bg: var(--color-accent-subtle);
+  --color-btn-hover-border: var(--color-accent-emphasis);
+  --color-btn-primary-bg: var(--color-accent-emphasis);
+  --color-btn-primary-hover-bg: var(--color-accent-fg);
+  --color-btn-primary-selected-bg: var(--color-accent-fg);
+  --color-btn-primary-border: transparent;
+  --color-btn-primary-hover-border: transparent;
+  --color-btn-primary-disabled-bg: var(--color-canvas-subtle);
+  --color-btn-primary-disabled-text: var(--color-fg-muted);
+}

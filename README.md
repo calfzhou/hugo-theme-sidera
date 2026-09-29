@@ -275,3 +275,7 @@ visible (immediate fallback without IntersectionObserver). The TOC adds a native
 No descriptive normal-state copy/manual button/separate GitHub link; concise failure
 and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
 while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.
+
+Giscus now uses a small fixed Sidera font/palette stylesheet through the provider
+custom-theme API. No extra settings or CSS hosting/CORS setup; provider layout and
+controls remain intact. See COMMENTS.md for the baseline scope and preview restart.

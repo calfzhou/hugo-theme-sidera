@@ -10,7 +10,8 @@
     {{- $lang := "en" -}}{{- if hasPrefix (lower .Page.Language.Locale) "zh" -}}{{- $lang = "zh-CN" -}}{{- end -}}
     {{- $strict := false -}}{{- if isset $g "strict" -}}{{- $strict = $g.strict -}}{{- end -}}
     {{- $reactions := true -}}{{- if isset $g "reactions" -}}{{- $reactions = $g.reactions -}}{{- end -}}
-  <div data-sidera-giscus data-backlink="{{ .Page.Permalink }}" data-repo="{{ $g.repo }}" data-repo-id="{{ $g.repo_id }}" data-category="{{ $g.category }}" data-category-id="{{ $g.category_id }}" data-term="{{ $term }}" data-lang="{{ $lang }}" data-strict="{{ cond $strict "1" "0" }}" data-reactions="{{ cond $reactions "1" "0" }}" data-input-position="{{ $g.input_position | default "top" }}" data-loading="{{ T "comments_loading" }}" data-unavailable="{{ T "comments_unavailable" }}">
+  {{- $themes := partialCached "comments/themes.html" . "giscus-themes" -}}
+  <div data-theme-light="{{ $themes.light }}" data-theme-dark="{{ $themes.dark }}" data-sidera-giscus data-backlink="{{ .Page.Permalink }}" data-repo="{{ $g.repo }}" data-repo-id="{{ $g.repo_id }}" data-category="{{ $g.category }}" data-category-id="{{ $g.category_id }}" data-term="{{ $term }}" data-lang="{{ $lang }}" data-strict="{{ cond $strict "1" "0" }}" data-reactions="{{ cond $reactions "1" "0" }}" data-input-position="{{ $g.input_position | default "top" }}" data-loading="{{ T "comments_loading" }}" data-unavailable="{{ T "comments_unavailable" }}">
     <p class="comments-status" role="status">{{ T "comments_nojs" }}</p>
     <div class="giscus" id="comments-thread"></div>
   </div>
