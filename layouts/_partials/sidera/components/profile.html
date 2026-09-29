@@ -5,7 +5,7 @@
       <section class="profile">
         {{ with .image }}<img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="" width="64" height="64">{{ end }}
         {{ with .title }}<h2 class="nav-heading">{{ . }}</h2>{{ end }}
-        {{ with .text }}<div class="authored-text">{{ $page.RenderString (dict "display" "block") . }}</div>{{ end }}
+        {{ with .text }}<div class="authored-text">{{ partial "config-markdown/render.html" (merge $ctx (dict "Text" .)) }}</div>{{ end }}
         {{ $menu }}
       </section>
     {{- end -}}

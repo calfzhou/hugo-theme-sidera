@@ -1,1 +1,1 @@
-{{- partial "sidera/text-block.html" (dict "Page" .Page "Title" .Config.title "Text" .Settings.text) -}}
+{{- partial "sidera/text-block.html" (merge . (dict "Title" .Config.title "Text" .Settings.text)) -}}

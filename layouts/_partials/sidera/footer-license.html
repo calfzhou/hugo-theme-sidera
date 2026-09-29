@@ -1,8 +1,9 @@
 {{- $text := .Settings.license -}}
+{{- $authored := eq (printf "%T" $text) "string" -}}
 {{- if eq (printf "%T" $text) "bool" -}}{{- if $text -}}{{- $text = T "license_default" -}}{{- else -}}{{- $text = "" -}}{{- end -}}{{- end -}}
 {{- if strings.TrimSpace $text -}}
 <section class="footer-section" aria-labelledby="{{ .Instance }}-heading">
   <h2 id="{{ .Instance }}-heading" class="footer-heading">{{ T "license" }}</h2>
-  <div class="authored-text">{{ .Page.RenderString (dict "display" "block") $text }}</div>
+  <div class="authored-text">{{ if $authored }}{{ partial "config-markdown/render.html" (merge . (dict "Text" $text)) }}{{ else }}{{ .Page.RenderString (dict "display" "block") $text }}{{ end }}</div>
 </section>
 {{- end -}}

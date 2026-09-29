@@ -11,7 +11,7 @@
   {{- if and $s.show_updated (not $page.Lastmod.IsZero) -}}<p class="footer-meta">{{ partial "date.html" (dict "date" $page.Lastmod "kind" "updated") }}</p>{{- end -}}
 {{- else if eq .Name "text" -}}
   {{- $text := $s.footer_text -}}{{- if $article -}}{{- $text = $s.article_text -}}{{- end -}}
-  {{- partial "sidera/text-block.html" (dict "Page" $page "Title" .Config.title "Text" $text) -}}
+  {{- partial "sidera/text-block.html" (merge . (dict "Title" .Config.title "Text" $text)) -}}
 {{- else if eq .Name "links" -}}
   {{- $menu := $s.footer_menu -}}{{- if $article -}}{{- $menu = $s.article_links_menu -}}{{- end -}}
   {{- with $menu -}}{{- partial "sidera/menu.html" (merge $ (dict "Name" .)) -}}{{- end -}}

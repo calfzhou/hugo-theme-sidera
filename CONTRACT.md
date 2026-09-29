@@ -328,3 +328,11 @@ visible (immediate fallback without IntersectionObserver). The TOC adds a native
 No descriptive normal-state copy/manual button/separate GitHub link; concise failure
 and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
 while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.
+
+## Configured Markdown (P3-F2)
+
+[CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) defines the shared build-time interpolation
+path for authored text/profile/footer/license/reference/final-text settings, minimal
+site/page title values and the native site-partial extension. Field resolution and
+per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
+shortcode labels, translation strings or every string setting; no full token catalog.

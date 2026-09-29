@@ -1,0 +1,74 @@
+{{- /* Single lexical pass: replacements are data, never scanned again. Code and TeX
+     spans are conservatively opaque; this is not a Markdown or expression engine. */ -}}
+{{- $text := .Text -}}
+{{- if findRE `\{(?:url:)?[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+\}` $text -}}
+  {{- $values := dict "site.title" .Page.Site.Title "page.title" .Page.Title -}}
+  {{- $extra := partial "config-markdown/values.html" . -}}
+  {{- if not (reflect.IsMap $extra) -}}
+    {{- errorf "Sidera configured Markdown: values partial must return a string map" -}}
+  {{- else -}}
+    {{- range $key, $value := $extra -}}
+      {{- if or (not (findRE `^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$` $key)) (ne (printf "%T" $value) "string") -}}
+        {{- errorf "Sidera configured Markdown: extension keys must be dotted lowercase names and values must be strings" -}}
+      {{- else if isset $values $key -}}
+        {{- errorf "Sidera configured Markdown: extension must not replace built-in %s" $key -}}
+      {{- else -}}{{- $values = merge $values (dict $key $value) -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $text = "" -}}{{- $fence := "" -}}{{- $code := "" -}}{{- $math := "" -}}
+  {{- /* Opaque fenced/indented lines, backtick spans, native $/$$ math and escaped
+       character pairs. An unmatched opener conservatively protects the remainder.
+       No marker strings or regex replacement values can collide with user data. */ -}}
+  {{- range findRE "(?m)^ {0,3}(?:`{3,}|~{3,})[^\n]*(?:\n|$)|^(?: {4}|\t)[^\n]*(?:\n|$)|`+|\\\\[^\n]|\\$\\$?|\\{(?:url:)?[a-z][a-z0-9_]*(?:\\.[a-z][a-z0-9_]*)+\\}|[^`\\\\${\n]+|(?s:.)" .Text -}}
+    {{- $part := . -}}
+    {{- $marker := findRE "^ {0,3}(?:`{3,}|~{3,})" . -}}
+    {{- if $fence -}}
+      {{- if and $marker (findRE (printf "^ {0,3}%s{%d,}[ \\t]*(?:\\n|$)$" (substr $fence 0 1) (len $fence)) .) -}}{{- $fence = "" -}}{{- end -}}
+    {{- else if $code -}}
+      {{- if eq . $code -}}{{- $code = "" -}}{{- end -}}
+    {{- else if $math -}}
+      {{- if eq . $math -}}{{- $math = "" -}}{{- end -}}
+    {{- else if $marker -}}
+      {{- $fence = strings.TrimSpace (index $marker 0) -}}
+    {{- else if hasPrefix . "`" -}}
+      {{- $code = . -}}
+    {{- else if in (slice "$" "$$") . -}}
+      {{- $math = . -}}
+    {{- else if hasPrefix . "{" -}}
+      {{- $key := strings.TrimSuffix "}" (strings.TrimPrefix "{" .) -}}
+      {{- $url := hasPrefix $key "url:" -}}{{- $key = strings.TrimPrefix "url:" $key -}}
+      {{- if and $url (not (index $values $key)) -}}
+        {{- errorf "Sidera configured Markdown: URL token %s requires a nonempty value" $key -}}
+      {{- end -}}
+      {{- if isset $values $key -}}
+        {{- $value := index $values $key -}}
+        {{- /* Empty and absent values both keep the token visible; no invented fallback. */ -}}
+        {{- if ne $value "" -}}
+          {{- if $url -}}
+            {{- $value = partial "sidera/url.html" (dict "url" $value "source" (printf "configured Markdown token %s" $key)) -}}
+            {{- if findRE `[\x7f<>"{}]` $value -}}{{- errorf "Sidera configured Markdown: invalid URL token %s" $key -}}{{- end -}}
+            {{- /* URL punctuation must not close a Markdown destination or inject a title. */ -}}
+            {{- $part = $value -}}
+            {{- range $char, $encoded := dict "(" "%28" ")" "%29" "[" "%5B" "]" "%5D" "`" "%60" -}}
+              {{- $part = replace $part $char $encoded -}}
+            {{- end -}}
+          {{- else -}}
+            {{- /* Encode ASCII punctuation BEFORE Markdown. HTML escaping alone leaves
+                 ](url), emphasis, code and entity attacks active. Rune iteration avoids
+                 replacement-string ($1/backslash) interpretation and keeps Unicode. */ -}}
+            {{- $part = "" -}}
+            {{- range split $value "" -}}
+              {{- $char := . -}}
+              {{- if findRE `[[:punct:]\x00-\x20\x7f]` . -}}
+                {{- $char = printf "&#%d;" (index (string .) 0) -}}
+              {{- end -}}
+              {{- $part = printf "%s%s" $part $char -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $text = printf "%s%s" $text $part -}}
+  {{- end -}}
+{{- end -}}
+{{- return $text -}}

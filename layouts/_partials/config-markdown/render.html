@@ -1,0 +1,4 @@
+{{- /* Only configuration-authored Markdown enters here. Preserve native rendering,
+     display mode, Page context, hooks and conditional assets; never cache by text alone. */ -}}
+{{- $text := partial "config-markdown/interpolate.html" . -}}
+{{- return (.Page.RenderString (dict "display" (.Display | default "block")) $text) -}}

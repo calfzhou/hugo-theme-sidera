@@ -3,6 +3,6 @@
 {{- partial "comments/render.html" . -}}
 {{- if strings.TrimSpace .Settings.article_end_text -}}
 <div class="article-end">
-  {{ partial "sidera/text-block.html" (dict "Page" .Page "Text" .Settings.article_end_text) }}
+  {{ partial "sidera/text-block.html" (merge . (dict "Text" .Settings.article_end_text)) }}
 </div>
 {{- end -}}
