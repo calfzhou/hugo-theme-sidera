@@ -80,7 +80,8 @@ summary { cursor: pointer; }
 .brand { display: block; font-size: 27px; font-weight: 750; line-height: 1.15; color: var(--text); text-decoration: none; }
 /* Stellar logo.styl: one circular avatar target and one title/subtitle box. */
 .identity-avatar { display: block; position: relative; width: 48px; height: 48px; flex: none; border-radius: 50%; overflow: hidden; }
-.identity-avatar::before { content: ""; position: absolute; inset: 0; opacity: 0; background: conic-gradient(from 0deg,#04f3ff,#08ffc6,#ddf730,#ffbd19,#ff1fe0,#c418ff,#3b5bff,#04f3ff); transition: opacity .2s ease-out; }
+/* Cut out the center rather than relying on the image to cover the gradient. */
+.identity-avatar::before { content: ""; position: absolute; inset: 0; opacity: 0; background: conic-gradient(from 0deg,#04f3ff,#08ffc6,#ddf730,#ffbd19,#ff1fe0,#c418ff,#3b5bff,#04f3ff); mask-image: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 0); transition: opacity .2s ease-out; }
 .identity-avatar:is(:hover,:focus-visible)::before { opacity: 1; animation: identity-spin 4s linear infinite; }
 .identity-image { display: block; position: relative; width: 44px; height: 44px; margin: 2px; object-fit: cover; border-radius: 50%; }
 .identity-text { display: block; min-width: 0; flex: 1; color: inherit; }

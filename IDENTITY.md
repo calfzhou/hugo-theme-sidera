@@ -21,6 +21,15 @@ outline or icon-library shape was used. No license grant or trademark clearance 
 asserted. The earlier `images/sidera-mark.svg` remains a historical test asset;
 normal showcase identity/covers no longer use it. Nothing is deleted automatically.
 
+## Transparent avatars and the rainbow ring
+
+The hover/keyboard-focus rainbow is masked to the outer **2px ring** of the 48px
+avatar target. Its center is genuinely transparent: SVG/PNG alpha reveals the
+actual surrounding surface, not the rainbow or a palette-colored cover disk.
+The 44px image, approved artwork, rotation, native home link and reduced-motion/
+no-JS behavior are unchanged. This works for site-supplied transparent or opaque
+images without image-specific settings.
+
 ## Native site ownership
 
 The theme keeps **no default identity image and no default favicon**. Site/language

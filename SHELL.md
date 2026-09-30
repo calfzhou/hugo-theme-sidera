@@ -77,7 +77,9 @@ Both footer arrays use the same presence-based resolver; see the footer contract
 The image is a circular home link (48px target, 44px image with a 2px ring inset).
 Title and subtitle share a second home link covering their entire text box, not just glyphs.
 Neither target underlines. Hover/focus on the image reveals Stellar's rotating rainbow ring
-(4-second revolution). Hover/focus anywhere in the text box transitions the subtitle upward:
+(4-second revolution). The gradient itself has a transparent center and is confined
+to the outer 2px ring, even for transparent site images; no solid background is
+added to the artwork. Hover/focus anywhere in the text box transitions the subtitle upward:
 
 ```toml
 [params.identity]
