@@ -502,3 +502,12 @@ other = "评论暂不可用，请刷新页面重试。"
 
 [comments_join]
 other = "参与讨论"
+
+[ai_label_manual]
+other = "本文完全由人类完成"
+[ai_label_reviewed]
+other = "已 AI 审核"
+[ai_label_polished]
+other = "已 AI 润色"
+[ai_label_generated]
+other = "由 AI 生成"

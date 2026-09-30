@@ -40,6 +40,9 @@
   {{- if not .section -}}{{- errorf "Sidera navigation_mode belongs on a collection root: %s" $source -}}{{- end -}}
 {{- end -}}
 {{- if and (isset $params "series_order") (ne $params.series_order "publication") -}}{{- errorf "Sidera series_order must be publication; remove weight-based ordering: %s" $source -}}{{- end -}}
+{{- if isset $params "ai_label" -}}
+  {{- if or (ne (printf "%T" $params.ai_label) "string") (not (in (slice "" "manual" "reviewed" "polished" "generated") $params.ai_label)) -}}{{- errorf "Sidera ai_label must be empty, manual, reviewed, polished or generated: %s" $source -}}{{- end -}}
+{{- end -}}
 {{- if isset $params "primary_date" -}}
   {{- if or (ne (printf "%T" $params.primary_date) "string") (not (in (slice "published" "updated") $params.primary_date)) -}}{{- errorf "Sidera primary_date must be published or updated: %s" $source -}}{{- end -}}
 {{- end -}}
@@ -59,6 +62,9 @@
 {{- $cascades := slice -}}{{- with $fm.cascade -}}{{- $cascades = slice . -}}{{- if reflect.IsSlice . -}}{{- $cascades = . -}}{{- end -}}{{- end -}}
 {{- range $cascades -}}
   {{- $cascadeParams := .params | default dict -}}
+  {{- if isset $cascadeParams "ai_label" -}}
+    {{- if or (ne (printf "%T" $cascadeParams.ai_label) "string") (not (in (slice "" "manual" "reviewed" "polished" "generated") $cascadeParams.ai_label)) -}}{{- errorf "Sidera ai_label must be empty, manual, reviewed, polished or generated: %s" $source -}}{{- end -}}
+  {{- end -}}
   {{- range $key := slice "giscus" "comment_provider" -}}{{- if isset $cascadeParams $key -}}{{- errorf "Sidera %s belongs in site/language params: %s" $key $source -}}{{- end -}}{{- end -}}
   {{- range $key := slice "comments" "search" "search_index" "link_graph" -}}
     {{- if and (isset $cascadeParams $key) (ne (printf "%T" (index $cascadeParams $key)) "bool") -}}{{- errorf "Sidera %s must be boolean: %s" $key $source -}}{{- end -}}

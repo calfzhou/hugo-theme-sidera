@@ -2,9 +2,11 @@
   {{ $breadcrumbs := .breadcrumbs }}
   {{ $showBody := .body }}{{ $deferEnd := .deferEnd }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
   {{ with .page }}
-  <article data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
+  <article{{ if eq .Type "story" }} data-story{{ end }} data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
+    {{ if $settings.ai_label }}<div class="article-header-top">{{ end }}
     {{ if $breadcrumbs }}{{ $breadcrumbs }}{{ else }}{{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}{{ end }}
+    {{ with $settings.ai_label }}<span class="ai-label" data-ai-label="{{ . }}">{{ T (printf "ai_label_%s" .) }}</span></div>{{ end }}
     <h1>{{ .Title }}</h1>
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     {{ partial "sidera/article-dates.html" (dict "Page" . "Settings" $settings) }}

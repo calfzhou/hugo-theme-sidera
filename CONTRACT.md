@@ -117,6 +117,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | auto_caption | Boolean, true. Direct standalone Markdown image title then cleaned alt becomes an escaped caption; false opts out using normal page/cascade/preset/site precedence. See MARKDOWN.md. |
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
+| ai_label | Optional disclosure string: manual/reviewed/polished/generated; empty default/explicit clear. Native page/cascade/preset/site resolution; localized article-header text only, not body/index/author identity. See MARKDOWN.md. |
 | navigation_mode | Collection-root policy: list (minimal/blog/notes), siblings (docs), or sequential. Root params override root preset then site/language default; not cascaded or set on member pages. Previous/Next stay within the complete collection sequence; Parent is the actual in-scope parent in siblings/sequential only; omitted in list mode. |
 | primary_date | published (minimal/blog) or updated (notes/docs). Per-page date priority shared by cards/headers, independent of sorting; normal params/cascade/preset/site precedence. |
 | show_authors / show_updated | Native author visibility (true): compact linked names in the header; optional explicit footer authors / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
@@ -336,3 +337,10 @@ path for authored text/profile/footer/license/reference/final-text settings, min
 site/page title values and the native site-partial extension. Field resolution and
 per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
 shortcode labels, translation strings or every string setting; no full token catalog.
+
+
+Native top-level `type: story` now opts shared article bodies into Stellar-style
+story typography. Native section `cascade.type` and local overrides work; it is not
+a new preset, taxonomy or organizational kind. Other types still use normal styling.
+[MARKDOWN.md](MARKDOWN.md#story-typography-and-ai-disclosure) defines the precise
+presentation/AI-label boundary, authoring syntax and intentional empty-label behavior.

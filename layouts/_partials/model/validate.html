@@ -1,3 +1,6 @@
+{{- if isset site.Params "ai_label" -}}
+  {{- if or (ne (printf "%T" site.Params.ai_label) "string") (not (in (slice "" "manual" "reviewed" "polished" "generated") site.Params.ai_label)) -}}{{- errorf "Sidera ai_label must be empty, manual, reviewed, polished or generated in site/language params" -}}{{- end -}}
+{{- end -}}
 {{- if and (isset site.Params "comments") (ne (printf "%T" site.Params.comments) "bool") -}}{{- errorf "Sidera comments must be boolean in site/language params" -}}{{- end -}}
 {{- if and (isset site.Params "auto_caption") (ne (printf "%T" site.Params.auto_caption) "bool") -}}{{- errorf "Sidera auto_caption must be boolean in site/language params" -}}{{- end -}}
 {{- if and (isset site.Params "link_heading_checks") (ne (printf "%T" site.Params.link_heading_checks) "bool") -}}

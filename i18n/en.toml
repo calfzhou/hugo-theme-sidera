@@ -505,3 +505,12 @@ other = "Comments are unavailable. Reload the page to try again."
 
 [comments_join]
 other = "Join the discussion"
+
+[ai_label_manual]
+other = "Written entirely by a human"
+[ai_label_reviewed]
+other = "AI-reviewed"
+[ai_label_polished]
+other = "AI-polished"
+[ai_label_generated]
+other = "AI-generated"

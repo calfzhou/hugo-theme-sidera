@@ -6,6 +6,11 @@ Stellar main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.
 Pinned collection tabs also adapt navbar.styl and the bar-glass/newblur mixins in _defines/func.styl; geometry tracking follows main.js navbarPin.
 Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
+Opt-in story typography also adapts pages/article-story.styl, article-indent.styl and
+_common/title.styl. H3 decorations reuse the already-attributed Solar arrow-left/right
+geometry below as CSS masks; quotation decorations use font punctuation, not a new icon.
+AI label wording/presentation follows languages/en.yml, zh-CN.yml and bread-nav.styl,
+with fixed palette-aware readable colors and no copied icon/provider framework.
 Ordinary Markdown styles also adapt _components/md.styl, pages/article-tech.styl and
 _common/base.styl, title.styl, blockquote.styl, pre.styl and highlight.styl.
 In-article scrollbar styling also adapts scrollbar-codeblock in _defines/func.styl, with

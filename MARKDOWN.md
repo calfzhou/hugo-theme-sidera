@@ -212,3 +212,81 @@ badges, and native C2 composition. Pinned local renderers are isolated and share
 page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
 Conditional Content/Summary assets, supported input limits and honest source-only
 fallbacks are explicit. Video remains documented separately in VIDEO.md.
+
+
+## Story typography and AI disclosure
+
+Story is an **opt-in native Hugo content type**, not a preset or collection kind:
+
+```yaml
+type: story
+params:
+  ai_label: polished
+```
+
+The existing shared article renderer reads native `.Type`. Hugo derives it from the
+top-level section when not set, so a section named `story` also has this native effect.
+No second story layout,
+URL scheme, taxonomy or closed content-kind model is introduced. A section may use
+native cascade (the body-bearing section itself can inherit it too):
+
+```yaml
+cascade:
+  type: story
+  params:
+    ai_label: reviewed  # optional, explicit editorial disclosure for this branch
+```
+
+A local non-story native type, e.g. `type: tech`, overrides inherited story styling.
+Any other native type keeps ordinary styling; this is not a two-value type whitelist.
+Use native cascade targets for a narrower set of pages. Story is **not**
+`params.type`, `params.story` or `preset: story`; native type-specific site template
+lookup still works normally. Source identity, native dated permalinks, scopes,
+classification and author/series relationships remain unchanged.
+
+### Presentation boundary
+
+The shared article's title and body use Stellar's story treatment: slightly larger
+prose (+2px), generous paragraph spacing, two-em first-line indentation with justified
+ordinary paragraphs, centered headings, slashed H2, Solar arrow H3, subtle H4 halo and
+inset ordinary blockquotes. It adapts `article-story.styl`, `article-indent.styl` and
+`title.styl` to Goldmark markup and existing Sidera tokens/fonts. No new font or JS.
+
+Tech permalink marker blocks disappear visually in story headings but remain
+keyboard-focusable; focus reveals the marker. Native heading IDs and TOC links are
+unchanged. Authored heading classes retain their own decoration intent. Lists,
+code, captions, alerts and component UI do not acquire paragraph indentation; the
+story body font is inherited where appropriate, but code retains its rem-based size.
+Quote decoration uses font punctuation (not an attributed-quote component), with
+no extra accessible text. Existing image/caption/math/container behavior remains.
+
+Only shared article bodies (regular/standalone pages and body-bearing docs sections)
+receive this treatment. List cards, recursive list introductions, taxonomies, sidebars,
+footers and comments do not. Native type alone never changes a collection into a
+story-only section or changes its list/navigation policy.
+
+### AI disclosure
+
+`params.ai_label` is an optional **string**, default `''` (no label). Supported values:
+
+| Value | English | Simplified Chinese |
+|---|---|---|
+| `manual` | Written entirely by a human | 本文完全由人类完成 |
+| `reviewed` | AI-reviewed | 已 AI 审核 |
+| `polished` | AI-polished | 已 AI 润色 |
+| `generated` | AI-generated | 由 AI 生成 |
+
+The native EN/ZH catalogs supply theme wording; normal site translation overrides
+work. A small unboxed, palette-aware text label sits beside the article breadcrumbs,
+wrapping safely on narrow screens. It does not require dates or authors. Lists/cards,
+body search text and reference graphs do not gain the label. It works independently
+of story mode and with JavaScript disabled.
+
+Effective Page.Params/native cascade wins, followed by the existing three preset
+targets and site/language defaults. `ai_label: ''` explicitly clears inherited/default
+labels; `false`, arrays and unknown strings fail validation, including supported raw
+excluded-draft/cascade inputs. There is no automatic content analysis or inferred
+label for an unspecified page, nor any change to author identity or content license.
+Do not set a site/cascade default unless it is true for that intended content set.
+For P4, move Stellar's top-level `ai_label` to `params.ai_label`; native `type: story`
+can now be retained as authorized, with normal native template-lookup semantics.

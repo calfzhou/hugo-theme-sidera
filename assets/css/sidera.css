@@ -917,3 +917,42 @@ html.diagram-modal-open { overflow:hidden; }
 .article-comments p { color: var(--muted); font-size: .875rem; }
 .comments-status:empty { display: none; }
 .article-comments .giscus-frame { width: 100%; border: 0; }
+
+/* Opt-in native type=story: Stellar article-story/article-indent/title rhythm.
+   Only the shared article body/header changes; lists, code, UI and footers do not. */
+article[data-story] > .article-header h1 { text-align: center; }
+article[data-story] > .prose { font-size: calc(1rem + 2px); }
+article[data-story] > .prose > p { margin-block: 2rem; }
+article[data-story] > .prose > p:not([class]):not(:has(img)) { text-indent: 2em; text-align: justify; }
+article[data-story] > .prose > :is(figure,.content-grid,.content-diagram) { margin-block: 2.4rem; }
+article[data-story] > .prose :is(h1,h2,h3,h4,h5,h6)[id] { position: relative; display: block; text-align: center; line-height: 1.2; margin-block: 2em 1.5em; }
+article[data-story] > .prose :is(h1,h2)[id] { font-size: calc(1em + 11px); }
+article[data-story] > .prose h3[id] { font-size: calc(1em + 7px); }
+article[data-story] > .prose h4[id] { font-size: calc(1em + 4px); }
+article[data-story] > .prose h5[id] { font-size: calc(1em + 1px); }
+article[data-story] > .prose h6[id] { font-size: 1em; }
+article[data-story] > .prose .heading-text { position: relative; isolation: isolate; }
+/* Tech marker blocks disappear visually, not from keyboard access or native TOC. */
+article[data-story] > .prose a.heading-anchor { position: absolute; inset-inline-start: 0; top: .25em; opacity: 0; pointer-events: none; }
+article[data-story] > .prose a.heading-anchor:focus-visible { opacity: 1; pointer-events: auto; }
+article[data-story] > .prose h2[id]:not([class]) > .heading-text::before,
+article[data-story] > .prose h2[id]:not([class]) > .heading-text::after { content: ""; display: inline-block; width: 12px; height: 1.2em; margin-inline: .5em; vertical-align: top; background: var(--accent); transform: skewX(-20deg); }
+article[data-story] > .prose h3[id]:not([class]) > .heading-text::before,
+article[data-story] > .prose h3[id]:not([class]) > .heading-text::after { content: ""; display: inline-block; width: 1em; height: 1em; vertical-align: middle; background: color-mix(in srgb,var(--accent) 50%,transparent); }
+article[data-story] > .prose h3[id]:not([class]) > .heading-text::before { mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M17.75%2019a.75.75%200%200%201-1.32.488l-6-7a.75.75%200%200%201%200-.976l6-7A.75.75%200%200%201%2017.75%205z%22%20opacity%3D%22.5%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20fill-rule%3D%22evenodd%22%20d%3D%22M13.488%2019.57a.75.75%200%200%200%20.081-1.058L7.988%2012l5.581-6.512a.75.75%200%201%200-1.138-.976l-6%207a.75.75%200%200%200%200%20.976l6%207a.75.75%200%200%200%201.057.082%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; }
+article[data-story] > .prose h3[id]:not([class]) > .heading-text::after { mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M6.25%2019a.75.75%200%200%200%201.32.488l6-7a.75.75%200%200%200%200-.976l-6-7A.75.75%200%200%200%206.25%205z%22%20opacity%3D%22.5%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20fill-rule%3D%22evenodd%22%20d%3D%22M10.512%2019.57a.75.75%200%200%201-.081-1.058L16.012%2012l-5.581-6.512a.75.75%200%201%201%201.139-.976l6%207a.75.75%200%200%201%200%20.976l-6%207a.75.75%200%200%201-1.058.082%22%20clip-rule%3D%22evenodd%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat; }
+article[data-story] > .prose h4[id]:not([class]) > .heading-text::before { content: ""; position: absolute; z-index: -1; width: 32px; height: 32px; inset-inline-start: -16px; top: -12px; border-radius: 50%; background: color-mix(in srgb,var(--accent) 30%,transparent); filter: blur(8px); pointer-events: none; }
+article[data-story] > .prose > blockquote:not([class]) { position: relative; margin: 2rem clamp(0px,4vw,2em); padding: 1rem; border: 0; border-radius: var(--radius); background: var(--panel); font-size: 1em; text-align: center; }
+article[data-story] > .prose > blockquote:not([class])::before,
+article[data-story] > .prose > blockquote:not([class])::after { position: absolute; top: -.3em; color: color-mix(in srgb,var(--accent) 40%,transparent); font: 2.5rem/1 Georgia,serif; pointer-events: none; }
+article[data-story] > .prose > blockquote:not([class])::before { content: "“" / ""; inset-inline-start: -.15em; }
+article[data-story] > .prose > blockquote:not([class])::after { content: "”" / ""; inset-inline-end: -.15em; }
+article[data-story] > .prose > blockquote:not([class]) > p { color: var(--muted); text-indent: 0; }
+article[data-story] > .prose > :first-child { margin-top: 0; }
+article[data-story] > .prose > :last-child { margin-bottom: 0; }
+/* Plain localized disclosure, not a chip, author badge or automatic AI detector. */
+.article-header-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.article-header-top > nav { flex: 1 1 12rem; min-width: 0; }
+.ai-label { margin-inline-start: auto; font-size: 13px; line-height: 1.6; color: color-mix(in srgb,#4caf50 55%,var(--text)); }
+.ai-label[data-ai-label="manual"] { color: color-mix(in srgb,var(--link) 80%,var(--text)); }
+.ai-label[data-ai-label="generated"] { color: color-mix(in srgb,#ff9800 55%,var(--text)); }

@@ -174,3 +174,17 @@ path for authored text/profile/footer/license/reference/final-text settings, min
 site/page title values and the native site-partial extension. Field resolution and
 per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
 shortcode labels, translation strings or every string setting; no full token catalog.
+
+
+## Story and AI metadata
+
+`type: story` is a native Hugo field, set locally or through native `cascade.type`;
+it is not a params/preset default or a content organization model. Shared article
+bodies opt into the story typography described in MARKDOWN.md. Local non-story types
+opt out without changing scope, presets or URLs.
+
+`ai_label` is an inheritable custom string in all three params targets, default empty.
+Only manual/reviewed/polished/generated are supported; an explicit empty string clears
+lower fallbacks. Bundled presets do not assume an AI disclosure. Site authors can
+set page/cascade/preset/site-language values where factually appropriate. Labels stay
+localized header metadata, outside body indexes and authorship/license semantics.
