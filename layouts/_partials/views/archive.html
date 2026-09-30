@@ -18,5 +18,5 @@
     </section>
   {{ end }}
 </div>
-{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" $pager }}{{ else if not $pages }}<p class="list-meta">{{ T "no_articles" }}</p>{{ end }}
+{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .) }}{{ else if not $pages }}<p class="list-meta">{{ T "no_articles" }}</p>{{ end }}
 {{ end }}

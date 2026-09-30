@@ -9,4 +9,4 @@
     {{- with index $model.nodes $key -}}{{- partial "taxonomies/index-node.html" (dict "Node" . "Model" $model "Owner" $ctx.Owner "Settings" $ctx.Settings) -}}{{- end -}}
   {{- end -}}
 </ul>
-{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" $pager }}{{ else if not $rootPages }}<p class="list-meta">{{ T "taxonomy_count" (dict "count" 0 "number" (lang.FormatNumber 0 0)) }}</p>{{ end }}
+{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .Page) }}{{ else if not $rootPages }}<p class="list-meta">{{ T "taxonomy_count" (dict "count" 0 "number" (lang.FormatNumber 0 0)) }}</p>{{ end }}

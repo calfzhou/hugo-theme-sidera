@@ -11,7 +11,11 @@
   {{- $source := path.Clean (path.Join $base $u.Path) -}}
   {{- if hasPrefix $u.Path "/" -}}{{- $source = path.Clean (strings.TrimPrefix "/" $u.Path) -}}{{- end -}}
   {{- $bounded := not (or (eq $source "..") (hasPrefix $source "../") (strings.Contains $u.Path "\\") (findRE `[\x00-\x1f\x7f]` $u.Path)) -}}
-  {{- if $bounded -}}
+  {{- /* A directory URL is not a file resource. resources.Get "/" can yield
+       the asset root and fail later when RelPermalink publishes it as a file.
+       Preserve ordinary URL spelling, query and fragment; do not invent a Page. */ -}}
+  {{- $filePath := and (not (hasSuffix $u.Path "/")) (not (in (slice "." ".." "/") (path.Clean $u.Path))) -}}
+  {{- if and $bounded $filePath -}}
     {{- if $sourceLink -}}
       {{- /* Explicit source filenames select their actual language, never an invented
            translation. Current language wins if a source is mounted in several sites. */ -}}

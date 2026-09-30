@@ -11,6 +11,6 @@
     {{ partial "sidera/card.html" (dict "Page" . "ShowOwner" $.show_owner) }}
   {{ end }}
 </ul>
-{{ partial "lists/navigation.html" $pager }}
+{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .page) }}
 
 {{ if and .navigation (eq $pager.PageNumber 1) }}{{ partial "navigation/render.html" .page }}{{ end }}

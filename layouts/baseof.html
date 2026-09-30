@@ -38,6 +38,8 @@
   <meta name="referrer" content="strict-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="sidera:icon-attribution" content="Solar icons by 480 Design · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/480-Design/Solar-Icon-Set · adapted sizing and semantics; original paths retained from Stellar 1.44.0">
+  {{ $notices := resources.Get "licenses/sidera-third-party.txt" }}
+  <link rel="license" href="{{ $notices.RelPermalink }}">
   <meta name="color-scheme" content="light dark">
   <title>{{ .Title }} | {{ site.Title }}</title>
   {{ $colorMode := resources.Get "js/color-mode.js" | minify }}

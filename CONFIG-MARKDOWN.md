@@ -90,9 +90,10 @@ Create **one site partial** at `layouts/_partials/config-markdown/values.html`:
 
 Then use `[Back to overview]({url:showcase.home})` in any participating field.
 This is the committed Fieldbook example; its native absolute home URL follows language
-and baseURL/preview settings. Use this native absolute home value: the existing
-source/resource hook has a known bare Markdown `[Home](/)` root-directory edge,
-tracked for final defect reconciliation (not fixed by interpolation).
+and baseURL/preview settings. This remains the deployment-aware home value. Ordinary `[Home](/)` now safely
+retains its authored host-root URL; directory URLs no longer reach file-resource
+publication. Interpolated URL values use the same corrected resolver, not a special
+placeholder workaround. A literal `/` does not acquire language/baseURL prefixes.
 No component copies, theme fork, provider registration,
 plugin or configuration namespace is required. Use your own token namespace.
 

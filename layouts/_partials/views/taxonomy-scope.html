@@ -41,7 +41,7 @@
     <ul class="article-list taxonomy-index">{{ range $pager.Pages }}{{ $node := index $model.nodes .Params.sidera.tag_key }}
       {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" $node.key "slug" $node.slug) }}
       <li class="article-card"><h2><a href="{{ .RelPermalink }}">{{ $native.LinkTitle }}</a></h2><p data-term-count="{{ len $node.pages }}">{{ T "taxonomy_count" (dict "count" (len $node.pages) "number" (lang.FormatNumber 0 (len $node.pages))) }}</p></li>
-    {{ end }}</ul>{{ partial "lists/navigation.html" $pager }}
+    {{ end }}</ul>{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .) }}
   {{ else }}
   {{ $policy := partial "lists/policy.html" $owner }}{{ $sequence := false }}
   {{ if and $term (eq $taxonomy "series") }}{{ $result := partial "series/order.html" (dict "term" $term "pages" $pages) }}{{ $pages = $result.pages }}{{ $policy = merge $policy (dict "order" $result.order) }}{{ $sequence = true }}{{ end }}

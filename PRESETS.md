@@ -86,7 +86,7 @@ creates a scope. See CONTRACT.md for exact types and field-domain exceptions.
 
 | Preset | Selecting section | Descendants |
 |---|---|---|
-| blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs, menu/taxonomies/recent | Same left components, TOC right, update date hidden |
+| blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs, menu/taxonomies/recent | Same left components, TOC right, update date shown |
 | notes | Recursive list, modification order, hierarchical tags, menu/taxonomies/recent | Same left components, TOC right, update date shown |
 | docs | Children list, page-tree/taxonomies, recent sections enabled | Children mode for sections, same tree/taxonomy components, TOC, update date shown |
 

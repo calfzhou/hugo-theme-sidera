@@ -1,10 +1,12 @@
-{{- /* Accept a Pager, not a Page: no .Paginator/.Paginate here. */ -}}
+{{- /* The caller owns pagination. Page supplies resolved presentation only. */ -}}
+{{- $icons := (partialCached "sidera/settings.html" .Page .Page.Path).icons -}}
+{{- with .Pager -}}
 {{- if ne .TotalPages 1 -}}
-<nav class="pagination" aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
+<nav class="pagination"{{ if not $icons }} data-icons="false"{{ end }} aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">
   {{ if .TotalNumberOfElements }}<span class="pagination-summary{{ if gt .TotalPages 1 }} visually-hidden{{ end }}">{{ T "page_summary" (dict "current" (lang.FormatNumber 0 .PageNumber) "total" (lang.FormatNumber 0 .TotalPages)) }}</span>{{ else }}<span>{{ T "no_articles" }}</span>{{ end }}
   {{ if gt .TotalPages 1 }}
-    {{ with .Prev }}<a class="pagination-arrow pagination-previous" data-page-link="previous" rel="prev" href="{{ .URL }}" aria-label="{{ T "page_previous" }}">{{ partial "sidera/icon.html" "arrow-left" }}</a>
-    {{ else }}<span class="pagination-arrow pagination-previous" aria-disabled="true" aria-label="{{ T "page_previous" }}">{{ partial "sidera/icon.html" "arrow-left" }}</span>{{ end }}
+    {{ with .Prev }}<a class="pagination-arrow pagination-previous" data-page-link="previous" rel="prev" href="{{ .URL }}" aria-label="{{ T "page_previous" }}">{{ if $icons }}{{ partial "sidera/icon.html" "arrow-left" }}{{ else }}{{ T "page_previous" }}{{ end }}</a>
+    {{ else }}<span class="pagination-arrow pagination-previous" aria-disabled="true" aria-label="{{ T "page_previous" }}">{{ if $icons }}{{ partial "sidera/icon.html" "arrow-left" }}{{ else }}{{ T "page_previous" }}{{ end }}</span>{{ end }}
     {{ $pager := . }}
     {{- /* The compact window is CSS-selected by available bar width, with no JS or hidden links in the tab order. */ -}}
     {{ range $radius := slice 2 1 }}
@@ -19,8 +21,10 @@
         {{ end }}
       </div>
     {{ end }}
-    {{ with .Next }}<a class="pagination-arrow" data-page-link="next" rel="next" href="{{ .URL }}" aria-label="{{ T "page_next" }}">{{ partial "sidera/icon.html" "arrow-right" }}</a>
-    {{ else }}<span class="pagination-arrow" aria-disabled="true" aria-label="{{ T "page_next" }}">{{ partial "sidera/icon.html" "arrow-right" }}</span>{{ end }}
+    {{ with .Next }}<a class="pagination-arrow" data-page-link="next" rel="next" href="{{ .URL }}" aria-label="{{ T "page_next" }}">{{ if $icons }}{{ partial "sidera/icon.html" "arrow-right" }}{{ else }}{{ T "page_next" }}{{ end }}</a>
+    {{ else }}<span class="pagination-arrow" aria-disabled="true" aria-label="{{ T "page_next" }}">{{ if $icons }}{{ partial "sidera/icon.html" "arrow-right" }}{{ else }}{{ T "page_next" }}{{ end }}</span>{{ end }}
   {{ end }}
 </nav>
+{{- end -}}
+
 {{- end -}}

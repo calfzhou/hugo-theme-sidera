@@ -26,7 +26,7 @@ Distribution licensing is a separate unresolved gate.
   main region (656px inner prose), local WenKai UI/reading and explicit portable
   Helvetica Neue/PingFang/Arial fallback. Local Source Code Pro/Menlo code.
 - Optional 288px left and independent right regions. In-flow right disclosure
-  below 1231px, left below 761px. No-JS leaves navigation open; no focus trap.
+  below 1181px, left below 668px. No-JS leaves navigation open; no focus trap.
 - Original fixed inline icons and optional local identity/profile images. No
   font/icon framework, downloads, remote backgrounds or integration placeholders.
 - Native effective Page.Params → target-specific preset fallback → language/site semantics
@@ -40,7 +40,8 @@ Stellar 1.44.0 source is the primary visual/interaction reference. G adapts sele
 rules for collection rows, cards, sidebar/TOC and footer surfaces; the full MIT copyright
 notice (2021 xaoxuu) is retained in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 Hugo templates and progressive native JavaScript use Sidera's existing model. No EJS,
-Stylus pipeline, third-party fonts/icons or service runtime is introduced. The overall
+Stylus pipeline is required. Local Solar artwork, matched KaTeX fonts, diagram
+renderers and optional Giscus now have their own scoped contracts/notices below. The overall
 Sidera distribution license remains unresolved; the upstream notice does not grant one.
 
 ## Color mode and ordinary reading
@@ -279,3 +280,11 @@ while page/cascade/preset false still opts out. See COMMENTS.md for privacy/life
 Giscus now uses a small fixed Sidera font/palette stylesheet through the provider
 custom-theme API. No extra settings or CSS hosting/CORS setup; provider layout and
 controls remain intact. See COMMENTS.md for the baseline scope and preview restart.
+
+## Approved identity and combined review
+
+[IDENTITY.md](IDENTITY.md): fixed-color Parallax circle/square SVGs and one 32px
+favicon fallback. These are optional native resources; consuming-site identities
+and head-hook favicons remain site-owned. No software/artwork license is inferred.
+A–F2 are accepted within their documented scope; combined user acceptance remains
+separate, with a user-specific icon-consistency requirement still pending.

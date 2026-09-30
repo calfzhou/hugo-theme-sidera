@@ -29,7 +29,7 @@ preset values: use a native config cascade when deliberately overriding a preset
 # Useful fallback content and identity. It does not forcibly override preset region defaults.
 [params.identity]
 subtitle = 'A place for evolving ideas'
-image = 'images/sidera-mark.svg'
+image = 'images/sidera-parallax-circle.svg'
 [params.profile]
 title = 'About this site'
 text = 'A site-authored **profile**.'
@@ -964,3 +964,16 @@ path for authored text/profile/footer/license/reference/final-text settings, min
 site/page title values and the native site-partial extension. Field resolution and
 per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
 shortcode labels, translation strings or every string setting; no full token catalog.
+
+## Identity and pager integration
+
+[IDENTITY.md](IDENTITY.md) documents approved Parallax assets, native site-owned
+avatar/favicon opt-in, resource overrides and small-size/background limits. No theme
+default forces Sidera identity on a consuming site.
+
+The list pager receives its native Pager plus the displaying Page for resolved
+presentation. `params.icons=false` replaces its arrows with visible localized
+Previous/Next text, including disabled endpoints. Numbers, current state, native
+URLs, keyboard/accessible names, and no-JS navigation remain. List/docs/archive/
+taxonomy callers share this behavior; no paginator is constructed by the renderer.
+Other icon-consistency requirements remain a separate user checkpoint.

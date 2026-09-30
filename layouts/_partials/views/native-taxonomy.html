@@ -15,7 +15,7 @@
       <li class="article-card"><h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2><p data-term-count="{{ len $members }}">{{ T "taxonomy_count" (dict "count" (len $members) "number" (lang.FormatNumber 0 (len $members))) }}</p></li>
     {{ end }}
   </ul>
-  {{ partial "lists/navigation.html" $pager }}
+  {{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .) }}
 {{ else }}
   {{ $members := partialCached "taxonomies/native-members.html" . .Path }}
   {{ $order := "title" }}{{ $preordered := false }}

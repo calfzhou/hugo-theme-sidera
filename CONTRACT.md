@@ -344,3 +344,12 @@ story typography. Native section `cascade.type` and local overrides work; it is 
 a new preset, taxonomy or organizational kind. Other types still use normal styling.
 [MARKDOWN.md](MARKDOWN.md#story-typography-and-ai-disclosure) defines the precise
 presentation/AI-label boundary, authoring syntax and intentional empty-label behavior.
+
+## Approved identity resources
+
+[IDENTITY.md](IDENTITY.md) defines optional fixed-color Parallax circle/square assets,
+one 32px favicon rendition and native consuming-site overrides. Identity image remains
+empty by default; favicons are site-head policy, not new public params or a forced
+logo. Full third-party notices publish through a native license resource; this is
+not a Sidera/content license grant. The shared pager now receives Page presentation
+settings alongside its native Pager and retains visible localized text with icons off.
