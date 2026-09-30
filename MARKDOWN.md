@@ -277,7 +277,7 @@ story-only section or changes its list/navigation policy.
 | `generated` | AI-generated | 由 AI 生成 |
 
 The native EN/ZH catalogs supply theme wording; normal site translation overrides
-work. A small unboxed, palette-aware text label sits beside the article breadcrumbs,
+work. A small unboxed label with Stellar’s exact Solar shield icon and color sits beside the article breadcrumbs,
 wrapping safely on narrow screens. It does not require dates or authors. Lists/cards,
 body search text and reference graphs do not gain the label. It works independently
 of story mode and with JavaScript disabled.
@@ -290,3 +290,17 @@ label for an unspecified page, nor any change to author identity or content lice
 Do not set a site/cascade default unless it is true for that intended content set.
 For P4, move Stellar's top-level `ai_label` to `params.ai_label`; native `type: story`
 can now be retained as authorized, with normal native template-lookup semantics.
+
+
+AI label fidelity follow-up: manual uses **shield-user / #03a9f4**; reviewed uses
+**shield-check / #4caf50**; polished uses **shield-up / #4caf50**; generated uses
+**shield-warning / #ff9800**, matching Stellar 1.44.0 `_config.yml`/`_data/icons.yml`.
+SVG paths and duotone opacity are unchanged; local trusted icons are decorative
+(`aria-hidden`, not focusable). Existing `params.icons: false` hides the icon only;
+the localized text and exact color remain. The label uses Stellar's 4px gap/padding
+and 1em icon with 1.25 scaling. No new configuration or remote assets.
+
+These exact colors deliberately supersede the earlier palette-adjusted colors.
+They do **not** meet 4.5:1 small-text contrast on every light surface; this fidelity
+choice must not be described as AA contrast compliance. Text still conveys each label
+without relying on the icon/color. A site can override styles using normal native CSS.

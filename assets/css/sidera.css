@@ -953,6 +953,7 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 /* Plain localized disclosure, not a chip, author badge or automatic AI detector. */
 .article-header-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
 .article-header-top > nav { flex: 1 1 12rem; min-width: 0; }
-.ai-label { margin-inline-start: auto; font-size: 13px; line-height: 1.6; color: color-mix(in srgb,#4caf50 55%,var(--text)); }
-.ai-label[data-ai-label="manual"] { color: color-mix(in srgb,var(--link) 80%,var(--text)); }
-.ai-label[data-ai-label="generated"] { color: color-mix(in srgb,#ff9800 55%,var(--text)); }
+.ai-label { display: inline-flex; align-items: center; gap: 4px; padding: 4px; margin-inline-start: auto; font-size: 13px; line-height: 1.6; color: #4caf50; }
+.ai-label .icon { width: 1em; height: 1em; color: inherit; transform: scale(1.25); }
+.ai-label[data-ai-label="manual"] { color: #03a9f4; }
+.ai-label[data-ai-label="generated"] { color: #ff9800; }

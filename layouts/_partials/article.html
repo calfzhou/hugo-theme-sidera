@@ -6,7 +6,7 @@
     <header class="article-header">
     {{ if $settings.ai_label }}<div class="article-header-top">{{ end }}
     {{ if $breadcrumbs }}{{ $breadcrumbs }}{{ else }}{{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}{{ end }}
-    {{ with $settings.ai_label }}<span class="ai-label" data-ai-label="{{ . }}">{{ T (printf "ai_label_%s" .) }}</span></div>{{ end }}
+    {{ with $settings.ai_label }}<span class="ai-label" data-ai-label="{{ . }}">{{ if $settings.icons }}{{ partial "sidera/icon.html" (index (dict "manual" "shield-user" "reviewed" "shield-check" "polished" "shield-up" "generated" "shield-warning") .) }}{{ end }}{{ T (printf "ai_label_%s" .) }}</span></div>{{ end }}
     <h1>{{ .Title }}</h1>
     {{ with $settings.byline }}<p class="byline">{{ . }}</p>{{ end }}
     {{ partial "sidera/article-dates.html" (dict "Page" . "Settings" $settings) }}

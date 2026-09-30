@@ -10,7 +10,8 @@ Opt-in story typography also adapts pages/article-story.styl, article-indent.sty
 _common/title.styl. H3 decorations reuse the already-attributed Solar arrow-left/right
 geometry below as CSS masks; quotation decorations use font punctuation, not a new icon.
 AI label wording/presentation follows languages/en.yml, zh-CN.yml and bread-nav.styl,
-with fixed palette-aware readable colors and no copied icon/provider framework.
+with its exact configured label colors and the four Solar shields credited below;
+no provider framework.
 Ordinary Markdown styles also adapt _components/md.styl, pages/article-tech.styl and
 _common/base.styl, title.styl, blockquote.styl, pre.styl and highlight.styl.
 In-article scrollbar styling also adapts scrollbar-codeblock in _defines/func.styl, with
@@ -57,7 +58,8 @@ No endorsement by the original author is implied.
 
 Local source/version: Stellar **1.44.0, commit 1f4cb4bc**, `_data/icons.yml`.
 Retained keys: default:documents, default:category, example:notebook,
-default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:tocomment, default:arrow-left, default:arrow-right, default:edit.
+default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:tocomment, default:arrow-left, default:arrow-right, default:edit, default:shield-user, default:shield-check,
+default:shield-up, default:shield-warning.
 Sidera changes only SVG root sizing/class/accessibility attributes and semantic
 names; paths and duotone opacity are unchanged. The home/link and email/QR/broadcast action icons remain
 original Sidera artwork; share actions do not reuse unverified vendor logos. No arbitrary authored SVG is interpreted as an icon.
