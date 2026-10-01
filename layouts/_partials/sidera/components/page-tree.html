@@ -3,6 +3,6 @@
   <nav class="docs-navigation tag-navigation" aria-label="{{ T "docs_tree" }}">
     <h2 class="nav-heading">{{ T "docs_tree" }}</h2>
     <a class="tree-root" href="{{ $owner.RelPermalink }}"{{ if eq $page $owner }} aria-current="page"{{ else }} aria-current="location"{{ end }}>{{ $owner.Title }}</a>
-    {{ partial "sidera/docs-tree.html" (dict "node" $owner "current" $page) }}
+    {{ partial "sidera/docs-tree.html" (dict "node" $owner "current" $page "icons" $s.icons) }}
   </nav>
 {{- end -}}

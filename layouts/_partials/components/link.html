@@ -7,5 +7,7 @@
      already contain it and must never be prefixed twice. */ -}}
 {{- $original := .Get "href" -}}
 {{- if and (eq $original $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
-{{- $icon := "" -}}{{- with .Get "icon" -}}{{- $icon = partial "components/image-url.html" (dict "src" . "shortcode" $) -}}{{- end -}}
-<div class="content-link"><a class="content-link-card" href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}><span class="content-link-label"><span class="content-link-title">{{ .Get "text" }}</span><span class="content-link-url">{{ $href }}</span></span>{{ with $icon }}<img src="{{ . }}" alt="" loading="lazy" width="44" height="44">{{ else }}{{ partial "sidera/icon.html" "link" }}{{ end }}</a></div>
+{{- $name := "link" -}}{{- if isset .Params "icon" -}}{{- $name = .Get "icon" -}}{{- end -}}
+{{- $icon := partial "sidera/icon.html" $name -}}
+{{- $settings := partialCached "sidera/settings.html" .Page .Page.Path -}}
+<div class="content-link"><a class="content-link-card" href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}><span class="content-link-label"><span class="content-link-title">{{ .Get "text" }}</span><span class="content-link-url">{{ $href }}</span></span>{{ if and $settings.icons $icon }}<span class="content-link-icon">{{ $icon }}</span>{{ end }}</a></div>

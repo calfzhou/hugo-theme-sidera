@@ -1,0 +1,3 @@
+{{- $icon := index (dict "tags" "tag" "categories" "category" "authors" "authors" "series" "series" "preset" "preset") .Taxonomy | default "tag" -}}
+{{- if isset .Settings.tag_icons .Key -}}{{- $icon = index .Settings.tag_icons .Key -}}{{- end -}}
+{{- if .Settings.icons -}}{{- partial "sidera/icon.html" $icon -}}{{- end -}}

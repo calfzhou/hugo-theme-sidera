@@ -14,15 +14,9 @@
     {{- if and $action (ne $action "Sidera.cycleColorMode()") -}}{{- errorf "Sidera %s: onclick accepts only Sidera.cycleColorMode()" $where -}}{{- end -}}
     {{- if and $action .URL -}}{{- errorf "Sidera %s: choose a URL/pageRef or onclick, not both" $where -}}{{- end -}}
     {{- if and (not $action) (not .URL) -}}{{- errorf "Sidera %s: social entry requires a destination or supported onclick" $where -}}{{- end -}}
-    {{- if and $p.icon $p.image -}}{{- errorf "Sidera %s: choose an icon name or local image, not both" $where -}}{{- end -}}
-    {{- $icon := "" -}}
-    {{- if $p.image -}}
-      {{- $url := partial "sidera/image.html" (dict "Page" $ctx.Page.Site.Home "Owner" false "path" $p.image) -}}
-      {{- $icon = printf `<img src="%s" width="24" height="24" alt="">` ($url | htmlEscape) | safeHTML -}}
-    {{- else -}}
-      {{- $name := "" -}}{{- if isset $p "icon" -}}{{- $name = $p.icon -}}{{- else if $action -}}{{- $name = "color-mode" -}}{{- end -}}
-      {{- $icon = partial "sidera/icon.html" $name -}}
-    {{- end -}}
+    {{- if isset $p "image" -}}{{- errorf "Sidera %s: social params.image is retired; define SVG in data/icons.yaml and select params.icon" $where -}}{{- end -}}
+    {{- $name := "" -}}{{- if isset $p "icon" -}}{{- $name = $p.icon -}}{{- else if $action -}}{{- $name = "color-mode" -}}{{- end -}}
+    {{- $icon := partial "sidera/icon.html" $name -}}
     {{- if not $ctx.Settings.icons -}}{{- $icon = "" -}}{{- end -}}
     {{- if $action -}}
       {{- partial "sidera/color-mode-control.html" (dict "Icon" $icon) -}}

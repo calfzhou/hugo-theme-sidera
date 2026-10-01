@@ -100,8 +100,8 @@ menus and current/ancestor helpers. Two levels are supported. A parent without a
 destination is a heading; destinationless leaves and unresolved pageRefs fail.
 Parent page links remain links. Native menu labels are site-authored—not silently
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.
-A `menus.<name>.params.icon` value can override its decorative icon. Icon names:
-`home`, `blog`, `notebook`, `docs`, `page`, `tag`, `category`, `link`, `star`; `''` means none.
+A `menus.<name>.params.icon` value can override its decorative icon. Names select the merged inline YAML registry in [ICONS.md](ICONS.md); `''` means none.
+Built-ins include home/about/blog/notebook/docs and site-defined keys work equally.
 Optional `menus.<name>.params.color` supplies that entry's icon/selection-dot accent on
 hover, focus-visible or current/ancestor selection. Omission or `''` uses the theme accent.
 It accepts hex `#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`; invalid types/CSS diagnose at build time for rendered entries,
@@ -208,7 +208,7 @@ Neither Page.Params, the cached page settings, another instance nor a region hoo
 | collection-nav | items (array of recent/categories/tags/archive; [] hides) | All four, in that order; empty categories/tags omitted |
 | menu | menu (string), icons (bool), taxonomies (array or false, for fallback navigation) | menu, icons, taxonomy_navigation |
 | collections | icons (bool) | icons |
-| taxonomies | taxonomies (array or false), icons (bool), tag_icons (map of fixed icon names) | taxonomy_navigation, icons, tag_icons |
+| taxonomies | taxonomies (array or false), icons (bool), tag_icons (map of registry keys) | taxonomy_navigation, icons, tag_icons |
 | site-taxonomies | taxonomies (array or false), icons (bool) | taxonomy_navigation, icons |
 | page-tree | No presentation options yet; config may be omitted or empty | Native owner/tree/local order, not instance data |
 | toc | icons (bool) | icons |
@@ -356,7 +356,10 @@ Use head-extra to load an owner CSS asset *after* theme CSS. UI/prose prefer loc
 LXGW WenKai, then Helvetica Neue/PingFang/Arial; code prefers local Source Code Pro,
 then Menlo/Consolas. The portable fallback is visibly different. Owner-supplied
 local fonts need their own rights/notices; none are downloaded or distributed here.
-The inline mark/link icon are original artwork; a small pinned Solar icon subset and Stellar drawer icons are local, with separate notices in THIRD-PARTY-NOTICES.md. No authored SVG strings are trusted.
+UI icons are a pinned Solar subset in native YAML; ICONS.md lists Sidera keys and
+source names/styles. Only validated maintainer-owned registry SVG is inlined;
+menu/section/shortcode values remain keys, never arbitrary authored SVG strings.
+THIRD-PARTY-NOTICES.md retains source terms. Identity artwork is separate.
 
 Desktop uses Stellar's bounded 720px reading track (696px at a 1440px viewport with
 8px scroll gutter), 288px left and 320px right rails. List cards have an 18px inner gutter;
@@ -539,11 +542,12 @@ other top/sidebar regions; article/site footer allowlists are unchanged.
 
 A social menu supports up to **six** flat entries, native ordering, internal pageRef or validated
 local/http/https/mailto URLs. Names provide accessible link labels and native hover tooltips.
-Choose a fixed built-in `params.icon` or a safe **local** `params.image` (assets/static/home
-resources); no inline authored SVG, remote icon request or large icon framework is required.
-Without an icon, or with icons=false, the label remains a usable text link. Custom images are
-muted/grayscale until hover/focus, following Stellar. User-provided SVGs render as images, not
-trusted inline code. Supply only artwork you have permission to use.
+Choose a built-in or site-defined **params.icon registry key**. No standalone icon
+image, remote request or icon framework is required. `params.image` on social menu
+entries is retired: paste normalized SVG into site data/icons.yaml and select its
+name. Without an icon, or with icons=false, the label remains a usable text link.
+The surrounding link controls icon color/size; no grayscale image treatment is
+needed. Supply only artwork you have permission to use. See ICONS.md.
 
 ```toml
 [params]
@@ -555,7 +559,7 @@ name = 'Email'
 url = 'mailto:hello@example.org'
 weight = 10
 [menus.social.params]
-image = 'icons/email.svg' # site-owned local file
+icon = 'email' # Solar inline entry; site data/icons.yaml may override it
 
 [[menus.social]]
 name = 'Color mode'
@@ -567,7 +571,7 @@ onclick = 'Sidera.cycleColorMode()'
 
 `onclick` accepts **only that exact supplied action**. It is converted to a data attribute and
 an event listener, not emitted/evaluated as arbitrary JavaScript. An entry cannot combine a
-URL/pageRef with onclick, or image with a nonempty icon name. Nested social menus and missing
+URL/pageRef with onclick. Image-valued icon APIs diagnose rather than fetch. Nested social menus and missing
 link/action destinations diagnose. An explicit empty icon selects text instead of the fallback
 icon. The built-in action's current/next labels are localized by the theme.
 
@@ -582,7 +586,7 @@ The public API is `Sidera.cycleColorMode()` and `Sidera.setColorMode('dark'|'lig
 Changing/exposing a control is optional: omit the action to offer only social links, or omit the
 menu entirely. Stored visitor choices still apply even without a button. With no JavaScript,
 CSS follows the owner default/OS and the inert action is hidden; ordinary social links stay usable.
-Fieldbook explicitly starts new visitors in dark mode and demonstrates two original local example
+Fieldbook explicitly starts new visitors in dark mode and demonstrates named email/code/color-mode
 icons, not a bundled vendor-logo collection. Its default can be changed to auto in root config.
 
 
@@ -629,7 +633,7 @@ scroll the whole contextual region instead of nesting another small TOC scrollpo
 heading anchors/history remain unchanged. Scroll tracking covers H1–H6 when included in Hugo's
 configured outline, keeps a newly current entry visible without stealing keyboard focus, and
 rechecks it when an outline is reopened. Repeated TOCs keep independent disclosure state/IDs.
-The local up icon is the pinned Stellar/Solar default:upup asset under the retained CC BY notice.
+The up icon is the Solar square-double-alt-arrow-up Linear entry under the retained CC BY notice.
 
 
 ## Public naming migration
@@ -978,4 +982,4 @@ presentation. `params.icons=false` replaces its arrows with visible localized
 Previous/Next text, including disabled endpoints. Numbers, current state, native
 URLs, keyboard/accessible names, and no-JS navigation remain. List/docs/archive/
 taxonomy callers share this behavior; no paginator is constructed by the renderer.
-Other icon-consistency requirements remain a separate user checkpoint.
+The approved Solar registry now covers the remaining UI; final user acceptance remains separate.

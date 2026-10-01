@@ -209,3 +209,12 @@ A selectable SVG document is a different display model. A future read-only isola
 SVG frame could permit text selection without inserting vendor markup into the page;
 it needs explicit navigation/network/markup restrictions and revised pan/selection
 interaction tests. This is a proposed option, not a delivered selectable-text feature.
+
+## Shared UI icons
+
+All toolbar and modal-close artwork uses Sidera's named Solar registry (ICONS.md),
+not separate diagram SVG paths. Colors/sizes remain control-owned. Effective source
+Page params.icons=false uses localized visible text for each operation, including
+modal close; no controls/downloads are hidden to satisfy icon opt-out. Modal reuse
+refreshes its close template and text/icon state from the current figure. Renderer
+output SVG, source downloads and provider artwork are not interface-icon inputs.

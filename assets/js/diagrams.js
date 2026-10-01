@@ -48,7 +48,7 @@
     const caption=document.createElement('div');caption.className='diagram-dialog-caption';
     const close=document.createElement('button');close.type='button';close.className='diagram-action diagram-close';
     close.title=script.dataset.close;close.setAttribute('aria-label',script.dataset.close);
-    const icon=document.createElement('span');icon.textContent='×';icon.setAttribute('aria-hidden','true');close.append(icon);
+
     close.addEventListener('click',()=>dialog.close());dialog.append(caption,close);document.body.append(dialog);
     dialog.addEventListener('keydown',event=>{
       if(event.key!=='Tab')return;
@@ -142,6 +142,8 @@
         case 'source':details.open=!details.open;button.setAttribute('aria-expanded',String(details.open));break;
         case 'expand':{
           makeDialog();if(dialog.open)break;
+          dialog.dataset.icons=figure.dataset.icons;
+          dialog.querySelector('.diagram-close').replaceChildren(figure.querySelector('template[data-diagram-close]').content.cloneNode(true));
           const previousScale=scale,left=view.scrollLeft,top=view.scrollTop,home=canvas.parentNode;
           const placeholder=document.createElement('div');placeholder.style.height=canvas.getBoundingClientRect().height+'px';placeholder.setAttribute('aria-hidden','true');
           modal={figure,canvas,opener:button,home,placeholder,restore:()=>{scale=previousScale;size();view.scrollTo(left,top);}};

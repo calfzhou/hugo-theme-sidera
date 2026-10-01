@@ -136,10 +136,14 @@ for (const body of document.querySelectorAll('article[data-renderer] .prose[data
     marker.className = 'external-link-marker';
     marker.setAttribute('aria-hidden', 'true');
     // A word joiner and narrow nonbreaking space keep the suffix with its label.
-    marker.textContent = '\u2060\u202f↗';
+    const icon = document.querySelector('template[data-external-link-icon]');
+    if (body.dataset.icons !== 'false' && icon) {
+      marker.append(document.createTextNode('\u2060\u202f'), icon.content.cloneNode(true));
+    }
     const description = document.createElement('span');
     description.className = 'visually-hidden';
     description.textContent = ' ' + body.dataset.externalLinkLabel;
-    link.append(marker, description);
+    if (marker.hasChildNodes()) link.append(marker);
+    link.append(description);
   }
 }

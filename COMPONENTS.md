@@ -109,7 +109,7 @@ cache clearing, legacy template alias, user-server manipulation or watcher fix.
 {{< mark text="✓" color="green" >}}
 {{< u text="aa" >}}bcc
 {{< quot text="A thought | worth keeping" ornament=false >}}
-{{< link href="../article/index.md?from=card#heading" text="Read the article" icon="icon.svg" >}}
+{{< link href="../article/index.md?from=card#heading" text="Read the article" icon="notebook" >}}
 {{< copy text="AAAA BBBB  CCCC DDDD" prefix="Example fingerprint" >}}
 ```
 
@@ -119,7 +119,7 @@ cache clearing, legacy template alias, user-server manipulation or watcher fix.
 | `mark` | Required nonblank string `text`; string `color="yellow"`: red/green/yellow | Escaped native highlighted text. Status glyphs remain meaningful without color. |
 | `u` | Required nonblank string `text` | Native underline, not a link. Adds no whitespace: the example displays `aabcc`. |
 | `quot` | Required nonblank string `text`; boolean `ornament=true` | Standout paragraph with optional typographic ornaments, no invented heading/attribution. |
-| `link` | Required nonblank strings `href`, `text`; optional string `icon=""` | One real link card, authored label/icon, native destination; no metadata fetch. |
+| `link` | Required nonblank strings `href`, `text`; optional string `icon="link"`; explicit empty hides | One real link card, authored label/named registry icon, native destination; no metadata fetch. |
 | `copy` | Required nonblank string `text`; optional string `prefix=""` | Selectable value and progressive shared Copy/Copied/toast/manual fallback. Prefix is not copied. |
 
 Text arguments are **literal escaped text**, not Markdown/HTML/math. Quote numeric
@@ -146,12 +146,14 @@ Card destinations allow local/public URLs, HTTP(S) and mailto. Unsafe schemes,
 protocol-relative URLs, controls, backslashes and URL spaces diagnose. Normal Markdown
 links keep A's contract, including tel; this does not change their resolver policy.
 
-Icons use exact page resources, assets, then static, or an explicit HTTP(S) image URL.
-Local extensions: SVG, PNG, JPEG, GIF, WebP, AVIF, ICO. Local keys allow no traversal,
-encoding, query/fragment, glob, backslash or scheme. Missing local images fail. Remote
-icons request only the explicitly authored image in the reader's browser; no build-time
-fetch or favicon discovery. Prefer approved local images. SVG stays an `img` resource,
-never injected inline. Decorative icon alt is empty; the card label supplies its name.
+Icons now select a built-in or site-defined **inline registry key**, consistently
+with menu/collection/tag icons. Omission uses link; explicit empty omits the icon.
+Resolved params.icons=false suppresses decoration, retaining the card label/URL.
+[ICONS.md](ICONS.md) documents native site data/icons.yaml and validated geometry.
+Former file/HTTP(S) icon arguments must be converted to named entries; no automatic
+fetch/path guessing. This changes icon arguments, not card destination resolution
+or ordinary image support. Cards use links/resolve.html for href and Page identity;
+a trusted resolver override returns that dictionary, not only a URL string.
 
 ## Native overrides
 

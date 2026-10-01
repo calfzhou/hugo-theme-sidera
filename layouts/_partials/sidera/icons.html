@@ -1,0 +1,55 @@
+{{- /* Site-maintainer geometry data, not arbitrary content HTML. Validate once,
+     including unused definitions; explicit site strings replace whole entries. */ -}}
+{{- $ok := true -}}
+{{- $icons := hugo.Data.sidera.icons -}}
+{{- if isset hugo.Data "icons" -}}
+  {{- if not (reflect.IsMap hugo.Data.icons) -}}{{- $ok = false -}}{{- errorf "Sidera data/icons.yaml must be a map of icon names to SVG strings" -}}
+  {{- else -}}{{- $icons = merge $icons hugo.Data.icons -}}{{- end -}}
+{{- end -}}
+{{- range $key, $svg := $icons -}}
+  {{- if not (findRE `^[a-z][a-z0-9-]*$` $key) -}}{{- $ok = false -}}{{- errorf "Sidera icon key %q must be lowercase kebab-case" $key -}}{{- end -}}
+  {{- if ne (printf "%T" $svg) "string" -}}{{- $ok = false -}}{{- errorf "Sidera icon %q must be an SVG string" $key -}}{{- continue -}}{{- end -}}
+  {{- $svg = strings.TrimSpace $svg -}}
+  {{- if or (gt (len $svg) 50000) (not (findRE `^<svg\s[^>]*>[\s\S]*</svg>$` $svg)) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: expected one bounded SVG root" $key -}}{{- end -}}
+  {{- if strings.ContainsNonSpace (replaceRE `<[^>]*>` "" $svg) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: text/entities are not supported geometry" $key -}}{{- end -}}
+  {{- $stack := slice -}}{{- $roots := 0 -}}
+  {{- range findRE `<[^>]*>` $svg -}}
+    {{- $tag := . -}}{{- $match := findRESubmatch `^<(/?)([a-z]+)([^<>]*?)(/?)>$` $tag -}}
+    {{- if not $match -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: invalid geometry tag %q" $key $tag -}}{{- continue -}}{{- end -}}
+    {{- $m := index $match 0 -}}{{- $closing := index $m 1 -}}{{- $name := index $m 2 -}}{{- $attrs := index $m 3 -}}{{- $self := index $m 4 -}}
+    {{- if not (in (slice "svg" "g" "path" "circle" "ellipse" "rect" "line" "polyline" "polygon") $name) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: unsupported geometry element %q" $key $name -}}{{- end -}}
+    {{- if $closing -}}
+      {{- if or $self (strings.ContainsNonSpace $attrs) (not $stack) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: invalid closing tag" $key -}}
+      {{- else if ne (index $stack (sub (len $stack) 1)) $name -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: unbalanced geometry" $key -}}
+      {{- else -}}{{- $stack = first (sub (len $stack) 1) $stack -}}{{- end -}}
+    {{- else -}}
+      {{- if eq $name "svg" -}}{{- $roots = add $roots 1 -}}{{- if or $stack $self -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: nested/self-closing SVG is unsupported" $key -}}{{- end -}}
+      {{- else if not $stack -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: geometry outside SVG" $key -}}{{- end -}}
+      {{- $seen := slice -}}
+      {{- $attributePattern := `\s+([a-zA-Z][a-zA-Z-]*)="([^"<>]*)"` -}}
+      {{- if strings.ContainsNonSpace (replaceRE $attributePattern "" $attrs) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: attributes must be double-quoted geometry values" $key -}}{{- end -}}
+      {{- range findRESubmatch $attributePattern $attrs -}}
+        {{- $attr := index . 1 -}}{{- $value := index . 2 -}}
+        {{- if in $seen $attr -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: duplicate attribute %s" $key $attr -}}{{- end -}}{{- $seen = $seen | append $attr -}}
+        {{- $valid := false -}}
+        {{- if eq $attr "viewBox" -}}{{- $valid = and (eq $name "svg") (eq $value "0 0 24 24") -}}
+        {{- else if eq $attr "xmlns" -}}{{- $valid = and (eq $name "svg") (eq $value "http://www.w3.org/2000/svg") -}}
+        {{- else if in (slice "fill" "stroke") $attr -}}{{- $valid = in (slice "none" "currentColor") $value -}}
+        {{- else if in (slice "fill-rule" "clip-rule") $attr -}}{{- $valid = in (slice "nonzero" "evenodd") $value -}}
+        {{- else if eq $attr "stroke-linecap" -}}{{- $valid = in (slice "butt" "round" "square") $value -}}
+        {{- else if eq $attr "stroke-linejoin" -}}{{- $valid = in (slice "miter" "round" "bevel") $value -}}
+        {{- else if eq $attr "d" -}}{{- $valid = and (eq $name "path") (findRE `^[MmZzLlHhVvCcSsQqTtAaEe0-9.,+\s-]+$` $value) -}}
+        {{- else if eq $attr "transform" -}}{{- $valid = and (strings.ContainsNonSpace $value) (not (strings.ContainsNonSpace (replaceRE `(matrix|translate|scale|rotate|skewX|skewY)\([0-9eE.,+\s-]+\)\s*` "" $value))) -}}
+        {{- else if in (slice "x" "y" "x1" "x2" "y1" "y2" "cx" "cy" "r" "rx" "ry" "width" "height" "opacity" "fill-opacity" "stroke-opacity" "stroke-width" "stroke-miterlimit" "stroke-dasharray" "stroke-dashoffset" "points") $attr -}}
+          {{- $valid = and (not (and (eq $name "svg") (in (slice "width" "height") $attr))) (findRE `^[0-9eE.,+\s-]+$` $value) -}}
+        {{- end -}}
+        {{- if not $valid -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: unsupported attribute/value %s=%q (geometry/currentColor only)" $key $attr $value -}}{{- end -}}
+      {{- end -}}
+      {{- if and (eq $name "svg") (not (in $seen "viewBox")) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: viewBox must be 0 0 24 24" $key -}}{{- end -}}
+      {{- if not $self -}}{{- $stack = $stack | append $name -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if or $stack (ne $roots 1) -}}{{- $ok = false -}}{{- errorf "Sidera icon %q: expected one balanced SVG" $key -}}{{- end -}}
+{{- end -}}
+{{- if not $ok -}}{{- $icons = dict -}}{{- end -}}
+{{- return $icons -}}

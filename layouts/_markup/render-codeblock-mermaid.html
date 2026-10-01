@@ -10,4 +10,4 @@
   {{- end -}}
 {{- end -}}
 {{- if and (isset .Attributes "caption") (not (strings.ContainsNonSpace $caption)) -}}{{- errorf "Sidera Mermaid: caption must be nonblank (%s)" .Position -}}{{- end -}}
-{{- partial "diagrams/figure.html" (dict "kind" "mermaid" "source" .Inner "caption" $caption "class" $class "id" $id) -}}
+{{- partial "diagrams/figure.html" (dict "page" .PageInner "kind" "mermaid" "source" .Inner "caption" $caption "class" $class "id" $id) -}}

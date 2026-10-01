@@ -140,7 +140,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
 | widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See SHELL.md. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see SHELL.md). |
-| icons / icon / tag_icons | Decorative visibility (true), fixed icon name/empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see SHELL.md). |
+| icons / icon / tag_icons | Decorative visibility (true), named inline registry key/empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see SHELL.md). |
 | article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,references,license,share,series,text,links]. Contiguous references/license/authors/share items form a box. []/false hides the region and its hook. |
 | site_footer | Ordered link/text/credit component or derived-widget references, or false; default [links,text,credit]. []/false hides the region and hook. |
 | references | Array of Markdown strings, default []; blank entries omitted. Authored references only, not automatic backlinks. |
@@ -159,8 +159,8 @@ Fixed components: social, collection-nav, menu, collections, taxonomies, **page-
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.
 In recursive list mode, native non-section storage folders may flatten into their parent tree;
 children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
-Unknown components/options/malformed fields diagnose; repeated component instances are allowed. Fixed icons remain home/blog/notebook/
-docs/page/tag/category/link/star; custom preset names are never used as required icon/i18n enum values.
+Unknown components/options/malformed fields diagnose; repeated component instances are allowed. Icon names come from the merged theme/site YAML registry (ICONS.md), not a closed
+enum; custom preset names are never required icon/i18n values.
 
 Native assignments are `tags`, `categories`, `authors`, `series`, `preset` at top level.
 Authors support multiple ordered identities. Series accepts one distinct native term per page;
@@ -353,3 +353,8 @@ empty by default; favicons are site-head policy, not new public params or a forc
 logo. Full third-party notices publish through a native license resource; this is
 not a Sidera/content license grant. The shared pager now receives Page presentation
 settings alongside its native Pager and retains visible localized text with icons off.
+
+[ICONS.md](ICONS.md) is authoritative for Sidera semantic keys, Solar provenance,
+site YAML additions/overrides, geometry safety and parent-owned size/color. Link
+card icon and social params.icon select those same keys; social params.image and
+image-valued card icons are explicitly retired pre-release, not guessed aliases.

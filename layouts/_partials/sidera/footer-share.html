@@ -6,7 +6,7 @@
   <div class="share-actions">
   {{- range . -}}
     {{- $label := "" -}}{{- $icon := "" -}}
-    {{- if eq . "link" -}}{{- $label = T "share_link" -}}{{- $icon = "link" -}}
+    {{- if eq . "link" -}}{{- $label = T "share_link" -}}{{- $icon = "link-action" -}}
     {{- else if eq . "wechat" -}}{{- $label = T "share_wechat" -}}{{- $icon = "qr" -}}
     {{- else if eq . "weibo" -}}{{- $label = T "share_weibo" -}}{{- $icon = "broadcast" -}}
     {{- else -}}{{- $label = T "share_email" -}}{{- $icon = "email" -}}{{- end -}}

@@ -27,7 +27,7 @@ Distribution licensing is a separate unresolved gate.
   Helvetica Neue/PingFang/Arial fallback. Local Source Code Pro/Menlo code.
 - Optional 288px left and independent right regions. In-flow right disclosure
   below 1181px, left below 668px. No-JS leaves navigation open; no focus trap.
-- Original fixed inline icons and optional local identity/profile images. No
+- Named Solar inline icons with native site YAML overrides; optional identity/profile images. No
   font/icon framework, downloads, remote backgrounds or integration placeholders.
 - Native effective Page.Params → target-specific preset fallback → language/site semantics
   are documented with native cascade caveats; ordered region arrays/maps replace completely. Same
@@ -287,4 +287,8 @@ controls remain intact. See COMMENTS.md for the baseline scope and preview resta
 favicon fallback. These are optional native resources; consuming-site identities
 and head-hook favicons remain site-owned. No software/artwork license is inferred.
 A–F2 are accepted within their documented scope; combined user acceptance remains
-separate, with a user-specific icon-consistency requirement still pending.
+separate, with the approved Solar registry now implemented and awaiting user review.
+
+[ICONS.md](ICONS.md) is the complete named-icon/customization/provenance contract.
+Sidera keys are independent of Solar source names, tracked per entry in
+data/sidera/icon_sources.yaml. No runtime dependency on the source checkout.

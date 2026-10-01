@@ -1,6 +1,6 @@
 {{- $o := .options -}}{{- $text := .context.Text -}}
 {{- if eq $o.kind "folding" -}}
-<details class="content-folding {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ if $o.open }} open{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}><summary>{{ $o.title }}<span class="folding-toggle" aria-hidden="true"></span></summary><div class="container-body">{{ $text }}</div></details>
+<details class="content-folding {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ if $o.open }} open{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}><summary>{{ $o.title }}<span class="folding-toggle" aria-hidden="true">{{ $icons := (partialCached "sidera/settings.html" .context.PageInner .context.PageInner.Path).icons }}<span class="when-closed">{{ if $icons }}{{ partial "sidera/icon.html" "plus" }}{{ else }}{{ T "icon_expand" }}{{ end }}</span><span class="when-open">{{ if $icons }}{{ partial "sidera/icon.html" "minus" }}{{ else }}{{ T "icon_collapse" }}{{ end }}</span></span></summary><div class="container-body">{{ $text }}</div></details>
 {{- else if eq $o.kind "box" -}}
 <div class="content-box {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}>{{ with $o.title }}<div class="container-title"><strong>{{ . }}</strong></div>{{ end }}<div class="container-body">{{ $text }}</div></div>
 {{- else if eq $o.kind "grid" -}}

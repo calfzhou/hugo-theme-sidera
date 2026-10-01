@@ -4,7 +4,7 @@
 {{- $label := $native.LinkTitle -}}{{- if $model.nested -}}{{- $label = path.Base $node.key -}}{{- if and $native.File (not $native.File.IsContentAdapter) -}}{{- $label = $native.LinkTitle -}}{{- end -}}{{- end -}}
 <li class="taxonomy-node" data-term-count="{{ len $node.pages }}">
   <a class="taxonomy-entry" href="{{ $target.RelPermalink }}">
-    <span class="taxonomy-name">{{ if .Settings.icons }}{{ $icon := cond (eq $model.taxonomy "categories") "category" "tag" }}{{ if isset .Settings.tag_icons $node.key }}{{ $icon = index .Settings.tag_icons $node.key }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ $label }}</span></span>
+    <span class="taxonomy-name">{{ partial "sidera/taxonomy-icon.html" (dict "Taxonomy" $model.taxonomy "Key" $node.key "Settings" .Settings) }}<span>{{ $label }}</span></span>
     <small title="{{ T "taxonomy_count" (dict "count" (len $node.pages) "number" (lang.FormatNumber 0 (len $node.pages))) }}">({{ lang.FormatNumber 0 (len $node.pages) }})</small>
   </a>
   {{- with where (sort $model.nodes "key") "parent" $node.key -}}

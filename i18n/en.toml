@@ -514,3 +514,8 @@ other = "AI-reviewed"
 other = "AI-polished"
 [ai_label_generated]
 other = "AI-generated"
+
+[icon_expand]
+other = "Expand"
+[icon_collapse]
+other = "Collapse"

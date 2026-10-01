@@ -109,7 +109,7 @@
       link.className='search-result-link'; link.setAttribute('aria-labelledby',`search-title-${index} search-heading-${index}`);
       const context=document.createElement('span'); context.className='search-result-context'; context.textContent=hit.doc.context; link.append(context);
       const heading=document.createElement('span'); heading.className='search-result-section'; heading.id=`search-heading-${index}`;
-      const marker=document.createElement('span'); marker.className='search-section-marker'; marker.setAttribute('aria-hidden','true'); marker.textContent='>'; heading.append(marker);
+      const marker=document.createElement('span'); marker.className='search-section-marker'; marker.setAttribute('aria-hidden','true'); const icon=wrapper.querySelector('template[data-search-heading-icon]');if(icon){marker.append(icon.content.cloneNode(true));heading.append(marker);}
       markText(heading,hit.section?.title || (hit.section ? hit.doc.title : wrapper.dataset.titleOnly),words); link.append(heading);
       if(hit.section) {
         const first=hit.ranges[0]?.[0] || 0, start=Math.max(0,first-24), end=Math.min(hit.section.text.length,start+140);

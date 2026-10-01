@@ -15,7 +15,7 @@
 {{- with .Page.Resources.Get $src -}}
   {{- if eq .ResourceType "page" -}}{{- errorf "Sidera diagramsnet: source must be a file (%s)" $.Position -}}{{- else -}}
   {{- if gt (len .Content) 1000000 -}}{{- errorf "Sidera diagramsnet: source exceeds 1 MB limit (%s)" $.Position -}}{{- end -}}
-  {{- partial "diagrams/figure.html" (dict "kind" "drawio" "source" .Content "url" .RelPermalink "caption" $caption) -}}
+  {{- partial "diagrams/figure.html" (dict "page" $.Page "kind" "drawio" "source" .Content "url" .RelPermalink "caption" $caption) -}}
 {{- end -}}
 {{- else -}}{{- errorf "Sidera diagramsnet: missing page resource %q (%s)" $src .Position -}}{{- end -}}
 {{- end -}}

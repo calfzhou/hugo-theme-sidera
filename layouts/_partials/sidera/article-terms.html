@@ -8,7 +8,7 @@
           {{ range $direct }}
             {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
             {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $native) }}
-            <li><a href="{{ $target.RelPermalink }}">{{ if $.Settings.icons }}{{ partial "sidera/icon.html" (cond (eq $taxonomy "tags") "tag" "category") }}{{ end }}<span>{{ .key }}</span></a></li>
+            <li><a href="{{ $target.RelPermalink }}">{{ partial "sidera/taxonomy-icon.html" (dict "Taxonomy" $taxonomy "Key" .key "Settings" $.Settings) }}<span>{{ .key }}</span></a></li>
           {{ end }}
         </ul>
       {{ end }}

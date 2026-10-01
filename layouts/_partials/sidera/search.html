@@ -1,10 +1,11 @@
 {{- if .Settings.search -}}
 {{- $placeholder := T "search_label" -}}{{- with .Owner -}}{{- $placeholder = T "search_in" (dict "title" .Title) -}}{{- end -}}
-<div class="search-wrapper" data-search-wrapper data-loading="{{ T "search_loading" }}" data-failed="{{ T "search_failed" }}" data-empty="{{ T "search_empty" }}" data-title-only="{{ T "search_title_only" }}">
+<div class="search-wrapper" data-search-wrapper{{ if not .Settings.icons }} data-icons="false"{{ end }} data-loading="{{ T "search_loading" }}" data-failed="{{ T "search_failed" }}" data-empty="{{ T "search_empty" }}" data-title-only="{{ T "search_title_only" }}">
+  {{ if .Settings.icons }}<template data-search-heading-icon>{{ partial "sidera/icon.html" "chevron-right" }}</template>{{ end }}
   <div class="search-form" role="search">
-    <label class="search-button" for="search-input"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><span class="visually-hidden">{{ T "search_label" }}</span></label>
+    <label class="search-button" for="search-input">{{ if .Settings.icons }}{{ partial "sidera/icon.html" "search" }}{{ end }}<span class="{{ if .Settings.icons }}visually-hidden{{ end }}">{{ T "search_label" }}</span></label>
     <input id="search-input" type="search" class="search-input" disabled maxlength="160" autocomplete="off" spellcheck="false" aria-label="{{ $placeholder }}" placeholder="{{ $placeholder }}" aria-controls="search-results" data-global-label="{{ T "search_label" }}" data-local-label="{{ $placeholder }}">
-    <button type="button" class="search-clear" hidden aria-label="{{ T "search_clear" }}">×</button>
+    <button type="button" class="search-clear" hidden aria-label="{{ T "search_clear" }}">{{ if .Settings.icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "search_clear" }}{{ end }}</button>
   </div>
   {{ with .Owner }}<div class="search-scope-control" role="group" aria-label="{{ T "search_scope" }}" hidden><label class="search-scope-label"><input type="checkbox" class="search-scope" data-scope="{{ .RelPermalink }}" aria-controls="search-results" disabled><span>{{ T "search_global" }}</span></label></div>{{ end }}
   <p class="search-status" role="status" aria-live="polite" hidden></p>

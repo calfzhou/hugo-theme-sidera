@@ -511,3 +511,8 @@ other = "已 AI 审核"
 other = "已 AI 润色"
 [ai_label_generated]
 other = "由 AI 生成"
+
+[icon_expand]
+other = "展开"
+[icon_collapse]
+other = "收起"

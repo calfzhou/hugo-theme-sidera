@@ -1,10 +1,12 @@
+{{- $icons := (partialCached "sidera/settings.html" .page .page.Path).icons -}}
 {{- $label := .caption -}}{{- if not $label -}}{{- if eq .kind "mermaid" -}}{{- $label = T "diagram_mermaid" -}}{{- else -}}{{- $label = T "diagram_drawio" -}}{{- end -}}{{- end -}}
-<figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }} data-sidera-diagram="{{ .kind }}" data-diagram-label="{{ $label }}" data-state="idle"{{ if eq .kind "drawio" }} data-diagram-source="{{ .source | jsonify }}"{{ end }}>
+<figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }} data-sidera-diagram="{{ .kind }}" data-icons="{{ $icons }}" data-diagram-label="{{ $label }}" data-state="idle"{{ if eq .kind "drawio" }} data-diagram-source="{{ .source | jsonify }}"{{ end }}>
+  <template data-diagram-close>{{ if $icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "diagram_close" }}{{ end }}</template>
   <div class="diagram-canvas">
     <div class="diagram-tools"{{ if eq .kind "mermaid" }} hidden{{ end }} role="group" aria-label="{{ T "diagram_controls" }}">
-      {{ $labels := dict "out" "diagram_zoom_out" "fit" "diagram_fit" "in" "diagram_zoom_in" "expand" "diagram_expand" }}{{ range $action := slice "out" "fit" "in" "expand" }}{{ $label := index $labels $action }}<button type="button" class="diagram-action" data-diagram-action="{{ $action }}" aria-label="{{ T $label }}" title="{{ T $label }}" hidden>{{ partial "diagrams/icon.html" $action }}</button>{{ end }}
-      {{ if eq .kind "mermaid" }}<button type="button" class="diagram-action" data-diagram-action="source" aria-label="{{ T "diagram_source" }}" title="{{ T "diagram_source" }}" aria-expanded="false" hidden>{{ partial "diagrams/icon.html" "source" }}</button>{{ end }}
-      {{ with .url }}<a class="diagram-action diagram-download" href="{{ . }}" download aria-label="{{ T "diagram_download" }}" title="{{ T "diagram_download" }}">{{ partial "diagrams/icon.html" "download" }}</a>{{ end }}
+      {{ $labels := dict "out" "diagram_zoom_out" "fit" "diagram_fit" "in" "diagram_zoom_in" "expand" "diagram_expand" }}{{ range $action := slice "out" "fit" "in" "expand" }}{{ $label := index $labels $action }}<button type="button" class="diagram-action" data-diagram-action="{{ $action }}" aria-label="{{ T $label }}" title="{{ T $label }}" hidden>{{ if $icons }}{{ partial "diagrams/icon.html" $action }}{{ else }}{{ T $label }}{{ end }}</button>{{ end }}
+      {{ if eq .kind "mermaid" }}<button type="button" class="diagram-action" data-diagram-action="source" aria-label="{{ T "diagram_source" }}" title="{{ T "diagram_source" }}" aria-expanded="false" hidden>{{ if $icons }}{{ partial "sidera/icon.html" "code" }}{{ else }}{{ T "diagram_source" }}{{ end }}</button>{{ end }}
+      {{ with .url }}<a class="diagram-action diagram-download" href="{{ . }}" download aria-label="{{ T "diagram_download" }}" title="{{ T "diagram_download" }}">{{ if $icons }}{{ partial "sidera/icon.html" "download" }}{{ else }}{{ T "diagram_download" }}{{ end }}</a>{{ end }}
     </div>
     <div class="diagram-view" hidden></div>
     {{ if eq .kind "mermaid" }}<details class="diagram-source" open><summary>{{ T "diagram_source" }}</summary><pre><code>{{ .source }}</code></pre></details>{{ end }}

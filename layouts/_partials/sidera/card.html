@@ -23,7 +23,7 @@
         {{ range index $model.assigned $page.Path }}
           {{ $term := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
           {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $term) }}
-          <a class="term-badge" href="{{ $target.RelPermalink }}">{{ if eq $taxonomy "tags" }}<span aria-hidden="true">#</span>{{ end }}{{ .key }}</a>
+          <a class="term-badge" href="{{ $target.RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ partial "sidera/taxonomy-icon.html" (dict "Taxonomy" $taxonomy "Key" .key "Settings" $settings) }}{{ end }}{{ .key }}</a>
         {{ end }}
       {{ end }}
     </div>

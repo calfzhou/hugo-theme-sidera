@@ -7,8 +7,8 @@ Pinned collection tabs also adapt navbar.styl and the bar-glass/newblur mixins i
 Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
 Opt-in story typography also adapts pages/article-story.styl, article-indent.styl and
-_common/title.styl. H3 decorations reuse the already-attributed Solar arrow-left/right
-geometry below as CSS masks; quotation decorations use font punctuation, not a new icon.
+_common/title.styl. H3 decorations reuse the already-attributed Solar double-arrow
+geometry below as inline registry SVGs; quotation decorations use font punctuation, not a new icon.
 AI label wording/presentation follows languages/en.yml, zh-CN.yml and bread-nav.styl,
 with its exact configured label colors and the four Solar shields credited below;
 no provider framework.
@@ -47,35 +47,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## Solar icons — 480 Design (CC BY 4.0)
+## Solar icons — 480 Design and maintained extensions (CC BY 4.0)
 
-The fixed SVG bodies in `layouts/_partials/sidera/icon.html` are by **480 Design**,
-from [Solar Icon Set](https://github.com/480-Design/Solar-Icon-Set), also published
-in the [author's Figma file](https://www.figma.com/community/file/1166831539721848736).
-Licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
-([legal code](https://creativecommons.org/licenses/by/4.0/legalcode)).
-No endorsement by the original author is implied.
+The **44 named inline SVG entries** in `data/sidera/icons.yaml` use Solar Icons.
+Original artwork: **480 Design**, [Solar Icon Set](https://github.com/480-Design/Solar-Icon-Set),
+[original Figma set](https://www.figma.com/community/file/1166831539721848736).
+License: [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+([legal code](https://creativecommons.org/licenses/by/4.0/legalcode)). No endorsement implied.
 
-Local source/version: Stellar **1.44.0, commit 1f4cb4bc**, `_data/icons.yml`.
-Retained keys: default:documents, default:category, example:notebook,
-default:hashtag, example:planet, default:pin, default:calendar, default:theme, default:upup, default:tocomment, default:arrow-left, default:arrow-right, default:edit, default:shield-user, default:shield-check,
-default:shield-up, default:shield-warning.
-Sidera changes only SVG root sizing/class/accessibility attributes and semantic
-names; paths and duotone opacity are unchanged. The home/link and email/QR/broadcast action icons remain
-original Sidera artwork; share actions do not reuse unverified vendor logos. No arbitrary authored SVG is interpreted as an icon.
+New selections are pinned to the maintained distribution
+[saoudi-h/solar-icons](https://github.com/saoudi-h/solar-icons), **dcbe867a0**,
+`packages/core/svgs/`. Its **panel-left, list-ordered, close, add and minus** geometry
+is attributed in that repository to **Hakim Saoudi** as maintained extensions.
+Those entries retain the same declared CC BY 4.0 terms; package-code MIT is not
+misrepresented as the artwork license.
 
-The local registry's Solar attribution is corroborated by Iconify's Solar collection
-metadata (`https://raw.githubusercontent.com/iconify/icon-sets/master/json/solar.json`,
-checked 2026-09-24): author 480 Design; license CC-BY-4.0; 24px grid. This lookup
-verifies provenance, not an unpinned runtime dependency: the distributed paths are
-pinned to the Stellar commit above. No icon package, CDN, font or framework is required.
-Source permission is not an overall Sidera distribution-license grant.
+`data/sidera/icon_sources.yaml` maps every **Sidera-owned semantic key** to the
+exact Solar name/style, origin/revision/path, author/license, normalized SHA-256
+and (for new selections) original source-file hash. Normalization removes intrinsic
+SVG size, converts fixed source paint to currentColor, retains geometry/stroke/
+duotone opacity, and adds decorative accessibility attributes only at rendering.
 
-## Stellar drawer artwork
+The accepted shield-user/check/up/warning and story double arrows preserve their
+exact geometry from Stellar **1.44.0 / 1f4cb4bc**, `_data/icons.yml`, rather than
+silently exchanging them for a newer maintained rendition. All other built-in UI
+artwork, including search, sharing, drawers and diagram operations, now uses the
+registry. Site-provided replacements are the site's responsibility and cannot
+claim the replaced entry's provenance automatically. See ICONS.md for the bounded
+custom SVG format and complete Sidera/Solar mapping. No package, font, CDN or client
+icon loader is required. This attribution does not grant a Sidera project license.
 
-`default:leftbar` and `default:rightbar` are the paired custom UI icons from the same
-Stellar commit, covered by its MIT notice above. The separator ID becomes a class
-to avoid duplicate IDs; root attributes supply decorative accessible semantics.
+### Historical Stellar drawer attribution retained
+
+The earlier default:leftbar/default:rightbar custom artwork was adapted under
+Stellar's MIT notice above. It is superseded at runtime by Solar panel/list icons;
+the historical credit is retained, not a claim that these custom paths still ship.
+Earlier handmade home/link/share/search and diagram SVGs are likewise no longer
+runtime UI artwork. Reference/history files are not removed by this integration.
 
 ## React Bits
 
@@ -191,7 +199,8 @@ are adapted from the read-only Stellar **1.44.0** reference: `layout/_partial/si
 The existing Stellar MIT license above applies to these adaptations (copyright 2021 xaoxuu).
 Sidera's native eligibility/graph generation, shared text model and bounded literal DOM
 matching are separately implemented, without copying query-as-HTML or raw-source filters.
-The tiny search magnifier is original SVG geometry, not an additional upstream asset.
+The search magnifier and result/external/close glyphs now use the Solar registry
+credited above; no separately authored runtime UI geometry remains.
 No search dependency, remote backend, CDN or distribution-license decision is introduced.
 
 Search's animated rainbow also follows Stellar 1.44.0 `_config.yml`'s
