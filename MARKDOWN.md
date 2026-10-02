@@ -107,6 +107,9 @@ No active rich-caption syntax was established by the bounded real-use audit.
   and A's destination/title behavior. No active linked-image use was found; arbitrary
   markdown-it-figure linked/rich-caption parity is not claimed.
 - Existing native `figure` shortcodes keep their explicit behavior.
+- Optional shared `image original="..."` supplies thumbnail-to-original access and
+  a progressive native popup; ordinary Markdown images do not become automatic
+  lightboxes. See COMPONENTS.md for controls, lazy loading and native download limits.
 
 `params.auto_caption` is a boolean, **true by default**, with the existing native
 page/cascade → section preset defaults → site/language → minimal-default precedence.

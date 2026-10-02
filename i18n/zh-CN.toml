@@ -516,3 +516,38 @@ other = "由 AI 生成"
 other = "展开"
 [icon_collapse]
 other = "收起"
+
+# Optional original-image viewer
+
+[image_viewer]
+other = "图片查看器"
+
+[image_controls]
+other = "图片控件"
+
+[image_open]
+other = "查看原图"
+
+[image_open_named]
+other = "查看原图：{{ .label }}"
+
+[image_loading]
+other = "正在加载原图…"
+
+[image_error]
+other = "图片无法显示。可使用下载链接打开原图。"
+
+[image_close]
+other = "关闭图片"
+
+[image_download]
+other = "下载原图"
+
+[image_fit]
+other = "适应视图"
+
+[image_zoom_in]
+other = "放大"
+
+[image_zoom_out]
+other = "缩小"

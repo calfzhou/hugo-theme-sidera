@@ -1,10 +1,10 @@
-{{- /* Opt-in image presentation only: native sources, explicit background, no viewer
-     or remote fetch. Ordinary Markdown remains the default authoring path. */ -}}
+{{- /* Opt-in image presentation: native sources, explicit background and optional
+     original-image viewer. No build-time remote fetch. Ordinary Markdown remains the default authoring path. */ -}}
 {{- $sc := . -}}
 {{- if not .IsNamedParams -}}{{- errorf "Sidera image requires named src and alt (%s)" .Position -}}{{- end -}}
 {{- partial "components/parent.html" . -}}
 {{- range $k, $v := .Params -}}
-  {{- if not (in (slice "src" "alt" "caption" "width" "height" "background" "class" "id") $k) -}}{{- errorf "Sidera image: unsupported parameter %q (%s)" $k $sc.Position -}}{{- end -}}
+  {{- if not (in (slice "src" "alt" "caption" "width" "height" "background" "class" "id" "original") $k) -}}{{- errorf "Sidera image: unsupported parameter %q (%s)" $k $sc.Position -}}{{- end -}}
   {{- if not (in (slice "width" "height") $k) -}}
     {{- if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera image: %s must be a string (%s)" $k $sc.Position -}}{{- end -}}
   {{- end -}}
@@ -35,9 +35,16 @@
   {{- end -}}
 {{- end -}}
 {{- $src := partial "images/source.html" (dict "src" (.Get "src") "page" .Page "position" .Position) -}}
+{{- $original := "" -}}
+{{- with .Get "original" -}}
+  {{- $original = partial "images/source.html" (dict "src" . "page" $sc.Page "position" $sc.Position) -}}
+  {{- $sc.Page.Store.Set "sidera-image-viewer" true -}}
+{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" .Page .Page.Path -}}
 {{- $caption := "" -}}
 {{- if $settings.auto_caption -}}{{- $caption = .Get "alt" -}}{{- end -}}
 {{- if isset .Params "caption" -}}{{- $caption = .Get "caption" -}}{{- end -}}
 {{- if in (split (.Get "class" | default "") " ") "no-caption" -}}{{- $caption = "" -}}{{- end -}}
-<figure class="md-figure content-image"><img src="{{ $src }}" alt="{{ .Get "alt" }}"{{ range $k, $v := $dimensions }} {{ $k | safeHTMLAttr }}="{{ $v }}"{{ end }}{{ with .Get "class" }} class="{{ . }}"{{ end }}{{ with .Get "id" }} id="{{ . }}"{{ end }}{{ with $background }} style="{{ printf "background-color:%s" . | safeCSS }}"{{ end }}>{{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
+{{- $openLabel := T "image_open" -}}
+{{- with .Get "alt" -}}{{- $openLabel = T "image_open_named" (dict "label" .) -}}{{- end -}}
+<figure class="md-figure content-image">{{ with $original }}<a class="image-original-link" data-image-open href="{{ . }}" aria-label="{{ $openLabel }}">{{ end }}<img src="{{ $src }}" alt="{{ .Get "alt" }}"{{ range $k, $v := $dimensions }} {{ $k | safeHTMLAttr }}="{{ $v }}"{{ end }}{{ with .Get "class" }} class="{{ . }}"{{ end }}{{ with .Get "id" }} id="{{ . }}"{{ end }}{{ with $background }} style="{{ printf "background-color:%s" . | safeCSS }}"{{ end }}>{{ if $original }}</a>{{ end }}{{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>

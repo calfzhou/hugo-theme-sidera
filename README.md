@@ -343,3 +343,11 @@ Optional local `params.name` on a collection root separates concise search/navig
 labels from native full `title` and summary `description`. It is not a shared preset
 default or article cascade. See CONTRACT.md/PRESETS.md and the portable native tests:
 `python3 tests/check_collection_names.py /absolute/fresh-output-directory`.
+
+### Explicit original-image popup
+
+`{{< image src="thumbnail.jpg" original="original.jpg" alt="Description" >}}`
+keeps native original access and progressively adds diagram-style zoom/fit/download/
+close controls. Original bytes and caption/inversion/background intent remain; no
+remote fetch/rehosting or viewer on every Markdown image. See COMPONENTS.md, including
+cross-origin native-download limits and no-JS/unsupported-browser fallback.

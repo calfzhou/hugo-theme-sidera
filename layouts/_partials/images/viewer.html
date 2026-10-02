@@ -1,0 +1,13 @@
+{{- $icons := (partialCached "sidera/settings.html" . .Path).icons -}}
+<template data-image-viewer-template>
+  <dialog class="image-dialog prose" data-icons="{{ $icons }}" aria-label="{{ T "image_viewer" }}" data-default-label="{{ T "image_viewer" }}" data-loading="{{ T "image_loading" }}" data-error="{{ T "image_error" }}">
+    <button type="button" class="diagram-action image-close" data-image-action="close" aria-label="{{ T "image_close" }}" title="{{ T "image_close" }}">{{ if $icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "image_close" }}{{ end }}</button>
+    <div class="diagram-tools image-tools" role="group" aria-label="{{ T "image_controls" }}">
+      {{ range $action := slice "out" "fit" "in" }}{{ $label := index (dict "out" "image_zoom_out" "fit" "image_fit" "in" "image_zoom_in") $action }}<button type="button" class="diagram-action" data-image-action="{{ $action }}" aria-label="{{ T $label }}" title="{{ T $label }}" disabled>{{ if $icons }}{{ partial "diagrams/icon.html" $action }}{{ else }}{{ T $label }}{{ end }}</button>{{ end }}
+      <a class="diagram-action" data-image-action="download" download target="_blank" rel="noopener" aria-label="{{ T "image_download" }}" title="{{ T "image_download" }}">{{ if $icons }}{{ partial "sidera/icon.html" "download" }}{{ else }}{{ T "image_download" }}{{ end }}</a>
+    </div>
+    <p class="image-viewer-status" role="status"></p>
+    <div class="image-view" tabindex="0" role="group" aria-label="{{ T "image_viewer" }}"></div>
+    <p class="image-dialog-caption" hidden></p>
+  </dialog>
+</template>

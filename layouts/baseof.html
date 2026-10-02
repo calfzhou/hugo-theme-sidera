@@ -21,6 +21,11 @@
       {{ $badges := resources.Get "js/badges.js" | minify | fingerprint }}
       <script data-sidera-badges-script src="{{ $badges.RelPermalink }}" integrity="{{ $badges.Data.Integrity }}" defer></script>
     {{ end }}
+    {{ if .page.Store.Get "sidera-image-viewer" }}
+      {{ partial "images/viewer.html" .page }}
+      {{ $images := resources.Get "js/image-viewer.js" | minify | fingerprint }}
+      <script data-sidera-image-viewer src="{{ $images.RelPermalink }}" integrity="{{ $images.Data.Integrity }}" defer></script>
+    {{ end }}
     {{ if .page.Store.Get "sidera-video" }}
       {{ $video := resources.Get "js/video.js" | minify | fingerprint }}
       <script data-sidera-video-script src="{{ $video.RelPermalink }}" integrity="{{ $video.Data.Integrity }}" defer></script>

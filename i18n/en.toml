@@ -519,3 +519,38 @@ other = "AI-generated"
 other = "Expand"
 [icon_collapse]
 other = "Collapse"
+
+# Optional original-image viewer
+
+[image_viewer]
+other = "Image viewer"
+
+[image_controls]
+other = "Image controls"
+
+[image_open]
+other = "Open original image"
+
+[image_open_named]
+other = "Open original image: {{ .label }}"
+
+[image_loading]
+other = "Loading original image…"
+
+[image_error]
+other = "Image could not be displayed. Use the download link to open the original."
+
+[image_close]
+other = "Close image"
+
+[image_download]
+other = "Download original image"
+
+[image_fit]
+other = "Fit image"
+
+[image_zoom_in]
+other = "Zoom in"
+
+[image_zoom_out]
+other = "Zoom out"

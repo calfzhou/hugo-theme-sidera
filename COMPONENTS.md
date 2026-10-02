@@ -214,7 +214,7 @@ No setting forces embedded hooks or overrides a site's native lookup choice.
 | box 3/3: optional title, red, codeblock | Named title/color/child on `box`; keep ordinary fences or use C1 snippet. Native alert syntax stays an alternative only when semantically appropriate. |
 | attributed blockquote 1/1 | **No dedicated shortcode by user choice.** Ordinary `>` paragraphs plus `> — Author, *Source*` retain credit. |
 | quot 6/3: text/pipe, icon:none | Named literal text; `icon:none` → boolean `ornament=false`. Paragraph, not a heading. |
-| image 7/4: background/width/original viewer/download | Limited native `image` presentation is now explicitly requested in P4 for opt-in backgrounds. Normal Markdown stays primary; old viewer/download UI remains retired. Preserve original-file links in content. |
+| image 7/4: background/width/original viewer/download | Limited native `image` presentation is now explicitly requested in P4 for opt-in backgrounds. Normal Markdown stays primary; D-145 adds explicit original-image popup/download behavior through `original`, not a full Stellar plugin port. Preserve original targets in that field or ordinary links. |
 | kbd 30/3: keys/backtick/Unicode | `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`. |
 | mark 36/3: ✓/✗/? and three colors | `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
 | u 120/10: letters/digits/selections | `{% u 9 %}` → `{{< u text="9" >}}`; adjacent characters stay adjacent. |
@@ -345,9 +345,51 @@ Use this small shared shortcode only when explicit presentation is useful:
   captions do not invert merely because the image does.
 - Standalone `<` notation on its own line; nested `<` in the existing outer-`%` C2
   containers (folds/grids/cells/boxes/timeline events) uses the same safe leaf bridge.
-- No lightbox, image editor, automatic download control or remote metadata service.
-  Old Stellar `fancybox`, `download` and other unsupported arguments diagnose. Author
-  an ordinary original-file link when needed. Icons-off does not hide content images.
+- Images without `original` remain plain images. D-145 adds the bounded opt-in viewer
+  below; no image editor, gallery, automatic download or remote metadata service. Old
+  Stellar `fancybox`/`download` argument aliases are not accepted. Icons-off does not
+  hide content images or leave controls blank.
 
 `python3 tests/check_images.py /absolute/fresh-output-directory` checks native
 resources/captions/nesting/typed-safe inputs without network or consumer edits.
+
+## Thumbnail and original image (P4 review)
+
+```text
+{{< image src="thumbnail.jpg" original="original.jpg" alt="A useful description" width=320 >}}
+```
+
+`original` is an optional **string image URL**, independently resolved/validated with
+the same native resource/HTTP(S) policy as src. Omission/empty keeps the plain image;
+use the same URL for src/original when a separate thumbnail file does not exist.
+The original file is published unchanged, never resized/rehosted or fetched at build.
+
+The thumbnail is a real link to the original, with a zoom-in cursor. A supported
+JavaScript browser enhances an unmodified primary click/Enter into one reusable native
+modal; modified clicks remain normal links. Without JS/dialog support it still opens
+the original directly. Merely rendering/hovering the thumbnail does not request the
+separate original. If src and original are the same URL, the thumbnail naturally has
+already loaded that file; there is no claim that this saves the original transfer.
+
+The popup uses the existing diagram-style surfaces and named icons, with localized
+zoom out/fit/zoom in/download/close controls. Fit respects natural size (no forced
+upscale), zoom is .25–8× the fit scale, arrows/native touch scrolling and mouse drag
+pan the image. Keyboard focus stays inside, Escape/backdrop/Close dismiss, and focus
+returns to the thumbnail. A loading/error message keeps Close/original access usable;
+late image decoding cannot overwrite a newer view. No inline SVG/HTML injection.
+
+The download control is a **native original-URL anchor** with `download`; it does not
+fetch a Blob, proxy, rehost or trigger automatically. Cross-origin servers/browser
+policies may ignore download and open the resource instead (in a separate tab with
+noopener). No CORS workaround or forced cross-origin download is promised.
+
+Caption/alt are preserved independently. The image's explicit background and effective
+inversion classes transfer to the original once, following palette changes, without
+inverting caption/controls or altering source bytes. Icons-off supplies visible labels;
+no-JS retains native access. Ordinary Markdown images and images without original gain
+no click handler or viewer assets. There is no gallery, rotation/crop/editor, auto-retry,
+preload of all originals, remote metadata lookup or new dependency.
+
+`python3 tests/check_image_viewer.py /absolute/fresh-output-directory` checks original
+URLs, conditional resources, source bytes, locales, icons-off and unsafe inputs. Browser
+checks additionally cover lazy requests, modal/zoom/pan/focus, failed/late loads and fallback.
