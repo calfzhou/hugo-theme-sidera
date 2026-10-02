@@ -1,0 +1,4 @@
+{{- /* A lone image in a Goldmark cell may report IsBlock=true. The parent table
+     owns this context; unwrap only our exact auto-figure markup from already
+     rendered cell HTML, never author Markdown or explicitly authored figures. */ -}}
+{{- return (replaceRE `<figure class="md-figure">(<img\b[^>]*>)<figcaption>[^<]*</figcaption></figure>` "$1" (string .) | safeHTML) -}}

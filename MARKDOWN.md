@@ -101,6 +101,14 @@ No active rich-caption syntax was established by the bounded real-use audit.
   hides descendant captions with CSS, preserving image alt.
 - Empty title and alt produce no empty caption/figure.
 - Images within ordinary prose get no generated caption.
+- Ordinary Markdown images inside table header/body cells also get **no automatic
+  caption**, including a cell containing only one image. Native image alt/title,
+  resource URL, dimensions and links remain. This is server-rendered behavior, not
+  CSS-only hiding or client cleanup; generated captions do not enter search text.
+  The native table hook removes only the exact auto-figure emitted by the image
+  hook from already-rendered cell HTML. Table attributes/alignment and nested Markdown
+  remain native. Explicit authored figures/shortcode captions are not erased by this
+  automatic-caption rule. Site table-hook overrides can reuse images/table-cell.html.
 - Image-only links remain valid image links without an automatic caption. Goldmark
   still wraps them in a paragraph even when the image's `.IsBlock` is true; the link
   hook removes only Sidera's generated figure wrapper, preserving image attributes

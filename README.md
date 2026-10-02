@@ -365,3 +365,10 @@ Set local collection-root `params.logo` to a native resource/assets/static image
 Home prefers that artwork to the preset icon; large collection cards show it on the
 right. It stays separate from UI icon keys, article covers and short/full title fields.
 See CONTRACT.md and `tests/check_collection_logos.py` for validation/fallback checks.
+
+### Table image captions
+
+Automatic image captions are for standalone images, not inline text or Markdown
+table cells/headers. Native table rendering preserves alt/title/sizing/resource/link
+semantics while omitting generated caption wrappers. See MARKDOWN.md and run
+`python3 tests/check_table_images.py /absolute/fresh-output-directory`.

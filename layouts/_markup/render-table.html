@@ -1,0 +1,10 @@
+{{- /* Native table structure/attributes/alignment; only generated image captions
+     differ from the embedded renderer. Cell Text is already safely rendered HTML. */ -}}
+<table{{ range $name, $value := .Attributes }}{{ if $value }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end }}{{ end }}>
+  <thead>
+    {{- range .THead }}<tr>{{ range . }}<th{{ with .Alignment }} style="{{ printf "text-align: %s" . | safeCSS }}"{{ end }}>{{ partial "images/table-cell.html" .Text }}</th>{{ end }}</tr>{{ end }}
+  </thead>
+  <tbody>
+    {{- range .TBody }}<tr>{{ range . }}<td{{ with .Alignment }} style="{{ printf "text-align: %s" . | safeCSS }}"{{ end }}>{{ partial "images/table-cell.html" .Text }}</td>{{ end }}</tr>{{ end }}
+  </tbody>
+</table>
