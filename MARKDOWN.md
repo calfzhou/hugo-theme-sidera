@@ -80,6 +80,12 @@ arguments, contexts, hook overrides, safety and diagnostics. No arbitrary raw HT
 
 ## Default automatic figures and image sizes
 
+Ordinary images have a **transparent CSS background by default**; source artwork is
+never recolored or rewritten. For an explicit matte, use the small `image` shortcode
+with `background="#f9fafb"` (see COMPONENTS.md), not raw style/HTML. The prior automatic
+pale CSS background is removed; intentionally authored backgrounds remain opt-in.
+
+
 ```md
 ![Description|320](diagram.svg "Caption from title")
 ![Description|320x160](diagram.svg)

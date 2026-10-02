@@ -96,7 +96,9 @@ Both links use the native language/subpath-aware home URL, including mobile and 
 ## Native menus and data
 
 Menus use ordinary native ordering/weights, `pageRef`, external `url`, language
-menus and current/ancestor helpers. Two levels are supported. A parent without a
+menus and current/ancestor helpers. Use `pageRef` for internal Pages/collection roots
+when current/ancestor highlighting is required; a literal URL does not establish a
+native Page association. Home pageRef is current only on Home, not every descendant. Two levels are supported. A parent without a
 destination is a heading; destinationless leaves and unresolved pageRefs fail.
 Parent page links remain links. Native menu labels are site-authored—not silently
 translated identifiers. Both English and Chinese theme-owned wording uses i18n.

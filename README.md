@@ -328,3 +328,11 @@ SVG text, not HTML fragments that fail XML image decoding. The pinned library an
 opaque sandbox are unchanged. `DIAGRAMS.md` explains the policy and regression scope;
 `python3 tests/check_mermaid_svg.py /absolute/fresh-output-directory` prepares native
 fixtures/checks. Browser checks must validate actual image decoding, not only `<svg`.
+
+### Transparent images and explicit mattes
+
+Normal Markdown images are transparent by default. The small native `image` shortcode
+can explicitly set a safe hex background while preserving native resources, captions,
+alt text and C2 nesting; see COMPONENTS.md. It does not restore the old viewer/download
+plugin. Image inversion uses supported next-line Markdown attributes, not adjacent
+Hexo-style attributes. Internal menus should use pageRef for native active indicators.

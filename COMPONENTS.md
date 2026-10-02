@@ -8,7 +8,7 @@ or unsafe HTML setting. C2 is implemented for user review; later P3 slices are s
 
 Use **Markdown `%` notation for the outermost container**, and **standard `<` notation
 for every nested component**. A container used alone takes `%`; the same container
-nested in another takes `<`. Self-contained components (`snippet`, `link`, `copy`,
+nested in another takes `<`. Self-contained components (`snippet`, `link`, `image`, `copy`,
 `quot`, `kbd`, `mark`, `u`) always take `<`, including when used alone.
 
 ```text
@@ -170,8 +170,8 @@ literal escaped `alt` defaults to empty (decorative/redundant beside the require
 card text); give meaningful alternative text when artwork adds information. `alt`
 without an image diagnoses. There is no automatic image-failure icon substitution.
 
-Card images have a transparent CSS background, independent of the pale background
-used by ordinary prose images. The card surface stays intact. Any background drawn
+Card images and ordinary prose images have transparent CSS backgrounds by default.
+The card surface stays intact. Any background drawn
 inside an image file remains part of its artwork; the theme never removes/recolors it.
 Link cards do not receive the decorative external-link arrow: their visible URL
 already exposes the destination. The localized screen-reader external-link description
@@ -214,7 +214,7 @@ No setting forces embedded hooks or overrides a site's native lookup choice.
 | box 3/3: optional title, red, codeblock | Named title/color/child on `box`; keep ordinary fences or use C1 snippet. Native alert syntax stays an alternative only when semantically appropriate. |
 | attributed blockquote 1/1 | **No dedicated shortcode by user choice.** Ordinary `>` paragraphs plus `> — Author, *Source*` retain credit. |
 | quot 6/3: text/pipe, icon:none | Named literal text; `icon:none` → boolean `ornament=false`. Paragraph, not a heading. |
-| image 7/4: background/width/original viewer/download | **Enhanced-image component retired by user choice.** Existing Markdown image/resource/dimension/caption behavior remains; no viewer parity claim or real-source conversion. |
+| image 7/4: background/width/original viewer/download | Limited native `image` presentation is now explicitly requested in P4 for opt-in backgrounds. Normal Markdown stays primary; old viewer/download UI remains retired. Preserve original-file links in content. |
 | kbd 30/3: keys/backtick/Unicode | `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`. |
 | mark 36/3: ✓/✗/? and three colors | `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
 | u 120/10: letters/digits/selections | `{% u 9 %}` → `{{< u text="9" >}}`; adjacent characters stay adjacent. |
@@ -314,3 +314,40 @@ light lift shadow or dark accent glow. Keyboard focus keeps a visible outline an
 highlight without tilt; touch/coarse-pointer/reduced-motion disable pointer motion.
 No-JS leaves native usable links and CSS hover/focus feedback. This does not change
 ordinary Markdown links, safe href resolution, card-image source/bytes or icons policy.
+
+## Optional image background (P4 review)
+
+Ordinary Markdown images now have **transparent CSS backgrounds by default**. This
+changes theme paint, not pixels or backgrounds inside PNG/JPEG/SVG files. Native
+Markdown remains the usual authoring path, including next-line inversion attributes.
+Use this small shared shortcode only when explicit presentation is useful:
+
+```text
+{{< image src="diagram.svg" alt="A diagram" width=320 background="#f9fafb" >}}
+{{< image src="diagram.svg" alt="A diagram" caption="An explicit caption" class="invert-when-dark" >}}
+```
+
+- Required **string** `src` and explicit **string** `alt` (empty for decorative images).
+  Src reuses the safe card-image resolver: exact native page/cross-bundle/assets,
+  same-site public paths and HTTP(S), with no build-time network fetch or rewriting
+  of artwork. Unsafe schemes, protocol-relative paths and above-root traversal reject.
+- Optional `background`: `transparent` or hex `#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`.
+  Omission has no forced matte. No arbitrary CSS, `url()`, raw style or SVG author input.
+  A background applies to the **image**, not its caption or the whole article.
+- Optional positive integer pixel `width`/`height` (decimal strings also accepted),
+  emitted as native dimensions. Responsive CSS still preserves natural image ratio;
+  this is not crop/stretch processing. Alt is literal, not Obsidian size syntax here.
+- Optional literal string `caption`: omitted follows `auto_caption` and alt; explicit
+  text overrides automatic behavior, empty hides. Image class `no-caption` also hides.
+  Alt/caption are independently escaped, never interpreted as executable HTML.
+- Optional `class`/`id` use the existing safe ASCII component token grammar and apply
+  to the image. `invert-when-dark`/`invert-when-light` work as for native Markdown images;
+  captions do not invert merely because the image does.
+- Standalone `<` notation on its own line; nested `<` in the existing outer-`%` C2
+  containers (folds/grids/cells/boxes/timeline events) uses the same safe leaf bridge.
+- No lightbox, image editor, automatic download control or remote metadata service.
+  Old Stellar `fancybox`, `download` and other unsupported arguments diagnose. Author
+  an ordinary original-file link when needed. Icons-off does not hide content images.
+
+`python3 tests/check_images.py /absolute/fresh-output-directory` checks native
+resources/captions/nesting/typed-safe inputs without network or consumer edits.
