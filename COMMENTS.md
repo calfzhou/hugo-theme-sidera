@@ -186,7 +186,9 @@ Each encoded style is under 2 KiB; only configured widgets carry it. No visitor/
 content or credentials are included. The same iframe adopts palette changes. The
 provider loads its ordinary base CSS on activation, not before the section is visible.
 
-The font stack uses locally installed fonts and ordinary system fallbacks, like the
+The full baseline UI fallback order matches SHELL.md (LXGW WenKai first). No inline/
+block code redesign or hosted font loading is applied to Giscus. The font stack uses
+locally installed fonts and ordinary system fallbacks, like the
 site. This matches the current Sidera baseline, **not arbitrary future site CSS
 customizations automatically**. A trusted consuming site can override the native asset
 or provider partial later. Keep larger customization/hosted-font needs separate.

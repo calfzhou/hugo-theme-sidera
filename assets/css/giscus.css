@@ -2,7 +2,7 @@
    Sidera's baseline font/palette. Fixed light/dark input, not executable config. */
 @import url("https://giscus.app/themes/{{ . }}.css");
 body {
-  font-family: "LXGW WenKai", "Helvetica Neue", "PingFang SC", Arial, sans-serif;
+  font-family: "LXGW WenKai", "Helvetica Neue", Helvetica, "Lucida Grande", Lucida, Tahoma, Arial, "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", STXiHei, SimHei, sans-serif;
 }
 main {
   color-scheme: {{ . }};

@@ -301,3 +301,15 @@ images, including defaults, scoped overrides, native resources, C2 nesting and
 unsafe inputs. Use an isolated destination outside the theme checkout. No remote
 image request or browser/package installation is required. `COMPONENTS.md` documents
 the separate image/icon API and browser-load policy; existing theme defaults stay put.
+
+### Font-family defaults (selection, not loading)
+
+Sidera uses separate CSS tokens for UI (`--ui`), prose (`--reading`), inline code
+(`--inline-code`) and monospace-first source blocks (`--code`). The default stacks
+and site override recipe are in [SHELL.md](SHELL.md#assets-escaping-and-extensions).
+LXGW WenKai/Source Code Pro are not downloaded or bundled by these declarations;
+font loading remains a separate site decision. KaTeX's local math fonts are unchanged.
+
+Run `python3 tests/check_font_defaults.py /absolute/fresh-output-directory` for
+three isolated native builds checking exact defaults, native override output, both
+Giscus baseline style variants, source bytes and absence of a new font loader.

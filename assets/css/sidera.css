@@ -11,8 +11,12 @@
   --title-highlight: #1bcdfc80; --card-shadow: 0 1px 2px #0000001a;
   --rail-background: linear-gradient(165deg,#ffffff0c,transparent 75%); --image-background: #e4eaee;
   --text: #fff; --muted: #ffffffb3; --quiet: #ffffff80; --accent: #1bcdfc; --link: #38a8ff; --pin: #ff9788;
-  --ui: "LXGW WenKai", "Helvetica Neue", "PingFang SC", Arial, sans-serif;
-  --reading: var(--ui); --code: "Source Code Pro", Menlo, Consolas, monospace;
+  /* Family selection only: no font download. Inline prose code and source blocks
+     intentionally use different priorities; sites may override these CSS tokens. */
+  --ui: "LXGW WenKai", "Helvetica Neue", Helvetica, "Lucida Grande", Lucida, Tahoma, Arial, "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", STXiHei, SimHei, sans-serif;
+  --reading: var(--ui);
+  --inline-code: "LXGW WenKai", "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
+  --code: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", "LXGW WenKai Mono", "LXGW WenKai", monospace;
   --tab-selected: #ffffff40; --radius: 16px; --measure: 720px; --page-gap: 32px; --rail-width: 288px;
   font: 18px/1.6 var(--ui); background: var(--canvas); color: var(--text);
 }
@@ -331,7 +335,7 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose figcaption { margin-top: .5rem; color: var(--muted); font-size: .85em; line-height: 1.5; text-align: center; }
 .prose figcaption :is(h4,p) { font: inherit; margin: .25em 0 0; }
 .prose figcaption h4 { color: var(--text); font-weight: 500; }
-.prose code { font-family: var(--code); font-size: .85em; overflow-wrap: anywhere; }
+.prose code { font-family: var(--inline-code); font-size: .85em; overflow-wrap: anywhere; }
 .prose :not(pre) > code { padding: .15em .3em; background: var(--panel); border-radius: 4px; }
 .prose pre { max-width: 100%; overflow: auto; padding: 1.75rem 1rem; background: var(--panel); border: 0; border-radius: 8px; font: .85rem/1.6 var(--code); tab-size: 4; }
 .prose pre code { padding: 0; font: inherit; overflow-wrap: normal; word-break: normal; }

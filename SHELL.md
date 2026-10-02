@@ -350,12 +350,33 @@ Example trusted site-only right extra:
 {{ end }}
 ```
 
-Native CSS tokens: `--ui`, `--reading`, `--code`, `--canvas`, `--surface`, `--panel`,
+Native CSS tokens: `--ui`, `--reading`, `--inline-code`, `--code`, `--canvas`, `--surface`, `--panel`,
 `--surface-hover`, `--line`, `--text`, `--muted`, `--accent`, `--pin`, `--measure`.
-Use head-extra to load an owner CSS asset *after* theme CSS. UI/prose prefer local
-LXGW WenKai, then Helvetica Neue/PingFang/Arial; code prefers local Source Code Pro,
-then Menlo/Consolas. The portable fallback is visibly different. Owner-supplied
-local fonts need their own rights/notices; none are downloaded or distributed here.
+Use head-extra to load an owner CSS asset *after* theme CSS. Font selection and loading are independent. The default family stacks are:
+
+```css
+--ui: "LXGW WenKai", "Helvetica Neue", Helvetica, "Lucida Grande", Lucida, Tahoma, Arial, "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", STXiHei, SimHei, sans-serif;
+--reading: var(--ui);
+--inline-code: "LXGW WenKai", "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
+--code: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", "LXGW WenKai Mono", "LXGW WenKai", monospace;
+```
+
+`--ui` covers shell/identity/headings; `--reading` covers body prose. Inline prose
+code uses `--inline-code`; fenced/highlighted code, snippets and source-copy fallback
+use monospace-first `--code`. Existing `pre code { font: inherit }` keeps nested code
+on the block's stack. Keyboard/control/other existing `--code` consumers remain
+monospace-first. To override both code roles, set both variables; no settings registry
+or site-specific theme mode is needed. Giscus's fixed baseline body stack matches
+`--ui`, but iframe CSS does not inherit site variable overrides.
+
+These definitions do **not** acquire fonts. Without installed or site-loaded fonts,
+the browser selects the next available family (also per missing glyph); appearance
+can differ across devices. No LXGW/Source Code Pro files, `@font-face`, CDN stylesheet,
+preload or network request is added. Sites may independently supply font stylesheets
+through the existing head-extra hook, with their own network/rights policy. Site CSS
+loaded after theme CSS can override the stacks. Already bundled KaTeX math fonts
+are separate and unchanged; this is not a change to their conditional loading.
+
 UI icons are a pinned Solar subset in native YAML; ICONS.md lists Sidera keys and
 source names/styles. Only validated maintainer-owned registry SVG is inlined;
 menu/section/shortcode values remain keys, never arbitrary authored SVG strings.
