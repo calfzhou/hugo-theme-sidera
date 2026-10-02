@@ -170,7 +170,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
 | top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
 | taxonomy_hubs | index (shared default) or list (explicit all-content opt-in). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
-| left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults [menu,profile] / [toc], with preset overrides. []/false disables, no blank rail. |
+| left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults menu + global recent-updates / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
 | widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See SHELL.md. |
@@ -256,9 +256,12 @@ certification, distribution license grant or P2 visual completion is implied.
 All six configurable regions accept component/widget names, `{component: name, config: {...}}`
 and `{widget: name, config: {...}}` entries.
 Config is a typed component-specific presentation overlay after the normal resolver. Named
-widgets add reusable defaults before per-use options; they do not change the resolved data scope. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
+widgets add reusable defaults before per-use options. Recent scope=global changes only
+that instance’s candidate set, not the Page owner or other components’ scope. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
 model change. SHELL.md contains the complete per-component option/default table and empty semantics.
-There is one recent component with instance order=modification/publication, not a second component.
+There is one recent component with instance order=modification/publication and
+scope=owner/global, not a second component. The shared count stays 5; global scope
+means current-language regular pages, while owner scope retains optional section inclusion.
 
 
 Collection browsing adds private generated `params.sidera.archive_view` and the reserved

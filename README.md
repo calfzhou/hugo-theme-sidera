@@ -351,3 +351,10 @@ keeps native original access and progressively adds diagram-style zoom/fit/downl
 close controls. Original bytes and caption/inversion/background intent remain; no
 remote fetch/rehosting or viewer on every Markdown image. See COMPONENTS.md, including
 cross-origin native-download limits and no-JS/unsupported-browser fallback.
+
+### Leftbar defaults
+
+Notes: menu, tag tree, recent publications. Blog: menu, recent updates. Docs: menu,
+page tree, recent updates and publications. The global/minimal fallback is menu plus
+non-scoped recent updates. Counts remain 5; main list ordering/pagination is separate.
+See PRESETS.md/SHELL.md and `tests/check_leftbar_defaults.py` for scope/override checks.

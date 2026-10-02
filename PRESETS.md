@@ -95,9 +95,9 @@ creates a scope. See CONTRACT.md for exact types and field-domain exceptions.
 
 | Preset | Selecting section | Descendants |
 |---|---|---|
-| blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs, menu/taxonomies/recent | Same left components, TOC right, update date shown |
-| notes | Recursive list, modification order, hierarchical tags, menu/taxonomies/recent | Same left components, TOC right, update date shown |
-| docs | Children list, page-tree/taxonomies, recent sections enabled | Children mode for sections, same tree/taxonomy components, TOC, update date shown |
+| blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs; menu + recent updates | Same left components, TOC right, update date shown |
+| notes | Recursive list, modification order; menu + tag tree (tags only) + recent publications | Same left components, TOC right, update date shown |
+| docs | Children list; menu + page tree + recent updates + recent publications; recent sections enabled | Children mode for sections, same left components, TOC, update date shown |
 
 Explicit section/page/native cascade values can change every applicable capability without
 selecting a preset. Site defaults sit below supplied preset values; use native cascade or a term/
@@ -120,8 +120,10 @@ or list policy. A hidden section intro does not generate a TOC.
 Region defaults in any of the three preset targets accept component/config objects as well as
 plain names. Native effective Page.Params still wins and arrays replace wholly. Each chosen
 instance then overlays its own validated options; unused preset instances are validated too.
-One `recent` type accepts order=publication/modification per instance. Bundled selections are
-unchanged; Fieldbook explicitly demonstrates new notebook entries and both orders on docs.
+One `recent` type accepts order=publication/modification and scope=owner/global per
+instance. The bundled defaults above apply to both the selecting section and its
+descendants; contextual taxonomy/archive views use the owner policy. Recent order is
+independent of the main list order/pinning/pagination.
 
 The blog section target now selects `top=[collection-nav]` and `taxonomy_hubs=index`. Its
 regular descendants do not acquire a bar by that default. Generated scoped browsing views use
@@ -129,8 +131,8 @@ the owner's resolved presentation. Other presets remain unchanged and can opt in
 capabilities through native Page/cascade or preset options; no runtime blog-name gate is used.
 
 Preset region arrays can reference site/language named widgets. Define widgets in params.widgets
-at site/language level, not in a preset's defaults map. Existing bundled preset selections remain
-unchanged; recent-updates/recent-published are available reusable choices backed by recent.
+at site/language level, not in a preset's defaults map. Bundled presets use the reusable recent-updates/recent-published definitions backed
+by the single recent renderer.
 
 The minimal taxonomy_hubs default is now index for every scope, including notes/docs and
 sections without a preset. The blog entry remains explicit; list is still an owner opt-in.
@@ -197,3 +199,15 @@ Only manual/reviewed/polished/generated are supported; an explicit empty string 
 lower fallbacks. Bundled presets do not assume an AI disclosure. Site authors can
 set page/cascade/preset/site-language values where factually appropriate. Labels stay
 localized header metadata, outside body indexes and authorship/license semantics.
+
+### Global leftbar fallback
+
+Without a higher-priority selection, left is menu plus recent-updates with explicit
+`config.scope=global`: current-language regular pages across all collections and
+standalone pages. It stays non-scoped even on an unpreset collection. Preset selections
+use owner-scoped recents by default. No profile widget is implicitly selected now;
+owners may still explicitly select it or replace/disable any region.
+
+The shared recent count remains **5**, not a preset/site-specific count. Main page_size
+and list_order are independent; notes still list by modification, blogs by publication.
+No article metadata, taxonomy assignments, scope roots or required author fields change.

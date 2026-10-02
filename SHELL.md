@@ -21,7 +21,7 @@ inapplicable components emit no empty region. Desktop left-shell views preserve 
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and any configured left-footer items move to the compact header when left is off.
 
-Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=index, left=[menu,profile], right=[toc], menu=primary, recent_count=5, icons=true.
+Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=index, left=[menu,{widget:recent-updates,config:{scope:global}}], right=[toc], menu=primary, recent_count=5, icons=true.
 Preset section/descendant maps may supply different defaults. Site/language values are below
 preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
@@ -161,9 +161,10 @@ features. `links`/profile menus are absent when the selected menu is absent.
 - **Recent (`recent`):** each instance selects `config.order=modification` (default,
   caption Recently updated) or `publication` (caption Recently published). Lastmod descending versus PublishDate descending,
   then Title/Path ascending; zero dates sort last. Both ignore pins and the main paginator.
-  Owner scope excludes nested independently marked collections. recent_sections=true includes
-  descendant sections as well as regular leaves. With no owner, both use current-language
-  Site.RegularPages. Rows show only one ellipsized title, with the full escaped title in the
+  `config.scope=owner` (default) uses the nearest collection and excludes nested
+  independent roots; recent_sections=true includes its descendant section documents.
+  `scope=global` always uses current-language Site.RegularPages, ignoring collection
+  boundaries and excluding section documents. No-owner scope also uses that global set. Rows show only one ellipsized title, with the full escaped title in the
   native tooltip/accessibility name; no date or scope-explanation line.
 - **TOC:** native headings, only with the rendered article/docs body; no TOC on
   later docs child pagers whose body is intentionally omitted. Full standalone
@@ -224,7 +225,7 @@ Neither Page.Params, the cached page settings, another instance nor a region hoo
 | site-taxonomies | taxonomies (array or false), icons (bool) | taxonomy_navigation, icons |
 | page-tree | No presentation options yet; config may be omitted or empty | Native owner/tree/local order, not instance data |
 | toc | icons (bool) | icons |
-| recent | order (publication/modification), count (positive integer), sections (bool) | modification; recent_count; recent_sections |
+| recent | order (publication/modification), count (positive integer), sections (bool), scope (owner/global) | modification; recent_count; recent_sections; owner (global when no owner) |
 | profile | title, text, image, menu (strings), icons (bool) | Corresponding profile fields; icons |
 | text | title (optional plain string), text (Markdown string) | No title; text |
 | links | menu (string), icons (bool) | links_menu; icons |
@@ -1018,3 +1019,25 @@ Previous/Next text, including disabled endpoints. Numbers, current state, native
 URLs, keyboard/accessible names, and no-JS navigation remain. List/docs/archive/
 taxonomy callers share this behavior; no paginator is constructed by the renderer.
 The approved Solar registry now covers the remaining UI; final user acceptance remains separate.
+
+### Default leftbar composition (P4-B review)
+
+Main navigation is retained. Below it: notes select only the tag tree and recent
+publications; blogs select recent updates; docs select page tree, recent updates, then
+recent publications. These preset choices apply to section and descendant targets.
+The minimal/global fallback is a recent-updates instance with scope=global, not a
+profile or an implicitly scoped list. This affects only that widget's candidate set;
+search, browsing ownership, taxonomies and other components retain their native scope.
+
+```yaml
+params:
+  left:
+    - menu
+    - widget: recent-updates
+      config:
+        scope: global
+```
+
+This is the existing region/instance model, not a second recent renderer. Page/cascade/
+preset/site overrides and false/empty opt-outs retain their precedence. Defaults keep
+recent_count=5; custom larger positive counts remain supported independently.

@@ -11,12 +11,12 @@ taxonomy_hubs = "index"
 list_mode = 'recursive'
 list_order = 'publication'
 taxonomy_hierarchy = []
-left = ['menu', 'taxonomies', 'recent']
+left = ['menu', 'recent-updates']
 icon = 'blog'
 recent_sections = false
 [blog.defaults.cascade.params]
 primary_date = "published"
-left = ['menu', 'taxonomies', 'recent']
+left = ['menu', 'recent-updates']
 right = ['toc']
 show_updated = true
 recent_sections = false
@@ -30,12 +30,12 @@ show_updated = true
 list_mode = 'recursive'
 list_order = 'modification'
 taxonomy_hierarchy = ['tags']
-left = ['menu', 'taxonomies', 'recent']
+left = ['menu', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'recent-published']
 icon = 'notebook'
 recent_sections = false
 [notes.defaults.cascade.params]
 primary_date = "updated"
-left = ['menu', 'taxonomies', 'recent']
+left = ['menu', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'recent-published']
 right = ['toc']
 show_updated = true
 recent_sections = false
@@ -49,12 +49,12 @@ show_updated = true
 list_mode = 'children'
 list_order = 'title'
 taxonomy_hierarchy = []
-left = ['menu', 'page-tree', 'taxonomies']
+left = ['menu', 'page-tree', 'recent-updates', 'recent-published']
 icon = 'docs'
 recent_sections = true
 [docs.defaults.cascade.params]
 primary_date = "updated"
-left = ['menu', 'page-tree', 'taxonomies']
+left = ['menu', 'page-tree', 'recent-updates', 'recent-published']
 right = ['toc']
 show_updated = true
 recent_sections = true

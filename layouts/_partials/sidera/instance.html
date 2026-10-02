@@ -8,7 +8,7 @@
   "site-taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons")
   "page-tree" dict
   "toc" (dict "icons" "icons")
-  "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections")
+  "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections" "scope" "")
   "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
   "text" (dict "title" "" "text" "text")
   "links" (dict "menu" "links_menu" "icons" "icons") -}}
@@ -82,6 +82,7 @@
     {{- else -}}
       {{- if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera %s: %s config.%s must be a string" $source $name $key -}}
       {{- else if and (eq $key "order") (not (in (slice "publication" "modification") $value)) -}}{{- errorf "Sidera %s: recent config.order must be publication or modification" $source -}}
+      {{- else if and (eq $key "scope") (not (in (slice "owner" "global") $value)) -}}{{- errorf "Sidera %s: recent config.scope must be owner or global" $source -}}
       {{- else if and (eq $key "image") $value -}}
         {{- if or (findRE `[:?#\\]` $value) (hasPrefix $value "//") (in (split $value "/") "..") (not (in (slice ".svg" ".png" ".jpg" ".jpeg" ".webp" ".gif" ".avif") (lower (path.Ext $value)))) -}}{{- errorf "Sidera %s: profile config.image must be a local image path" $source -}}{{- end -}}
       {{- end -}}

@@ -1,7 +1,8 @@
 {{- $order := "modification" -}}{{- with .Config.order -}}{{- $order = . -}}{{- end -}}
 {{- $label := T "recent_updates" -}}{{- $id := "recent-updates" -}}
 {{- if eq $order "publication" -}}{{- $label = T "recent_published" -}}{{- $id = "recent-published" -}}{{- end -}}
-{{- $page := .Page -}}{{- $owner := .Owner -}}{{- $s := .Settings -}}{{- $ctx := . -}}
+{{- $page := .Page -}}{{- $owner := .Owner -}}
+{{- if eq (.Config.scope | default "owner") "global" -}}{{- $owner = false -}}{{- end -}}{{- $s := .Settings -}}{{- $ctx := . -}}
   {{- $pages := $page.Site.RegularPages -}}
   {{- with $owner -}}
     {{- $pages = slice -}}{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
