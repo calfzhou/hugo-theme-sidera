@@ -107,6 +107,8 @@ assert imgs[1]['alt']==''
 assert imgs[2]['src']=='/preview/logo.ico?v=1'
 assert imgs[3]['src']=='/preview/shared.svg'
 assert d.find('a',href='/preview/notes/n00/')
+assert d.find('span',**{'class':'content-link-title'})[0]['title']=='Article'
+assert d.find('span',**{'class':'content-link-url'})[0]['title']=='/preview/notes/n00/'
 assert d.find('h2',id='Old Heading'), 'Native quoted heading IDs preserve spaces/case'
 assert not d.find('span',**{'class':'content-link-icon'})
 assert (out/'notes/n00/art.svg').read_bytes()==(SITE/'content/notes/n00/art.svg').read_bytes()

@@ -570,10 +570,10 @@ html::-webkit-scrollbar { width: 8px; height: 8px; }
 html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 /* The card moves, not its surrounding grid. Spotlight cannot intercept a link. */
 .article-card:has(.card-content),.collection-card { transition: transform .25s ease-out,box-shadow .2s ease-out; }
-.article-card:has(.card-content)::before,.collection-card::before { content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at var(--pointer-x,50%) var(--pointer-y,50%),#ffffff40,transparent 80%); opacity: 0; transition: opacity .25s ease-out; }
+.article-card:has(.card-content)::before,.collection-card::before,.content-link-card::before { content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at var(--pointer-x,50%) var(--pointer-y,50%),#ffffff40,transparent 80%); opacity: 0; transition: opacity .25s ease-out; }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .pointer-active { transform: perspective(900px) translateY(-2px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)); }
-  .article-card.pointer-active::before,.collection-card.pointer-active::before,.article-card:focus-within::before,.collection-card:focus-within::before { opacity: .6; }
+  .article-card.pointer-active::before,.collection-card.pointer-active::before,.article-card:focus-within::before,.collection-card:focus-within::before,.content-link-card.pointer-active::before,.content-link-card:focus-visible::before { opacity: .6; }
 }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -752,14 +752,22 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .content-quot .quot-text { min-width: 0; position: relative; }
 .content-quot .quot-text::after { content: ""; position: absolute; height: 4px; width: 90%; left: 5%; bottom: -8px; border-radius: 100%; background: var(--text); opacity: .1; filter: blur(2px); }
 .quot-ornament { flex: none; color: var(--accent); font: bold 1.5em Georgia,serif; }
-.prose .content-link { display: flex; justify-content: center; margin: 1rem 0; }
-.prose .content-link-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 300px; max-width: 100%; padding: 12px; border-radius: 8px; background: var(--surface); box-shadow: var(--card-shadow); color: var(--text); text-decoration: none; line-height: 1.3; }
-.content-link-label { min-width: 0; }
-.content-link-title { display: block; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
-.content-link-url { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
-.prose .content-link-card > img { flex: none; width: 44px; height: 44px; border-radius: 4px; object-fit: contain; margin: 0; background: transparent; }
-.content-link-icon { --icon-size: 44px; flex: none; color: inherit; }
-.prose .content-link-card:is(:hover,:focus-visible) { background: var(--surface-hover); box-shadow: var(--item-shadow); text-decoration: none; }
+/* Stellar link.styl + hoverable-card: quiet resting card, responsive artwork,
+   two-line title and single-line destination; same shared pointer hover as lists. */
+.prose .content-link { display: flex; justify-content: center; margin: 1em auto; text-align: left; }
+.prose .content-link-card { position: relative; display: inline-flex; align-items: center; justify-content: space-between; width: 300px; max-width: 100%; padding: 0; border-radius: 12px; background: var(--surface); box-shadow: var(--link-card-shadow,none); color: inherit; text-decoration: none; line-height: 1.2; transition: transform .25s ease-out,box-shadow .2s ease-out; }
+.content-link-label { min-width: 0; overflow: hidden; margin: .75rem 0 .75rem .75rem; }
+.content-link-title { color: color-mix(in srgb,var(--text) 80%,transparent); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: calc(1em - 2px); font-weight: 500; overflow-wrap: anywhere; }
+.content-link-url { display: block; margin-top: .25rem; color: var(--quiet); opacity: .75; font-size: calc(1em - 3px); font-weight: 500; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prose .content-link-card > img { flex: none; width: 2.75rem; height: 2.75rem; border-radius: 4px; object-fit: contain; margin: .75rem; background: transparent; }
+.content-link-icon { --icon-size: 2.75rem; flex: none; width: 2.75rem; height: 2.75rem; margin: .75rem; color: inherit; }
+.content-link-card:not(:has(> img, > .content-link-icon)) > .content-link-label { margin-right: .75rem; }
+.prose .content-link-card:is(:hover,:focus-visible) { background: var(--surface); box-shadow: var(--link-card-hover-shadow,0 0 4px -2px var(--accent),0 0 24px -8px var(--accent)); text-decoration: none; }
+:root[data-color-scheme="light"] .content-link-card { --link-card-shadow: 0 1px 2px 0 #0000001a; --link-card-hover-shadow: 0 12px 20px -4px #00000026; }
+@media (prefers-color-scheme: light) {
+  :root[data-color-scheme="auto"] .content-link-card { --link-card-shadow: 0 1px 2px 0 #0000001a; --link-card-hover-shadow: 0 12px 20px -4px #00000026; }
+}
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) { .prose .content-link-card { transition: none; } }
 .prose .content-copy { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 1rem 0; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-width: 0; }
 .content-copy .copy-prefix { padding: 2px 8px; border-radius: 4px; color: var(--accent); background: var(--accent-soft); font: 700 13px/1.5 var(--code); overflow-wrap: anywhere; }
 .prose .content-copy .copy-value { flex: 1; min-width: 8ch; padding: 4px; background: none; white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -987,11 +995,11 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 
 /* In-article timeline: Stellar 1.44.0 tag-plugins/timeline.styl (xaoxuu, MIT).
    Native ordered events, not its unrelated sidebar/API widget. */
-.prose ol.content-timeline { position: relative; list-style: none; padding: 0 0 0 16px; margin: 1rem 0; }
+.prose ol.content-timeline { font-size: 1em; position: relative; list-style: none; padding: 0 0 0 16px; margin: 1rem 0; }
 .content-timeline::before { content: ""; position: absolute; top: .5rem; bottom: 0; left: 0; width: 4px; border-radius: 8px; background: var(--panel); }
 .prose .timeline-event { position: relative; display: flex; flex-direction: column; align-items: flex-start; max-width: 100%; margin: 0; padding: 0; }
 .prose .timeline-event + .timeline-event { margin-top: 1rem; }
-.timeline-label { position: relative; max-width: 100%; margin: .25rem 0; color: var(--quiet); font: 500 13px/1 var(--ui); overflow-wrap: anywhere; }
+.timeline-label { position: relative; max-width: 100%; margin: .25rem 0; color: var(--quiet); font: 500 calc(1em - 3px)/1 var(--ui); overflow-wrap: anywhere; }
 .timeline-label::before { content: ""; position: absolute; left: -16px; width: 4px; height: 4px; top: calc(50% - 2px); border-radius: 12px; background: var(--muted); transform: scale(2); transition: background .2s, height .2s, top .2s, transform .2s; }
 .timeline-event:is(:hover,:focus-within) > .timeline-label { color: var(--text); }
 .timeline-event:is(:hover,:focus-within) > .timeline-label::before { background: var(--accent); height: 16px; top: calc(50% - 8px); transform: scale(1); }

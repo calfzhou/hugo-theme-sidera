@@ -78,7 +78,7 @@ if (headings.length) {
 // Stellar/React Bits card hover, adapted to static Hugo cards (see third-party notices).
 // One queued frame per hovered card; touch, reduced motion and keyboard never tilt.
 const cardMotion = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-for (const card of document.querySelectorAll('.article-card:has(.card-content), .collection-card')) {
+for (const card of document.querySelectorAll('.article-card:has(.card-content), .collection-card, .content-link-card')) {
   let frame = 0, point;
   const reset = () => {
     cancelAnimationFrame(frame); frame = 0; point = null;
@@ -137,7 +137,9 @@ for (const body of document.querySelectorAll('article[data-renderer] .prose[data
     marker.setAttribute('aria-hidden', 'true');
     // A word joiner and narrow nonbreaking space keep the suffix with its label.
     const icon = document.querySelector('template[data-external-link-icon]');
-    if (body.dataset.icons !== 'false' && icon) {
+    // Cards already expose their destination and own their layout; keep the spoken
+    // external distinction below, but reserve decorative suffixes for prose links.
+    if (body.dataset.icons !== 'false' && !link.classList.contains('content-link-card') && icon) {
       marker.append(document.createTextNode('\u2060\u202f'), icon.content.cloneNode(true));
     }
     const description = document.createElement('span');

@@ -173,6 +173,9 @@ without an image diagnoses. There is no automatic image-failure icon substitutio
 Card images have a transparent CSS background, independent of the pale background
 used by ordinary prose images. The card surface stays intact. Any background drawn
 inside an image file remains part of its artwork; the theme never removes/recolors it.
+Link cards do not receive the decorative external-link arrow: their visible URL
+already exposes the destination. The localized screen-reader external-link description
+is retained. Ordinary external prose links keep their existing arrow/behavior.
 
 Native exact bundle/cross-bundle/global asset resolution is shared with ordinary
 images/links; static/public leading-slash paths receive the deployment prefix once.
@@ -295,3 +298,19 @@ blocks in a content commit, not a move-only commit. Preserve every label, paragr
 card/image reference and attribution. Do not author HTML comments as a hidden parser API.
 `python3 tests/check_timeline.py /absolute/fresh-output-directory` tests native positive,
 negative, nested resource/source/heading/math and literal-label cases without network.
+
+### Link-card presentation
+
+Resting and interactive cards follow Stellar's plain content-link style: 300px maximum
+card width within its container, 12px corners, .75rem inner spacing and 2.75rem
+contained artwork. Title is two lines, destination one ellipsized line. Both retain
+full DOM text and escaped native title tooltips; no content/reference is truncated
+at build time. Font sizes follow prose/story context (body minus 2px / 3px), rather
+than fixed small labels. Dark resting cards have no outline/shadow; light resting
+cards keep a quiet shadow. Their surface color does not change on hover.
+
+Pointer hover reuses the existing Stellar-derived Sidera spotlight/tilt handler, with
+light lift shadow or dark accent glow. Keyboard focus keeps a visible outline and
+highlight without tilt; touch/coarse-pointer/reduced-motion disable pointer motion.
+No-JS leaves native usable links and CSS hover/focus feedback. This does not change
+ordinary Markdown links, safe href resolution, card-image source/bytes or icons policy.
