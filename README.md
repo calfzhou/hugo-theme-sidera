@@ -320,3 +320,11 @@ Native `timeline`/`event` containers now preserve authored chronology and nested
 Markdown/cards/grids through the existing safe composition bridge. See COMPONENTS.md
 for `%`/`<` notation, typed literal labels and conversion. This is not a sidebar
 timeline, API widget or generic Hexo interpreter. No additional JavaScript/dependency.
+
+### Mermaid multiline SVG regression
+
+Mermaid uses protected root `htmlLabels: false` so multiline labels render as native
+SVG text, not HTML fragments that fail XML image decoding. The pinned library and
+opaque sandbox are unchanged. `DIAGRAMS.md` explains the policy and regression scope;
+`python3 tests/check_mermaid_svg.py /absolute/fresh-output-directory` prepares native
+fixtures/checks. Browser checks must validate actual image decoding, not only `<svg`.

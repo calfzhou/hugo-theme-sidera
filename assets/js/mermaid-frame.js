@@ -10,8 +10,11 @@
       const api = window.mermaid.default || window.mermaid;
       api.initialize({startOnLoad:false, securityLevel:'strict', suppressErrorRendering:true,
         maxTextSize:50000, maxEdges:500, theme:palette === 'dark' ? 'dark' : 'neutral',
-        fontFamily:'Arial, sans-serif', flowchart:{htmlLabels:false, useMaxWidth:false, curve:'linear'},
-        secure:['securityLevel','startOnLoad','maxTextSize','maxEdges','themeCSS','fontFamily','altFontFamily','themeVariables','flowchart']});
+        // Mermaid 11.17 uses root htmlLabels; the deprecated flowchart setting alone
+        // leaves HTML labels enabled in some renderers. Native SVG text keeps the
+        // result XML-valid (including multiline labels) for inert img decoding.
+        htmlLabels:false, fontFamily:'Arial, sans-serif', flowchart:{useMaxWidth:false, curve:'linear'},
+        secure:['securityLevel','startOnLoad','maxTextSize','maxEdges','themeCSS','htmlLabels','fontFamily','altFontFamily','themeVariables','flowchart']});
       graph.replaceChildren();
       const {svg} = await api.render('diagram', source, graph);
       parent.postMessage({type:'rendered',request,svg}, '*');

@@ -19,6 +19,29 @@ including the actual f-circ shape syntax, subgraphs, CJK labels and multi-target
 All 30 audited fences rendered in the local check; this is not every Mermaid grammar,
 label/font combination or visual-parity certification. Ordinary B math remains separate.
 
+### XML-safe multiline labels
+
+The pinned Mermaid 11.17.2 renderer uses root-level **`htmlLabels: false`**, included
+in its protected config keys. The older `flowchart.htmlLabels` option alone is
+insufficient: some rendering paths prefer the root/default setting and emit HTML
+labels. HTML-style `<br>` in returned SVG `foreignObject` is not well-formed XML and
+cannot reliably decode in Sidera's inert `img` viewer.
+
+Native SVG text/tspan labels keep authored multiline content without source rewrites,
+HTML-label injection, string replacements on SVG, a dependency upgrade or a relaxed
+sandbox. Literal `\n`, explicit `<br/>`, literal newlines and Markdown multiline
+labels are covered by the regression. This is an internal fixed renderer policy,
+not a new page parameter or invitation to pass Mermaid initialization directives.
+Thirty original real-use diagrams are checked in both palettes for **valid XML and
+successful native image decoding**, not merely for the presence of an `<svg` string.
+That stronger assertion fixes a gap in the earlier aggregate source-render check.
+All existing grammar/size/security and source-only fallback boundaries remain.
+
+Native fixture/integrity checks:
+`python3 tests/check_mermaid_svg.py /absolute/fresh-output-directory`.
+Browser verification must additionally decode the SVG and verify multiline text;
+a successful parser/render promise alone is not evidence of a displayable diagram.
+
 Optional fence attributes: plain nonblank `caption` and safe `class`/`id`. A caption
 is optional: omission shows no generic visible caption, while a localized diagram
 label remains for accessibility. To display code only, use a `text` fence. The former
