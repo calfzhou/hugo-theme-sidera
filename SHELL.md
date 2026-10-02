@@ -1041,3 +1041,12 @@ params:
 This is the existing region/instance model, not a second recent renderer. Page/cascade/
 preset/site overrides and false/empty opt-outs retain their precedence. Defaults keep
 recent_count=5; custom larger positive counts remain supported independently.
+
+### Collection card identity artwork
+
+Optional root params.logo replaces Home's small preset icon with a 48px contained
+image, transparent surface/no filtering. Large collection cards show it at the right
+(96px desktop, 72px narrow layout); title/summary have a separate flexible text column.
+Both surfaces use the explicit short name before preset type without duplicating equal
+labels. Native full titles, descriptions, dates, URLs and menu icons remain independent.
+Empty/omitted logos retain fallback behavior; icons=false still preserves identity images.

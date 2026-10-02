@@ -358,3 +358,10 @@ Notes: menu, tag tree, recent publications. Blog: menu, recent updates. Docs: me
 page tree, recent updates and publications. The global/minimal fallback is menu plus
 non-scoped recent updates. Counts remain 5; main list ordering/pagination is separate.
 See PRESETS.md/SHELL.md and `tests/check_leftbar_defaults.py` for scope/override checks.
+
+### Collection logos
+
+Set local collection-root `params.logo` to a native resource/assets/static image path.
+Home prefers that artwork to the preset icon; large collection cards show it on the
+right. It stays separate from UI icon keys, article covers and short/full title fields.
+See CONTRACT.md and `tests/check_collection_logos.py` for validation/fallback checks.

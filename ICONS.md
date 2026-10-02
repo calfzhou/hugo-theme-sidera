@@ -202,3 +202,11 @@ Shields images and **actual QR data** remain images, not registry icons.
 
 All third-party notices remain in THIRD-PARTY-NOTICES.md and its published mirror.
 No Sidera software/artwork license or trademark clearance is granted by this guide.
+
+## Collection logos are not interface icons
+
+Local root `params.logo` is identity artwork, resolved as an image rather than registry
+geometry. Home collection cards prefer it over the preset icon; large collection cards
+show it on the right. It is not recolored/cropped and is not suppressed by icons=false.
+Without a logo, existing named UI icon/default-off behavior remains. Main menu icons
+are not automatically replaced with logos. See CONTRACT.md for field scope and safety.

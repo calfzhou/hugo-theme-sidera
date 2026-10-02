@@ -1,0 +1,8 @@
+{{- /* Keep legacy no-name cards concise; their title already supplies the name. */ -}}
+{{- $kind := partial "collection-label.html" . -}}
+{{- $label := $kind -}}
+{{- with strings.TrimSpace (string (.Params.name | default "")) -}}
+  {{- $label = . -}}
+  {{- if ne (lower .) (lower $kind) -}}{{- $label = printf "%s · %s" . $kind -}}{{- end -}}
+{{- end -}}
+{{- return $label -}}

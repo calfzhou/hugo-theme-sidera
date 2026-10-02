@@ -1,0 +1,9 @@
+{{- /* Local collection identity artwork, never a named monochrome UI icon. */ -}}
+{{- $url := "" -}}
+{{- if partial "model/is-root.html" . -}}
+  {{- if isset .Params "logo" -}}
+    {{- if ne (printf "%T" .Params.logo) "string" -}}{{- errorf "Sidera collection params.logo must be a string: %s" .Path -}}
+    {{- else -}}{{- with .Params.logo -}}{{- $url = partial "sidera/image.html" (dict "Page" $ "Owner" $ "path" .) -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $url -}}

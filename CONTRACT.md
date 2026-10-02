@@ -101,6 +101,36 @@ put it on articles/shared-scope branches, or place it in preset defaults. It is 
 read from site/language params. Thus two collections using `preset: notes` can have
 independent names/titles, and a root without any preset can have a name too.
 
+## Collection logo
+
+Optional local **`params.logo`** on a collection root selects identity artwork:
+
+```yaml
+title: A full collection title
+description: A useful summary.
+preset: notes
+params:
+  name: Notebook
+  logo: /images/notebook.png
+```
+
+It is a **local image path**, resolved through native root resources, assets or static,
+with the existing identity-image validation (SVG/PNG/JPEG/WebP/GIF/AVIF, no traversal,
+remote URL/query/raw SVG input). Missing files diagnose. Omission/empty restores the
+Home preset/icon fallback. No build-time fetch, processing, cropping or recoloring.
+Like name, logo is root-local identity, not a preset default/site fallback/cascade.
+
+Home cards use the logo in place of their default UI icon. Explicit short name appears
+before preset type in the small identity line; equal names/types are not repeated, and
+without an explicit name the title already serves that role. Full native title and
+summary stay below. Large collection cards (including preset term members) put the
+logo on the right, larger, beside the unchanged title/summary/content metadata.
+
+Logos remain images even when params.icons=false; that switch hides optional UI icons,
+not site-owned identity artwork. Logos have empty alt because adjacent identity/title
+already name the linked collection. No extra link/tab stop or automatic image viewer
+is added. Native menu icons, article covers and author avatars are separate contracts.
+
 ## Three distinct targets for preset defaults
 
 The term's own `params`/body configure that public term Page. Its member-default fragment is:
@@ -149,6 +179,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | Setting | Meaning / default |
 |---|---|
 | auto_caption | Boolean, true. Direct standalone Markdown image title then cleaned alt becomes an escaped caption; false opts out using normal page/cascade/preset/site precedence. See MARKDOWN.md. |
+| logo | Optional local collection-root image path; empty/omitted falls back to the Home UI icon. No inheritance/remote fetch; see collection logo contract. |
 | name | Optional local collection-root short label; string, title fallback when omitted/blank. Not a preset/default/cascade field. See the name/title/description contract above. |
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |

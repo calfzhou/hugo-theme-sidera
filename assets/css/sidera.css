@@ -1019,3 +1019,14 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .image-dialog .image-dialog-caption { margin:0; max-height:20vh; overflow:auto; }
 .image-dialog .image-viewer-status { margin:0; font-size:.85em; color:var(--muted); }
 .image-dialog .diagram-action:disabled { opacity:.4; cursor:default; }
+
+/* Collection-owned logos are identity images: no UI-icon recoloring/cropping/matte. */
+.collection-emblem.has-logo { width:48px; height:48px; padding:0; margin:0 0 8px 12px; border-radius:0; background:transparent; }
+.collection-logo,.collection-card-logo { display:block; object-fit:contain; background:transparent; border-radius:0; filter:none; }
+.collection-logo { width:48px; height:48px; }
+.collection-identity { display:block; overflow-wrap:anywhere; }
+.card-content.has-collection-logo { display:grid; grid-template-columns:minmax(0,1fr) 96px; align-items:center; gap:24px; }
+.collection-card-copy { min-width:0; }
+.collection-card-copy > .collection-identity { margin:0; }
+.collection-card-logo { width:96px; height:96px; }
+@media (max-width:600px) { .card-content.has-collection-logo { grid-template-columns:minmax(0,1fr) 72px; gap:16px; } .collection-card-logo { width:72px; height:72px; } }

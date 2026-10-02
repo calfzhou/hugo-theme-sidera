@@ -30,10 +30,10 @@ language. No new dependency, raw parser/override guard or mandatory site languag
 
 ## Collection display identity is not preset vocabulary
 
-Use native `title`/`description` and optional local `params.name` on the collection's
+Use native `title`/`description` and optional local `params.name` / `params.logo` on the collection's
 `_index.md`. The short name labels scoped search/navigation; full title remains for
 headings/cards. These identify a particular collection, not all collections using a
-preset. Do not put `name` in preset defaults/cascade or use it as a routing/scope key.
+preset. Do not put `name` or `logo` in preset defaults/cascade or use it as a routing/scope key.
 A notes/wiki/blog/custom root follows the same rule, including roots without a preset.
 CONTRACT.md gives the fallback, validation and exact display surfaces.
 
@@ -211,3 +211,7 @@ owners may still explicitly select it or replace/disable any region.
 The shared recent count remains **5**, not a preset/site-specific count. Main page_size
 and list_order are independent; notes still list by modification, blogs by publication.
 No article metadata, taxonomy assignments, scope roots or required author fields change.
+
+Collection-owned logos can replace the default icon on Home and appear at the right
+of large collection cards. Preset type/icon definitions are unchanged; no theme brand
+catalog, new content kind or global logo default is introduced. See CONTRACT.md.

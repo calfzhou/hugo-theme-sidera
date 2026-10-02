@@ -10,8 +10,9 @@
       {{ if partial "model/is-root.html" . }}
         <li class="collection-card">
           {{ $s := partialCached "sidera/settings.html" . .Path }}
-          <span class="collection-emblem">{{ if $s.icons }}{{ partial "sidera/icon.html" $s.icon }}{{ end }}</span>
-          <span class="eyebrow">{{ partial "collection-label.html" . }}</span>
+          {{ $logo := partial "collection-logo.html" . }}
+          <span class="collection-emblem{{ if $logo }} has-logo{{ end }}">{{ if $logo }}<img class="collection-logo" src="{{ $logo }}" width="48" height="48" alt="" loading="lazy" decoding="async">{{ else if $s.icons }}{{ partial "sidera/icon.html" $s.icon }}{{ end }}</span>
+          <span class="eyebrow collection-identity">{{ partial "collection-identity.html" . }}</span>
           <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
           <p>{{ (.Description | default (.Summary | plainify | htmlUnescape)) | truncate 160 }}</p>
         </li>
