@@ -292,3 +292,12 @@ separate, with the approved Solar registry now implemented and awaiting user rev
 [ICONS.md](ICONS.md) is the complete named-icon/customization/provenance contract.
 Sidera keys are independent of Solar source names, tracked per entry in
 data/sidera/icon_sources.yaml. No runtime dependency on the source checkout.
+
+### Focused P4 input checks
+
+`python3 tests/check_p4_inputs.py /absolute/fresh-output-directory` runs native,
+stdlib-only checks for positive recent counts and independent link-card content
+images, including defaults, scoped overrides, native resources, C2 nesting and
+unsafe inputs. Use an isolated destination outside the theme checkout. No remote
+image request or browser/package installation is required. `COMPONENTS.md` documents
+the separate image/icon API and browser-load policy; existing theme defaults stay put.

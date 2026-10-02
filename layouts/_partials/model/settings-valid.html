@@ -14,7 +14,7 @@
   {{- if ne (printf "%T" (index $settings $key)) "string" -}}{{- errorf "Sidera %s: %s must be a string" $page.Path $key -}}{{- end -}}
 {{- end -}}
 {{- if ne (printf "%T" $settings.icons) "bool" -}}{{- errorf "Sidera %s: icons must be boolean" $page.Path -}}{{- end -}}
-{{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $settings.recent_count))) (not (in (seq 1 10) $settings.recent_count)) -}}{{- errorf "Sidera %s: recent_count must be an integer from 1 to 10" $page.Path -}}{{- end -}}
+{{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $settings.recent_count))) (not (findRE `^[1-9][0-9]*$` (printf "%v" $settings.recent_count))) (lt (int $settings.recent_count) 1) -}}{{- errorf "Sidera %s: recent_count must be a positive integer" $page.Path -}}{{- end -}}
 {{- range $key := slice "identity" "profile" "tag_icons" -}}
   {{- $value := index $settings $key -}}
   {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera %s: %s must be a map" $page.Path $key -}}

@@ -1,4 +1,4 @@
-{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "href" "text" "icon") "required" (slice "href" "text")) -}}
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "href" "text" "icon" "image" "alt") "required" (slice "href" "text")) -}}
 {{- $href := partial "sidera/url.html" (dict "url" (.Get "href") "source" .Position) -}}
 {{- $resolved := partial "links/resolve.html" (dict "PageInner" .Page "Destination" $href "Position" .Position) -}}
 {{- $identity := partial "links/content-target.html" (dict "result" $resolved "page" .Page) -}}
@@ -9,5 +9,9 @@
 {{- if and (eq $original $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
 {{- $name := "link" -}}{{- if isset .Params "icon" -}}{{- $name = .Get "icon" -}}{{- end -}}
 {{- $icon := partial "sidera/icon.html" $name -}}
+{{- $image := "" -}}
+{{- if .Get "image" -}}
+  {{- $image = partial "components/link-image.html" . -}}
+{{- else if isset .Params "alt" -}}{{- errorf "Sidera link: alt requires image (%s)" .Position -}}{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" .Page .Page.Path -}}
-<div class="content-link"><a class="content-link-card" href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}><span class="content-link-label"><span class="content-link-title">{{ .Get "text" }}</span><span class="content-link-url">{{ $href }}</span></span>{{ if and $settings.icons $icon }}<span class="content-link-icon">{{ $icon }}</span>{{ end }}</a></div>
+<div class="content-link"><a class="content-link-card" href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}><span class="content-link-label"><span class="content-link-title">{{ .Get "text" }}</span><span class="content-link-url">{{ $href }}</span></span>{{ if $image }}<img src="{{ $image }}" alt="{{ .Get "alt" | default "" }}" width="44" height="44" loading="lazy" decoding="async">{{ else if and $settings.icons $icon }}<span class="content-link-icon">{{ $icon }}</span>{{ end }}</a></div>

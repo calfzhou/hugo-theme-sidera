@@ -212,7 +212,7 @@ Neither Page.Params, the cached page settings, another instance nor a region hoo
 | site-taxonomies | taxonomies (array or false), icons (bool) | taxonomy_navigation, icons |
 | page-tree | No presentation options yet; config may be omitted or empty | Native owner/tree/local order, not instance data |
 | toc | icons (bool) | icons |
-| recent | order (publication/modification), count (integer 1–10), sections (bool) | modification; recent_count; recent_sections |
+| recent | order (publication/modification), count (positive integer), sections (bool) | modification; recent_count; recent_sections |
 | profile | title, text, image, menu (strings), icons (bool) | Corresponding profile fields; icons |
 | text | title (optional plain string), text (Markdown string) | No title; text |
 | links | menu (string), icons (bool) | links_menu; icons |

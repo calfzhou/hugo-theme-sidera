@@ -119,7 +119,7 @@ cache clearing, legacy template alias, user-server manipulation or watcher fix.
 | `mark` | Required nonblank string `text`; string `color="yellow"`: red/green/yellow | Escaped native highlighted text. Status glyphs remain meaningful without color. |
 | `u` | Required nonblank string `text` | Native underline, not a link. Adds no whitespace: the example displays `aabcc`. |
 | `quot` | Required nonblank string `text`; boolean `ornament=true` | Standout paragraph with optional typographic ornaments, no invented heading/attribution. |
-| `link` | Required nonblank strings `href`, `text`; optional string `icon="link"`; explicit empty hides | One real link card, authored label/named registry icon, native destination; no metadata fetch. |
+| `link` | Required nonblank strings `href`, `text`; optional string `icon="link"`; explicit empty hides; optional strings `image=""`, `alt=""` | One real link card, authored label, native destination; optional content image takes visual priority over the named icon. No metadata fetch. |
 | `copy` | Required nonblank string `text`; optional string `prefix=""` | Selectable value and progressive shared Copy/Copied/toast/manual fallback. Prefix is not copied. |
 
 Text arguments are **literal escaped text**, not Markdown/HTML/math. Quote numeric
@@ -150,10 +150,35 @@ Icons now select a built-in or site-defined **inline registry key**, consistentl
 with menu/collection/tag icons. Omission uses link; explicit empty omits the icon.
 Resolved params.icons=false suppresses decoration, retaining the card label/URL.
 [ICONS.md](ICONS.md) documents native site data/icons.yaml and validated geometry.
-Former file/HTTP(S) icon arguments must be converted to named entries; no automatic
+Former file/HTTP(S) content-artwork arguments belong in `image`, not the icon registry; no automatic
 fetch/path guessing. This changes icon arguments, not card destination resolution
 or ordinary image support. Cards use links/resolve.html for href and Page identity;
 a trusted resolver override returns that dictionary, not only a URL string.
+
+### Card content images
+
+```text
+{{< link href="../article/index.md" text="Read the article" image="artwork.svg" alt="" >}}
+{{< link href="https://example.org/" text="Project" image="https://example.org/logo.png" alt="Project artwork" >}}
+```
+
+`href` and `image` are independent strings. A nonempty image takes the visual slot
+instead of `icon`; omission/empty image retains the existing default link icon.
+`params.icons=false` hides named decoration, **not content images**. The optional
+literal escaped `alt` defaults to empty (decorative/redundant beside the required
+card text); give meaningful alternative text when artwork adds information. `alt`
+without an image diagnoses. There is no automatic image-failure icon substitution.
+
+Native exact bundle/cross-bundle/global asset resolution is shared with ordinary
+images/links; static/public leading-slash paths receive the deployment prefix once.
+Local paths require an image suffix (including SVG and ICO); ordinary public paths
+are not existence-checked. HTTP(S) image URLs may have dynamic paths; no build-time
+request, scraping, download, optimization or rehosting occurs. The reader's browser
+loads the authored URL lazily under its normal image/referrer policy. Remote failure
+leaves the card text/destination usable. Protocol-relative, mailto/data/javascript,
+controls, backslashes and above-content-root paths are rejected. Author SVG markup
+is never inlined: SVG resources are isolated by native `img`. Selected artwork and
+its rights remain the author's responsibility, separate from UI icon policy.
 
 ## Native overrides
 

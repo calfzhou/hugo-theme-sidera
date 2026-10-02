@@ -126,7 +126,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
 | list_order / page_size | publication or modification descending, or title ascending; stable Title/Path ties. Minimal title / positive integer 10. |
 | children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |
-| recent_count / recent_sections | 1–10 (default 5); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
+| recent_count / recent_sections | Positive integer (default 5); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
 | taxonomy_hierarchy | Tags/categories interpreted hierarchically; default []. Notes preset supplies [tags]. Stable owner policy for scoped views; Site policy for globals. |
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |

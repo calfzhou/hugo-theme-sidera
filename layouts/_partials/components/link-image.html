@@ -1,0 +1,19 @@
+{{- /* Content image, never a registry icon or build-time remote fetch. */ -}}
+{{- $src := partial "sidera/url.html" (dict "url" (.Get "image") "source" .Position) -}}
+{{- $u := urls.Parse $src -}}
+{{- if or (findRE `[\x00-\x20\x7f\\]` $u.Path) (not $u.Path) (hasSuffix $u.Path "/") (and $u.IsAbs (or (not (in (slice "http" "https") (lower $u.Scheme))) (not $u.Host))) -}}
+  {{- errorf "Sidera link: image must be a safe local image URL or HTTP(S) image URL (%s)" .Position -}}
+{{- end -}}
+{{- if not $u.IsAbs -}}
+  {{- if not (in (slice ".svg" ".png" ".jpg" ".jpeg" ".webp" ".gif" ".avif" ".ico" ".bmp") (lower (path.Ext $u.Path))) -}}
+    {{- errorf "Sidera link: local image must have an image extension (%s)" .Position -}}
+  {{- end -}}
+  {{- $base := "" -}}{{- with .Page.File -}}{{- $base = strings.TrimPrefix "/" (replace .Dir "\\" "/") -}}{{- end -}}
+  {{- $path := path.Clean (path.Join $base $u.Path) -}}
+  {{- if hasPrefix $u.Path "/" -}}{{- $path = path.Clean (strings.TrimPrefix "/" $u.Path) -}}{{- end -}}
+  {{- if or (eq $path "..") (hasPrefix $path "../") -}}{{- errorf "Sidera link: image leaves the content root (%s)" .Position -}}{{- end -}}
+{{- end -}}
+{{- $resolved := partial "links/resolve.html" (dict "PageInner" .Page "Destination" $src "Position" .Position) -}}
+{{- $href := $resolved.href -}}
+{{- if and (eq $src $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
+{{- return $href -}}

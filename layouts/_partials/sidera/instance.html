@@ -68,7 +68,7 @@
         {{- if or (not (in (slice "recent" "categories" "tags" "archive") .)) (in $seen .) -}}{{- errorf "Sidera %s: invalid/duplicate collection-nav item %v" $source . -}}{{- end -}}{{- $seen = $seen | append . -}}
       {{- end -}}{{- end -}}
     {{- else if eq $key "count" -}}
-      {{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $value))) (not (in (seq 1 10) $value)) -}}{{- errorf "Sidera %s: recent config.count must be an integer from 1 to 10 (got %T %v)" $source $value $value -}}{{- end -}}
+      {{- if or (not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $value))) (not (findRE `^[1-9][0-9]*$` (printf "%v" $value))) (lt (int $value) 1) -}}{{- errorf "Sidera %s: recent config.count must be a positive integer (got %T %v)" $source $value $value -}}{{- end -}}
     {{- else if eq $key "taxonomies" -}}
       {{- if and (eq (printf "%T" $value) "bool") (eq $value false) -}}{{- $value = slice -}}
       {{- else if not (reflect.IsSlice $value) -}}{{- errorf "Sidera %s: config.taxonomies must be an array or false" $source -}}{{- $value = slice -}}{{- end -}}
