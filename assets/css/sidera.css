@@ -757,7 +757,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .content-link-label { min-width: 0; }
 .content-link-title { display: block; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
 .content-link-url { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
-.prose .content-link-card > img { flex: none; width: 44px; height: 44px; border-radius: 4px; object-fit: contain; margin: 0; }
+.prose .content-link-card > img { flex: none; width: 44px; height: 44px; border-radius: 4px; object-fit: contain; margin: 0; background: transparent; }
 .content-link-icon { --icon-size: 44px; flex: none; color: inherit; }
 .prose .content-link-card:is(:hover,:focus-visible) { background: var(--surface-hover); box-shadow: var(--item-shadow); text-decoration: none; }
 .prose .content-copy { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 1rem 0; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-width: 0; }

@@ -170,6 +170,10 @@ literal escaped `alt` defaults to empty (decorative/redundant beside the require
 card text); give meaningful alternative text when artwork adds information. `alt`
 without an image diagnoses. There is no automatic image-failure icon substitution.
 
+Card images have a transparent CSS background, independent of the pale background
+used by ordinary prose images. The card surface stays intact. Any background drawn
+inside an image file remains part of its artwork; the theme never removes/recolors it.
+
 Native exact bundle/cross-bundle/global asset resolution is shared with ordinary
 images/links; static/public leading-slash paths receive the deployment prefix once.
 Local paths require an image suffix (including SVG and ICO); ordinary public paths
