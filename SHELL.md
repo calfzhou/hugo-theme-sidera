@@ -547,7 +547,9 @@ image, remote request or icon framework is required. `params.image` on social me
 entries is retired: paste normalized SVG into site data/icons.yaml and select its
 name. Without an icon, or with icons=false, the label remains a usable text link.
 The surrounding link controls icon color/size; no grayscale image treatment is
-needed. Supply only artwork you have permission to use. See ICONS.md.
+needed. In the left-footer placement (including mobile/compact equivalents), hover
+and keyboard focus use red `#f44336`; resting icons remain muted. Other social
+placements and article share controls retain their own presentation. Supply only artwork you have permission to use. See ICONS.md.
 
 ```toml
 [params]

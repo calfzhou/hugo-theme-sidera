@@ -671,6 +671,8 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .social-link { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 36px; min-height: 36px; padding: 6px; border: 0; border-radius: 8px; font: inherit; line-height: 1.2; color: var(--muted); background: none; cursor: pointer; text-decoration: none; }
 .social-link { --icon-size: 24px; }
 .social-link:is(:hover,:focus-visible) { color: var(--text); background: var(--item-hover); box-shadow: var(--item-shadow); text-decoration: none; }
+/* Requested footer feedback: Stellar red, owned by the link/button, not SVG data. */
+.sidebar-footer .social-link:is(:hover,:focus-visible) { color: #f44336; --icon-color: currentColor; }
 .social-text { width: auto; padding-inline: 8px; font-size: 14px; }
 .social-links:not(:has(.social-link:not([hidden]))) { display: none; }
 .compact-header .social-links { margin: 0; }
