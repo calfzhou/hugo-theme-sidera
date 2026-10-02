@@ -208,3 +208,11 @@ Queries necessarily appear in the target URL, normal history and the static host
 request logs. The document uses `strict-origin` referrers (no URL query/path leakage)
 and index fetch/result navigation use `no-referrer`. No query persistence or external
 service transmission is added. Custom analytics/scripts remain the site owner's policy.
+
+### Collection display names
+
+The scoped input/accessible label and index `context` use the owning collection's
+local `params.name` when provided, otherwise its title. Scope still uses native URL,
+not the name. Indexed document `title` and heading sections keep their full native
+titles. Standalone/global search retains site context; no article inheritance,
+source rewriting or change to graph/comment identity follows from a display name.

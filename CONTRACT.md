@@ -67,6 +67,40 @@ Owners filter recursive lists and scoped taxonomy/recent views; independent nest
 not leak into their outer collection. Native leaf bundles still have no descendant Pages;
 body-bearing parents use branch `_index.md`. Do not confuse native parentage with browsing scope.
 
+## Collection name, title and description
+
+These belong to each collection **root Page**, not to the shared preset definition:
+
+```yaml
+title: A full descriptive notebook title
+description: A short summary of what readers will find here.
+preset: notes
+params:
+  name: Notes
+```
+
+- **`params.name`** is the optional concise collection label. Nonblank strings are
+  trimmed at their edges; omission/empty/whitespace falls back to the existing title
+  label. It is escaped text, not Markdown/HTML. Duplicate display names are permitted;
+  native Path/URL still define identity and search scope.
+- **Native `title`** remains the full H1, document title, collection card title and
+  search-result document title. No Page.Title mutation or title/URL alias is created.
+- **Native `description`** retains its summary/excerpt role; it is not renamed or
+  overwritten by the short name.
+
+Short names appear in the scoped search placeholder/accessible label and result
+context, automatic collection navigation, collection-owner badges, docs tree root,
+collection breadcrumb segments and navigation targets that are collection roots.
+Non-root document/branch labels remain unchanged. Existing native LinkTitle fallback
+is preserved on surfaces that already used it. Explicit native menu `name` values
+remain authoritative; custom menus are not silently relabeled.
+
+`name` is **local collection identity**, not an inheritable setting: author it under
+params on a top-level root or an explicit nested `scope_root`. Do not cascade it,
+put it on articles/shared-scope branches, or place it in preset defaults. It is not
+read from site/language params. Thus two collections using `preset: notes` can have
+independent names/titles, and a root without any preset can have a name too.
+
 ## Three distinct targets for preset defaults
 
 The term's own `params`/body configure that public term Page. Its member-default fragment is:
@@ -115,6 +149,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | Setting | Meaning / default |
 |---|---|
 | auto_caption | Boolean, true. Direct standalone Markdown image title then cleaned alt becomes an escaped caption; false opts out using normal page/cascade/preset/site precedence. See MARKDOWN.md. |
+| name | Optional local collection-root short label; string, title fallback when omitted/blank. Not a preset/default/cascade field. See the name/title/description contract above. |
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
 | ai_label | Optional disclosure string: manual/reviewed/polished/generated; empty default/explicit clear. Native page/cascade/preset/site resolution; localized article-header text only, not body/index/author identity. See MARKDOWN.md. |

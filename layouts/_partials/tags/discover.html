@@ -21,6 +21,7 @@
 {{- range $name, $physical := $local.files -}}
   {{- if or (not $local.leaf) (eq $name "index.md") -}}
     {{- $file := path.Join $dir $physical -}}{{- $fm := partial "tags/frontmatter.html" $file -}}
+    {{- if and (isset ($fm.params | default dict) "name") (not (and (eq $name "_index.md") $root)) -}}{{- errorf "Sidera params.name belongs on a collection root: %s" $file -}}{{- end -}}
     {{- $inputValid := partial "model/input.html" (dict "fm" $fm "source" $file "section" (eq $name "_index.md")) -}}
     {{- range $taxonomy := slice "tags" "categories" "authors" "series" -}}
       {{- $terms := slice -}}{{- if isset $fm $taxonomy -}}{{- $terms = index $fm $taxonomy -}}{{- end -}}

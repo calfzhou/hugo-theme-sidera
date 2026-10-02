@@ -93,6 +93,16 @@ The alternate slogan is decorative to assistive technology; the home link keeps 
 No JS is needed. Reduced motion shows a static ring and swaps text without movement.
 Both links use the native language/subpath-aware home URL, including mobile and compact shells.
 
+## Collection label selection
+
+Local root `params.name` supplies concise collection context (search input/accessible
+label, search-result context, automatic collection lists/owner badges, docs tree root
+and root breadcrumb/navigation links). Omission/blank preserves existing title labels;
+LinkTitle fallback remains where previously used. Full collection H1/card/document
+and search-result titles remain native `title`, and summaries remain `description`.
+Explicit native menu names remain site-owned overrides. See CONTRACT.md; do not cascade
+collection names or encode them in preset defaults.
+
 ## Native menus and data
 
 Menus use ordinary native ordering/weights, `pageRef`, external `url`, language

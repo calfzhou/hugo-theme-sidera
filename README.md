@@ -336,3 +336,10 @@ can explicitly set a safe hex background while preserving native resources, capt
 alt text and C2 nesting; see COMPONENTS.md. It does not restore the old viewer/download
 plugin. Image inversion uses supported next-line Markdown attributes, not adjacent
 Hexo-style attributes. Internal menus should use pageRef for native active indicators.
+
+### Collection short names
+
+Optional local `params.name` on a collection root separates concise search/navigation
+labels from native full `title` and summary `description`. It is not a shared preset
+default or article cascade. See CONTRACT.md/PRESETS.md and the portable native tests:
+`python3 tests/check_collection_names.py /absolute/fresh-output-directory`.

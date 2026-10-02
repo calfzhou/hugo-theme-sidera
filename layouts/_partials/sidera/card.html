@@ -11,7 +11,7 @@
   <div class="card-content">
     {{ partial "series/badge.html" $page }}
     <h2><a class="card-title" href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
-    {{ if .ShowOwner }}{{ with $owner }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ .Title }}</a></p>{{ end }}{{ end }}
+    {{ if .ShowOwner }}{{ with $owner }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ partial "collection-name.html" . }}</a></p>{{ end }}{{ end }}
     {{ $excerpt := $page.Description }}{{ if not $excerpt }}{{ $excerpt = $page.Summary | plainify | htmlUnescape }}{{ end }}
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}
     <div class="card-dates">

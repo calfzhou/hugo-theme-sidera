@@ -1,5 +1,5 @@
 {{- if .Settings.search -}}
-{{- $placeholder := T "search_label" -}}{{- with .Owner -}}{{- $placeholder = T "search_in" (dict "title" .Title) -}}{{- end -}}
+{{- $placeholder := T "search_label" -}}{{- with .Owner -}}{{- $placeholder = T "search_in" (dict "title" (partial "collection-name.html" .)) -}}{{- end -}}
 <div class="search-wrapper" data-search-wrapper{{ if not .Settings.icons }} data-icons="false"{{ end }} data-loading="{{ T "search_loading" }}" data-failed="{{ T "search_failed" }}" data-empty="{{ T "search_empty" }}" data-title-only="{{ T "search_title_only" }}">
   {{ if .Settings.icons }}<template data-search-heading-icon>{{ partial "sidera/icon.html" "chevron-right" }}</template>{{ end }}
   <div class="search-form" role="search">

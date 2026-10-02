@@ -1,0 +1,9 @@
+{{- /* Collection identity, not an inheritable setting or a preset display name. */ -}}
+{{- $name := .Title -}}
+{{- if partial "model/is-root.html" . -}}
+  {{- if isset .Params "name" -}}
+    {{- if ne (printf "%T" .Params.name) "string" -}}{{- errorf "Sidera collection params.name must be a string: %s" .Path -}}
+    {{- else -}}{{- with strings.TrimSpace .Params.name -}}{{- $name = . -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $name -}}

@@ -28,6 +28,15 @@ A small native per-language adapter supplies real preset term Pages from the the
 language-suffix files appearing as accidental ordinary Pages when a site enables only one
 language. No new dependency, raw parser/override guard or mandatory site language declaration.
 
+## Collection display identity is not preset vocabulary
+
+Use native `title`/`description` and optional local `params.name` on the collection's
+`_index.md`. The short name labels scoped search/navigation; full title remains for
+headings/cards. These identify a particular collection, not all collections using a
+preset. Do not put `name` in preset defaults/cascade or use it as a routing/scope key.
+A notes/wiki/blog/custom root follows the same rule, including roots without a preset.
+CONTRACT.md gives the fallback, validation and exact display surfaces.
+
 ## Select, override or add
 
 ```yaml

@@ -10,6 +10,7 @@
 {{- $widgets := partialCached "sidera/widgets.html" site "widgets" -}}
 {{- range site.Pages -}}
   {{- $page := . -}}
+  {{- if and (isset .Params "name") (not (partial "model/is-root.html" .)) -}}{{- errorf "Sidera params.name belongs on a collection root: %s" .Path -}}{{- end -}}
   {{- if and (isset .Params "navigation_mode") (not (partial "model/is-root.html" .)) -}}{{- errorf "Sidera navigation_mode belongs on a collection root: %s" .Path -}}{{- end -}}
   {{- with .File -}}{{- if not .IsContentAdapter -}}
     {{- range $key := slice "tag_view" "archive_view" "tag_key" "tag_slug" "tag_taxonomy" "inferred_term" "term_key" -}}
@@ -21,6 +22,7 @@
     {{- $valid := partial "model/input.html" (dict "fm" (dict "params" .Params) "source" .Path "section" .IsSection "effective" true) -}}
     {{- with .File -}}{{- if not .IsContentAdapter -}}
       {{- $fm := partial "tags/frontmatter.html" .Filename -}}
+      {{- if and (isset $page.Params "name") (not (isset ($fm.params | default dict) "name")) -}}{{- errorf "Sidera collection name must be local, not cascaded: %s" $page.Path -}}{{- end -}}
       {{- $valid = partial "model/input.html" (dict "fm" $fm "source" .Filename "section" $page.IsSection) -}}
       {{- if and (isset $page.Params "scope_root") (not (isset ($fm.params | default dict) "scope_root")) -}}{{- errorf "Sidera scope_root must be local, not cascaded: %s" $page.Path -}}{{- end -}}
       {{- if and (isset $page.Params "preset") (not (isset $fm "preset")) -}}{{- errorf "Sidera preset must be local, not cascaded: %s" $page.Path -}}{{- end -}}
@@ -42,7 +44,7 @@
         {{- $value = $value.params | default dict -}}
       {{- end -}}
       {{- if not (reflect.IsMap $value) -}}{{- errorf "Sidera preset parameter defaults must be a map: %s" $term.Path -}}
-      {{- else -}}{{- range $k, $_ := $value -}}{{- if in (slice "preset" "scope_root" "tags" "categories" "authors" "series" "pinned" "identity" "defaults") $k -}}{{- errorf "Sidera %s is not inheritable preset metadata: %s" $k $term.Path -}}{{- end -}}{{- end -}}{{- end -}}
+      {{- else -}}{{- range $k, $_ := $value -}}{{- if in (slice "name" "preset" "scope_root" "tags" "categories" "authors" "series" "pinned" "identity" "defaults") $k -}}{{- errorf "Sidera %s is not inheritable preset metadata: %s" $k $term.Path -}}{{- end -}}{{- end -}}{{- end -}}
       {{- end -}}
     {{- end -}}{{- end -}}
   {{- end -}}

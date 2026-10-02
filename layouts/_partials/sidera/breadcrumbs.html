@@ -12,7 +12,9 @@
   <a href="{{ $page.Site.Home.RelPermalink }}">{{ T "home" }}</a>
   {{- range $trail -}}
     {{- if ne .Page $page -}}
-    <span class="breadcrumb-step"><span class="breadcrumb-separator" aria-hidden="true">/</span><a{{ if eq .Page $owner }} data-collection-link{{ end }} href="{{ .Page.RelPermalink }}">{{ .Label }}</a></span>
+    {{- $label := .Label -}}
+    {{- if and (partial "model/is-root.html" .Page) (strings.TrimSpace (string (.Page.Params.name | default ""))) -}}{{- $label = partial "collection-name.html" .Page -}}{{- end -}}
+    <span class="breadcrumb-step"><span class="breadcrumb-separator" aria-hidden="true">/</span><a{{ if eq .Page $owner }} data-collection-link{{ end }} href="{{ .Page.RelPermalink }}">{{ $label }}</a></span>
     {{- end -}}
   {{- end -}}
 </nav>
