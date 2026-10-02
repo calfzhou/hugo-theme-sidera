@@ -1,0 +1,3 @@
+{{- $_hugo_config := `{ "version": 2 }` -}}
+{{- partial "components/parent.html" . -}}
+{{- partial "components/container.html" (dict "shortcode" . "inner" .Inner) | safeHTML -}}

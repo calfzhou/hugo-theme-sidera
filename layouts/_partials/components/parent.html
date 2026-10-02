@@ -1,4 +1,5 @@
 {{- with .Parent -}}
-  {{- if not (in (slice "block" "folding" "box" "grid" "cell") .Name) -}}{{- errorf "Sidera %s: unsupported parent shortcode %q (%s)" $.Name .Name $.Position -}}{{- end -}}
+  {{- if not (in (slice "block" "folding" "box" "grid" "cell" "timeline" "event") .Name) -}}{{- errorf "Sidera %s: unsupported parent shortcode %q (%s)" $.Name .Name $.Position -}}{{- end -}}
+  {{- if and (eq .Name "timeline") (ne $.Name "event") -}}{{- errorf "Sidera timeline requires event children (%s)" $.Position -}}{{- end -}}
   {{- if and (eq .Name "grid") (ne $.Name "cell") -}}{{- errorf "Sidera grid requires cell children (%s)" $.Position -}}{{- end -}}
 {{- end -}}

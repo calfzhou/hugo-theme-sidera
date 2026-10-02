@@ -35,11 +35,12 @@ has explicit opening/closing tags. A cell may contain several cards, images, ord
 Markdown or supported shortcodes. A grid accepts **only cells and whitespace**, and
 requires at least one cell. Cells require an immediate grid parent.
 
-`block`, `folding`, `box`, `grid` and `cell` are supported parents. Unknown shortcode
+`block`, `folding`, `box`, `grid`, `cell`, `timeline` and `event` are supported parents
+(`grid` only accepts cells, `timeline` only accepts events). Unknown shortcode
 parents fail, rather than sending already-generated HTML through Markdown. Site-owned
 future embeds need their own integration. D supplies video, diagramsnet and badge_github
 through this bridge; AnimCube remains site-owned P4.
-Four-level real-use compositions are tested; this is not arbitrary plugin nesting.
+Four-level original compositions and timeline → event → grid → cell → leaf are tested; this is not arbitrary plugin nesting.
 
 ### Container arguments
 
@@ -210,7 +211,7 @@ No setting forces embedded hooks or overrides a site's native lookup choice.
 | kbd 30/3: keys/backtick/Unicode | `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`. |
 | mark 36/3: ✓/✗/? and three colors | `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
 | u 120/10: letters/digits/selections | `{% u 9 %}` → `{{< u text="9" >}}`; adjacent characters stay adjacent. |
-| timeline 1/1 | **Retired by user choice.** No timeline interpreter/component. |
+| timeline 1/1 | **Reopened by explicit P4 user request:** native `timeline` with paired `event title` children; preserve former node-comment labels. No sidebar/API widget. |
 | link 12/4 including wrapper: label/icon/local target | URL → href, label → text, icon explicit. Works inside cells/folds/boxes; no remote metadata service. |
 | copy 1/1: fingerprint + prefix | Named text/prefix; exact value only copied, no git-command modes. |
 | emoji 1/1: blobcat party | **Retired by user choice.** No emoji shortcode or blobcat asset/license requirement. |
@@ -240,3 +241,53 @@ path for authored text/profile/footer/license/reference/final-text settings, min
 site/page title values and the native site-partial extension. Field resolution and
 per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
 shortcode labels, translation strings or every string setting; no full token catalog.
+
+## In-article timeline (P4)
+
+This is an authored **content component**, not the Stellar sidebar timeline/data-service
+widget. It supersedes the earlier retirement of this content tag only. No feed, API,
+remote fetching, extra JavaScript or Hexo comment-marker parser is implemented.
+
+```text
+{{% timeline %}}
+{{< event title="2025 年" >}}
+Ordinary Markdown and source links.
+
+{{< grid columns=2 >}}
+{{< cell >}}
+{{< link href="../project/index.md" text="A project" image="art.svg" >}}
+{{< /cell >}}
+{{< cell >}}
+Another card or Markdown body.
+{{< /cell >}}
+{{< /grid >}}
+{{< /event >}}
+{{< event title="2008 年或更早" >}}
+An approximate date is valid; labels are not parsed as timestamps.
+{{< /event >}}
+{{% /timeline %}}
+```
+
+- Outermost timeline uses `%`; nested timeline/events and all nested components use
+  `<`, exactly like existing C2 containers. A timeline can itself be inside a fold/cell.
+- `timeline` accepts common optional `class`/`id` only, and requires one or more direct
+  `event` children, with whitespace between. Stray prose/leaves diagnose rather than
+  disappearing. `event` requires an immediate timeline parent and a nonblank **string**
+  `title`; it also accepts common `class`/`id`. Quote year-only labels (`title="2025"`).
+- Labels are escaped literal text, not HTML/Markdown or synthetic headings. No forced
+  ISO date, chronological sorting, reverse mode or invented machine timestamp.
+  Authors control order and may repeat/approximate dates. Native body headings retain
+  their IDs/TOC/search destinations; labels stay readable/indexable body text.
+- Semantic ordered list/items preserve sequence with decorative line/markers. Rounded
+  content surfaces and marker hover follow Stellar's content timeline; keyboard focus
+  within each entry receives the same marker emphasis, with reduced-motion support.
+  Existing source/resource/card/math/fold/grid behavior and safe native rendering remain.
+- No default heading, English-only control or translation string is introduced. No-JS
+  retains all content; nested details remain operable. `icons=false` does not remove
+  content/chronology or content images; the line/dots are structural CSS decoration.
+
+Convert Stellar `<!-- node LABEL -->` segments into paired `event title="LABEL"`
+blocks in a content commit, not a move-only commit. Preserve every label, paragraph,
+card/image reference and attribution. Do not author HTML comments as a hidden parser API.
+`python3 tests/check_timeline.py /absolute/fresh-output-directory` tests native positive,
+negative, nested resource/source/heading/math and literal-label cases without network.

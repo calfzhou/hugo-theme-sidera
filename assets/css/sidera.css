@@ -984,3 +984,21 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .search-wrapper[data-icons="false"] .search-clear { font: 12px var(--ui); flex: none; }
 :is(.content-diagram,.diagram-dialog)[data-icons="false"] .diagram-action { width: auto; height: auto; min-height: 28px; padding: 5px 8px; font: 12px var(--ui); }
 @media (hover:none),(pointer:coarse) { :is(.content-diagram,.diagram-dialog)[data-icons="false"] .diagram-action { min-height: 44px; } }
+
+/* In-article timeline: Stellar 1.44.0 tag-plugins/timeline.styl (xaoxuu, MIT).
+   Native ordered events, not its unrelated sidebar/API widget. */
+.prose ol.content-timeline { position: relative; list-style: none; padding: 0 0 0 16px; margin: 1rem 0; }
+.content-timeline::before { content: ""; position: absolute; top: .5rem; bottom: 0; left: 0; width: 4px; border-radius: 8px; background: var(--panel); }
+.prose .timeline-event { position: relative; display: flex; flex-direction: column; align-items: flex-start; max-width: 100%; margin: 0; padding: 0; }
+.prose .timeline-event + .timeline-event { margin-top: 1rem; }
+.timeline-label { position: relative; max-width: 100%; margin: .25rem 0; color: var(--quiet); font: 500 13px/1 var(--ui); overflow-wrap: anywhere; }
+.timeline-label::before { content: ""; position: absolute; left: -16px; width: 4px; height: 4px; top: calc(50% - 2px); border-radius: 12px; background: var(--muted); transform: scale(2); transition: background .2s, height .2s, top .2s, transform .2s; }
+.timeline-event:is(:hover,:focus-within) > .timeline-label { color: var(--text); }
+.timeline-event:is(:hover,:focus-within) > .timeline-label::before { background: var(--accent); height: 16px; top: calc(50% - 8px); transform: scale(1); }
+.timeline-body { min-width: 0; max-width: 100%; margin-top: 4px; padding: .5rem 1rem; border-radius: 2px 16px 16px; background: var(--surface); box-shadow: var(--card-shadow); line-height: 1.5; }
+.timeline-body:empty { display: none; }
+.prose .timeline-body > :is(p,ol,ul,.content-grid,.content-link,.code-block) { margin-block: .5rem; }
+.prose .timeline-body :is(h1,h2) { font-size: 1.25rem; line-height: 1.2; margin-block: 1rem; }
+.prose .timeline-body :is(h3,h4) { font-size: 1rem; line-height: 1.2; margin-block: .75rem; }
+.prose .timeline-body :is(h5,h6) { font-size: 15px; line-height: 1.2; margin-block: .5rem; }
+@media (prefers-reduced-motion: reduce) { .timeline-label::before { transition: none; } }

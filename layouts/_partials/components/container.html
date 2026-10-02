@@ -1,6 +1,7 @@
 {{- $body := .inner -}}{{- $sc := .shortcode -}}{{- with .shortcode -}}
 {{- $allowed := slice "class" "id" -}}
 {{- if in (slice "folding" "box") .Name -}}{{- $allowed = $allowed | append "title" "color" "child" -}}{{- end -}}
+{{- if eq .Name "event" -}}{{- $allowed = $allowed | append "title" -}}{{- end -}}
 {{- if eq .Name "folding" -}}{{- $allowed = $allowed | append "open" -}}{{- end -}}
 {{- if eq .Name "grid" -}}{{- $allowed = $allowed | append "columns" "min_width" -}}{{- end -}}
 {{- if and .Params (not .IsNamedParams) -}}{{- errorf "Sidera %s accepts named parameters only (%s)" .Name .Position -}}{{- end -}}
@@ -35,6 +36,13 @@
   {{- $titleHTML := .Page.RenderString (dict "display" "inline") $title -}}
   {{- if findRE `<(?:h[1-6]|p|div|pre|ul|ol|blockquote|figure|table)(?:[ >])` (string $titleHTML) -}}{{- errorf "Sidera %s: title must contain inline Markdown only (%s)" .Name .Position -}}{{- end -}}
   {{- $options = merge $options (dict "title" $titleHTML "color" $color "child" $child "open" $open) -}}
+{{- else if eq .Name "event" -}}
+  {{- if not .Parent -}}{{- errorf "Sidera event requires a timeline parent (%s)" .Position -}}
+  {{- else if ne .Parent.Name "timeline" -}}{{- errorf "Sidera event requires a timeline parent (%s)" .Position -}}{{- end -}}
+  {{- $title := .Get "title" | default "" -}}
+  {{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera event requires a nonblank title (%s)" .Position -}}{{- end -}}
+  {{- /* Labels can be approximate years or prose, not necessarily ISO dates. */ -}}
+  {{- $options = merge $options (dict "title" $title) -}}
 {{- else if eq .Name "grid" -}}
   {{- if and .IsNamedParams (isset .Params "columns") (isset .Params "min_width") -}}{{- errorf "Sidera grid: choose columns or min_width, not both (%s)" .Position -}}{{- end -}}
   {{- $columns := "" -}}{{- $width := 240 -}}
@@ -64,12 +72,20 @@
   {{- range $cells -}}{{- $rest = replace $rest (strings.TrimSpace .) "" -}}{{- end -}}
   {{- if strings.ContainsNonSpace $rest -}}{{- errorf "Sidera grid accepts only cell children and whitespace (%s)" .Position -}}{{- end -}}
 {{- end -}}
+{{- if eq .Name "timeline" -}}
+  {{- $events := .Store.Get "sidera-events" -}}
+  {{- if not $events -}}{{- errorf "Sidera timeline requires at least one event (%s)" .Position -}}{{- end -}}
+  {{- $rest := $inner -}}
+  {{- range $events -}}{{- $rest = replace $rest (strings.TrimSpace .) "" -}}{{- end -}}
+  {{- if strings.ContainsNonSpace $rest -}}{{- errorf "Sidera timeline accepts only event children and whitespace (%s)" .Position -}}{{- end -}}
+{{- end -}}
 {{- $key := printf "sidera-container-%s" (partial "components/key.html" .) -}}
 {{- .Page.Store.Set $key $options -}}
 {{- .Page.Store.SetInMap "sidera-pending-nodes" $key .Position -}}
 {{- /* Native blockquote node; no raw HTML or regex parsing of Markdown. */ -}}
 {{- $node := printf "\n\n> %s\n{data-sidera-container=%q}\n\n" (replace $inner "\n" "\n> ") $key -}}
 {{- if eq .Name "cell" -}}{{- with .Parent -}}{{- .Store.Add "sidera-cells" (slice $node) -}}{{- end -}}{{- end -}}
+{{- if eq .Name "event" -}}{{- with .Parent -}}{{- .Store.Add "sidera-events" (slice $node) -}}{{- end -}}{{- end -}}
 {{- return $node -}}
 
 {{- end -}}

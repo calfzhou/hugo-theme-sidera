@@ -313,3 +313,10 @@ font loading remains a separate site decision. KaTeX's local math fonts are unch
 Run `python3 tests/check_font_defaults.py /absolute/fresh-output-directory` for
 three isolated native builds checking exact defaults, native override output, both
 Giscus baseline style variants, source bytes and absence of a new font loader.
+
+### In-article timeline
+
+Native `timeline`/`event` containers now preserve authored chronology and nested
+Markdown/cards/grids through the existing safe composition bridge. See COMPONENTS.md
+for `%`/`<` notation, typed literal labels and conversion. This is not a sidebar
+timeline, API widget or generic Hexo interpreter. No additional JavaScript/dependency.

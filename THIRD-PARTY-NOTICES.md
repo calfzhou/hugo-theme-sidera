@@ -226,3 +226,10 @@ drift. This preserves the existing third-party terms in static output even when
 Hugo minification removes CSS comments; it does not license Sidera or site content.
 Keep both copies synchronized when updating notices. Vendor-specific license files
 continue to publish with their conditional math/diagram resources.
+
+## In-article timeline (P4)
+
+Timeline line/marker/header/card styling adapts Stellar 1.44.0 (1f4cb4bc),
+source/css/_components/tag-plugins/timeline.styl, copyright 2021 xaoxuu,
+under the MIT notice retained above. Native timeline/event composition is
+implemented by Sidera; no sidebar timeline, API service or JS widget is copied.
