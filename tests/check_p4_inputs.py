@@ -91,7 +91,7 @@ def recents(out):
     d=DOM((out/'notes/index.html').read_text())
     return len([a for a in d.find('a') if a.get('href','').startswith('/preview/notes/n') and 'title' in a])
 
-out=build('baseline'); assert recents(out)==5
+out=build('baseline'); assert recents(out)==10
 for count in (1,11,32,100):
     write('content/notes/_index.md',ROOT+f'  recent_count: {count}\n---\n')
     out=build('count-'+str(count));assert recents(out)==min(count,40)

@@ -208,7 +208,7 @@ standalone pages. It stays non-scoped even on an unpreset collection. Preset sel
 use owner-scoped recents by default. No profile widget is implicitly selected now;
 owners may still explicitly select it or replace/disable any region.
 
-The shared recent count remains **5**, not a preset/site-specific count. Main page_size
+The shared recent count defaults to **10**, not a preset/site-specific count. Main page_size
 and list_order are independent; notes still list by modification, blogs by publication.
 No article metadata, taxonomy assignments, scope roots or required author fields change.
 

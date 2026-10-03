@@ -192,7 +192,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
 | list_order / page_size | publication or modification descending, or title ascending; stable Title/Path ties. Minimal title / positive integer 10. |
 | children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |
-| recent_count / recent_sections | Positive integer (default 5); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
+| recent_count / recent_sections | Positive integer (default 10); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
 | taxonomy_hierarchy | Tags/categories interpreted hierarchically; default []. Notes preset supplies [tags]. Stable owner policy for scoped views; Site policy for globals. |
 | taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
@@ -291,7 +291,7 @@ widgets add reusable defaults before per-use options. Recent scope=global change
 that instance’s candidate set, not the Page owner or other components’ scope. Repeats are supported and get distinct DOM IDs. No Page.Params/cache mutation or native
 model change. SHELL.md contains the complete per-component option/default table and empty semantics.
 There is one recent component with instance order=modification/publication and
-scope=owner/global, not a second component. The shared count stays 5; global scope
+scope=owner/global, not a second component. The shared count defaults to 10; global scope
 means current-language regular pages, while owner scope retains optional section inclusion.
 
 

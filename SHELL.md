@@ -21,7 +21,7 @@ inapplicable components emit no empty region. Desktop left-shell views preserve 
 track position when the right is absent rather than stretching the article into it. Standalone pages retain
 the full shell; compact is explicit. Identity/home and any configured left-footer items move to the compact header when left is off.
 
-Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=index, left=[menu,{widget:recent-updates,config:{scope:global}}], right=[toc], menu=primary, recent_count=5, icons=true.
+Minimal defaults are left_footer=[social], social_menu=social, top=[], taxonomy_hubs=index, left=[menu,{widget:recent-updates,config:{scope:global}}], right=[toc], menu=primary, recent_count=10, icons=true.
 Preset section/descendant maps may supply different defaults. Site/language values are below
 preset values: use a native config cascade when deliberately overriding a preset site-wide.
 
@@ -1040,7 +1040,7 @@ params:
 
 This is the existing region/instance model, not a second recent renderer. Page/cascade/
 preset/site overrides and false/empty opt-outs retain their precedence. Defaults keep
-recent_count=5; custom larger positive counts remain supported independently.
+recent_count=10; custom larger positive counts remain supported independently.
 
 ### Collection card identity artwork
 

@@ -24,8 +24,8 @@ lastmod=['lastmod','date']
 ''')
 for folder in ('notes','blog','docs'):
  write(f'content/{folder}/_index.md',f'---\ntitle: {folder.title()}\npreset: {folder}\n---\n')
- for i in range(7):
-  write(f'content/{folder}/n{i}.md',f'---\ntitle: {folder} {i}\ndate: 2024-01-0{i+1}\nlastmod: 2024-02-0{7-i}\ntags: [shared/child]\ncategories: [category]\n'+('params:\n  pinned: true\n' if i==3 else '')+'---\nBody.\n')
+ for i in range(12):
+  write(f'content/{folder}/n{i}.md',f'---\ntitle: {folder} {i}\ndate: 2024-01-{i+1:02d}\nlastmod: 2024-02-{12-i:02d}\ntags: [shared/child]\ncategories: [category]\n'+('params:\n  pinned: true\n' if i==3 else '')+'---\nBody.\n')
 write('content/docs/chapter/_index.md','---\ntitle: Chapter\ndate: 2024-03-01\nlastmod: 2024-04-01\n---\nChapter.\n')
 write('content/notes/independent/_index.md','---\ntitle: Independent root\nparams:\n  scope_root: true\n---\n')
 write('content/notes/independent/new.md','---\ntitle: New independent page\ndate: 2025-11-01\nlastmod: 2025-11-01\n---\n')
@@ -63,10 +63,10 @@ for label,overlay,prefix in [('baseline','',''),('chinese',"locale='zh-CN'\ndefa
    assert len({x['id'] for x in d.lists})==len(d.lists)
    assert d.taxonomies==(['标签' if label=='chinese' else 'Tags'] if folder=='notes' else []),(route,d.taxonomies)
    for recent in d.lists:
-    seq=list(range(6,-1,-1)) if recent['order']=='publication' else list(range(7))
+    seq=list(range(11,-1,-1)) if recent['order']=='publication' else list(range(12))
     paths=[f'{prefix}/{folder}/n{i}/' for i in seq]
     if folder=='docs':paths.insert(0,prefix+'/docs/chapter/')
-    assert recent['hrefs']==paths[:5],(route,recent,paths[:5])
+    assert recent['hrefs']==paths[:10],(route,recent,paths[:10])
   # Collection header has no redundant browse-tags CTA; native hubs survive.
   root=read(out,f'/{folder}/')[0]
   assert 'class="view-tools"' not in root and '浏览标签 →' not in root and 'Browse tags →' not in root
@@ -76,7 +76,7 @@ for label,overlay,prefix in [('baseline','',''),('chinese',"locale='zh-CN'\ndefa
  for route in ['/','/standalone/','/custom/','/custom/entry/']:
   raw,d=read(out,route);assert len(d.lists)==1 and d.lists[0]['order']=='modification'
   assert d.lists[0]['hrefs'][:3]==[prefix+'/standalone/',prefix+'/notes/independent/new/',prefix+'/custom/entry/'],(route,d.lists)
-  assert len(d.lists[0]['hrefs'])==5
+  assert len(d.lists[0]['hrefs'])==10
 # Explicit per-instance scope: same renderer, no global owner mutation.
 write('content/probe.md','''---
 title: Instance scope probe
@@ -91,4 +91,4 @@ out=build('instance');assert read(out,'/probe/')[1].lists[0]['hrefs']==['/standa
 out=build('disabled','[cascade.params]\nleft=false\n');assert not read(out,'/notes/n0/')[1].lists
 for n,value in enumerate(['"bad"','true','2','["global"]']):
  build('invalid-scope-'+str(n),'[params.widgets.unused]\ncomponent="recent"\n[params.widgets.unused.config]\nscope='+value+'\n', 'config.scope')
-(RUN/'results.json').write_text(json.dumps({'passed':passed,'rejected':rejected,'theme':str(THEME),'recentDefaultCount':5,'globalRegularPages':True,'notesMainOrder':'modification'},indent=2)+'\n');print('PASS',len(passed),'builds /',len(rejected),'expected scope rejections;',RUN)
+(RUN/'results.json').write_text(json.dumps({'passed':passed,'rejected':rejected,'theme':str(THEME),'recentDefaultCount':10,'globalRegularPages':True,'notesMainOrder':'modification'},indent=2)+'\n');print('PASS',len(passed),'builds /',len(rejected),'expected scope rejections;',RUN)
