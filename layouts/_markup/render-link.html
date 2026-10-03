@@ -13,7 +13,7 @@
 {{- if hasPrefix (string $text) `<figure class="md-figure">` -}}
   {{- $text = replaceRE `^<figure class="md-figure">(<img[^>]*>)[\s\S]*</figure>$` "$1" (string $text) | safeHTML -}}
 {{- end -}}
-<a href="{{ $href }}"{{ with $identity }} data-content-page="{{ . }}"{{ end }}{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
+<a href="{{ $href }}"{{ partial "links/target.html" $href }}{{ with $identity }} data-content-page="{{ . }}"{{ end }}{{ with .Title }} title="{{ partial "links/title.html" . }}"{{ end }}>{{ $text }}</a>
 {{- /* Keep Goldmark's rendered label and html/template URL/title escaping. */ -}}
 
 {{- end -}}

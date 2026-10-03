@@ -1,0 +1,3 @@
+{{- $attrs := "" -}}
+{{- if partial "links/external.html" . -}}{{- $attrs = ` target="_blank" rel="noopener noreferrer"` -}}{{- end -}}
+{{- return ($attrs | safeHTMLAttr) -}}

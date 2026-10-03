@@ -1,0 +1,12 @@
+{{- /* Compare HTTP(S) origins, never string prefixes or absolute-vs-relative paths.
+     This classifies destinations; existing URL validation/escaping still owns trust. */ -}}
+{{- $url := urls.Parse (string .) -}}{{- $base := urls.Parse site.BaseURL -}}
+{{- $scheme := lower $url.Scheme -}}{{- if and (not $scheme) $url.Host -}}{{- $scheme = lower $base.Scheme -}}{{- end -}}
+{{- $external := false -}}
+{{- if and $url.Host (in (slice "http" "https") $scheme) -}}
+  {{- $host := lower $url.Host -}}{{- $baseHost := lower $base.Host -}}
+  {{- $host = strings.TrimSuffix (cond (eq $scheme "https") ":443" ":80") $host -}}
+  {{- $baseHost = strings.TrimSuffix (cond (eq (lower $base.Scheme) "https") ":443" ":80") $baseHost -}}
+  {{- $external = or (ne $scheme (lower $base.Scheme)) (ne $host $baseHost) -}}
+{{- end -}}
+{{- return $external -}}

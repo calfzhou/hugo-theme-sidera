@@ -284,7 +284,7 @@ other = "面包屑导航"
 other = "链接到标题：{{ .title }}"
 
 [external_link_suffix]
-other = "（外部链接）"
+other = "（外部链接，在新标签页打开）"
 
 [code_language_text]
 other = "纯文本"

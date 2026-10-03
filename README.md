@@ -150,14 +150,26 @@ The arrow is decorative, with a native EN/ZH screen-reader suffix. Internal path
 same-origin absolute URLs, mail/tel links and image-only links stay unmarked. Headings with an
 authored external text link are included; TOC, menus, metadata and configured footers are not.
 
-This is a small progressive enhancement in the existing navigation script, scoped to the shared
-article body. Browser URL parsing compares the resolved destination's scheme/host/port with the
-current page origin, correctly handling protocol-relative URLs, case and default ports. A link
-to a production host from a localhost preview is external to that preview, not silently remapped.
-No href, title, target or rel is changed; no new tab, link interception or destination fetch.
-Sidera's [source-link hook](LINKS.md) supplies native destinations; this decoration never rewrites them.
-Without JavaScript, links retain their native appearance and behavior without the suffix.
-There is no observer for dynamically inserted content, new configuration or separate asset.
+External HTTP(S) links open in a new tab by default throughout Sidera, including
+article content, link cards, menus, social links, footer credits/licenses/references,
+edit links and media source links. Native templates set `target="_blank"` and
+`rel="noopener noreferrer"`, so the behavior does not require JavaScript. Same-site
+absolute URLs, relative paths/fragments and mail/tel links keep normal same-tab or
+protocol-handler behavior. Origin means scheme/host/effective port, not URL prefix.
+
+The `↗` decoration remains an article-text-only progressive enhancement, not a footer
+or menu decoration. Its localized screen-reader text announces a new tab. Link cards
+already show their URL and retain their existing no-arrow treatment. Canonical site
+origin is used, so production-site URLs are not misidentified just because output is
+viewed through a local preview. JS also recognizes the preview's own current origin.
+No href rewriting, destination fetch, window.open handler or click interception.
+
+The existing navigation script applies the default to custom DOM links present at
+load time, preserving explicit authored targets and adding safe rel tokens for blank
+targets. Site render-hook/custom template overrides should call `links/target.html`
+for equivalent no-JS markup. There is no dynamic DOM observer. Popup-original download
+anchors inherit the source link's policy; the image popup itself still opens in-page.
+See [LINKS.md](LINKS.md) for classification and extension details.
 
 ## Use and develop
 

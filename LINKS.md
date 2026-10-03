@@ -129,3 +129,39 @@ helper delegates to `links/resolve.html`, returning the same href and its native
 link hooks/cards can annotate that identity for the deferred graph. Exact native URLs
 are recognized separately without rewriting authored hrefs. A root-level File.Dir `/`
 is normalized before source matching. Native source diagnostics and C2 bridge remain.
+
+
+## External navigation defaults
+
+Sidera's shared `links/external.html` classifies HTTP(S) destinations by origin
+against the current Hugo site's BaseURL (scheme, case-insensitive host, effective
+port). Explicit default ports equal omitted ports; subdomains, lookalike hosts,
+nondefault ports or a different scheme are external. Protocol-relative Markdown
+links use the site's scheme; menu/shortcode URL validation retains its existing
+stricter policy. Relative/root/fragment URLs and non-web schemes are not external.
+This helper does not validate or rewrite URLs; the existing trust boundary remains.
+
+`links/target.html` returns only fixed safe attribute markup for an external URL:
+`target="_blank" rel="noopener noreferrer"`. It is used by Markdown/autolinks,
+linked images, content cards, original-image links, native menus/social links,
+edit links, GitHub badges and video source links. Authored config/footer/license/
+reference Markdown uses the same link hook. Pure native page/resource links stay
+same-tab. Existing Weibo nofollow/security tokens remain unchanged. The popup image
+viewer still intercepts its thumbnail for in-page viewing; its native download link
+inherits the original link's external/internal target and rel without fetching a Blob.
+
+The browser enhances custom anchors present at load time with the same default,
+using URL parsing and canonical/current preview origins. Explicit authored targets
+on custom anchors remain; blank targets acquire noopener/noreferrer without losing
+other rel tokens. Native theme templates need no script for navigation behavior.
+Custom raw HTML/native figure or overridden link hooks should call the helper or set
+attributes themselves for no-JS parity; there is no blanket HTML rewrite or observer.
+
+The existing `↗` marker is restricted to external article text links opening a new
+tab. It is not added to menus/footers, internal links, image-only links or content
+cards that already show their URL. Icons-off hides the arrow while retaining the
+localized external/new-tab description. No-JS retains native link targets without
+the progressive marker. No change to source-link resolution, href/title escaping,
+content graph membership, downloads or mail/tel handling is implied.
+
+Regression: `python3 tests/check_external_links.py /absolute/fresh-output-directory`.

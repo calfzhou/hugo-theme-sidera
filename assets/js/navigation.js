@@ -124,14 +124,26 @@ if (topRegion) {
 }
 
 
-// Decorate resolved article links, without replacing Hugo's native link/resource
-// renderer or changing href/target/rel. No-script pages keep ordinary usable links.
+// Native templates set targets before JS (including footer/menu Markdown).
+// Also cover authored/custom DOM links without intercepting clicks or changing href.
+const siteOrigin = new URL(document.querySelector('[data-sidera-navigation]')?.dataset.siteUrl || location.href).origin;
+function isExternalLink(link) {
+  try {
+    const destination = new URL(link.href);
+    return ['http:', 'https:'].includes(destination.protocol) && destination.origin !== siteOrigin && destination.origin !== location.origin;
+  } catch { return false; }
+}
+for (const link of document.querySelectorAll('a[href]')) {
+  if (!isExternalLink(link)) continue;
+  if (!link.hasAttribute('target')) link.target = '_blank';
+  if (link.target === '_blank') link.relList.add('noopener', 'noreferrer');
+}
+
+// Decorate external article links using the same canonical origin as native output.
 for (const body of document.querySelectorAll('article[data-renderer] .prose[data-external-link-label]')) {
   for (const link of body.querySelectorAll('a[href]')) {
     if (!link.textContent.trim() || link.querySelector('.external-link-marker')) continue;
-    let destination;
-    try { destination = new URL(link.href); } catch { continue; }
-    if (!['http:', 'https:'].includes(destination.protocol) || destination.origin === location.origin) continue;
+    if (!isExternalLink(link) || link.target !== '_blank') continue;
     const marker = document.createElement('span');
     marker.className = 'external-link-marker';
     marker.setAttribute('aria-hidden', 'true');

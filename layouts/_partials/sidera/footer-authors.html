@@ -4,7 +4,7 @@
 <section class="footer-section footer-authors" aria-labelledby="{{ .Instance }}-heading">
   <div class="footer-section-header">
     <h2 id="{{ .Instance }}-heading" class="footer-heading">{{ T "authors" }}</h2>
-    {{ with .Settings.edit_url }}<a class="article-edit" href="{{ partial "sidera/url.html" (dict "url" . "source" $.Page.Path) }}">{{ if $.Settings.icons }}{{ partial "sidera/icon.html" "edit" }}{{ end }}{{ T "edit_article" }}</a>{{ end }}
+    {{ with .Settings.edit_url }}<a class="article-edit" href="{{ partial "sidera/url.html" (dict "url" . "source" $.Page.Path) }}"{{ partial "links/target.html" . }}>{{ if $.Settings.icons }}{{ partial "sidera/icon.html" "edit" }}{{ end }}{{ T "edit_article" }}</a>{{ end }}
   </div>
   {{ $authors }}
 </section>

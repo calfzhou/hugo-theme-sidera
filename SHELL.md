@@ -141,7 +141,10 @@ arrow is centered for any line count, independently of expanded children. Recent
 single-line with ellipsis. These are local native
 menu params; arbitrary CSS strings, URLs and authored SVG are never accepted as color values.
 
-No config-supplied SVG/HTML, `pre`/`post` markup, callbacks or forced new tabs.
+No config-supplied SVG/HTML, `pre`/`post` markup or arbitrary callbacks. External
+HTTP(S) menu/social links default to a new tab with noopener/noreferrer; internal
+absolute/relative links stay same-tab. Menus/footers do not receive the article-only
+external arrow. See LINKS.md.
 
 URLs allow local URLs and `http://`, `https://`, `mailto:`; dangerous schemes,
 backslashes and control/whitespace characters reject. Use `pageRef` for internal

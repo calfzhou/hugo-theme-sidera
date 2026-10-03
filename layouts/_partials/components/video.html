@@ -53,5 +53,5 @@
   {{- else }}
   <p class="video-status">{{ T "video_disabled" }}</p>
   {{- end }}
-  <a class="video-source" href="{{ $url }}" rel="noreferrer">{{ T "video_source" }}</a>
+  <a class="video-source" href="{{ $url }}" {{ if partial "links/external.html" $url }}target="_blank" rel="noopener noreferrer"{{ else }}rel="noreferrer"{{ end }}>{{ T "video_source" }}</a>
 </figure>

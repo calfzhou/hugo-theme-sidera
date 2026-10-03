@@ -89,7 +89,8 @@
       const text = link.closest('figure').querySelector('figcaption')?.textContent || '';
       caption.textContent = text;caption.hidden = !text;
       dialog.setAttribute('aria-label', text || thumb.alt || dialog.dataset.defaultLabel);
-      dialog.querySelector('[data-image-action="download"]').href = link.href;
+      const download = dialog.querySelector('[data-image-action="download"]');
+      download.href = link.href;download.target = link.target;download.rel = link.rel;
       for (const button of dialog.querySelectorAll('button:not([data-image-action="close"])')) button.disabled = true;
       status.textContent = dialog.dataset.loading;status.hidden = false;view.setAttribute('aria-busy', 'true');view.replaceChildren();
       link.setAttribute('aria-expanded', 'true');dialog.showModal();document.documentElement.classList.add('image-modal-open');

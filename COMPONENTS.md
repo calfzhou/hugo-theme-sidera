@@ -384,7 +384,8 @@ late image decoding cannot overwrite a newer view. No inline SVG/HTML injection.
 The download control is a **native original-URL anchor** with `download`; it does not
 fetch a Blob, proxy, rehost or trigger automatically. Cross-origin servers/browser
 policies may ignore download and open the resource instead (in a separate tab with
-noopener). No CORS workaround or forced cross-origin download is promised.
+noopener/noreferrer); same-site originals keep normal download/same-tab fallback.
+No CORS workaround or forced cross-origin download is promised.
 
 Caption/alt are preserved independently. The image's explicit background and effective
 inversion classes transfer to the original once, following palette changes, without

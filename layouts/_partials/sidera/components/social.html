@@ -22,7 +22,7 @@
       {{- partial "sidera/color-mode-control.html" (dict "Icon" $icon) -}}
     {{- else -}}
       {{- with .ConfiguredURL -}}{{- $valid := partial "sidera/url.html" (dict "url" . "source" $where) -}}{{- end -}}
-      <a class="social-link{{ if not $icon }} social-text{{ end }}" href="{{ partial "sidera/url.html" (dict "url" .URL "source" $where) }}" title="{{ .Name }}" aria-label="{{ .Name }}">{{ if $icon }}{{ $icon }}{{ else }}{{ .Name }}{{ end }}</a>
+      <a class="social-link{{ if not $icon }} social-text{{ end }}" href="{{ partial "sidera/url.html" (dict "url" .URL "source" $where) }}"{{ partial "links/target.html" .URL }} title="{{ .Name }}" aria-label="{{ .Name }}">{{ if $icon }}{{ $icon }}{{ else }}{{ .Name }}{{ end }}</a>
     {{- end -}}
   {{- end -}}
   </nav>

@@ -23,7 +23,7 @@
   {{- $badges = $badges | append (dict "src" (printf "https://img.shields.io/github/v/release/%s?label=" $key) "alt" (T "badge_release")) (dict "src" (printf "https://img.shields.io/github/release-date/%s?label=" $key) "alt" (T "badge_release_date")) -}}
 {{- end -}}
 <div class="github-badges"{{ if not (.Get "disabled") }} data-sidera-badges{{ end }}>
-  <a class="badge-repo" href="{{ $href }}" rel="noreferrer">{{ $label }}</a>
+  <a class="badge-repo" href="{{ $href }}" {{ if partial "links/external.html" $href }}target="_blank" rel="noopener noreferrer"{{ else }}rel="noreferrer"{{ end }}>{{ $label }}</a>
   {{ if .Get "disabled" }}<p class="badge-status visually-hidden">{{ T "badge_disabled" }}</p>{{ else }}
   <div class="badge-images">{{ range $badges }}<span><img src="{{ .src }}" alt="{{ .alt }}" height="20" loading="lazy" referrerpolicy="no-referrer"><span class="badge-failed" hidden>{{ .alt }}: {{ T "badge_unavailable" }}</span></span>{{ end }}</div>
   <p class="badge-status visually-hidden" role="status" data-loading="{{ T "badge_loading" }}" data-ready="{{ T "badge_ready" }}" data-error="{{ T "badge_error" }}">{{ T "badge_notice" }}</p>
