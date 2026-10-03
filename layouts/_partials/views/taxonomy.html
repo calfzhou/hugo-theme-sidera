@@ -3,7 +3,7 @@
 {{ $taxonomy := .Data.Plural }}
 {{ $model := partialCached "taxonomies/model.html" (dict "owner" false "taxonomy" $taxonomy) "global" $taxonomy }}
 {{ $policy := partial "taxonomies/policy.html" false }}
-<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ .Content }}</div></header>
+<header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1><div class="intro prose">{{ partial "images/list-captions.html" .Content }}</div></header>
 {{ if eq .Kind "taxonomy" }}
   {{ partial "taxonomies/index.html" (dict "Page" . "Owner" false "Model" $model "Settings" (partialCached "sidera/settings.html" . .Path)) }}
 {{ else }}

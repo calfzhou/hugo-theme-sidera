@@ -372,3 +372,12 @@ Automatic image captions are for standalone images, not inline text or Markdown
 table cells/headers. Native table rendering preserves alt/title/sizing/resource/link
 semantics while omitting generated caption wrappers. See MARKDOWN.md and run
 `python3 tests/check_table_images.py /absolute/fresh-output-directory`.
+
+
+### List image captions
+
+Ordinary Markdown images inside ordered/unordered lists are caption-free, including
+single-image items, nested/loose lists and lists in grid cells. Standalone and explicit
+shortcode captions remain unchanged. Output/search share the bounded rendered-HTML
+normalizer; custom body templates should use it too. See MARKDOWN.md and run
+`python3 tests/check_list_images.py /absolute/fresh-output-directory`.

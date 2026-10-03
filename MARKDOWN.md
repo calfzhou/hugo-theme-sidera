@@ -43,10 +43,10 @@ Adjacent image attrs, link/emphasis inline attrs and `:::` containers are not re
 Move the image attribute list to the next line during conversion; no image shortcode
 is required. Inside a quote, retain the `>` prefix. Inside a **loose list**, indent
 the attribute line with the image and keep blank lines between items. Hugo drops
-image attrs in the tested tight-list form. For a tight single-image list, put
-`{.no-caption}` on the next **outdented** line to mark the list instead: the group's
-caption is hidden, with image alt retained. This is the compatible primitive for
-the actual numbered images inside grid cells; full grid composition remains C.
+image attrs in the tested tight-list form. Ordinary images inside ordered/unordered
+lists are automatically caption-free, even when a list item contains only one image
+or the list is inside a grid cell. No `.no-caption` class is required for these images.
+An outdented attribute line still targets the list, not its image.
 Do not claim every attribute position is interchangeable. Conversions in the showcase are synthetic; real-site conversion stays P4.
 
 `invert-when-dark` and `invert-when-light` apply `invert(1) hue-rotate(180deg)` **to the
@@ -101,6 +101,17 @@ No active rich-caption syntax was established by the bounded real-use audit.
   hides descendant captions with CSS, preserving image alt.
 - Empty title and alt produce no empty caption/figure.
 - Images within ordinary prose get no generated caption.
+- Ordinary Markdown images anywhere inside ordered/unordered list items get no
+  automatic figure or caption, including tight/loose/nested lists and lists inside
+  grid/folding containers. Alt/title, dimensions, links, numbering and classes remain.
+  Goldmark exposes no list ancestry to image hooks or native list render hook, so
+  `images/list-captions.html` unwraps only the exact generated image figure in
+  **already-rendered HTML**, tracking nested list items. It never parses Markdown.
+  Body output and discovery/search use the same normalization; no CSS/JS hiding.
+  Standalone images outside lists and explicit `image`/`figure` shortcodes keep their
+  captions. Theme body/config-Markdown views apply this helper; custom templates
+  that output `.Content` or `RenderString` directly must call it to retain the rule.
+  This is a bounded theme-output filter, not an arbitrary-HTML repair/parser API.
 - Ordinary Markdown images inside table header/body cells also get **no automatic
   caption**, including a cell containing only one image. Native image alt/title,
   resource URL, dimensions and links remain. This is server-rendered behavior, not

@@ -10,7 +10,7 @@
     {{- if and .IsSection (eq $settings.list_mode "recursive") (not $settings.list_header) -}}{{- continue -}}{{- end -}}
     {{- $owner := partial "collection-owner.html" . -}}{{- $scope := "" -}}{{- $label := .Site.Title -}}
     {{- with $owner -}}{{- $scope = .RelPermalink -}}{{- $label = partial "collection-name.html" . -}}{{- end -}}
-    {{- $body := string .Content -}}{{- $links := slice -}}
+    {{- $body := string (partial "images/list-captions.html" .Content) -}}{{- $links := slice -}}
     {{- range findRE `<a\s[^>]*\sdata-content-page="[^"]*"[^>]*>` $body -}}
       {{- $links = $links | append (htmlUnescape (replaceRE `.*\sdata-content-page="([^"]*)".*` "$1" .)) -}}
     {{- end -}}

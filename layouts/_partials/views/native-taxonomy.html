@@ -5,7 +5,7 @@
 <header class="view-header"><p class="eyebrow">{{ T "all_content" }}</p><h1>{{ if and (eq .Kind "taxonomy") (not .File) (in (slice "authors" "series" "preset") $taxonomy) }}{{ T $taxonomy }}{{ else }}{{ .Title }}{{ end }}</h1>{{ if and (eq .Kind "term") (eq $taxonomy "authors") }}{{ with .Params.avatar }}
   {{ if ne (printf "%T" .) "string" }}{{ errorf "Sidera avatar must be a local image string: %s" $.Path }}{{ else }}
   {{ $avatar := partial "sidera/image.html" (dict "Page" $ "Owner" false "path" .) }}{{ with $avatar }}<img src="{{ . }}" width="80" alt="{{ $.Title }}" loading="lazy">{{ end }}{{ end }}
-{{ end }}{{ end }}<div class="intro prose">{{ .Content }}</div></header>
+{{ end }}{{ end }}<div class="intro prose">{{ partial "images/list-captions.html" .Content }}</div></header>
 {{ if eq .Kind "taxonomy" }}
   {{ $terms := slice }}{{ range .Data.Terms.Alphabetical }}{{ $terms = $terms | append .Page }}{{ end }}
   {{ $pager := .Paginate $terms $policy.size }}
