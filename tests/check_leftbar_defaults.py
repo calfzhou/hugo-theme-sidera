@@ -67,6 +67,10 @@ for label,overlay,prefix in [('baseline','',''),('chinese',"locale='zh-CN'\ndefa
     paths=[f'{prefix}/{folder}/n{i}/' for i in seq]
     if folder=='docs':paths.insert(0,prefix+'/docs/chapter/')
     assert recent['hrefs']==paths[:5],(route,recent,paths[:5])
+  # Collection header has no redundant browse-tags CTA; native hubs survive.
+  root=read(out,f'/{folder}/')[0]
+  assert 'class="view-tools"' not in root and '浏览标签 →' not in root and 'Browse tags →' not in root
+  assert (out/folder/'tags/index.html').is_file()
   if folder=='notes':assert 'data-list-order="modification"' in read(out,'/notes/')[0]
  # Minimal/global default stays non-scoped even within an unpreset root.
  for route in ['/','/standalone/','/custom/','/custom/entry/']:

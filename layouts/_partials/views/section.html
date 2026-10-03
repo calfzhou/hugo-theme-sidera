@@ -8,10 +8,6 @@
     {{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}
     <h1>{{ .Title }}</h1>
     <div class="intro prose" data-search-body data-clear-highlights="{{ T "search_highlights_clear" }}">{{ partial "discovery/body.html" . }}</div>
-    {{ if and $owner (in (partialCached "sidera/settings.html" . .Path).taxonomy_navigation "tags") }}
-      {{ with $hub := .Site.GetPage (printf "%s/tags" $owner.Path) }}
-      <nav class="view-tools" aria-label="{{ T "notebook_tags" }}"><a href="{{ $hub.RelPermalink }}">{{ T "browse_tags" }}</a></nav>{{ end }}
-    {{ end }}
   </header>
   {{ else }}<h1 class="visually-hidden">{{ .Title }}</h1>{{ end }}
   {{ $pages := partial "lists/collection-pages.html" . }}
