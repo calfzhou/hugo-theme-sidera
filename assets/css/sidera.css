@@ -769,7 +769,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 }
 @media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) { .prose .content-link-card { transition: none; } }
 .prose .content-copy { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 1rem 0; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); min-width: 0; }
-.content-copy .copy-prefix { padding: 2px 8px; border-radius: 4px; color: var(--accent); background: var(--accent-soft); font: 700 13px/1.5 var(--code); overflow-wrap: anywhere; }
+.content-copy .copy-prefix { padding: 2px 8px; border-radius: 4px; color: var(--accent); background: var(--accent-soft); font-family: inherit; font-size: 13px; font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
 .prose .content-copy .copy-value { flex: 1; min-width: 8ch; padding: 4px; background: none; white-space: pre-wrap; overflow-wrap: anywhere; }
 .content-copy .code-copy { grid-area: auto; flex: none; opacity: 1; pointer-events: auto; min-height: 44px; }
 .content-copy .code-copy-fallback { flex-basis: 100%; }

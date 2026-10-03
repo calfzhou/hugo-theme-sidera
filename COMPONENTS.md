@@ -121,7 +121,7 @@ cache clearing, legacy template alias, user-server manipulation or watcher fix.
 | `u` | Required nonblank string `text` | Native underline, not a link. Adds no whitespace: the example displays `aabcc`. |
 | `quot` | Required nonblank string `text`; boolean `ornament=true` | Standout paragraph with optional typographic ornaments, no invented heading/attribution. |
 | `link` | Required nonblank strings `href`, `text`; optional string `icon="link"`; explicit empty hides; optional strings `image=""`, `alt=""` | One real link card, authored label, native destination; optional content image takes visual priority over the named icon. No metadata fetch. |
-| `copy` | Required nonblank string `text`; optional string `prefix=""` | Selectable value and progressive shared Copy/Copied/toast/manual fallback. Prefix is not copied. |
+| `copy` | Required nonblank string `text`; optional string `prefix=""` | Selectable value and progressive shared Copy/Copied/toast/manual fallback. Prefix inherits the surrounding paragraph font family and is not copied; value typography is unchanged. |
 
 Text arguments are **literal escaped text**, not Markdown/HTML/math. Quote numeric
 text (`text="9"`, not `text=9`). Boolean options use `false`, not `"false"`. Inline
