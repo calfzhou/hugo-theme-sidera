@@ -381,3 +381,12 @@ single-image items, nested/loose lists and lists in grid cells. Standalone and e
 shortcode captions remain unchanged. Output/search share the bounded rendered-HTML
 normalizer; custom body templates should use it too. See MARKDOWN.md and run
 `python3 tests/check_list_images.py /absolute/fresh-output-directory`.
+
+
+### Collection-card dates
+
+Collection cards show the most recent update among their own published articles,
+not the collection root's date. Empty/undated collections omit the date; independent
+nested collections are excluded and `show_updated=false` is honored. Regular article
+dates stay unchanged. See CONTRACT.md and run
+`python3 tests/check_collection_dates.py /absolute/fresh-output-directory`.

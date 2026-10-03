@@ -1,0 +1,16 @@
+{{- /* Collection activity, not the root page's metadata or main-list order.
+     Native published regular pages only; independent nested roots own their dates.
+     Hugo's Lastmod policy supplies the usual publication-date fallback. */ -}}
+{{- $root := . -}}{{- $date := false -}}
+{{- range .RegularPagesRecursive -}}
+  {{- if eq (partial "collection-owner.html" .) $root -}}
+    {{- $updated := .Lastmod -}}
+    {{- if $updated.IsZero -}}{{- $updated = .PublishDate -}}{{- end -}}
+    {{- if not $updated.IsZero -}}
+      {{- if or (not $date) ($updated.After $date.date) -}}
+        {{- $date = dict "date" $updated "kind" "modified" -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $date -}}

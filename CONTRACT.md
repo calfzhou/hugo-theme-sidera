@@ -185,7 +185,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | byline | Additional escaped credit text; empty by default. Not author identity. |
 | ai_label | Optional disclosure string: manual/reviewed/polished/generated; empty default/explicit clear. Native page/cascade/preset/site resolution; localized article-header text only, not body/index/author identity. See MARKDOWN.md. |
 | navigation_mode | Collection-root policy: list (minimal/blog/notes), siblings (docs), or sequential. Root params override root preset then site/language default; not cascaded or set on member pages. Previous/Next stay within the complete collection sequence; Parent is the actual in-scope parent in siblings/sequential only; omitted in list mode. |
-| primary_date | published (minimal/blog) or updated (notes/docs). Per-page date priority shared by cards/headers, independent of sorting; normal params/cascade/preset/site precedence. |
+| primary_date | published (minimal/blog) or updated (notes/docs). Per-article date priority shared by cards/headers, independent of sorting; collection cards instead show member activity; normal params/cascade/preset/site precedence. |
 | show_authors / show_updated | Native author visibility (true): compact linked names in the header; optional explicit footer authors / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
 | list_header | Boolean, default true. Show the recursive section title/intro/tools. false keeps an accessible title and full counts/pagination, but emits no hidden-body TOC. Does not hide taxonomy result titles or docs bodies. |
@@ -427,3 +427,19 @@ settings alongside its native Pager and retains visible localized text with icon
 site YAML additions/overrides, geometry safety and parent-owned size/color. Link
 card icon and social params.icon select those same keys; social params.image and
 image-valued card icons are explicitly retired pre-release, not guessed aliases.
+
+
+## Collection-card activity dates
+
+Large collection cards (including preset collection lists) show the latest effective
+`Lastmod` among native published regular pages owned by that collection, with native
+`PublishDate` as fallback when Lastmod is zero. This is collection activity, not the
+root `_index.md` date, main-list sort order or pagination. All member depths count;
+nested independent scope roots and their articles belong to their own collection.
+Section metadata does not contribute. Native build/list visibility determines eligible
+pages; normal builds exclude drafts, future/expired and headless pages.
+
+No dated member means no date label or calendar icon—not an unknown-date placeholder.
+The collection's `show_updated=false` also hides this activity date. Article-card date
+priority/fallbacks, article headers, authored metadata and small Home cards are unchanged.
+No build-time, filesystem-time or Git-date fallback is introduced by this feature.

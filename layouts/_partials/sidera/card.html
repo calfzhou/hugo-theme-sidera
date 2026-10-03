@@ -1,12 +1,17 @@
 {{- $page := .Page -}}{{- $owner := partial "collection-owner.html" $page -}}
 {{- $collection := partial "model/is-root.html" $page -}}{{- $logo := "" -}}{{- if $collection -}}{{- $logo = partial "collection-logo.html" $page -}}{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
-{{- $dates := partial "sidera/dates.html" (dict "Page" $page "Settings" $settings) -}}
-{{- $date := dict "date" $page.PublishDate "kind" "published" -}}
-{{- if and (eq $settings.primary_date "updated") $settings.show_updated -}}{{- $date = dict "date" $page.Lastmod "kind" "updated" -}}{{- end -}}
-{{- with $dates -}}{{- $date = index . 0 -}}{{- end -}}
-{{- /* Keep the existing card class/translation key; its visible wording is Updated. */ -}}
-{{- if eq $date.kind "updated" -}}{{- $date = merge $date (dict "kind" "modified") -}}{{- end -}}
+{{- $date := false -}}
+{{- if $collection -}}
+  {{- if $settings.show_updated -}}{{- $date = partialCached "collection-updated.html" $page $page.Language.Lang $page.Path -}}{{- end -}}
+{{- else -}}
+  {{- $dates := partial "sidera/dates.html" (dict "Page" $page "Settings" $settings) -}}
+  {{- $date = dict "date" $page.PublishDate "kind" "published" -}}
+  {{- if and (eq $settings.primary_date "updated") $settings.show_updated -}}{{- $date = dict "date" $page.Lastmod "kind" "updated" -}}{{- end -}}
+  {{- with $dates -}}{{- $date = index . 0 -}}{{- end -}}
+  {{- /* Keep the existing card class/translation key; its visible wording is Updated. */ -}}
+  {{- if eq $date.kind "updated" -}}{{- $date = merge $date (dict "kind" "modified") -}}{{- end -}}
+{{- end -}}
 <li class="article-card">
   {{- with $page.Params.cover.image -}}<div class="card-cover"><img src="{{ partial "sidera/image.html" (dict "Page" $page "Owner" $owner "path" .) }}" alt="{{ $page.Params.cover.alt }}" loading="lazy" decoding="async"></div>{{- end -}}
   <div class="card-content{{ if $logo }} has-collection-logo{{ end }}">
@@ -18,7 +23,7 @@
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}
     <div class="card-dates">
       {{ if $page.Params.pinned }}<span class="pin-label">{{ if $settings.icons }}{{ partial "sidera/icon.html" "pin" }}{{ end }}{{ T "pinned" }}</span>{{ end }}
-      <span class="card-date">{{ if $settings.icons }}{{ partial "sidera/icon.html" "calendar" }}{{ end }}{{ partial "date.html" $date }}</span>
+      {{ with $date }}<span class="card-date">{{ if $settings.icons }}{{ partial "sidera/icon.html" "calendar" }}{{ end }}{{ partial "date.html" . }}</span>{{ end }}
       {{ $scope := "global" }}{{ with $owner }}{{ $scope = .Path }}{{ end }}
       {{ range $taxonomy := slice "tags" "categories" }}
         {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}
