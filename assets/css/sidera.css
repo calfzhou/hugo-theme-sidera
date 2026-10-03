@@ -216,6 +216,7 @@ summary { cursor: pointer; }
 .taxonomy-index .navigation-content { margin-top: 12px; }
 .taxonomy-index .navigation-content:empty { display: none; }
 .term-badge { color: var(--muted); text-decoration: none; border-radius: 4px; padding: 0 4px; }
+.term-badge > .icon { margin-inline-end: 4px; }
 .term-badge:is(:hover,:focus-visible) { color: var(--accent); background: var(--accent-soft); text-decoration: none; }
 .article-card:focus-within,.collection-card:focus-within { border-color: var(--accent); }
 .excerpt { color: var(--muted); font-size: 16px; line-height: 1.5; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin: 18px 0; }
