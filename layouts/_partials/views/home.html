@@ -5,17 +5,10 @@
     <div class="intro prose" data-search-body data-clear-highlights="{{ T "search_highlights_clear" }}">{{ partial "discovery/body.html" . }}</div>
   </header>
   <h2 class="section-heading">{{ T "collections" }}</h2>
-  <ul id="collections" class="collection-grid">
+  <ul id="collections" class="article-list">
     {{ range (where site.Pages "Kind" "section").ByTitle }}
       {{ if partial "model/is-root.html" . }}
-        <li class="collection-card">
-          {{ $s := partialCached "sidera/settings.html" . .Path }}
-          {{ $logo := partial "collection-logo.html" . }}
-          <span class="collection-emblem{{ if $logo }} has-logo{{ end }}">{{ if $logo }}<img class="collection-logo" src="{{ $logo }}" width="48" height="48" alt="" loading="lazy" decoding="async">{{ else if $s.icons }}{{ partial "sidera/icon.html" $s.icon }}{{ end }}</span>
-          <span class="eyebrow collection-identity">{{ partial "collection-identity.html" . }}</span>
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          <p>{{ (.Description | default (.Summary | plainify | htmlUnescape)) | truncate 160 }}</p>
-        </li>
+        {{ partial "sidera/card.html" (dict "Page" . "Home" true) }}
       {{ end }}
     {{ end }}
   </ul>

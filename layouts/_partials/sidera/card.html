@@ -17,7 +17,9 @@
   <div class="card-content{{ if $logo }} has-collection-logo{{ end }}">
     {{ if $collection }}<div class="collection-card-copy"><p class="eyebrow collection-identity">{{ partial "collection-identity.html" $page }}</p>{{ end }}
     {{ partial "series/badge.html" $page }}
-    <h2><a class="card-title" href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+    {{- /* Home cards sit beneath the Collections h2; identical visual treatment. */ -}}
+    {{ $heading := "h2" }}{{ if .Home }}{{ $heading = "h3" }}{{ end }}
+    {{ printf "<%s>" $heading | safeHTML }}<a class="card-title" href="{{ $page.RelPermalink }}">{{ $page.Title }}</a>{{ printf "</%s>" $heading | safeHTML }}
     {{ if and .ShowOwner (not $collection) }}{{ with $owner }}<p class="eyebrow"><a data-result-owner href="{{ .RelPermalink }}">{{ partial "collection-name.html" . }}</a></p>{{ end }}{{ end }}
     {{ $excerpt := $page.Description }}{{ if not $excerpt }}{{ $excerpt = $page.Summary | plainify | htmlUnescape }}{{ end }}
     {{ with $excerpt }}<p class="excerpt">{{ . | truncate 240 }}</p>{{ end }}

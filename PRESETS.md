@@ -212,6 +212,6 @@ The shared recent count defaults to **10**, not a preset/site-specific count. Ma
 and list_order are independent; notes still list by modification, blogs by publication.
 No article metadata, taxonomy assignments, scope roots or required author fields change.
 
-Collection-owned logos can replace the default icon on Home and appear at the right
-of large collection cards. Preset type/icon definitions are unchanged; no theme brand
+Home and preset collection lists share large cards, with collection-owned logos
+on the right and no artwork placeholder when a logo is absent. Preset type/icon definitions are unchanged; no theme brand
 catalog, new content kind or global logo default is introduced. See CONTRACT.md.

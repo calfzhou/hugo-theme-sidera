@@ -1044,9 +1044,12 @@ recent_count=10; custom larger positive counts remain supported independently.
 
 ### Collection card identity artwork
 
-Optional root params.logo replaces Home's small preset icon with a 48px contained
-image, transparent surface/no filtering. Large collection cards show it at the right
+Home and preset collection lists reuse the same full-width card and list styles.
+Optional root params.logo appears on the right, with a transparent surface/no filtering
 (96px desktop, 72px narrow layout); title/summary have a separate flexible text column.
 Both surfaces use the explicit short name before preset type without duplicating equal
 labels. Native full titles, descriptions, dates, URLs and menu icons remain independent.
-Empty/omitted logos retain fallback behavior; icons=false still preserves identity images.
+Empty/omitted logos leave text-only cards; icons=false still preserves identity images.
+Home retains its all-collections title ordering, introductory content and standalone list,
+without introducing pagination. Card titles use h3 beneath the Collections h2 on Home
+and h2 on preset lists, with identical visual styling and latest-activity dates.

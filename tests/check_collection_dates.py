@@ -72,6 +72,11 @@ for label,overlay,prefix in [('baseline','',''),('chinese',"locale='zh-CN'\ndefa
   assert datetime.fromisoformat(collection['dates'][0]['datetime'].replace('Z','+00:00'))==datetime.fromisoformat('2024-06-01T15:00:00+00:00')
   assert ('更新于' if label=='chinese' else 'Updated') in collection['text'],collection
   for name in ['draft','future','expired','headless']:assert not (out/preset/name/'index.html').exists()
+ # Home uses the same card content/activity, retaining h3 under Collections h2.
+ home=cards('')
+ for preset in ['notes','blog','docs']:
+  for href,card in cards('preset/'+preset).items():assert home[href]==card,(label,href)
+ assert '<h3><a class="card-title"' in (out/'index.html').read_text()
  notes=cards('preset/notes')
  for name in ['empty','undated','hidden']:
   c=notes[prefix+'/'+name+'/'];assert c['spans']==0 and not c['dates'];assert '不详' not in c['text'] and 'unknown' not in c['text'].lower()

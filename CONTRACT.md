@@ -116,14 +116,13 @@ params:
 
 It is a **local image path**, resolved through native root resources, assets or static,
 with the existing identity-image validation (SVG/PNG/JPEG/WebP/GIF/AVIF, no traversal,
-remote URL/query/raw SVG input). Missing files diagnose. Omission/empty restores the
-Home preset/icon fallback. No build-time fetch, processing, cropping or recoloring.
+remote URL/query/raw SVG input). Missing files diagnose. Omission/empty leaves the card text-only, without an artwork placeholder. No build-time fetch, processing, cropping or recoloring.
 Like name, logo is root-local identity, not a preset default/site fallback/cascade.
 
-Home cards use the logo in place of their default UI icon. Explicit short name appears
+Home and preset lists share the same large collection-card renderer. Explicit short name appears
 before preset type in the small identity line; equal names/types are not repeated, and
 without an explicit name the title already serves that role. Full native title and
-summary stay below. Large collection cards (including preset term members) put the
+summary stay below. All collection cards put the
 logo on the right, larger, beside the unchanged title/summary/content metadata.
 
 Logos remain images even when params.icons=false; that switch hides optional UI icons,
@@ -179,7 +178,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | Setting | Meaning / default |
 |---|---|
 | auto_caption | Boolean, true. Direct standalone Markdown image title then cleaned alt becomes an escaped caption; false opts out using normal page/cascade/preset/site precedence. See MARKDOWN.md. |
-| logo | Optional local collection-root image path; empty/omitted falls back to the Home UI icon. No inheritance/remote fetch; see collection logo contract. |
+| logo | Optional local collection-root image path; empty/omitted has no artwork. No inheritance/remote fetch; see collection logo contract. |
 | name | Optional local collection-root short label; string, title fallback when omitted/blank. Not a preset/default/cascade field. See the name/title/description contract above. |
 | scope_root | Local section boolean; nested false, top-level implicit true. Browsing only. |
 | byline | Additional escaped credit text; empty by default. Not author identity. |
@@ -441,5 +440,6 @@ pages; normal builds exclude drafts, future/expired and headless pages.
 
 No dated member means no date label or calendar icon—not an unknown-date placeholder.
 The collection's `show_updated=false` also hides this activity date. Article-card date
-priority/fallbacks, article headers, authored metadata and small Home cards are unchanged.
+priority/fallbacks, article headers and authored metadata are unchanged. Home collection
+cards use the same activity dates as preset collection cards.
 No build-time, filesystem-time or Git-date fallback is introduced by this feature.
