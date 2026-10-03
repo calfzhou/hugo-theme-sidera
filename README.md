@@ -390,3 +390,12 @@ not the collection root's date. Empty/undated collections omit the date; indepen
 nested collections are excluded and `show_updated=false` is honored. Regular article
 dates stay unchanged. See CONTRACT.md and run
 `python3 tests/check_collection_dates.py /absolute/fresh-output-directory`.
+
+
+### Native article-image loading
+
+Markdown images and `image` shortcode thumbnails use browser-native lazy loading
+and async decoding by default. Use `loading="eager"` on the shortcode or as a native
+standalone Markdown image attribute for an opening image. Preserve authored dimensions
+and native src/no-JS access; originals in the popup keep their on-demand behavior.
+See MARKDOWN.md and `tests/check_image_loading.py` for scope and verification.

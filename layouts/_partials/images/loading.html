@@ -1,0 +1,9 @@
+{{- /* Explicit values are strict; only omission chooses the native lazy default. */ -}}
+{{- $loading := "lazy" -}}
+{{- if isset .params "loading" -}}
+  {{- $value := index .params "loading" -}}
+  {{- if and (eq (printf "%T" $value) "string") (in (slice "lazy" "eager") $value) -}}
+    {{- $loading = $value -}}
+  {{- else -}}{{- errorf "Sidera image: loading must be lazy or eager (%s)" .position -}}{{- end -}}
+{{- end -}}
+{{- return $loading -}}

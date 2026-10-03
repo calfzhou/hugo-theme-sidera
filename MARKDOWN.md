@@ -147,7 +147,7 @@ markers are not this contract and remain literal alt text.
 
 Parsed image destinations reuse [A's native helper](LINKS.md): exact resources,
 page/bundle permalinks, query/fragment/base path and source context. Native image
-attributes support class/id and positive integer width/height; suffix sizes win.
+attributes support class/id, positive integer width/height and loading="lazy|eager"; suffix sizes win.
 Unknown attributes/invalid sizes emit `sidera-image-attribute` warnings, strict under
 `--panicOnWarning`. Goldmark strips event handlers first. No attribute can replace
 src/alt or grant unsafe URL protocols.
@@ -332,3 +332,35 @@ These exact colors deliberately supersede the earlier palette-adjusted colors.
 They do **not** meet 4.5:1 small-text contrast on every light surface; this fidelity
 choice must not be described as AA contrast compliance. Text still conveys each label
 without relying on the icon/color. A site can override styles using normal native CSS.
+
+
+## Native image lazy loading
+
+Ordinary Markdown images and `image` shortcode thumbnails default to
+`loading="lazy" decoding="async"`. This includes inline/list/table images and images
+inside grids/folds. The browser chooses its near-viewport threshold; it may preload
+nearby images. Keep native src/alt and authored dimensions, no data-src placeholder,
+custom loader or build-time remote fetch. Width/height are preserved when supplied;
+missing dimensions are not invented, so undimensioned images can still shift layout.
+
+For a prominent opening image, explicitly opt into eager loading:
+
+```markdown
+![Description](opening.jpg)
+{loading="eager"}
+```
+
+```text
+{{< image src="opening.jpg" alt="Description" loading="eager" >}}
+```
+
+Only omitted, `lazy` or `eager` are supported; invalid explicit values diagnose.
+The shortcode is reliable in nested layouts where native Markdown attributes may
+not attach to the image. Eager changes fetching, not decoding policy or priority.
+
+Link-card images already use native lazy/async. Popup originals remain on-demand
+and are not assigned lazy loading. Diagram/badge/video loaders and site branding are
+unchanged. Hugo's built-in `figure`, custom shortcodes/raw HTML or site render-hook
+overrides keep their own loading policy; this does not rewrite arbitrary HTML.
+Without JavaScript, src links/images remain usable; browsers may intentionally load
+all images despite lazy hints. No guarantee of network deferral in no-JS mode.

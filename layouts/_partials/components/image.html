@@ -4,7 +4,7 @@
 {{- if not .IsNamedParams -}}{{- errorf "Sidera image requires named src and alt (%s)" .Position -}}{{- end -}}
 {{- partial "components/parent.html" . -}}
 {{- range $k, $v := .Params -}}
-  {{- if not (in (slice "src" "alt" "caption" "width" "height" "background" "class" "id" "original") $k) -}}{{- errorf "Sidera image: unsupported parameter %q (%s)" $k $sc.Position -}}{{- end -}}
+  {{- if not (in (slice "src" "alt" "caption" "width" "height" "background" "class" "id" "original" "loading") $k) -}}{{- errorf "Sidera image: unsupported parameter %q (%s)" $k $sc.Position -}}{{- end -}}
   {{- if not (in (slice "width" "height") $k) -}}
     {{- if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera image: %s must be a string (%s)" $k $sc.Position -}}{{- end -}}
   {{- end -}}
@@ -34,6 +34,7 @@
     {{- errorf "Sidera image: background must be transparent or a hex color (%s)" .Position -}}
   {{- end -}}
 {{- end -}}
+{{- $loading := partial "images/loading.html" (dict "params" .Params "position" .Position) -}}
 {{- $src := partial "images/source.html" (dict "src" (.Get "src") "page" .Page "position" .Position) -}}
 {{- $original := "" -}}
 {{- with .Get "original" -}}
@@ -47,4 +48,4 @@
 {{- if in (split (.Get "class" | default "") " ") "no-caption" -}}{{- $caption = "" -}}{{- end -}}
 {{- $openLabel := T "image_open" -}}
 {{- with .Get "alt" -}}{{- $openLabel = T "image_open_named" (dict "label" .) -}}{{- end -}}
-<figure class="md-figure content-image">{{ with $original }}<a class="image-original-link" data-image-open href="{{ . }}" aria-label="{{ $openLabel }}">{{ end }}<img src="{{ $src }}" alt="{{ .Get "alt" }}"{{ range $k, $v := $dimensions }} {{ $k | safeHTMLAttr }}="{{ $v }}"{{ end }}{{ with .Get "class" }} class="{{ . }}"{{ end }}{{ with .Get "id" }} id="{{ . }}"{{ end }}{{ with $background }} style="{{ printf "background-color:%s" . | safeCSS }}"{{ end }}>{{ if $original }}</a>{{ end }}{{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
+<figure class="md-figure content-image">{{ with $original }}<a class="image-original-link" data-image-open href="{{ . }}" aria-label="{{ $openLabel }}">{{ end }}<img src="{{ $src }}" alt="{{ .Get "alt" }}" loading="{{ $loading }}" decoding="async"{{ range $k, $v := $dimensions }} {{ $k | safeHTMLAttr }}="{{ $v }}"{{ end }}{{ with .Get "class" }} class="{{ . }}"{{ end }}{{ with .Get "id" }} id="{{ . }}"{{ end }}{{ with $background }} style="{{ printf "background-color:%s" . | safeCSS }}"{{ end }}>{{ if $original }}</a>{{ end }}{{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>

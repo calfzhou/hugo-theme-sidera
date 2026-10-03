@@ -1,5 +1,6 @@
 {{- /* Resolve parsed resources with A's native permalink helper. Do not parse
      trailing source attributes or containers here: they are outside this node. */ -}}
+{{- $loading := partial "images/loading.html" (dict "params" .Attributes "position" .Position) -}}
 {{- $src := partial "links/destination.html" . -}}
 {{- $alt := .PlainText -}}
 {{- $width := "" -}}{{- $height := "" -}}
@@ -17,7 +18,7 @@
   {{- $caption = $alt -}}{{- with .Title -}}{{- $caption = partial "links/title.html" . -}}{{- end -}}
 {{- end -}}
 {{- if $caption -}}<figure class="md-figure">{{- end -}}
-<img src="{{ $src }}" alt="{{ $alt }}"
+<img src="{{ $src }}" alt="{{ $alt }}" loading="{{ $loading }}" decoding="async"
   {{- with .Title }} title="{{ partial "links/title.html" . }}"{{ end -}}
   {{- with $width }} width="{{ . }}"{{ end -}}
   {{- with $height }} height="{{ . }}"{{ end -}}
@@ -28,8 +29,8 @@
     {{- else if and (in (slice "width" "height") $name) (not (or (and (eq $name "width") $width) (and (eq $name "height") $height))) -}}
       {{- if findRE `^[1-9][0-9]*$` (string $value) }} {{ $name | safeHTMLAttr }}="{{ $value }}"
       {{- else -}}{{- warnidf "sidera-image-attribute" "Sidera image: %s must be a positive integer (%s)" $name $.Position -}}{{- end -}}
-    {{- else if not (in (slice "width" "height") $name) -}}
-      {{- warnidf "sidera-image-attribute" "Sidera image: unsupported attribute %q (%s); supported native attributes are id, class, width and height" $name $.Position -}}
+    {{- else if not (in (slice "width" "height" "loading") $name) -}}
+      {{- warnidf "sidera-image-attribute" "Sidera image: unsupported attribute %q (%s); supported native attributes are id, class, width, height and loading" $name $.Position -}}
     {{- end -}}
   {{- end -}}
 >

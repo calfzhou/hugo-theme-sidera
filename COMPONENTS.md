@@ -331,6 +331,9 @@ Use this small shared shortcode only when explicit presentation is useful:
   Src reuses the safe card-image resolver: exact native page/cross-bundle/assets,
   same-site public paths and HTTP(S), with no build-time network fetch or rewriting
   of artwork. Unsafe schemes, protocol-relative paths and above-root traversal reject.
+- Optional `loading`: `lazy` (default) or `eager`; thumbnails always use
+  `decoding="async"`. Eager is useful for an important opening image; popup originals
+  still load only when opened. No source rewriting or custom lazy-loader script.
 - Optional `background`: `transparent` or hex `#RGB`, `#RGBA`, `#RRGGBB`, `#RRGGBBAA`.
   Omission has no forced matte. No arbitrary CSS, `url()`, raw style or SVG author input.
   A background applies to the **image**, not its caption or the whole article.
