@@ -1,0 +1,13 @@
+{{- /* Reusable candidate order, not instance HTML. Cache variants include language,
+     owner/global scope, order and section inclusion; count is applied by the caller.
+     Native Pages and ownership checks retain publication and nested-root boundaries. */ -}}
+{{- $pages := .Site.RegularPages -}}
+{{- $owner := .Owner -}}
+{{- with $owner -}}
+  {{- $pages = slice -}}
+  {{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+  {{- if $.Sections -}}
+    {{- range $.Site.Pages -}}{{- if and .IsSection (not .Params.sidera.tag_view) (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (partial "lists/order.html" (dict "pages" $pages "order" .Order "pins" false)) -}}

@@ -1056,3 +1056,13 @@ Empty/omitted logos leave text-only cards; icons=false still preserves identity 
 Home retains its all-collections title ordering, introductory content and standalone list,
 without introducing pagination. Card titles use h3 beneath the Collections h2 on Home
 and h2 on preset lists, with identical visual styling and latest-activity dates.
+
+### Recent-list data reuse
+
+Recent instances reuse a native candidate ordering keyed by language, actual owner
+(or global scope), publication/modification order and section inclusion. The renderer
+still applies each instance's count and emits its own labels/IDs. It does not cache
+one universal sidebar or change nested-root/publication boundaries. Native page and
+configuration dependencies govern rebuild invalidation; no persistent disk cache or
+new setting is required. Live-rebuild tests cover dates, cascaded counts, ownership,
+new pages and publication exclusions.

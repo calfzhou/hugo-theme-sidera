@@ -1,4 +1,4 @@
-{{- $icons := (partialCached "sidera/settings.html" . .Path).icons -}}
+{{- $icons := (partialCached "sidera/settings.html" . .Language.Lang .Path).icons -}}
 <template data-image-viewer-template>
   <dialog class="image-dialog prose" data-icons="{{ $icons }}" aria-label="{{ T "image_viewer" }}" data-default-label="{{ T "image_viewer" }}" data-loading="{{ T "image_loading" }}" data-error="{{ T "image_error" }}">
     <button type="button" class="diagram-action image-close" data-image-action="close" aria-label="{{ T "image_close" }}" title="{{ T "image_close" }}">{{ if $icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "image_close" }}{{ end }}</button>

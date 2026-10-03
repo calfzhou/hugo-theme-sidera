@@ -41,7 +41,7 @@
   {{- $original = partial "images/source.html" (dict "src" . "page" $sc.Page "position" $sc.Position) -}}
   {{- $sc.Page.Store.Set "sidera-image-viewer" true -}}
 {{- end -}}
-{{- $settings := partialCached "sidera/settings.html" .Page .Page.Path -}}
+{{- $settings := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path -}}
 {{- $caption := "" -}}
 {{- if $settings.auto_caption -}}{{- $caption = .Get "alt" -}}{{- end -}}
 {{- if isset .Params "caption" -}}{{- $caption = .Get "caption" -}}{{- end -}}

@@ -3,7 +3,7 @@
      Store flags alone can outlive a render-policy change in Hugo server.
      Page-local flags are idempotent, never accumulated graph edges. No Content
      calls in render hooks, no Site.Store, no dependency on page iteration order. */ -}}
-{{- $catalog := slice -}}
+{{- $catalog := slice -}}{{- $rules := hugo.Data.sidera_discovery | jsonify -}}
 {{- range hugo.Sites -}}{{- range sort .Pages "Path" -}}
   {{- if and (in (slice "page" "section" "home") .Kind) .File (not .File.IsContentAdapter) (.OutputFormats.Get "html") (not (in (slice "link" "never" false) .Params.build.render)) (.Store.Get "sidera-content-rendered") .RelPermalink -}}
     {{- $settings := partialCached "sidera/settings.html" . .Language.Lang .Path -}}
@@ -14,7 +14,12 @@
     {{- range findRE `<a\s[^>]*\sdata-content-page="[^"]*"[^>]*>` $body -}}
       {{- $links = $links | append (htmlUnescape (replaceRE `.*\sdata-content-page="([^"]*)".*` "$1" .)) -}}
     {{- end -}}
-    {{- $catalog = $catalog | append (dict "url" .RelPermalink "title" .Title "language" .Language.Lang "scope" $scope "context" $label "links" ($links | uniq | sort) "graph" $settings.link_graph "index" $settings.search_index "sections" (partial "discovery/text.html" $body)) -}}
+    {{- /* Store values may survive a server rebuild. Reuse only an exact current
+         rendered body; fallback also supports custom own-body renderers. */ -}}
+    {{- $cached := .Store.Get "sidera-search-body" -}}{{- $sections := slice -}}
+    {{- if and $cached (eq $cached.html $body) (eq $cached.rules $rules) -}}{{- $sections = $cached.sections -}}
+    {{- else -}}{{- $sections = partial "discovery/text.html" $body -}}{{- end -}}
+    {{- $catalog = $catalog | append (dict "url" .RelPermalink "title" .Title "language" .Language.Lang "scope" $scope "context" $label "links" ($links | uniq | sort) "graph" $settings.link_graph "index" $settings.search_index "sections" $sections) -}}
   {{- end -}}
 {{- end -}}{{- end -}}
 {{- return $catalog -}}

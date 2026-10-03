@@ -33,7 +33,7 @@
   {{ end }}
   {{ $searchContext := dict "page" . }}
   {{ with (templates.Defer (dict "data" $searchContext)) }}
-    {{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
+    {{ $settings := partialCached "sidera/settings.html" .page .page.Language.Lang .page.Path }}
     {{ if or $settings.search $settings.search_index }}
       {{ $index := "" }}{{ if $settings.search }}{{ $index = partialCached "discovery/resource.html" .page.Site "search-resource" }}{{ end }}
       {{ $js := slice (resources.Get "js/search-core.js") (resources.Get "js/search.js") | resources.Concat "js/search.js" | minify | fingerprint }}
@@ -57,7 +57,7 @@
   <script data-sidera-navigation data-site-url="{{ site.BaseURL }}" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
   {{ $share := resources.Get "js/share.js" | minify | fingerprint }}
   <script src="{{ $share.RelPermalink }}" integrity="{{ $share.Data.Integrity }}" defer></script>
-  {{ partial "sidera/head-extra.html" (dict "Page" . "Owner" (partial "collection-owner.html" .) "Region" "head" "Settings" (partialCached "sidera/settings.html" . .Path)) }}
+  {{ partial "sidera/head-extra.html" (dict "Page" . "Owner" (partial "collection-owner.html" .) "Region" "head" "Settings" (partialCached "sidera/settings.html" . .Language.Lang .Path)) }}
 </head>
 <body>
   <a class="skip-link" href="#main">{{ T "skip_content" }}</a>

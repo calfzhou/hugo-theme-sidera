@@ -1,0 +1,17 @@
+{{- /* Pure interpretation of one rendered-HTML tag. Memoized locally by token: highlighted
+     code repeats a small vocabulary of tags, independent of Page/scope/state.
+     Parent skip/caption state remains in text.html, never in this cached value. */ -}}
+{{- $tag := lower (replaceRE `(?s)^</?([a-zA-Z0-9]+).*` "$1" .) -}}
+{{- $closing := hasPrefix . "</" -}}
+{{- $rules := hugo.Data.sidera_discovery -}}
+{{- $skip := false -}}{{- $caption := false -}}{{- $id := "" -}}
+{{- if not $closing -}}
+  {{- $attrs := partial "discovery/attributes.html" . -}}
+  {{- $skip = or (in $rules.skipTags $tag) (isset $attrs "hidden") (eq (index $attrs "aria-hidden") "true") (isset $attrs "data-search-exclude") -}}
+  {{- range split ($attrs.class | default "") " " -}}
+    {{- if eq . "no-caption" -}}{{- $caption = true -}}{{- end -}}
+    {{- if in $rules.skipClasses . -}}{{- $skip = true -}}{{- end -}}
+  {{- end -}}
+  {{- with findRE `\sid="[^"]*"` . 1 -}}{{- $id = htmlUnescape (strings.TrimSuffix `"` (strings.TrimPrefix ` id="` (index . 0))) -}}{{- end -}}
+{{- end -}}
+{{- return (dict "tag" $tag "closing" $closing "skip" $skip "noCaption" $caption "id" $id "void" (or (in $rules.voids $tag) (hasSuffix . "/>")) "heading" (in (slice "h1" "h2" "h3" "h4" "h5" "h6") $tag) "block" (in $rules.blocks $tag)) -}}

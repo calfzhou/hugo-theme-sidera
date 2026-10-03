@@ -2,7 +2,7 @@
 <ul class="collection-nav">
   {{- range (where .Page.Site.Pages "Kind" "section").ByTitle -}}
     {{- if partial "model/is-root.html" . -}}
-    <li><a href="{{ .RelPermalink }}"{{ if eq . $ctx.Page }} aria-current="page"{{ else if eq . $ctx.Owner }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $icon := (partialCached "sidera/settings.html" . .Path).icon }}{{ if isset (.Params | default dict) "icon" }}{{ $icon = .Params.icon }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ partial "collection-name.html" . }}</span><small>{{ partial "collection-label.html" . }}</small></a></li>
+    <li><a href="{{ .RelPermalink }}"{{ if eq . $ctx.Page }} aria-current="page"{{ else if eq . $ctx.Owner }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $icon := (partialCached "sidera/settings.html" . .Language.Lang .Path).icon }}{{ if isset (.Params | default dict) "icon" }}{{ $icon = .Params.icon }}{{ end }}{{ partial "sidera/icon.html" $icon }}{{ end }}<span>{{ partial "collection-name.html" . }}</span><small>{{ partial "collection-label.html" . }}</small></a></li>
     {{- end -}}
   {{- end -}}
 </ul>

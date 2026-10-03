@@ -5,7 +5,7 @@
 {{- $scopes := slice $page.Params -}}
 {{- if and (or $page.Params.sidera.tag_view $page.Params.sidera.archive_view) $owner -}}
   {{- /* A contextual navigation Page queries its owner policy, not article metadata. */ -}}
-  {{- $scopes = $scopes | append (partialCached "sidera/settings.html" $owner $owner.Path) -}}
+  {{- $scopes = $scopes | append (partialCached "sidera/settings.html" $owner $owner.Language.Lang $owner.Path) -}}
 {{- else -}}
   {{- $stop := false -}}
   {{- if $page.IsSection -}}

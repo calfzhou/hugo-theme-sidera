@@ -1,5 +1,5 @@
 {{- /* The caller owns pagination. Page supplies resolved presentation only. */ -}}
-{{- $icons := (partialCached "sidera/settings.html" .Page .Page.Path).icons -}}
+{{- $icons := (partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path).icons -}}
 {{- with .Pager -}}
 {{- if ne .TotalPages 1 -}}
 <nav class="pagination"{{ if not $icons }} data-icons="false"{{ end }} aria-label="{{ T "pagination" }}" data-page-number="{{ .PageNumber }}" data-total-pages="{{ .TotalPages }}">

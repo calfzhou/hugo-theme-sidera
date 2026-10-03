@@ -1,7 +1,7 @@
 {{- /* Native Params supply cascading defaults; only order is source-local.
      Read this native Page's source, never walk directories or discover Pages. */ -}}
 {{- $p := . -}}
-{{- $settings := (partialCached "sidera/settings.html" . .Path).children -}}
+{{- $settings := (partialCached "sidera/settings.html" . .Language.Lang .Path).children -}}
 {{- $order := slice -}}
 {{- with .File -}}
   {{- $fm := partial "tags/frontmatter.html" .Filename -}}

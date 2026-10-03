@@ -18,4 +18,4 @@
   </section>
 {{ end }}
 
-{{ if $body }}{{ partial "sidera/article-end.html" (dict "Page" . "Owner" $owner "Settings" (partialCached "sidera/settings.html" . .Path)) }}{{ end }}
+{{ if $body }}{{ partial "sidera/article-end.html" (dict "Page" . "Owner" $owner "Settings" (partialCached "sidera/settings.html" . .Language.Lang .Path)) }}{{ end }}

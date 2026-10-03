@@ -1,4 +1,4 @@
 {{- /* Stable scope policy, not the individual member article's display defaults. */ -}}
 {{- $page := site.Home -}}{{- with . -}}{{- $page = . -}}{{- end -}}
-{{- $s := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- $s := partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path -}}
 {{- return (dict "hierarchy" $s.taxonomy_hierarchy "size" $s.taxonomy_page_size) -}}

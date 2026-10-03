@@ -1,4 +1,7 @@
-{{- /* Called only at the Page's own body location, never from cards or summaries.
-     Idempotent Page-local readiness flag; consumers run after ALL HTML rendering. */ -}}
+{{- /* Called at the Page's own body location, not from cards or render hooks.
+     Parse search sections here while Hugo renders pages concurrently. The deferred
+     catalog still owns publication/graph selection; this is only per-body work. */ -}}
 {{- .Store.Set "sidera-content-rendered" true -}}
-{{- partial "images/list-captions.html" .Content -}}
+{{- $body := partial "images/list-captions.html" .Content -}}
+{{- .Store.Set "sidera-search-body" (dict "html" (string $body) "rules" (hugo.Data.sidera_discovery | jsonify) "sections" (partial "discovery/text.html" $body)) -}}
+{{- $body -}}

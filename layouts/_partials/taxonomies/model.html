@@ -12,7 +12,7 @@
       {{- $values := slice -}}{{- if isset .Params $taxonomy -}}{{- $values = index .Params $taxonomy -}}{{- end -}}
       {{- if and (in (slice "authors" "series") $taxonomy) (eq (printf "%T" $values) "string") -}}{{- $values = slice $values -}}{{- end -}}
       {{- $direct := partial "tags/normalize.html" (dict "tags" $values "source" .Path) -}}
-      {{- if or .IsPage $direct (and $owner (eq (partialCached "sidera/settings.html" $owner $owner.Path).list_mode "children") (ne . $owner)) -}}
+      {{- if or .IsPage $direct (and $owner (eq (partialCached "sidera/settings.html" $owner $owner.Language.Lang $owner.Path).list_mode "children") (ne . $owner)) -}}
         {{- $all = $all | append . -}}
       {{- end -}}
       {{- $assigned = merge $assigned (dict .Path $direct) -}}

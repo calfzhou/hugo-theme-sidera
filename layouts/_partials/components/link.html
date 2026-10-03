@@ -13,5 +13,5 @@
 {{- if .Get "image" -}}
   {{- $image = partial "components/link-image.html" . -}}
 {{- else if isset .Params "alt" -}}{{- errorf "Sidera link: alt requires image (%s)" .Position -}}{{- end -}}
-{{- $settings := partialCached "sidera/settings.html" .Page .Page.Path -}}
+{{- $settings := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path -}}
 <div class="content-link"><a class="content-link-card" href="{{ $href }}"{{ partial "links/target.html" $href }}{{ with $identity }} data-content-page="{{ . }}"{{ end }}><span class="content-link-label"><span class="content-link-title" title="{{ .Get "text" }}">{{ .Get "text" }}</span><span class="content-link-url" title="{{ $href }}">{{ $href }}</span></span>{{ if $image }}<img src="{{ $image }}" alt="{{ .Get "alt" | default "" }}" width="44" height="44" loading="lazy" decoding="async">{{ else if and $settings.icons $icon }}<span class="content-link-icon">{{ $icon }}</span>{{ end }}</a></div>

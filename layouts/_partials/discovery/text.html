@@ -1,35 +1,33 @@
 {{- /* Tokenize ONLY native rendered HTML, not Markdown. A stack excludes complete
      control/math/payload subtrees. This is a bounded theme-output reader, not an
      arbitrary HTML parser. The same rules drive the browser's DOM traversal. */ -}}
-{{- $rules := hugo.Data.sidera_discovery -}}
 {{- $html := replaceRE `(?s)<!--.*?-->|<(script|style|noscript|template)\b[^>]*>.*?</(script|style|noscript|template)>` "" (string .) -}}
+{{- $tokens := collections.NewScratch -}}
 {{- $stack := slice -}}{{- $skip := false -}}{{- $noCaption := false -}}
 {{- $sections := slice -}}{{- $id := "" -}}{{- $title := "" -}}{{- $text := "" -}}{{- $heading := false -}}
 {{- range findRE `<[^>]*>|[^<]+` $html -}}
   {{- $token := . -}}
   {{- if hasPrefix $token "<" -}}
-    {{- $tag := lower (replaceRE `(?s)^</?([a-zA-Z0-9]+).*` "$1" $token) -}}
-    {{- $closing := hasPrefix $token "</" -}}
+    {{- $info := $tokens.Get $token -}}
+    {{- if not $info -}}{{- $info = partial "discovery/token.html" $token -}}{{- $tokens.Set $token $info -}}{{- end -}}
+    {{- $tag := $info.tag -}}{{- $closing := $info.closing -}}
     {{- if $closing -}}
       {{- if $stack -}}{{- $frame := index $stack (sub (len $stack) 1) -}}{{- $skip = $frame.skip -}}{{- $noCaption = $frame.noCaption -}}{{- $stack = first (sub (len $stack) 1) $stack -}}{{- end -}}
-      {{- if and (not $skip) (in (slice "h1" "h2" "h3" "h4" "h5" "h6") $tag) -}}{{- $heading = false -}}{{- end -}}
+      {{- if and (not $skip) $info.heading -}}{{- $heading = false -}}{{- end -}}
     {{- else -}}
       {{- $previousCaption := $noCaption -}}{{- $nextSkip := $skip -}}
-      {{- $attrs := partial "discovery/attributes.html" $token -}}
-      {{- if or (in $rules.skipTags $tag) (isset $attrs "hidden") (eq (index $attrs "aria-hidden") "true") (isset $attrs "data-search-exclude") -}}{{- $nextSkip = true -}}{{- end -}}
-      {{- $class := $attrs.class | default "" -}}
-      {{- if in (split $class " ") "no-caption" -}}{{- $noCaption = true -}}{{- end -}}
+      {{- $nextSkip = or $nextSkip $info.skip -}}
+      {{- $noCaption = or $noCaption $info.noCaption -}}
       {{- if and $noCaption (eq $tag "figcaption") -}}{{- $nextSkip = true -}}{{- end -}}
-      {{- range split $class " " -}}{{- if in $rules.skipClasses . -}}{{- $nextSkip = true -}}{{- end -}}{{- end -}}
-      {{- if and (not (in $rules.voids $tag)) (not (hasSuffix $token "/>")) -}}{{- $stack = $stack | append (dict "skip" $skip "noCaption" $previousCaption) -}}{{- $skip = $nextSkip -}}
+      {{- if not $info.void -}}{{- $stack = $stack | append (dict "skip" $skip "noCaption" $previousCaption) -}}{{- $skip = $nextSkip -}}
       {{- else -}}{{- $noCaption = $previousCaption -}}{{- end -}}
-      {{- if and (not $skip) (in (slice "h1" "h2" "h3" "h4" "h5" "h6") $tag) -}}
+      {{- if and (not $skip) $info.heading -}}
         {{- $sections = $sections | append (dict "id" $id "title" (strings.TrimSpace (replaceRE `[\s\x{00a0}]+` " " $title)) "text" (strings.TrimSpace (replaceRE `[\s\x{00a0}]+` " " $text))) -}}
-        {{- $id = "" -}}{{- with findRE `\sid="[^"]*"` $token 1 -}}{{- $id = htmlUnescape (strings.TrimSuffix `"` (strings.TrimPrefix ` id="` (index . 0))) -}}{{- end -}}
+        {{- $id = $info.id -}}
         {{- $title = "" -}}{{- $text = "" -}}{{- $heading = true -}}
       {{- end -}}
     {{- end -}}
-    {{- if and (not $skip) (in $rules.blocks $tag) -}}{{- $text = printf "%s\n" $text -}}{{- end -}}
+    {{- if and (not $skip) $info.block -}}{{- $text = printf "%s\n" $text -}}{{- end -}}
   {{- else if not $skip -}}
     {{- $decoded := htmlUnescape $token -}}
     {{- $text = printf "%s%s" $text $decoded -}}

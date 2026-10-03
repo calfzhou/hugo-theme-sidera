@@ -6,7 +6,7 @@
     {{- if ne $name "id" }} {{ $name | safeHTMLAttr }}="{{ $value }}"{{ end -}}
   {{- end -}}>
   {{- if $marker -}}
-    <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="{{ T "heading_permalink" (dict "title" .PlainText) }}" title="{{ T "heading_permalink" (dict "title" .PlainText) }}"><span aria-hidden="true">{{ $marker }}</span></a><span class="heading-text">{{ $story := and (eq .PageInner.Type "story") (eq .Level 3) (not .Attributes.class) (partialCached "sidera/settings.html" .PageInner .PageInner.Path).icons }}{{ if $story }}<span class="story-ornament story-left" aria-hidden="true">{{ partial "sidera/icon.html" "story-left" }}</span>{{ end }}{{ .Text }}{{ if $story }}<span class="story-ornament" aria-hidden="true">{{ partial "sidera/icon.html" "story-right" }}</span>{{ end }}</span>
+    <a class="heading-anchor" href="#{{ .Anchor }}" aria-label="{{ T "heading_permalink" (dict "title" .PlainText) }}" title="{{ T "heading_permalink" (dict "title" .PlainText) }}"><span aria-hidden="true">{{ $marker }}</span></a><span class="heading-text">{{ $story := and (eq .PageInner.Type "story") (eq .Level 3) (not .Attributes.class) (partialCached "sidera/settings.html" .PageInner .PageInner.Language.Lang .PageInner.Path).icons }}{{ if $story }}<span class="story-ornament story-left" aria-hidden="true">{{ partial "sidera/icon.html" "story-left" }}</span>{{ end }}{{ .Text }}{{ if $story }}<span class="story-ornament" aria-hidden="true">{{ partial "sidera/icon.html" "story-right" }}</span>{{ end }}</span>
   {{- else -}}
     {{ .Text }}
   {{- end -}}

@@ -3,14 +3,9 @@
 {{- if eq $order "publication" -}}{{- $label = T "recent_published" -}}{{- $id = "recent-published" -}}{{- end -}}
 {{- $page := .Page -}}{{- $owner := .Owner -}}
 {{- if eq (.Config.scope | default "owner") "global" -}}{{- $owner = false -}}{{- end -}}{{- $s := .Settings -}}{{- $ctx := . -}}
-  {{- $pages := $page.Site.RegularPages -}}
-  {{- with $owner -}}
-    {{- $pages = slice -}}{{- range .RegularPagesRecursive -}}{{- if eq (partial "collection-owner.html" .) $owner -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
-    {{- if $s.recent_sections -}}
-      {{- range $page.Site.Pages -}}{{- if and .IsSection (not .Params.sidera.tag_view) (ne . $owner) (eq (partial "collection-owner.html" .) $owner) -}}{{- $pages = $pages | append . -}}{{- end -}}{{- end -}}
-    {{- end -}}
-  {{- end -}}
-  {{- with first (int $s.recent_count) (partial "lists/order.html" (dict "pages" $pages "order" $order "pins" false)) -}}
+  {{- $scope := "" -}}{{- with $owner -}}{{- $scope = .Path -}}{{- end -}}
+  {{- $pages := partialCached "lists/recent-pages.html" (dict "Site" $page.Site "Owner" $owner "Order" $order "Sections" $s.recent_sections) $page.Language.Lang $scope $order $s.recent_sections -}}
+  {{- with first (int $s.recent_count) $pages -}}
     <section class="recent-panel" aria-label="{{ $label }}"><h2 class="section-heading nav-heading">{{ $label }}</h2>
       <ul id="{{ $id }}{{ if eq $ctx.Region "right" }}-right{{ end }}{{ $ctx.IDSuffix }}" data-recent="{{ $order }}">
         {{- range . -}}<li><a href="{{ .RelPermalink }}" title="{{ .Title }}">{{ .Title }}</a></li>{{- end -}}

@@ -216,3 +216,24 @@ local `params.name` when provided, otherwise its title. Scope still uses native 
 not the name. Indexed document `title` and heading sections keep their full native
 titles. Standalone/global search retains site context; no article inheritance,
 source rewriting or change to graph/comment identity follows from a display name.
+
+## Build-time reuse and freshness
+
+The own-body renderer extracts search sections while Hugo renders pages in parallel,
+then stores the result with its exact normalized HTML and discovery-rule snapshot.
+The deferred catalog retains native publication, body-eligibility and graph selection.
+It reuses sections only when both snapshots match; otherwise it extracts from the
+current body. Custom body renderers therefore retain the safe fallback. No `.Content`
+call is added to render hooks and no global edge accumulator is introduced.
+
+Within one extraction, `collections.NewScratch` memoizes each distinct HTML tag's
+pure interpretation. Parent skip/caption state remains local to the traversal, not
+in the memo. The memo does not survive the call or cross pages/languages/builds.
+This avoids parsing repeated highlighter spans without removing code from search,
+changing hidden/control exclusions, or replacing rendered text with `.Plain`.
+
+Shared settings calls use one language-and-native-Path cache key, including the
+cross-language catalog. Validation and all native/cascade/preset rules remain.
+`tests/check_discovery_tokens.py OUTPUT` checks exact token/ancestry/heading semantics;
+`tests/check_build_cache_preview.py OUTPUT` uses an owned free-port fixture to verify
+body/date/count/ownership/publication and discovery-rule changes during live rebuilds.

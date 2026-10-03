@@ -9,7 +9,7 @@
 {{ $pages := $model.pages }}
 {{ with .Params.sidera.tag_key }}{{ $pages = slice }}{{ with index $model.nodes . }}{{ $pages = .pages }}{{ end }}{{ end }}
 <section data-tag-view="{{ .Params.sidera.tag_key }}" data-taxonomy="{{ $taxonomy }}" data-collection="{{ $owner.RelPermalink }}">
-  {{ $settings := partialCached "sidera/settings.html" . .Path }}
+  {{ $settings := partialCached "sidera/settings.html" . .Language.Lang .Path }}
   {{ if and (not $term) (in (slice "tags" "categories") $taxonomy) (eq $settings.taxonomy_hubs "index") }}
     <header class="view-header taxonomy-hub-header" data-note-count="{{ len $pages }}"><h1>{{ .Title }}</h1></header>
     {{ partial "taxonomies/index.html" (dict "Page" . "Owner" $owner "Model" $model "Settings" $settings) }}

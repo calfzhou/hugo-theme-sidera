@@ -19,7 +19,7 @@
   {{- end -}}
 {{- end -}}
 <li>
-  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if partial "model/is-root.html" . -}}{{- $icon = (partialCached "sidera/settings.html" . .Path).icon -}}{{- end -}}{{- end -}}
+  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if partial "model/is-root.html" . -}}{{- $icon = (partialCached "sidera/settings.html" . .Language.Lang .Path).icon -}}{{- end -}}{{- end -}}
   {{- with $entry.Page -}}{{- if isset (.Params | default dict) "icon" -}}{{- $icon = .Params.icon -}}{{- end -}}{{- end -}}
   {{- if isset ($entry.Params | default dict) "icon" -}}{{- $icon = $entry.Params.icon -}}{{- end -}}
   {{- $iconHTML := partial "sidera/icon.html" $icon -}}

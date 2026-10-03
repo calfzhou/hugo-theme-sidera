@@ -1,3 +1,3 @@
 {{- $policy := dict "order" "title" "size" 10 -}}
-{{- with . -}}{{- $s := partialCached "sidera/settings.html" . .Path -}}{{- $policy = dict "order" $s.list_order "size" $s.page_size -}}{{- end -}}
+{{- with . -}}{{- $s := partialCached "sidera/settings.html" . .Language.Lang .Path -}}{{- $policy = dict "order" $s.list_order "size" $s.page_size -}}{{- end -}}
 {{- return $policy -}}

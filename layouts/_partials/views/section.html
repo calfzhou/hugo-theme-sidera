@@ -1,9 +1,9 @@
 {{ $owner := partial "collection-owner.html" . }}
-  {{ if eq (partialCached "sidera/settings.html" . .Path).list_mode "children" }}
+  {{ if eq (partialCached "sidera/settings.html" . .Language.Lang .Path).list_mode "children" }}
     {{ partial "docs/render.html" . }}
   {{ else }}
-  {{ .Store.Set "sidera-body" (partialCached "sidera/settings.html" . .Path).list_header }}
-  {{ if (partialCached "sidera/settings.html" . .Path).list_header }}
+  {{ .Store.Set "sidera-body" (partialCached "sidera/settings.html" . .Language.Lang .Path).list_header }}
+  {{ if (partialCached "sidera/settings.html" . .Language.Lang .Path).list_header }}
   <header class="view-header">
     {{ partial "sidera/breadcrumbs.html" (dict "Page" .) }}
     <h1>{{ .Title }}</h1>

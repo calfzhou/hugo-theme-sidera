@@ -1,4 +1,4 @@
-{{- $icons := (partialCached "sidera/settings.html" .page .page.Path).icons -}}
+{{- $icons := (partialCached "sidera/settings.html" .page .page.Language.Lang .page.Path).icons -}}
 {{- $label := .caption -}}{{- if not $label -}}{{- if eq .kind "mermaid" -}}{{- $label = T "diagram_mermaid" -}}{{- else -}}{{- $label = T "diagram_drawio" -}}{{- end -}}{{- end -}}
 <figure class="content-diagram{{ with .class }} {{ . }}{{ end }}"{{ with .id }} id="{{ . }}"{{ end }} data-sidera-diagram="{{ .kind }}" data-icons="{{ $icons }}" data-diagram-label="{{ $label }}" data-state="idle"{{ if eq .kind "drawio" }} data-diagram-source="{{ .source | jsonify }}"{{ end }}>
   <template data-diagram-close>{{ if $icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "diagram_close" }}{{ end }}</template>

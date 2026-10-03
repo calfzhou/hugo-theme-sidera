@@ -1,6 +1,6 @@
 {{- $page := .Page -}}{{- $owner := partial "collection-owner.html" $page -}}
 {{- $collection := partial "model/is-root.html" $page -}}{{- $logo := "" -}}{{- if $collection -}}{{- $logo = partial "collection-logo.html" $page -}}{{- end -}}
-{{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- $settings := partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path -}}
 {{- $date := false -}}
 {{- if $collection -}}
   {{- if $settings.show_updated -}}{{- $date = partialCached "collection-updated.html" $page $page.Language.Lang $page.Path -}}{{- end -}}

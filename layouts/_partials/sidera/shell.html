@@ -9,7 +9,7 @@
 {{- /* Rendered summaries/content may contain math from other Pages. Detect only
      native rendered math markup, never raw Markdown or arbitrary source grammar. */ -}}
 {{- if strings.Contains (string .Content) `class="katex"` -}}{{- $page.Store.Set "sidera-math" true -}}{{- end -}}
-{{- $settings := partialCached "sidera/settings.html" $page $page.Path -}}
+{{- $settings := partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path -}}
 {{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings "HasComments" (strings.Contains (string .Content) `id="sidera-comments"`) -}}
 {{- $top := partial "sidera/region.html" (merge $ctx (dict "Region" "top")) -}}
 {{- $left := partial "sidera/region.html" (merge $ctx (dict "Region" "left")) -}}

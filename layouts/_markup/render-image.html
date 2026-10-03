@@ -12,7 +12,7 @@
   {{- $width = index $dimensions 0 -}}
   {{- if eq (len $dimensions) 2 -}}{{- $height = index $dimensions 1 -}}{{- end -}}
 {{- end -}}
-{{- $settings := partialCached "sidera/settings.html" .PageInner .PageInner.Path -}}
+{{- $settings := partialCached "sidera/settings.html" .PageInner .PageInner.Language.Lang .PageInner.Path -}}
 {{- $caption := "" -}}
 {{- if and .IsBlock $settings.auto_caption (not (in (split (.Attributes.class | default "") " ") "no-caption")) -}}
   {{- $caption = $alt -}}{{- with .Title -}}{{- $caption = partial "links/title.html" . -}}{{- end -}}

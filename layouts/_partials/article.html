@@ -1,6 +1,6 @@
   {{ $owner := partial "collection-owner.html" .page }}
   {{ $breadcrumbs := .breadcrumbs }}
-  {{ $showBody := .body }}{{ $deferEnd := .deferEnd }}{{ $settings := partialCached "sidera/settings.html" .page .page.Path }}
+  {{ $showBody := .body }}{{ $deferEnd := .deferEnd }}{{ $settings := partialCached "sidera/settings.html" .page .page.Language.Lang .page.Path }}
   {{ with .page }}
   <article{{ if eq .Type "story" }} data-story{{ end }} data-renderer="shared-article" data-collection="{{ with $owner }}{{ .RelPermalink }}{{ end }}">
     <header class="article-header">
