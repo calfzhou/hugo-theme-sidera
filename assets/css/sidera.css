@@ -718,7 +718,8 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .markdown-alert-caution { --alert-color: #f85149; }
 /* Native MathML owns glyph layout/baselines. Auto margins center short blocks,
    but collapse for long formulas so their left edge remains scroll-accessible. */
-.prose .math-display { display: flex; overflow-x: auto; margin-block: 1rem; padding-block: .25em; }
+/* Leave room for tall KaTeX delimiter glyphs beyond their nominal line box. */
+.prose .math-display { display: flex; overflow-x: auto; margin-block: 1rem; padding-block: .5em; }
 .prose .math-display > .katex { flex: none; margin-inline: auto; }
 
 /* Explicit opt-in on the element itself, not a descendant-image heuristic.
