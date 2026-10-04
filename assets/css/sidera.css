@@ -1039,7 +1039,7 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .not-found { --not-found-accent: #fdb62f; min-height: min(70vh,720px); padding: 48px 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .not-found-symbol { --icon-size: clamp(104px,12vw,144px); --icon-color: var(--not-found-accent); line-height: 1; margin-bottom: 18px; }
 .not-found h1 { margin: 0; }
-.not-found-code { display: block; font: 700 clamp(72px,12vw,112px)/1 var(--code); letter-spacing: -.06em; color: var(--text); }
+.not-found-code { display: block; font: 700 clamp(48px,8vw,64px)/1.1 var(--ui); color: var(--text); }
 .not-found-heading { display: block; margin-top: 14px; font: 600 clamp(22px,3vw,28px)/1.4 var(--ui); }
 .not-found-description { max-width: 34em; margin: 14px 0 0; color: var(--muted); font-size: 16px; }
 .not-found-home { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 28px; padding: 10px 22px; border: 1px solid #17191b; border-radius: 8px; background: var(--not-found-accent); color: #17191b; font-weight: 600; text-decoration: none; }
