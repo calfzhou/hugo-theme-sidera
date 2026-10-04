@@ -1,12 +1,9 @@
-{{- /* One paginator over root nodes; descendant rows and counts use the complete model. */ -}}
+{{- /* Complete root vocabulary; recursive nodes retain hierarchy and counts. */ -}}
 {{- $model := .Model -}}{{- $ctx := . -}}
 {{- $roots := where (sort $model.nodes "key") "parent" "" -}}
-{{- $rootPages := slice -}}{{- range $roots -}}{{- $rootPages = $rootPages | append (partial "taxonomies/page.html" (dict "owner" $ctx.Owner "taxonomy" $model.taxonomy "key" .key "slug" .slug)) -}}{{- end -}}
-{{- $pager := .Page.Paginate $rootPages (partial "taxonomies/policy.html" .Owner).size -}}
 <ul class="taxonomy-index taxonomy-index-list {{ if and (eq $model.taxonomy "tags") (not $model.nested) }}taxonomy-cloud{{ else }}taxonomy-directory{{ end }}" data-taxonomy-index="{{ $model.taxonomy }}">
-  {{- range $pager.Pages -}}
-    {{- $key := .Params.sidera.tag_key -}}{{- if not $ctx.Owner -}}{{- $key = partial "taxonomies/key.html" . -}}{{- end -}}
-    {{- with index $model.nodes $key -}}{{- partial "taxonomies/index-node.html" (dict "Node" . "Model" $model "Owner" $ctx.Owner "Settings" $ctx.Settings) -}}{{- end -}}
+  {{- range $roots -}}
+    {{- partial "taxonomies/index-node.html" (dict "Node" . "Model" $model "Owner" $ctx.Owner "Settings" $ctx.Settings) -}}
   {{- end -}}
 </ul>
-{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .Page) }}{{ else if not $rootPages }}<p class="list-meta">{{ T "taxonomy_count" (dict "count" 0 "number" (lang.FormatNumber 0 0)) }}</p>{{ end }}
+{{ if not $roots }}<p class="list-meta">{{ T "taxonomy_count" (dict "count" 0 "number" (lang.FormatNumber 0 0)) }}</p>{{ end }}

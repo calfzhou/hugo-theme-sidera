@@ -193,7 +193,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | children | Map with parent-local order, fallback sort=title or name, positive page_size=10, list=true. See DOCS.md. |
 | recent_count / recent_sections | Positive integer (default 10); include descendant section documents (default false). Defaults for each recent instance (overridable by config.count/sections); full owner model, independent of main pins/pager. |
 | taxonomy_hierarchy | Tags/categories interpreted hierarchically; default []. Notes preset supplies [tags]. Stable owner policy for scoped views; Site policy for globals. |
-| taxonomy_page_size | Positive global/index page size; default 10. Scoped result lists retain owner page_size. |
+| taxonomy_page_size | Positive page size for global article results and other taxonomy directories; default 10. Tag/category vocabulary indexes are unpaginated. Scoped article results retain owner page_size. |
 | taxonomy_navigation | Ordered configured taxonomy names; default [tags,categories]; []/false hides navigation only. |
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
 | color_mode | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |

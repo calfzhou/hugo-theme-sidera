@@ -56,9 +56,11 @@ assignments: `science/quantum` is one term. Native parent term `.Pages` can cont
 duplicates in Hugo 0.166, so the shared model does not treat it as exact flat membership.
 
 Inferred unused parent routes may remain empty (D-010). Explicitly authored empty global terms
-are valid. Global indexes page over root terms in hierarchy mode, direct terms in flat mode;
-scoped content results retain owner list policy. `taxonomy_page_size` is a positive integer;
-ordinary owner `page_size` controls scoped result lists. One paginator per mutually exclusive view.
+are valid. Global and scoped tag/category indexes show the complete vocabulary without pagination:
+all root terms and their children in hierarchy mode, all direct terms in flat mode.
+`taxonomy_page_size` still controls global term article results and other taxonomy
+directories; ordinary owner `page_size` controls scoped article results. Explicit
+all-content list hubs retain their normal list policy. One paginator per paginated view.
 
 ## Authors and series
 
@@ -115,8 +117,8 @@ also be selected as closing attribution, and the existing scoped series sequence
 in the article footer. Hiding/reordering a display item never changes native membership.
 
 P2-GR presentation uses Stellar-style compact tag chips for flat global tags and quiet
-directory rows for categories/hierarchical indexes. Full native counts, nested links and
-pagination remain. Contextual result headers consolidate global/scoped links and show
+directory rows for categories/hierarchical indexes. Full native counts and nested links
+remain; pagination applies to article results, not tag/category vocabulary indexes. Contextual result headers consolidate global/scoped links and show
 the full count once in the list metadata; authors/series breadcrumbs use native display
 titles rather than the raw assignment key. No membership or sequence policy changes.
 

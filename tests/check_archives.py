@@ -53,7 +53,8 @@ for label,overlay,prefix,size,flags in [
   assert not (out/owner/'archives/page').exists()
   # Native browsing remains paginated independently; a large size naturally fits.
   assert (out/owner/'page/2/index.html').exists()==(len(slugs)>size)
-  assert (out/owner/'tags/page/2/index.html').exists()
+  assert not (out/owner/'tags/page/2/index.html').exists() # complete vocabulary index
+  assert (out/owner/'tags/one/page/2/index.html').exists()==(len(slugs)>size)
   assert f'data-page-size="{size}"' in (out/owner/'index.html').read_text()
   separate=(out/owner/'annex/archives/index.html').read_text()
   assert re.findall(r'data-archive-article href="([^"]+)"',separate)==[prefix+'/'+owner+'/annex/other/']

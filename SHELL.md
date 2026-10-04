@@ -545,10 +545,10 @@ The separate recent widgets retain their publication/modification-specific capti
 **tag/category roots** vocabulary indexes; term-result pages still list native member articles.
 Explicit `taxonomy_hubs=list` retains the alternative all-content hub when intentionally wanted.
 Categories use wide, always-expanded directory rows, including nested categories when enabled.
-Flat tags use chips; hierarchical tags use tree rows, never a forced flattening. Root-node
-pagination uses taxonomy_page_size; descendant rows and counts use the full deduplicated model.
-Global tag/category indexes share the same renderer. A one-page taxonomy index has no
-redundant pager; multiple index pages use the usual native pager. Archives are unpaginated. Sidebar category hubs say
+Flat tags use chips; hierarchical tags use tree rows, never a forced flattening. All root and descendant rows and counts use the full deduplicated model, without
+index pagination. Global and collection tag/category indexes share this renderer.
+Individual term article lists still use their normal native pager; other taxonomy
+directories retain their existing pagination. Archives are also unpaginated. Sidebar category hubs say
 “All categories”, paralleling “All tags”. Authored label escaping and icons-off remain intact.
 
 ### Archives and source boundaries
