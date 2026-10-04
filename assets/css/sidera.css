@@ -655,9 +655,9 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 .archive-year + .archive-year { margin-top: 32px; }
 .archive-year h2 { width: fit-content; margin: 18px 0 12px; font-size: 20px; font-weight: 700; border-bottom: 4px solid var(--accent); }
 .archive-year ul { list-style: none; padding: 0; margin: 0; }
-.archive-year a { display: inline-flex; gap: 18px; align-items: baseline; margin: 4px 0; padding: 4px 0; color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--line); }
+.archive-year a { display: inline-flex; gap: 18px; align-items: baseline; text-align: start; margin: 4px 0; padding: 4px 0; color: var(--muted); text-decoration: none; border-bottom: 1px dashed var(--line); }
 .archive-year a:is(:hover,:focus-visible) { color: var(--text); border-bottom-color: var(--accent); }
-.archive-date { flex: none; min-width: 12ch; color: var(--quiet); font-size: 13px; }
+.archive-date { flex: none; width: 5ch; color: var(--quiet); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .archive-year a:is(:hover,:focus-visible) .archive-date { color: var(--accent); }
 @media (max-width: 667px) { .top-region { margin-top: 8px; } .top-region:has([data-collection-nav]) { top: 8px; } .archive-year a { gap: 10px; } }
 

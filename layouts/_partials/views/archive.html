@@ -13,7 +13,7 @@
 <div class="archive-list" data-archive-scope="{{ $owner.RelPermalink }}">
   {{ range $years }}
     <section class="archive-year"><h2>{{ if eq . "undated" }}{{ T "archive_undated" }}{{ else }}{{ . }}{{ end }}</h2>
-      <ul>{{ range index $groups . }}<li><a data-archive-article href="{{ .RelPermalink }}">{{ if .PublishDate.IsZero }}<span class="archive-date" aria-hidden="true">—</span>{{ else }}<time class="archive-date" datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ time.Format ":date_medium" .PublishDate }}</time>{{ end }}<span>{{ .Title }}</span></a></li>{{ end }}</ul>
+      <ul>{{ range index $groups . }}<li><a data-archive-article href="{{ .RelPermalink }}">{{ if .PublishDate.IsZero }}<span class="archive-date" aria-hidden="true">—</span>{{ else }}<time class="archive-date" datetime="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">{{ .PublishDate.Format "01-02" }}</time>{{ end }}<span>{{ .Title }}</span></a></li>{{ end }}</ul>
     </section>
   {{ end }}
 </div>

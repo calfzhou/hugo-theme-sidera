@@ -559,7 +559,9 @@ content, a recent item or a docs child. Private params.sidera.archive_view is re
 archive sorts the complete owner's regular pages by native PublishDate descending, then Title/
 Path; pins and Lastmod do not reorder it. All entries appear on one page, grouped by
 publication year; zero dates appear under a localized Undated heading. A true year 0001
-remains its own dated group. Owner page_size does not limit archives; ordinary collection
+remains its own dated group. Dated rows show MM-DD in a fixed-width date column so
+article titles align at their leading edge; the full date stays in the native time
+element’s datetime attribute. Owner page_size does not limit archives; ordinary collection
 and taxonomy pagination remain unchanged.
 Independent nested roots do not leak; drafts/future/expired pages follow the native build flags.
 

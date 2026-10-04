@@ -49,6 +49,10 @@ for label,overlay,prefix,size,flags in [
   groups=re.findall(r'class="archive-year">\s*<h2>(.*?)</h2>',archive)
   assert groups==years+(['日期不详'] if label=='chinese-subpath' else ['Undated']),(label,groups)
   assert f'data-archive-total="{len(slugs)}"' in archive
+  dates=re.findall(r'<time class="archive-date" datetime="([^"]+)">([^<]+)</time>',archive)
+  assert len(dates)==len(slugs)-1
+  for instant,label_text in dates:assert re.fullmatch(r'\d{2}-\d{2}',label_text) and label_text==instant[5:10],(instant,label_text)
+  assert '<span class="archive-date" aria-hidden="true">—</span>' in archive
   assert 'data-page-link' not in archive and 'class="pagination' not in archive
   assert not (out/owner/'archives/page').exists()
   # Native browsing remains paginated independently; a large size naturally fits.
