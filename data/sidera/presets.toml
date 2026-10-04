@@ -24,6 +24,7 @@ recent_sections = false
 [notes]
 title_key = 'collection_notebook'
 [notes.defaults.params]
+top = ["collection-nav"]
 navigation_mode = "list"
 primary_date = "updated"
 show_updated = true

@@ -96,7 +96,7 @@ creates a scope. See CONTRACT.md for exact types and field-domain exceptions.
 | Preset | Selecting section | Descendants |
 |---|---|---|
 | blog | Recursive publication list, flat classification, top collection-nav, vocabulary-index hubs; menu + recent updates | Same left components, TOC right, update date shown |
-| notes | Recursive list, modification order; menu + tag tree (tags only) + recent publications | Same left components, TOC right, update date shown |
+| notes | Recursive list, modification order, top collection-nav; menu + tag tree (tags only) + recent publications | Same left components, TOC right, update date shown |
 | docs | Children list; menu + page tree + recent updates + recent publications; recent sections enabled | Children mode for sections, same left components, TOC, update date shown |
 
 Explicit section/page/native cascade values can change every applicable capability without
@@ -125,10 +125,11 @@ instance. The bundled defaults above apply to both the selecting section and its
 descendants; contextual taxonomy/archive views use the owner policy. Recent order is
 independent of the main list order/pinning/pagination.
 
-The blog section target now selects `top=[collection-nav]` and `taxonomy_hubs=index`. Its
-regular descendants do not acquire a bar by that default. Generated scoped browsing views use
-the owner's resolved presentation. Other presets remain unchanged and can opt into identical
-capabilities through native Page/cascade or preset options; no runtime blog-name gate is used.
+The blog and notes section targets select `top=[collection-nav]`; blog also explicitly
+selects `taxonomy_hubs=index` (the shared minimal default). Regular descendants do not
+acquire a bar by these defaults. Generated scoped browsing views use the owner's resolved
+presentation. Docs and unclassified scopes can opt in explicitly; native false/empty/custom
+top values retain precedence. No runtime collection-name gate is used.
 
 Preset region arrays can reference site/language named widgets. Define widgets in params.widgets
 at site/language level, not in a preset's defaults map. Bundled presets use the reusable recent-updates/recent-published definitions backed

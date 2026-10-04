@@ -198,7 +198,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 | taxonomy_links | Map to section/global term-link preference. Missing entries use tags/categories/series→section and authors/preset→global. No scope/destination means a real global fallback. |
 | color_mode | Site/language default dark/light/auto; theme default auto. Saved visitor choice wins. No forced control. |
 | left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
-| top | Same instance array/false contract; default []. Blog preset selects collection-nav for the section. |
+| top | Same instance array/false contract; default []. Blog and notes presets select collection-nav for their sections. |
 | taxonomy_hubs | index (shared default) or list (explicit all-content opt-in). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
 | left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults menu + global recent-updates / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |

@@ -532,8 +532,8 @@ params:
   taxonomy_hubs: index
 ```
 
-The blog preset supplies this top bar to its selecting section. Notes/docs and unclassified
-scopes can choose the top bar explicitly; all scopes default to `taxonomy_hubs=index`. `top=false`
+The blog and notes presets supply this top bar to their selecting sections. Docs and
+unclassified scopes can choose the top bar explicitly; all scopes default to `taxonomy_hubs=index`. `top=false`
 or `[]` disables the bar; a custom item array changes order/selection. Series is intentionally
 not a tab yet (its existing native taxonomy/sequence UI still works). Category/tag tabs use
 complete actual scoped vocabularies, not the current pager. The first tab links the owner and always reads **All posts / 全部文章**, independent of sort
