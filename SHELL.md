@@ -547,8 +547,8 @@ Explicit `taxonomy_hubs=list` retains the alternative all-content hub when inten
 Categories use wide, always-expanded directory rows, including nested categories when enabled.
 Flat tags use chips; hierarchical tags use tree rows, never a forced flattening. Root-node
 pagination uses taxonomy_page_size; descendant rows and counts use the full deduplicated model.
-Global tag/category indexes share the same renderer. A one-page index/archive does not show a
-redundant pager, but multiple pages use the usual native pager. Sidebar category hubs say
+Global tag/category indexes share the same renderer. A one-page taxonomy index has no
+redundant pager; multiple index pages use the usual native pager. Archives are unpaginated. Sidebar category hubs say
 “All categories”, paralleling “All tags”. Authored label escaping and icons-off remain intact.
 
 ### Archives and source boundaries
@@ -557,8 +557,10 @@ Each supported local browsing root has a generated `/scope/archives/` native sec
 `build.list=never` and `render=always`: it renders and resolves via GetPage but is not ordinary
 content, a recent item or a docs child. Private params.sidera.archive_view is reserved. The
 archive sorts the complete owner's regular pages by native PublishDate descending, then Title/
-Path; pins and Lastmod do not reorder it. It groups each pager's entries by publication year;
-zero dates appear under a localized Undated heading. Owner page_size controls its single paginator.
+Path; pins and Lastmod do not reorder it. All entries appear on one page, grouped by
+publication year; zero dates appear under a localized Undated heading. A true year 0001
+remains its own dated group. Owner page_size does not limit archives; ordinary collection
+and taxonomy pagination remain unchanged.
 Independent nested roots do not leak; drafts/future/expired pages follow the native build flags.
 
 The archives namespace, aliases and static/source collisions are guarded just like scoped

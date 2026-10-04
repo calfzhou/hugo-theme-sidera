@@ -296,8 +296,9 @@ means current-language regular pages, while owner scope retains optional section
 
 Collection browsing adds private generated `params.sidera.archive_view` and the reserved
 `archives` namespace at supported local roots. Archives are native list-excluded rendered Pages,
-not content-kind/scope roots. The root's native publication subset drives one separate archive
-paginator; list/tree/recent/taxonomy membership stays unchanged. See SHELL.md for the component,
+not content-kind/scope roots. Each archive lists the root's complete native publication
+subset on one page, grouped by year, independently of page_size. Ordinary list/taxonomy
+pagination and list/tree/recent/taxonomy membership stay unchanged. See SHELL.md for the component,
 index presentation, collision guards and bounded-source limitations.
 
 Widget definitions are native site/language params, not Page/preset metadata. Built-in component

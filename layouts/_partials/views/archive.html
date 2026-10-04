@@ -1,10 +1,9 @@
 {{ $owner := partial "collection-owner.html" . }}
 {{ if not $owner }}{{ errorf "Sidera archive %s has no collection owner" .Path }}{{ else }}
 {{ $pages := partial "archives/pages.html" $owner }}
-{{ $pager := .Paginate $pages (partial "lists/policy.html" $owner).size }}
-{{/* Group this already ordered pager without treating a real year 0001 as a missing date. */}}
+{{/* Group the complete ordered collection without treating a real year 0001 as a missing date. */}}
 {{ $years := slice }}{{ $groups := dict }}
-{{ range $pager.Pages }}
+{{ range $pages }}
   {{ $year := "undated" }}{{ if not .PublishDate.IsZero }}{{ $year = .PublishDate.Format "2006" }}{{ end }}
   {{ if not (isset $groups $year) }}{{ $years = $years | append $year }}{{ end }}
   {{ $groups = merge $groups (dict $year ((index $groups $year | default slice) | append .)) }}
@@ -18,5 +17,5 @@
     </section>
   {{ end }}
 </div>
-{{ if gt $pager.TotalPages 1 }}{{ partial "lists/navigation.html" (dict "Pager" $pager "Page" .) }}{{ else if not $pages }}<p class="list-meta">{{ T "no_articles" }}</p>{{ end }}
+{{ if not $pages }}<p class="list-meta">{{ T "no_articles" }}</p>{{ end }}
 {{ end }}
