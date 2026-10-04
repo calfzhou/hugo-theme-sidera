@@ -92,6 +92,12 @@ containment remains; the modal contains scrolling while its background is locked
 Mermaid's source disclosure and drawio's download are toolbar controls; drawio has no
 XML source viewer or persistent editing note.
 
+Both viewport scrollbars reuse the shared content style: slim transparent tracks and
+rounded thumbs on hover/focus, including expanded dialogs. Touch keeps the thumb
+visible; forced-colors mode retains native controls. This does not change scrolling,
+zoom/panning, inline wheel chaining or modal containment. Document/sidebar scrollbar
+policies remain separate.
+
 **Large view:** the expand icon opens a native modal at 96vw × 94dvh. It fits/upscales
 the image to the available space, supports the same controls and Mermaid source pane,
 and closes with Escape, ×, or the backdrop. Controls stay clear of the image. Focus
