@@ -834,7 +834,8 @@ details[open] > summary :where(.folding-toggle,.disclosure-text) > .when-open { 
 /* Desktop tools float above the image without reserving a permanent blank row. */
 .prose .content-diagram { margin:1.25rem 0; min-width:0; }
 .diagram-canvas { position:relative; min-width:0; min-height:1px; display:flex; flex-direction:column; }
-.diagram-view { overflow:auto; max-height:520px; border:0; background:transparent; cursor:grab; overscroll-behavior-x:contain; overscroll-behavior-y:auto; }
+/* Inline diagrams grow to image height; only the modal is viewport-constrained. */
+.diagram-view { overflow:auto; border:0; background:transparent; cursor:grab; overscroll-behavior-x:contain; overscroll-behavior-y:auto; }
 .prose .diagram-view img { background:transparent; display:block; max-width:none; height:auto; margin:0 auto; border-radius:0; }
 .diagram-tools { display:flex; flex:none; align-self:flex-end; gap:2px; flex-wrap:wrap; width:max-content; max-width:100%; margin-bottom:6px; z-index:1; }
 [data-state="ready"] > .diagram-canvas > .diagram-tools,.diagram-dialog .diagram-tools { padding:3px; border-radius:6px; background:var(--surface); box-shadow:0 1px 5px #0002; opacity:0; pointer-events:none; transition:opacity .15s; }

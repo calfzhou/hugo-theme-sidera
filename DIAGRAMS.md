@@ -86,9 +86,11 @@ panel uses the existing gap and may overlap a little preceding prose while visib
 by user choice. A small hover bridge keeps it reachable from the image. Touch and
 modal views use a compact row above the image; touch targets remain 44px.
 Zoom in/out/fit, arrow-key panning, native touch scrolling and mouse panning remain.
-Inline vertical wheel scrolling chains to the page when the diagram fits or reaches
-its scroll boundary. Real tall/zoomed content still scrolls locally. Horizontal
-containment remains; the modal contains scrolling while its background is locked.
+Inline diagrams have no fixed maximum height: their viewport grows with the displayed
+image, including when zoomed. Vertical wheel scrolling therefore continues through
+the article instead of a height-limited inner pane. Wide/zoomed images retain local
+horizontal scrolling. Expanded dialogs stay bounded by the browser viewport and
+scroll internally while the background is locked.
 Mermaid's source disclosure and drawio's download are toolbar controls; drawio has no
 XML source viewer or persistent editing note.
 
