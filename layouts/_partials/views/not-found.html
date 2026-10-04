@@ -1,0 +1,7 @@
+{{- $settings := partialCached "sidera/settings.html" . .Language.Lang .Path -}}
+<section class="not-found" aria-labelledby="not-found-title">
+  {{ if $settings.icons }}<div class="not-found-symbol">{{ partial "sidera/icon.html" "not-found" }}</div>{{ end }}
+  <h1 id="not-found-title"><span class="not-found-code">404</span><span class="not-found-heading">{{ T "not_found_title" }}</span></h1>
+  <p class="not-found-description">{{ T "not_found_description" }}</p>
+  <a class="not-found-home" href="{{ .Site.Home.RelPermalink }}">{{ T "not_found_home" }}</a>
+</section>

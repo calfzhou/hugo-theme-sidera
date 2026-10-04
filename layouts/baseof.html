@@ -46,7 +46,7 @@
   {{ $notices := resources.Get "licenses/sidera-third-party.txt" }}
   <link rel="license" href="{{ $notices.RelPermalink }}">
   <meta name="color-scheme" content="light dark">
-  <title>{{ .Title }} | {{ site.Title }}</title>
+  <title>{{ if eq .Kind "404" }}404 · {{ T "not_found_title" }}{{ else }}{{ .Title }}{{ end }} | {{ site.Title }}</title>{{ if eq .Kind "404" }}<meta name="robots" content="noindex">{{ end }}
   {{ $colorMode := resources.Get "js/color-mode.js" | minify }}
   <script>{{ $colorMode.Content | safeJS }}</script>
   {{ $css := resources.Get "css/sidera.css" | minify | fingerprint }}

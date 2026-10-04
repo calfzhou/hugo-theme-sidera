@@ -411,3 +411,20 @@ and async decoding by default. Use `loading="eager"` on the shortcode or as a na
 standalone Markdown image attribute for an opening image. Preserve authored dimensions
 and native src/no-JS access; originals in the popup keep their on-demand behavior.
 See MARKDOWN.md and `tests/check_image_loading.py` for scope and verification.
+
+## Not-found page
+
+The theme supplies native `layouts/404.html`: a local Solar warning triangle, 404
+text, localized explanation and Home link within the normal site shell. It has no
+article metadata or comment slot, is excluded from the native sitemap/search catalog,
+and carries `noindex`. Existing search/navigation preferences and icons=false apply.
+
+Override `not_found_title`, `not_found_description` and `not_found_home` through native
+site i18n, replace the `not-found` registry icon through site data/icons.yaml, or use
+normal Hugo layout/partial overrides. No content/404.md or remote artwork is required.
+The Home destination follows the current language and deployment subpath.
+
+Hugo server uses the page for missing URLs. Production hosting must serve the generated
+404.html with HTTP 404 for missing requests; generating the file does not configure
+an arbitrary host or validate production routing. A direct request for the 404.html
+file itself may return HTTP 200, so its noindex directive is retained.

@@ -554,3 +554,12 @@ other = "Zoom in"
 
 [image_zoom_out]
 other = "Zoom out"
+
+[not_found_title]
+other = "Page not found"
+
+[not_found_description]
+other = "The page may have moved or been removed, or the address may be incorrect."
+
+[not_found_home]
+other = "Back to Home"

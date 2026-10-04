@@ -439,3 +439,13 @@ story-right:
   license: "CC-BY-4.0"
   note: "Exact accepted Stellar-pinned paths/opacity retained."
   normalized_sha256: "b03dd6b818a7b5d2eda337988672e8bcdac1848f43ee4d0a3b9380dc71be0439"
+not-found:
+  solar_name: "danger-triangle"
+  style: "BoldDuotone"
+  repository: "saoudi-h/solar-icons"
+  revision: "dcbe867a0"
+  path: "packages/core/svgs/ui/BoldDuotone/danger-triangle.svg"
+  author: "480 Design"
+  license: "CC-BY-4.0"
+  source_sha256: "6a3619c351a50f7f782ece459a5366c3abd490d7ad5da63af1619528b180994b"
+  normalized_sha256: "b6f5e4bbd0aa5a041ad088a4d5657698022b3d8d51bc65a4124fee165314ce7d"

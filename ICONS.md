@@ -6,7 +6,7 @@ Native image/identity/favicon/content/QR APIs are separate and remain unchanged.
 
 ## Names belong to Sidera; source names remain traceable
 
-- `data/sidera/icons.yaml`: **44 Sidera keys → complete SVG strings**.
+- `data/sidera/icons.yaml`: **45 Sidera keys → complete SVG strings**.
 - `data/sidera/icon_sources.yaml`: the corresponding **Solar name, style, source
   repository/revision/path, author/license and normalized SHA-256** for each key.
   New imports also record their original source-file hash. This is provenance, not
@@ -29,6 +29,7 @@ BD = Bold Duotone; L = Linear. Call sites use only the **Sidera key**.
 | notebook | notebook | BD |
 | docs | book-bookmark | BD |
 | page | document-text | BD |
+| not-found | danger-triangle | BD |
 | category | folder | BD |
 | tag | hashtag | BD |
 | authors | users-group-rounded | BD |
