@@ -3,7 +3,7 @@
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
 configuration API. The collection-overview home remains the default. Reusable cards and
 configurable article/site footers are implemented. The same shell presents ordinary Markdown inside
-that frame (README); it does not redesign these regions or implement a selected-home option.
+that frame; collection and page settings choose the documented presentation.
 
 
 ## Defaults and configuration
