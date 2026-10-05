@@ -9,22 +9,22 @@
   {{- $namespace := printf "%spage/" .RelPermalink -}}
   {{- range site.Pages -}}
     {{- if or (eq (strings.TrimSuffix "/" .RelPermalink) (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix .RelPermalink $namespace) -}}
-      {{- errorf "P1C reserved pagination route: %s (list %s)" .RelPermalink $section.Path -}}
+      {{- errorf "Sidera reserved pagination route: %s (list %s)" .RelPermalink $section.Path -}}
     {{- end -}}
     {{- range .Aliases -}}
       {{- if or (eq (strings.TrimSuffix "/" .) (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix . $namespace) -}}
-        {{- errorf "P1C alias in reserved pagination route: %s (list %s)" . $section.Path -}}
+        {{- errorf "Sidera alias in reserved pagination route: %s (list %s)" . $section.Path -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
   {{- $relative := strings.TrimPrefix site.Home.RelPermalink $namespace -}}
   {{- if os.FileExists (path.Join "static" $relative) -}}
-    {{- errorf "P1C static file in reserved pagination route: %s" $relative -}}
+    {{- errorf "Sidera static file in reserved pagination route: %s" $relative -}}
   {{- end -}}
 {{- end -}}
 {{- range site.Pages -}}
   {{- if and (isset (.Params | default dict) "pinned") (ne (printf "%T" .Params.pinned) "bool") -}}
-    {{- errorf "P1C pinned must be boolean: %s" .Path -}}
+    {{- errorf "Sidera pinned must be boolean: %s" .Path -}}
   {{- end -}}
 {{- end -}}
 {{- return true -}}

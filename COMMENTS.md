@@ -108,7 +108,7 @@ threads or real-site URLs are rewritten.
 Path-derived terms avoid new front matter and agree with the current real site's
 pathname concept. A global content ID would survive URL moves but would require
 new authoring/identity policy and reconciliation of old threads; it is **not**
-introduced here. P4 must compare actual legacy pathname terms, including suffix/
+introduced here. When changing an existing site, compare actual discussion pathname terms, including suffix/
 slash/locale/encoding and discussion hashes, separately from redirects. `strict`
 defaults false, like the existing reference. New isolated repositories may choose
 true to avoid fuzzy matches; existing discussions need the corresponding SHA-1

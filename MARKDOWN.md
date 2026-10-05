@@ -47,7 +47,7 @@ image attrs in the tested tight-list form. Ordinary images inside ordered/unorde
 lists are automatically caption-free, even when a list item contains only one image
 or the list is inside a grid cell. No `.no-caption` class is required for these images.
 An outdented attribute line still targets the list, not its image.
-Do not claim every attribute position is interchangeable. Conversions in the showcase are synthetic; real-site conversion stays P4.
+Do not claim every attribute position is interchangeable. Test the actual block/list context when applying attributes.
 
 `invert-when-dark` and `invert-when-light` apply `invert(1) hue-rotate(180deg)` **to the
 marked element itself**, not just descendant images. Both classes together invert in
@@ -72,7 +72,7 @@ Markdown content here.
 {{% /block %}}
 ```
 
-`block` is a general container with optional safe named class/id tokens. In C2,
+`block` is a general container with optional safe named class/id tokens. In container,
 use `%` when outermost and `<` when nested in folding/box/grid/cell/block. Ordinary
 content and headings remain in one native Markdown pass. Supported nested shortcodes
 now use the bounded native-node bridge; see [COMPONENTS.md](COMPONENTS.md) for exact
@@ -201,10 +201,9 @@ Markdown. Unescaped paired dollars intentionally mean math. Set native passthrou
 
 ## Inspection and overrides
 
-**Restart an existing preview once after C2's block.md → block.html transition.**
-The B-era opposite rename/recovery remains historical evidence; C2 needs a single
-HTML shortcode template to carry native Markdown in both approved contexts. A cold
-server and same-cache restart are verified; no cache clearing or compatibility alias.
+The block shortcode uses one HTML template to carry native Markdown in both
+standalone and nested contexts. A preview spanning a template-format change may
+need one restart; do not clear user caches or add a compatibility alias.
 
 The committed showcase is `/handbook/reference/advanced-markdown/`; Reading List also
 proves a note-to-dated-Journal link inside an alert. New block links retain queries
@@ -214,29 +213,28 @@ record source/config/security, asset and actual rendering checks.
 Project render hooks retain native precedence. Explicit `useEmbedded='always'`
 intentionally bypasses theme link/image hooks; it is never forced here. A custom
 blockquote hook must preserve the private-node branch documented in COMPONENTS.md.
-Theme documentation remains opt-in. C–F, diagram implementations and real migration
-remain separate; this B checkpoint is not whole-P3 acceptance.
+Theme documentation remains opt-in. Separate component and diagram guides describe their APIs.
 
-## Include code files (C1)
+## Include code files
 
 Use `{{< snippet src="solution.py" >}}` on its own line for an adjacent bundle resource.
 [SNIPPETS.md](SNIPPETS.md) covers inclusive bounds, native options, exact downloads,
 shared resources and line endings. Code is escaped data, not a Markdown fence generated
-from file contents. Standard snippet calls can now nest in C2 containers; the
+from file contents. Standard snippet calls can now nest in containers; the
 container at the outermost level uses Markdown `%` notation.
 
-## Native MP4 (P3-D video slice)
+## Native MP4
 
 [VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
 resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
-and file fallback. It composes with the C2 bridge; no player library, autoplay or
-build-time fetch. Other P3-D diagram/badge families remain separate.
+and file fallback. It composes with the container bridge; no player library, autoplay or
+build-time fetch. See DIAGRAMS.md for diagrams and badges.
 
-## Diagrams and used badges (P3-D)
+## Diagrams and used badges
 
 [DIAGRAMS.md](DIAGRAMS.md) is authoritative for ordinary Mermaid fences, local
 single-page drawio resources/viewing/source downloads, automatically loaded Shields
-badges, and native C2 composition. Pinned local renderers are isolated and shared per
+badges, and native container composition. Pinned local renderers are isolated and shared per
 page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
 Conditional Content/Summary assets, supported input limits and honest source-only
 fallbacks are explicit. Video remains documented separately in VIDEO.md.
@@ -316,7 +314,7 @@ labels; `false`, arrays and unknown strings fail validation, including supported
 excluded-draft/cascade inputs. There is no automatic content analysis or inferred
 label for an unspecified page, nor any change to author identity or content license.
 Do not set a site/cascade default unless it is true for that intended content set.
-For P4, move Stellar's top-level `ai_label` to `params.ai_label`; native `type: story`
+Use `params.ai_label` for disclosure; native `type: story`
 can now be retained as authorized, with normal native template-lookup semantics.
 
 

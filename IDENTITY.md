@@ -15,7 +15,7 @@ SVG is authoritative. Circle SHA-256:
 square SHA-256:
 `f21dc7afd04c9f4d4873ac39ee03e77d6affc093780d669177636b36e215ec7c`.
 These are byte-identical deployment copies of the user-selected 2026-09-30 fixed-color
-P3-L outputs (D-119/120); the original design folder is not a build/test dependency.
+Parallax artwork; the original design folder is not a build/test dependency.
 Eureka directly authored the geometry; no third-party logo, traced raster, font
 outline or icon-library shape was used. No license grant or trademark clearance is
 asserted. The earlier `images/sidera-mark.svg` remains a historical test asset;

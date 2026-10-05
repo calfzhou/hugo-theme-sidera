@@ -12,7 +12,7 @@
     {{- $body := replaceRE `\A---\r?\n|\r?\n---(?:\r?\n|\z)$` "" (index $match 0) -}}
     {{- $data = transform.Unmarshal (dict "format" "yaml") $body -}}
   {{- else if findRE `\A\s*(\{|\+\+\+|---)` $text -}}
-    {{- errorf "P1B discovery requires TOML or YAML front matter: %s" . -}}
+    {{- errorf "Sidera discovery requires TOML or YAML front matter: %s" . -}}
   {{- end -}}
 {{- end -}}
 {{- return $data -}}

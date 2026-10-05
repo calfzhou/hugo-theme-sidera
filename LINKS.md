@@ -64,7 +64,7 @@ Within opt-in theme docs, relative links follow the one mounted source tree at e
 prefix. Physical links across unrelated mount roots/contentDir layouts are **not**
 a universal filesystem resolver: use paths in Hugo's mounted content namespace,
 and verify a new layout explicitly. The existing contextual-taxonomy loader limits
-are unchanged. No full real-site URL/heading migration is claimed.
+are unchanged. Existing incoming URL/fragment compatibility must be checked separately.
 
 ## Diagnostics and authoring policy
 
@@ -81,7 +81,7 @@ Default warnings are nonfatal in ordinary `hugo server`; `--panicOnWarning` make
 strict build failures. For a deliberate public `.md` URL outside known local static
 storage, prefer an explicit HTTP(S) URL or a site hook. Native
 `ignoreLogs = ['sidera-link-source']` is available for a reviewed exception, but
-suppresses the **category**, not one link: do not use it to hide migration mistakes.
+suppresses the **category**, not one link: do not use it to hide broken source links.
 No broad fail policy is imposed on legitimate ordinary web paths.
 
 Native headings can optionally be checked with a site/language-only boolean:
@@ -97,11 +97,11 @@ footnote, shortcode and custom HTML IDs are not all native headings. A warning s
 “no native heading”, **not** “no element exists”. The test harness independently
 checks built heading IDs and destinations, including encoded fragments. Validate
 non-heading targets against output separately; arbitrary URL anchors are not crawled.
-Renamed legacy Hexo anchors need a P4 manifest/conversion, not guessed normalization.
+Changed incoming heading fragments require an explicit compatibility decision, not guessed normalization.
 
 Excluded pages become linkable only when Hugo supplies a native URL in the selected
 build. All-states builds are private validation output, not publication. Draft metadata
-still must validate (D-013). A native `build.render=link` URL is Hugo's promise of an
+still must validate. A native `build.render=link` URL is Hugo's promise of an
 external/other-built destination, not proof this build produced a file.
 
 ## Native hook precedence and extension
@@ -121,14 +121,14 @@ above-root traversal is clamped rather than diagnosed; cross-bundle files under 
 routes remain unresolved; missing sources/headings are silent; tel/title escaping
 needs care. Installed embedded source and `always` control builds were inspected.
 Its broad `GetPage` lookup for web paths and fragment absolutization are not copied.
-H's external-link suffix still decorates links progressively without changing hrefs;
+The external-link suffix still decorates links progressively without changing hrefs;
 heading markers, TOC, code and image behavior remain independent.
 
-P3-E now adds [content references and local search](DISCOVERY.md). Internally the href-only
+See [content references and local search](DISCOVERY.md). Internally the href-only
 helper delegates to `links/resolve.html`, returning the same href and its native target;
 link hooks/cards can annotate that identity for the deferred graph. Exact native URLs
 are recognized separately without rewriting authored hrefs. A root-level File.Dir `/`
-is normalized before source matching. Native source diagnostics and C2 bridge remain.
+is normalized before source matching. Native source diagnostics and container bridge remain.
 
 
 ## External navigation defaults

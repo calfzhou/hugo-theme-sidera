@@ -33,7 +33,7 @@
   {{- if ne (printf "%T" (index $settings $key)) "bool" -}}{{- errorf "Sidera %s must be boolean: %s" $key $page.Path -}}{{- end -}}
 {{- end -}}
 {{- if not (in (slice "recursive" "children") $settings.list_mode) -}}{{- errorf "Sidera list_mode must be recursive or children: %s" $page.Path -}}{{- end -}}
-{{- if not (in (slice "publication" "modification" "title") $settings.list_order) -}}{{- errorf "P1C list_order must be publication, modification or title: %s" $page.Path -}}{{- end -}}
+{{- if not (in (slice "publication" "modification" "title") $settings.list_order) -}}{{- errorf "Sidera list_order must be publication, modification or title: %s" $page.Path -}}{{- end -}}
 {{- range $key := slice "page_size" "taxonomy_page_size" -}}{{- $value := index $settings $key -}}
   {{- if or (not (in (slice "int" "int64" "uint64") (printf "%T" $value))) (lt (int $value) 1) -}}{{- errorf "Sidera %s must be a positive integer: %s" $key $page.Path -}}{{- end -}}
 {{- end -}}

@@ -8,22 +8,22 @@
   {{- $owner := . -}}
   {{- $expected := printf "%s/" (strings.TrimPrefix "/" .Path) | relLangURL -}}
   {{- if ne .RelPermalink $expected -}}
-    {{- errorf "P1B scoped route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
+    {{- errorf "Sidera scoped route must follow its content path: %s (%s != %s)" .Path .RelPermalink $expected -}}
   {{- end -}}
   {{- range slice "tags" "categories" "authors" "series" "archives" "page" -}}
     {{- $namespace := printf "%s%s/" $owner.RelPermalink . -}}
     {{- if ne . "page" -}}{{- with site.GetPage (printf "%s/%s" $owner.Path .) -}}{{- $namespace = .RelPermalink -}}{{- end -}}{{- end -}}
     {{- range site.Pages -}}
       {{- if and .Params.sidera.tag_view .File (not .File.IsContentAdapter) -}}
-        {{- errorf "P1B tag_view is reserved for generated pages: %s" .Path -}}
+        {{- errorf "Sidera tag_view is reserved for generated pages: %s" .Path -}}
       {{- end -}}
       {{- if and (not .Params.sidera.tag_view) (or (eq .RelPermalink (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix .RelPermalink $namespace)) -}}
-        {{- errorf "P1B reserved scoped route namespace: %s (%s)" .RelPermalink .Path -}}
+        {{- errorf "Sidera reserved scoped route namespace: %s (%s)" .RelPermalink .Path -}}
       {{- end -}}
       {{- range .Aliases -}}
         {{- $alias := . -}}
         {{- if or (eq (strings.TrimSuffix "/" $alias) (strings.TrimSuffix "/" $namespace)) (strings.HasPrefix $alias $namespace) -}}
-          {{- errorf "P1B alias in reserved scoped route namespace: %s" . -}}
+          {{- errorf "Sidera alias in reserved scoped route namespace: %s" . -}}
         {{- end -}}
       {{- end -}}
     {{- end -}}
@@ -32,7 +32,7 @@
     {{- $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $owner.Path $taxonomy -}}
     {{- range $model.nodes -}}
       {{- $page := partial "taxonomies/page.html" (dict "owner" $owner "taxonomy" $taxonomy "key" .key "slug" .slug) -}}
-      {{- if ne $page.Params.sidera.tag_key .key -}}{{- errorf "P1B rendered tag collision: %s (%s)" .key $owner.Path -}}{{- end -}}
+      {{- if ne $page.Params.sidera.tag_key .key -}}{{- errorf "Sidera rendered tag collision: %s (%s)" .key $owner.Path -}}{{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

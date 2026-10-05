@@ -135,14 +135,10 @@ Link cards now consistently use keys:
 ```
 
 Omitting icon selects `link`. The same applies to native social menu `params.icon`.
-**Pre-release migration:** former `link icon="file.svg"` / remote-image destinations
-are no longer icon inputs. Preserve card artwork with the separate `image` and
-optional `alt` arguments documented in COMPONENTS.md; do not retrace it as a UI icon.
-Former social `params.image` diagnoses with the replacement instructions: define an
-inline site-owned registry entry and select its key. Identity/profile/
-avatar/cover images and ordinary Markdown images are not retired. Old unreferenced
-showcase social files remain as historical source, not loaded runtime icons; this
-change does not authorize deleting user files or converting the real site.
+Icon inputs are registry keys, not image-file paths or remote-image URLs. Preserve
+card artwork with separate image/alt arguments documented in COMPONENTS.md. Social
+icons use a site-owned inline registry entry selected by its key. Identity, profile,
+avatar, cover and ordinary Markdown images keep their separate image interfaces.
 
 ## Geometry, presentation and trust
 

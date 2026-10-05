@@ -1,6 +1,6 @@
 # Native section presets
 
-The P2-M resolver is implemented. `preset` is a native taxonomy on sections; blog/notes/docs
+`preset` is a native taxonomy on sections; blog/notes/docs
 are bundled defaults, not types or capability gates. Scope is independent (CONTRACT.md).
 
 ## Supplied by Sidera
@@ -162,7 +162,7 @@ for direct-standalone image scope and per-image `.no-caption`. No parser configu
 is emulated through presets; native parser imports remain site-owned.
 
 
-## Giscus comments (P3-F1)
+## Giscus comments
 
 `params.comments` is an inheritable boolean, default false, independent of preset.
 The canonical article-end slot renders comments before the final `article_end_text`,
@@ -172,14 +172,14 @@ overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mappin
 privacy, loading, locale/palette and failure boundaries. No production IDs belong in
 the theme. This supersedes earlier future-comment-slot statements.
 
-F1 review refinement: configured comments load automatically when the section becomes
+Loading behavior: configured comments load automatically when the section becomes
 visible (immediate fallback without IntersectionObserver). The TOC adds a native
 **Join the discussion** action beneath Back to top only for an actual comment slot.
 No descriptive normal-state copy/manual button/separate GitHub link; concise failure
 and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
 while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.
 
-## Configured Markdown (P3-F2)
+## Configured Markdown
 
 [CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) defines the shared build-time interpolation
 path for authored text/profile/footer/license/reference/final-text settings, minimal

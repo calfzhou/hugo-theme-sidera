@@ -1,10 +1,10 @@
-# Page shell, components and native footers (P2-F/G)
+# Page shell, components and native footers
 
 Implemented on Hugo 0.166.0. This is an independent Hugo theme, not Stellar's
 configuration API. The collection-overview home remains the default. Reusable cards and
-configurable article/site footers are implemented. P2-GR covers whole-site/non-content composition. P2-H refines ordinary Markdown inside
+configurable article/site footers are implemented. The same shell presents ordinary Markdown inside
 that frame (README); it does not redesign these regions or implement a selected-home option.
-Final integrated acceptance is deferred until after P3.
+
 
 ## Defaults and configuration
 
@@ -353,7 +353,7 @@ extra. Site templates are trusted code, not configurable executable paths.
 Each fixed built-in also has a native override under
 `layouts/_partials/sidera/components/<fixed-name>.html`, receiving the same context.
 Named widgets are data definitions over that fixed list, not an arbitrary template-path registry. Routine menu/profile/text/
-region changes do not need template copies. P2-G adds `article-footer-extra.html` and
+region changes do not need template copies. Sidera provides `article-footer-extra.html` and
 `site-footer-extra.html` with the same context (Region is article-footer/site-footer).
 Empty/false footer selection suppresses its hook; selected but empty built-ins permit
 a hook-only footer. No resulting markup means no footer box or spacing.
@@ -570,7 +570,7 @@ classification routes. No existing content is overwritten. The same bounded loca
 TOML/YAML/filename-language inventory applies; arbitrary mounted/generated vocabularies are not
 newly supported. Enabling the bar where an archive route cannot be generated diagnoses the
 missing supported source context. Bundled docs stay opt-in, and archive navigation is off by
-default for docs. No search, comments, special-syntax backend or real-site URL migration is added.
+default for docs. Search and comments use the separate discovery and provider settings.
 
 
 ## Pinned social footer and color mode
@@ -679,7 +679,7 @@ rechecks it when an outline is reopened. Repeated TOCs keep independent disclosu
 The up icon is the Solar square-double-alt-arrow-up Linear entry under the retained CC BY notice.
 
 
-## Public naming migration
+## Color-mode names and persistence
 
 Use params.color_mode, Sidera.cycleColorMode(), Sidera.setColorMode(mode), and the fixed icon
 name color-mode. The color_mode, color_mode_dark, color_mode_light, color_mode_auto and color_mode_cycle
@@ -784,7 +784,7 @@ params:
 ```
 
 `references` defaults to [], accepts Markdown strings, and skips blank entries. These are explicit
-source references, not automatic outgoing links or backlinks. The latter remain separate P3 work.
+source references, not automatic outgoing links or backlinks. See DISCOVERY.md for generated outgoing links and backlinks.
 
 `license=true` (default) renders the localized neutral Markdown notice **All rights reserved unless
 otherwise stated.** A string replaces it; false or an empty string hides it. The theme does not
@@ -970,7 +970,7 @@ label masquerades as a path segment. No ancestor is marked aria-current; all lin
 keyboard-focus feedback. Labels wrap without separating a slash from its following link. Existing
 list_header=false and compact taxonomy-index layouts remain unchanged.
 
-## Content discovery (P3-E)
+## Content discovery
 
 The sidebar search is deliberately between identity and the configured navigation;
 the compact-header fallback also supports it. `params.search=false` hides it without
@@ -979,17 +979,17 @@ the scrolling widgets, matching Stellar; clearing restores them. No modal redesi
 `outgoing` and `backlinks` are normal configurable article-footer components (no options),
 now selected after manual `references` by default. Manual references remain independent.
 See [DISCOVERY.md](DISCOVERY.md) for scopes, eligibility, matching, destination highlights,
-privacy and opt-outs. These supersede older “search/backlinks remain P3” statements above.
+privacy and opt-outs.
 
 
-P3-E search refinement: search/form/results fill the sidebar's inner width. Stellar's
+Search layout: search/form/results fill the sidebar's inner width. Stellar's
 rainbow underline animates on hover/focus/active query, with reduced-motion fallback.
 The scoped/global dropdown is replaced by a native **Search all content** checkbox,
 visible only with a nonempty scoped query. Clear resets to the current collection;
 global-only pages have no toggle. See DISCOVERY.md for keyboard/no-JS behavior.
 
 
-## Giscus comments (P3-F1)
+## Giscus comments
 
 `params.comments` is an inheritable boolean, default false, independent of preset.
 The canonical article-end slot renders comments before the final `article_end_text`,
@@ -999,14 +999,14 @@ overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mappin
 privacy, loading, locale/palette and failure boundaries. No production IDs belong in
 the theme. This supersedes earlier future-comment-slot statements.
 
-F1 review refinement: configured comments load automatically when the section becomes
+Loading behavior: configured comments load automatically when the section becomes
 visible (immediate fallback without IntersectionObserver). The TOC adds a native
 **Join the discussion** action beneath Back to top only for an actual comment slot.
 No descriptive normal-state copy/manual button/separate GitHub link; concise failure
 and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
 while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.
 
-## Configured Markdown (P3-F2)
+## Configured Markdown
 
 [CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) defines the shared build-time interpolation
 path for authored text/profile/footer/license/reference/final-text settings, minimal
@@ -1025,9 +1025,9 @@ presentation. `params.icons=false` replaces its arrows with visible localized
 Previous/Next text, including disabled endpoints. Numbers, current state, native
 URLs, keyboard/accessible names, and no-JS navigation remain. List/docs/archive/
 taxonomy callers share this behavior; no paginator is constructed by the renderer.
-The approved Solar registry now covers the remaining UI; final user acceptance remains separate.
+The named Solar registry supplies UI icons; see ICONS.md for site overrides and provenance.
 
-### Default leftbar composition (P4-B review)
+### Default leftbar composition
 
 Main navigation is retained. Below it: notes select only the tag tree and recent
 publications; blogs select recent updates; docs select page tree, recent updates, then

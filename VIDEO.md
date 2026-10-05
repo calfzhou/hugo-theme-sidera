@@ -68,7 +68,7 @@ pages, code examples and plainified list excerpts do not request the controller.
 Custom layouts must use the shared shell (or deliberately supply equivalent asset
 handling). Site shortcodes/partials retain native precedence; nested overrides must
 preserve the documented leaf bridge. No template rename or user restart is required
-by this addition; the earlier C2 restart note only applies to that transition.
+by this addition; the earlier container restart note only applies to that transition.
 
 Showcase: `/handbook/reference/video/`. The local two-second silent test pattern was
 created with the already installed FFmpeg, without acquiring media:
@@ -78,4 +78,4 @@ ffmpeg -f lavfi -i 'testsrc2=size=320x180:rate=12:duration=2' \
   -c:v libx264 -pix_fmt yuv420p -movflags +faststart -an motion.mp4
 ```
 
-This is a video specimen, not Mermaid/drawio/badge completion. Their P3-D work remains.
+See DIAGRAMS.md for the separate diagram and badge interfaces.

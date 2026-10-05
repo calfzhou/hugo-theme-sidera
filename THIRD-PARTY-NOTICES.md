@@ -150,7 +150,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Used content components (C2)
+## Used content components (container)
 
 The content primitive CSS also adapts Stellar 1.44.0
 `source/css/_components/tag-plugins/{inline-labels,mark,quot,link,copy,folding,grid,note}.styl`,
@@ -160,7 +160,7 @@ Quote ornaments are typographic characters, not copied icon paths. No new third-
 sticker/font/icon package was added. The emoji shortcode and blobcat requirement
 were subsequently retired by user choice; no third-party sticker was distributed.
 
-## P3-D local diagram runtimes
+## Local diagram runtimes
 
 **Mermaid 11.17.2**: unmodified npm `dist/mermaid.min.js`, root MIT LICENSE (Knut
 Sveidqvist) and upstream bundled notices. Release `mermaid@11.17.2`, `dcb694d`;
@@ -190,7 +190,7 @@ relevant original licenses as native resources. The opaque sandbox intentionally
 blocks unused networking/eval/editing; its output becomes an inert SVG image. See
 DIAGRAMS.md for the exact feature, security, source-only fallback and CSP boundaries.
 
-### P3-E search presentation and journey
+### Search presentation and journey
 
 The inline sidebar search layout, widget replacement while searching, title-above-link
 result structure, section/excerpt treatment, keyword accents and `?kw=`/heading journey
@@ -210,8 +210,8 @@ Sidera adds inactive pause and reduced-motion handling under the same retained M
 ## Original Parallax artwork
 
 `assets/images/sidera-parallax-circle.svg` and `sidera-parallax-square.svg` are
-byte-identical copies of Eureka's directly authored fixed-color P3-L Parallax B,
-selected by the user on 2026-09-30 (D-119), integration authorized D-120. The 32px
+byte-identical copies of Eureka's directly authored fixed-color Parallax B,
+selected by the user on 2026-09-30. The 32px
 PNG is a direct librsvg rendition of the square SVG. There is no third-party logo,
 font outline, raster trace or external icon provenance for this mark. See IDENTITY.md
 for exact source hashes, native usage, reproduction and accepted visual limits.
@@ -227,7 +227,7 @@ Hugo minification removes CSS comments; it does not license Sidera or site conte
 Keep both copies synchronized when updating notices. Vendor-specific license files
 continue to publish with their conditional math/diagram resources.
 
-## In-article timeline (P4)
+## In-article timeline
 
 Timeline line/marker/header/card styling adapts Stellar 1.44.0 (1f4cb4bc),
 source/css/_components/tag-plugins/timeline.styl, copyright 2021 xaoxuu,

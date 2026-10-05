@@ -1,6 +1,6 @@
 # Content references and local search
 
-P3-E · Hugo 0.166.0 · no production Node dependency, remote backend or account.
+Hugo 0.166.0 · no production Node dependency, remote backend or account.
 
 ## Try the complete journey
 
@@ -72,8 +72,8 @@ separate authored Markdown list: it is neither augmented nor used to invent edge
 
 ## Canonical link coverage
 
-- Native Markdown inline/reference/autolink nodes and the C2 `link` card, including
-  those in supported folds/boxes/grids, share A's **single exact-source resolver**.
+- Native Markdown inline/reference/autolink nodes and the container `link` card, including
+  those in supported folds/boxes/grids, share the **single exact-source resolver**.
   Page/resource resolution and href diagnostics are unchanged. A root-level File.Dir
   of `/` is normalized before exact File.Path comparison; it is not an extra root.
 - The resolver now returns href plus native target internally. The public
@@ -97,7 +97,7 @@ separate authored Markdown list: it is neither augmented nor used to invent edge
 - Raw HTML, arbitrary third-party shortcode HTML, JS-generated links and a custom
   hook that omits the annotation are **not universally covered**. Site hook authors
   can use `links/resolve.html` and `links/content-target.html`, plus the annotation,
-  while retaining C2's bridge branch. Raw author HTML remains disabled.
+  while retaining the container bridge branch. Raw author HTML remains disabled.
 
 ## Native lifecycle and publication privacy
 
@@ -143,8 +143,8 @@ small data-owned tag/class exclusion rules. Tests compare every generated sectio
 with its actual rendered DOM text/heading identity, including composed/decomposed
 accents, CJK and non-BMP offset checks.
 
-Included: ordinary text/links/tables/alerts; supported C2 container titles/body/cards/
-inline kbd/u/quot/copy values; real fences and displayed C1 snippet selections; visible
+Included: ordinary text/links/tables/alerts; supported container titles/body/cards/
+inline kbd/u/quot/copy values; real fences and displayed snippet selections; visible
 image/video/diagram captions. Inline formatting and syntax-highlight spans do not
 split words. Whitespace is collapsed consistently; entities are decoded once.
 

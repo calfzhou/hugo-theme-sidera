@@ -150,7 +150,7 @@ use paired light colors inside that wrapper too, avoiding double-themed unreadab
 Explicit nested filters still compound.
 Unmarked diagrams are renderer-themed, not automatically CSS-inverted. No image analysis.
 
-Use C2 **outer `%`, nested `<`** containers. Mermaid fences need no shortcode notation;
+Use **outer `%`, nested `<`** containers. Mermaid fences need no shortcode notation;
 diagramsnet and badge_github are block leaves on their own lines. Existing page-local
 trusted-node restoration and one-pass Markdown/math/snippet rendering remain. Native
 keys now permit underscore-separated shortcode names for badge_github, without dropping
@@ -188,7 +188,7 @@ interpolated as HTML or executable URLs. Unknown fields/types fail with source p
 Four images: identity, stars, forks, last commit. `release=true` adds latest release
 and release date. Branch affects the identity label and last-commit path only. The
 repository link remains the repository root, matching actual source behavior. Existing
-C2 link cards are unchanged; no metadata preview fetch or GitHub API/backend is added.
+Link cards are unchanged; no metadata preview fetch or GitHub API/backend is added.
 
 **User-approved automatic loading:** native lazy images contact **img.shields.io**
 without a consent button. No referrer is sent by those image elements; Shields still
@@ -204,22 +204,14 @@ backdrop. Colored areas drawn inside Shields SVGs are not altered or removed.
 Image success proves delivery, **not freshness, accuracy or the absence of an error
 message inside the provider's SVG**. Provider reliability is not theme acceptance.
 
-## Conversion and verification
+## Verification
 
-- Mermaid fences unchanged; old flags unnecessary. B colon inversion wrappers still
-  become the approved general block, not a new diagram-only syntax.
-- `{% diagramsnet file.drawio %}` → `{{< diagramsnet src="file.drawio" >}}`.
-- `{% badge_github owner repo release:true branch:beta %}` → named arguments above.
-- No real-site source migration, retired image viewer/emoji/timeline restoration,
-  AnimCube, backlinks/search/comments or full editor is included.
-
-`tests/check_diagrams.py` uses one tiny source tree and the active theme, caps Hugo to
-two workers and reuses a cache/output for expected failures. It also checks the real
-root's opt-in docs contract. `check_diagram_preview.py` uses that tree and an explicitly
-free port, stopping its own server. `check_diagrams_browser.mjs` uses the existing
-isolated harness, mocks all Shields requests, checks the 30/40 actual diagram sources
-in memory only, and captures only synthetic examples. See the coordination P3-D report
-for actual commands/results and deliberately unrun broad/cross-browser checks.
+Mermaid uses ordinary fenced blocks. Local drawio resources use
+`{{< diagramsnet src="file.drawio" >}}`; GitHub badges use the named arguments above.
+The native diagram tests validate sources, safety and output without executing source
+code. Browser tests should check actual SVG XML/image decoding, both palettes and
+modal controls; merely finding an SVG element is not a rendering proof. Use isolated
+profiles and explicit free ports, and stop test servers afterward.
 
 `check_diagram_controls_browser.mjs` additionally covers hover/focus/touch visibility,
 quiet states, icon-only controls, source/download differences, modal fit/focus/Escape/

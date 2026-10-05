@@ -2,7 +2,7 @@
 
 Hugo **0.166.0**. Native Markdown/render hooks, a small set of shortcodes, and the
 existing shared copy UI. No Hexo interpreter, extra library, remote preview service
-or unsafe HTML setting. C2 is implemented for user review; later P3 slices are separate.
+or unsafe HTML setting. Each capability has an independent, explicit authoring interface.
 
 ## Authoring and composition
 
@@ -39,7 +39,7 @@ requires at least one cell. Cells require an immediate grid parent.
 (`grid` only accepts cells, `timeline` only accepts events). Unknown shortcode
 parents fail, rather than sending already-generated HTML through Markdown. Site-owned
 future embeds need their own integration. D supplies video, diagramsnet and badge_github
-through this bridge; AnimCube remains site-owned P4.
+through this bridge; AnimCube remains site-owned.
 Four-level original compositions and timeline → event → grid → cell → leaf are tested; this is not arbitrary plugin nesting.
 
 ### Container arguments
@@ -58,7 +58,7 @@ space-separated. No HTML tag, script, style string, event handler or arbitrary S
 | `block` | Common class/id only | B's general div-like Markdown container, now composable; existing root `%` syntax unchanged. |
 
 `color` allows **neutral, red, yellow, green**. `child` allows **empty or codeblock**:
-codeblock adjusts padding/surfaces but does not hide C1's title, language, copy or full
+codeblock adjusts padding/surfaces but does not hide code inclusion's title, language, copy or full
 source download. This is the audited presentation subset, not every Stellar option.
 
 Container titles support **inline Markdown** with native hooks, including emphasis,
@@ -98,10 +98,9 @@ labels, author an explicit summary. Actual rendered container Content and Summar
 embedded through the shared shell retain conditional math resources. Tested page-local
 stores do not promise arbitrary third-party layouts/output formats or source inclusion.
 
-**Preview transition:** C2 changes B's `block.md` template to `block.html` to carry the
-same named component in both contexts. Restart an already-running `hugo server` once
-after updating. Cold builds/server and restart with the same cache are verified. No
-cache clearing, legacy template alias, user-server manipulation or watcher fix.
+The block shortcode uses an HTML template to carry the same named component in both
+contexts. A preview spanning a template-format change may need one restart; no cache
+clearing or user-server manipulation is performed by the theme.
 
 ## Self-contained components
 
@@ -130,7 +129,7 @@ tables, including inside supported containers. Their use inside another Markdown
 link/image label is not a certified nesting context; use an ordinary text label there.
 Block link/copy/quot/snippet calls belong on their own lines, not inside a paragraph.
 
-Copy shares H/C1's button/handler and localized EN/ZH feedback. Missing/denied clipboard
+Copy shares H/code inclusion's button/handler and localized EN/ZH feedback. Missing/denied clipboard
 selects a readonly manual-copy field and reports failure. No-JS hides the action and
 keeps the value selectable. Exact API text excludes labels/line numbers; browser manual
 textarea normalizes CRLF. Tests mock all clipboard writes. Selection is not redaction.
@@ -195,43 +194,30 @@ a container** must preserve the bridge: render its trusted HTML into `$html`, th
 `components/leaf.html` with `shortcode`, `html`, and `inline` (true only for text-like
 inline output), passing the result through `safeHTML` in the shortcode template.
 The existing theme wrappers are minimal working examples; renderer partials live in
-`layouts/_partials/components/`. H/C1 still share `code-block.html`/`copy-button.html`.
+`layouts/_partials/components/`. H/code inclusion still share `code-block.html`/`copy-button.html`.
 
 A custom blockquote/alert hook must retain `components/blockquote.html` for private
 container/leaf nodes. A custom link hook must retain the `sidera-inline:` branch calling
 `components/render-leaf.html`; normal destinations stay site-owned. Cooperating overrides
 are tested. `useEmbedded='always'` intentionally bypasses theme hooks and is incompatible
-with nested inline leaves; it diagnoses instead of silently dropping them. A's embedded
+with nested inline leaves; it diagnoses instead of silently dropping them. Embedded-hook
 control tests separately exercise native resolution with ordinary text at that point.
 No setting forces embedded hooks or overrides a site's native lookup choice.
 
-## Hexo → Hugo: every used C2 row
+## Component boundaries
 
-| Used row / audited forms | Conversion / disposition |
-|---|---|
-| folding 32/5: title, open:false, child:codeblock | `{% folding Title open:false %}` → `{{% folding title="Title" open=false %}} … {{% /folding %}}`; nested container uses `<`. |
-| grid 47/6: default, c:2/c:5, w:150px | `c:2` → `columns=2`; `w:150px` → `min_width=150`; each `<!-- cell -->` segment → paired `< cell >`. Multiple cards in one cell work. |
-| box 3/3: optional title, red, codeblock | Named title/color/child on `box`; keep ordinary fences or use C1 snippet. Native alert syntax stays an alternative only when semantically appropriate. |
-| attributed blockquote 1/1 | **No dedicated shortcode by user choice.** Ordinary `>` paragraphs plus `> — Author, *Source*` retain credit. |
-| quot 6/3: text/pipe, icon:none | Named literal text; `icon:none` → boolean `ornament=false`. Paragraph, not a heading. |
-| image 7/4: background/width/original viewer/download | Limited native `image` presentation is now explicitly requested in P4 for opt-in backgrounds. Normal Markdown stays primary; D-145 adds explicit original-image popup/download behavior through `original`, not a full Stellar plugin port. Preserve original targets in that field or ordinary links. |
-| kbd 30/3: keys/backtick/Unicode | `{% kbd Ctrl %}` → `{{< kbd text="Ctrl" >}}`. |
-| mark 36/3: ✓/✗/? and three colors | `{% mark ✓ color:green %}` → `{{< mark text="✓" color="green" >}}`. |
-| u 120/10: letters/digits/selections | `{% u 9 %}` → `{{< u text="9" >}}`; adjacent characters stay adjacent. |
-| timeline 1/1 | **Reopened by explicit P4 user request:** native `timeline` with paired `event title` children; preserve former node-comment labels. No sidebar/API widget. |
-| link 12/4 including wrapper: label/icon/local target | URL → href, label → text, icon explicit. Works inside cells/folds/boxes; no remote metadata service. |
-| copy 1/1: fingerprint + prefix | Named text/prefix; exact value only copied, no git-command modes. |
-| emoji 1/1: blobcat party | **Retired by user choice.** No emoji shortcode or blobcat asset/license requirement. |
+Use folding/grid/box containers for structured Markdown; kbd/mark/u/quot for inline
+or standalone labels; native image and timeline/event for their documented uses.
+Quotation attribution remains ordinary Markdown. No emoji shortcode or external
+metadata scraping service is bundled. AnimCube is a site-owned integration.
+[SNIPPETS.md](SNIPPETS.md) defines source inclusion, bounds and full-byte downloads.
 
-[SNIPPETS.md](SNIPPETS.md) is authoritative for C1 scopes/selection/options/full bytes.
-AnimCube stays site-owned P4. D embeds, E references/search and F comments are not C2.
-
-## Native MP4 (P3-D video slice)
+## Native MP4
 
 [VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
 resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
-and file fallback. It composes with the C2 bridge; no player library, autoplay or
-build-time fetch. Other P3-D diagram/badge families remain separate.
+and file fallback. It composes with the container bridge; no player library, autoplay or
+build-time fetch. See DIAGRAMS.md for diagrams and badges.
 
 ## Diagrams and GitHub badges (D)
 
@@ -239,9 +225,9 @@ build-time fetch. Other P3-D diagram/badge families remain separate.
 `badge_github` block leaves. Outermost containers still use `%`, nested leaves `<`.
 The underscore in badge_github is a native shortcode name, not an alternate bridge.
 No full editor, hosted diagram transfer, consent button for the approved automatic
-Shields images, or retired C2 component is added.
+Shields images, or retired container component is added.
 
-## Configured Markdown (P3-F2)
+## Configured Markdown
 
 [CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) defines the shared build-time interpolation
 path for authored text/profile/footer/license/reference/final-text settings, minimal
@@ -249,7 +235,7 @@ site/page title values and the native site-partial extension. Field resolution a
 per-instance context stay unchanged. It does not interpolate ordinary body Markdown,
 shortcode labels, translation strings or every string setting; no full token catalog.
 
-## In-article timeline (P4)
+## In-article timeline
 
 This is an authored **content component**, not the Stellar sidebar timeline/data-service
 widget. It supersedes the earlier retirement of this content tag only. No feed, API,
@@ -276,7 +262,7 @@ An approximate date is valid; labels are not parsed as timestamps.
 ```
 
 - Outermost timeline uses `%`; nested timeline/events and all nested components use
-  `<`, exactly like existing C2 containers. A timeline can itself be inside a fold/cell.
+  `<`, exactly like existing containers. A timeline can itself be inside a fold/cell.
 - `timeline` accepts common optional `class`/`id` only, and requires one or more direct
   `event` children, with whitespace between. Stray prose/leaves diagnose rather than
   disappearing. `event` requires an immediate timeline parent and a nonblank **string**
@@ -315,7 +301,7 @@ highlight without tilt; touch/coarse-pointer/reduced-motion disable pointer moti
 No-JS leaves native usable links and CSS hover/focus feedback. This does not change
 ordinary Markdown links, safe href resolution, card-image source/bytes or icons policy.
 
-## Optional image background (P4 review)
+## Optional image background
 
 Ordinary Markdown images now have **transparent CSS backgrounds by default**. This
 changes theme paint, not pixels or backgrounds inside PNG/JPEG/SVG files. Native
@@ -346,9 +332,9 @@ Use this small shared shortcode only when explicit presentation is useful:
 - Optional `class`/`id` use the existing safe ASCII component token grammar and apply
   to the image. `invert-when-dark`/`invert-when-light` work as for native Markdown images;
   captions do not invert merely because the image does.
-- Standalone `<` notation on its own line; nested `<` in the existing outer-`%` C2
+- Standalone `<` notation on its own line; nested `<` in the existing outer-`%` container
   containers (folds/grids/cells/boxes/timeline events) uses the same safe leaf bridge.
-- Images without `original` remain plain images. D-145 adds the bounded opt-in viewer
+- Images without `original` remain plain images. The bounded opt-in viewer is available
   below; no image editor, gallery, automatic download or remote metadata service. Old
   Stellar `fancybox`/`download` argument aliases are not accepted. Icons-off does not
   hide content images or leave controls blank.
@@ -356,7 +342,7 @@ Use this small shared shortcode only when explicit presentation is useful:
 `python3 tests/check_images.py /absolute/fresh-output-directory` checks native
 resources/captions/nesting/typed-safe inputs without network or consumer edits.
 
-## Thumbnail and original image (P4 review)
+## Thumbnail and original image
 
 ```text
 {{< image src="thumbnail.jpg" original="original.jpg" alt="A useful description" width=320 >}}

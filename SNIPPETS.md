@@ -43,12 +43,6 @@ on its own line with surrounding blank lines:
 - Import dependencies in included code are not discovered, executed or packaged.
   Downloading one Python file does not promise a runnable multi-file program.
 
-Real-site audit: all 791 active calls in the comparable 352-file inventory use
-adjacent Python basenames. Coding `_utils` imports are shared execution dependencies,
-not active shared snippet calls. For a future explicitly shared inclusion, deliberately
-place/mount the approved public utility in `assets/snippets/` and use `scope="shared"`;
-do not widen lookup to the whole source tree.
-
 ## Exact text and line semantics
 
 | Input/option | Result |
@@ -110,7 +104,7 @@ Markdown, alerts, figures, source links and math. Markdown `%` notation sends ge
 HTML into the safe Markdown pass and is unsupported; strict builds reject the omitted
 raw HTML. Do not enable unsafe HTML to force it through.
 
-C2 supports snippets inside block/folding/box/cell containers: outer container `%`,
+container supports snippets inside block/folding/box/cell containers: outer container `%`,
 nested snippet `<`. The original source/resource/selection/highlighting runs unchanged;
 only its trusted generated output crosses a page-local native-node bridge. No source
 is run through Markdown. Native ancestor ordinals give unique nested line-anchor
@@ -118,25 +112,9 @@ prefixes; standalone default prefixes remain unchanged. [COMPONENTS.md](COMPONEN
 defines the complete contract. No filename heading is synthesized.
 
 Native site `layouts/_shortcodes/snippet.html` overrides the theme shortcode. For nested use, preserve its small leaf-bridge wrapper
-as documented in COMPONENTS.md; overriding the renderer partial is another focused option. Both H
-fences and inclusions reuse `layouts/_partials/code-block.html` for the same toolbar,
+as documented in COMPONENTS.md; overriding the renderer partial is another focused option. Both fenced-code blocks and inclusions reuse `layouts/_partials/code-block.html` for the same toolbar,
 copy/toast/manual fallback and scroll presentation. A custom fenced-code hook is still
 independent of the inclusion highlighter; a site partial override can affect both UIs.
 No new registry, dependency, parser import or unsafe setting is required. Bundled docs
-remain default-off. C2 changes the block template format: restart an already-running preview once.
+remain default-off. A preview spanning a template-format change may need one restart.
 No cache deletion or user-server operation is performed by the theme.
-
-## Hexo conversion
-
-```text
-{% snippet solution.py %}
-→ {{< snippet src="solution.py" >}}
-
-{% snippet solution.py "Lookup loop" lang:python from:4 to:8 %}
-→ {{< snippet src="solution.py" title="Lookup loop" lang="python" from=4 to=8 >}}
-```
-
-Keep the file in the page bundle. Review any explicit old bounds: the old plugin used
-an end index/default `-1` and trimmed text; do **not** reproduce that trailing-content
-loss. No active from/to use was found in the bounded source audit. Full real-site
-conversion is P4, not performed by this feature.

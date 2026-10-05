@@ -1,6 +1,6 @@
 # Native page trees and opt-in theme documentation
 
-This guide describes the implemented P2-W behavior retained by the capability-first P2-M model.
+This guide describes Sidera's capability-based page trees.
 A page tree is not restricted to a docs preset. Native branch Pages can have bodies and children;
 native leaf bundles remain leaves. The same shared reading renderer handles regular pages and
 children-mode sections, including native authors/taxonomies, local resources and TOC.
@@ -87,14 +87,14 @@ Filename-translated authored sample nodes are supported within the tested mount 
 not a universal arbitrary-contentDir/mount/source inventory guarantee for contextual taxonomies.
 The separately bundled **docs preset term** is always available and is not this opt-in sample.
 
-The retained showcase P2-W suite verifies exact order/tree/pagers/body, resources/links, default-off,
+The page-tree test suite verifies exact order/tree/pagers/body, resources/links, default-off,
 explicit-on, alternate prefix, native overrides, structural rejection and EN/ZH behavior.
 
-P2-G renders immediate children with the same optional-cover/term/date card as other lists.
+Sidera renders immediate children with the same optional-cover/term/date card as other lists.
 The article footer follows canonical body content and stays absent on later child-list pagers.
 No tree/order/mount or source-ownership behavior changes.
 
-P2-GR places the existing native ancestor trail inside the shared article banner rather
+Sidera places the existing native ancestor trail inside the shared article banner rather
 than stacking a second owner bar above it. Parent links and native complete tree/order
 semantics remain. Narrow page-tree/TOC regions use the same progressive native drawers
 as other pages, with open in-flow fallback when JS/Popover support is absent.

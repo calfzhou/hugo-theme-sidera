@@ -1,9 +1,8 @@
 # Sidera content and configuration contract
 
-Implemented P2-M model on Hugo **0.166.0**. This is an independent Hugo theme, not a
-Stellar configuration port. P2-G adds reusable component styling and configurable footers;
-P2-GR corrects whole-site/non-content composition against Stellar. Ordinary Markdown is refined in P2-H (see README); unverified homepage capabilities remain
-for the post-P3 integrated review, not this body-only checkpoint.
+Sidera uses Hugo **0.166.0** native content and configuration. It is an independent
+Hugo theme with reusable components, native taxonomies and configurable regions,
+not a Stellar configuration port.
 No Hexo, Node runtime, downloaded dependency, duplicated source repo or Go-module switch is
 required to build. Showcase tests use Python stdlib; browser tests use its pinned Node/Chrome.
 
@@ -223,7 +222,7 @@ All these are under **`params`**, not `params.sidera`. Grouping is retained wher
 Fixed components: social, collection-nav, menu, collections, taxonomies, **page-tree**, site-taxonomies, toc,
 recent, profile, text, links. A page tree is available irrespective of preset/list mode.
 In recursive list mode, native non-section storage folders may flatten into their parent tree;
-children-mode document trees retain the P2-W explicit intermediate-branch/order checks.
+children-mode document trees retain explicit intermediate-branch/order checks.
 Unknown components/options/malformed fields diagnose; repeated component instances are allowed. Icon names come from the merged theme/site YAML registry (ICONS.md), not a closed
 enum; custom preset names are never required icon/i18n values.
 
@@ -231,7 +230,7 @@ Native assignments are `tags`, `categories`, `authors`, `series`, `preset` at to
 Authors support multiple ordered identities. Series accepts one distinct native term per page;
 its global union and independent section-scoped sequence coexist. See TAXONOMIES.md.
 
-## Presets and migration
+## Presets and generated metadata
 
 The theme's native per-language adapter supplies real blog/notes/docs term Pages from one
 bundled data source, with native site-over-theme replacement. Site-authored same-path term files
@@ -239,11 +238,10 @@ replace the whole definition, not an implicit deep merge. Term titles/body are o
 content; bundled labels use native EN/ZH i18n. No need to re-register presets in the showcase.
 [PRESETS.md](PRESETS.md) explains overriding/adding a term and the bundled defaults.
 
-Pre-release migration is direct: collection markers become native preset plus explicit scope_root
-where independent nesting is intended; public params lose the blanket wrapper; article defaults
-move from owner metadata to native cascade when needed. Root-only values remain root-only. Existing
-notebook/wiki enum aliases are not a compatibility layer—author native notes/docs/custom terms.
-The old docs-tree component is now page-tree. No real-site content was converted.
+Use native preset terms for section defaults, local scope_root for independent nested
+roots, and native cascade for descendant defaults. Root-only values remain root-only.
+The generic document-tree component is page-tree. Do not wrap public settings inside
+params.sidera or cascade structural root metadata.
 
 Only generated internals remain under `params.sidera`: tag_view, tag_key, tag_slug, tag_taxonomy,
 inferred_term, term_key. Do not author them; unrelated user namespaces/params are not banned.
@@ -263,10 +261,10 @@ are validated independently of preset labels. Do not silently broaden those veri
 into a promise about an arbitrary site. Native term URL remapping/language/subpath behavior is tested.
 
 Draft is not a structural-validation exemption. Raw local scalar/cardinality/route checks cover
-excluded source; references/parent-local document rules additionally require the documented native
-all-states validation build for unreferenced excluded content, as in P2-W. Fresh successful builds
-into new destinations remain authoritative; watcher defects and harmless empty inferred term routes
-retain D-010's migration tolerance, not production privacy approval. No failed build is publishable.
+unpublished but included source; references/parent-local document rules additionally require the documented native
+all-states validation build for unreferenced excluded content. Fresh successful builds
+into new destinations remain authoritative; a watcher result or an empty inferred term route
+is not evidence of publication privacy. No failed build is publishable.
 
 ```sh
 mkdir -p .checks
@@ -278,8 +276,8 @@ hugo --buildDrafts --buildFuture --buildExpired --destination "$run/all-states" 
 
 Bundled actual docs remain outside default content and need explicit mounts (DOCS.md); preset
 metadata never enables them. Standalone reading/shell, localization, dark/light/auto behavior,
-local resources and safety remain intact. P3-A adds the [source-link contract](LINKS.md); no later P3 service/renderers, full browser/accessibility
-certification, distribution license grant or P2 visual completion is implied.
+local resources and safety remain intact. The [source-link contract](LINKS.md) defines exact resolution and validation.
+No full browser/accessibility certification or distribution license grant is implied.
 
 ## Component instances
 
@@ -332,22 +330,22 @@ page/native-cascade → preset → language/site → minimal-default resolution.
 opts out; `.no-caption` suppresses a single image. The default/preset validator and
 local excluded-draft/cascade checks include it. Native field placement stays native.
 
-Outer containers use Markdown notation; nested C2 containers/components use standard
+Outer containers use Markdown notation; nested containers/components use standard
 notation with a bounded native-node bridge. Safe class/ID tokens and ordinary native
 TOC/link rendering remain; see COMPONENTS.md. Raw HTML is not enabled.
-Theme docs remain opt-in; C–F and combined final review remain separate.
+Theme documentation remains opt-in.
 
-## Code-file inclusion (C1)
+## Code-file inclusion
 
 [SNIPPETS.md](SNIPPETS.md) defines the standard-notation `snippet` shortcode, exact
 inclusive selection, text/UTF-8 policy, native page resources and the explicit shared
 `assets/snippets/` namespace. Full downloads retain original bytes; browser highlighting
 normalizes CRLF while mocked/real Clipboard API inputs preserve selected source text.
 H and snippets share one code UI. No arbitrary filesystem/network access or execution,
-or new configuration import. C2 adds supported container composition without widening
+or new configuration import. container adds supported container composition without widening
 resource access.
 
-## Content components (C2)
+## Content components (container)
 
 [COMPONENTS.md](COMPONENTS.md) is the authoritative typed-argument/conversion guide
 for kbd/mark/u, standout quot, link cards and copy text. These standard-notation
@@ -356,23 +354,23 @@ Attribution uses ordinary Markdown, not a dedicated shortcode. Emoji, timeline a
 image components are retired by user choice; existing Markdown images remain intact.
 No new config import, library, renderer safety exception or params wrapper is added.
 
-## Native MP4 (P3-D video slice)
+## Native MP4
 
 [VIDEO.md](VIDEO.md) defines `{{< video src="clip.mp4" width=480 >}}`: exact local
 resource or authored HTTP(S) MP4, explicit loading, native controls, localized states
-and file fallback. It composes with the C2 bridge; no player library, autoplay or
-build-time fetch. Other P3-D diagram/badge families remain separate.
+and file fallback. It composes with the container bridge; no player library, autoplay or
+build-time fetch. See DIAGRAMS.md for diagrams and badges.
 
-## Diagrams and used badges (P3-D)
+## Diagrams and used badges
 
 [DIAGRAMS.md](DIAGRAMS.md) is authoritative for ordinary Mermaid fences, local
 single-page drawio resources/viewing/source downloads, automatically loaded Shields
-badges, and native C2 composition. Pinned local renderers are isolated and shared per
+badges, and native container composition. Pinned local renderers are isolated and shared per
 page; no Node runtime, remote diagram service, editor or unsafe Markdown setting.
 Conditional Content/Summary assets, supported input limits and honest source-only
 fallbacks are explicit. Video remains documented separately in VIDEO.md.
 
-### P3-E discovery controls
+### Discovery controls
 
 `search`, `search_index` and `link_graph` are public boolean params (all true by default),
 using the normal native/cascade/preset/site precedence and typed validation. Article footer
@@ -382,7 +380,7 @@ opt-outs replace publication security. Default-on indexing never overrides nativ
 future, expiry, headless, list or actual body-render eligibility.
 
 
-## Giscus comments (P3-F1)
+## Giscus comments
 
 `params.comments` is an inheritable boolean, default false, independent of preset.
 The canonical article-end slot renders comments before the final `article_end_text`,
@@ -392,14 +390,14 @@ overrides are documented in [COMMENTS.md](COMMENTS.md), with exact setup, mappin
 privacy, loading, locale/palette and failure boundaries. No production IDs belong in
 the theme. This supersedes earlier future-comment-slot statements.
 
-F1 review refinement: configured comments load automatically when the section becomes
+Loading behavior: configured comments load automatically when the section becomes
 visible (immediate fallback without IntersectionObserver). The TOC adds a native
 **Join the discussion** action beneath Back to top only for an actual comment slot.
 No descriptive normal-state copy/manual button/separate GitHub link; concise failure
 and no-JS messages remain. Site-wide `comments=true` can enable all eligible pages,
 while page/cascade/preset false still opts out. See COMMENTS.md for privacy/lifecycle.
 
-## Configured Markdown (P3-F2)
+## Configured Markdown
 
 [CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) defines the shared build-time interpolation
 path for authored text/profile/footer/license/reference/final-text settings, minimal
