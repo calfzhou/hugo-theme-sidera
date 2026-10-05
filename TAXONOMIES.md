@@ -55,7 +55,7 @@ direct/descendant assignments, deduplicated before counts/sorting/pagination. Fl
 assignments: `science/quantum` is one term. Native parent term `.Pages` can contain descendants and
 duplicates in Hugo 0.166, so the shared model does not treat it as exact flat membership.
 
-Inferred unused parent routes may remain empty (D-010). Explicitly authored empty global terms
+Inferred unused parent routes may remain empty. Explicitly authored empty global terms
 are valid. Global and scoped tag/category indexes show the complete vocabulary without pagination:
 all root terms and their children in hierarchy mode, all direct terms in flat mode.
 `taxonomy_page_size` still controls global term article results and other taxonomy
@@ -77,7 +77,7 @@ is ordinary valid data, not a reason to prefix keys or reject the content.
 
 Series always use oldest PublishDate first, undated last, then stable Title/Path ties. The former
 optional weight mode is removed: omit params.series_order (recommended) or use publication;
-weight/other values fail with a migration diagnostic. Native series_weight may remain metadata
+weight/other values fail validation. Native series_weight may remain metadata
 but never changes the sequence. Pins, Lastmod, primary_date and main-list order do not reorder it.
 Global series term results also sort the complete union by publication date without pins; articles
 with an owner still use only that owner's subset for their positions and reading navigation.
@@ -97,13 +97,51 @@ changed display title. Native term `:slug` defaults also preserve adapter-provid
 slugs. Contextual views reuse shared native metadata rather than inventing another per-scope
 identity/metadata registry. Native term UI params do not become member defaults; only preset defaults do.
 
-Local literal TOML/YAML source discovery generates the required contextual and inferred routes.
-Actual native published Pages determine membership. Both scalar/array authors/series and the
-supported raw metadata validation are covered; invalid drafts are not exempt. Native all-states
-validation still matters for excluded Page/reference/default checks. Shared-directory filename
-translations and root/subpath routes are tested. Broader arbitrary mounts/generated/computed or
-cascaded vocabulary/custom taxonomy source trees are not universal discovery support; validate
-such source layouts explicitly before production use. This is not a new limitation on native Hugo.
+Literal TOML/YAML source discovery generates contextual and inferred routes from
+Hugo's **mounted content filesystem**, with Hugo's native source-ignore policy.
+Native `ignoreFiles`, content mount `files` inclusions/exclusions and default ignored
+editor filenames apply before scope discovery, front-matter inspection or authored
+term override detection. Excluded sources cannot create empty taxonomy/collection
+routes or shadow an inferred term. Directories without included Markdown do not
+become collections merely because support files exist on disk.
+
+Use the site's native Hugo configuration, not a separate Sidera exclusion setting:
+
+```toml
+ignoreFiles = ['(^|/)(_templates|_utils)(/|$)', '(^|/)editor-report\.md$']
+```
+
+Alternatively, filter the content mount itself:
+
+```toml
+[[module.mounts]]
+source = 'content'
+target = 'content'
+files = ['! _templates{,/**}', '! **/_utils{,/**}']
+```
+
+Mount globs are path-sensitive: a root path and a nested path are not interchangeable.
+Use `{,/**}` to exclude a directory itself and its descendants. Native exclusions are
+not secrecy for files already committed to Git, nor authorization to mount private
+content as static assets or shared snippets.
+
+**Draft/future/expired is not source exclusion.** Included Markdown still receives
+structural metadata validation even when not currently published. Native published
+Pages determine memberships and search/graph bodies. Leaf bundle Markdown resources
+remain resources; shared-directory filename translations retain their existing
+selection rules. No source content or generated code is executed.
+
+The adapter's early filesystem bridge is tested with **Hugo 0.166.0**; it uses the
+adapter Site's content filesystem and SourceSpec, not the wrapped rendering Site.
+These Go-backed adapter members are version-sensitive, so rerun the native regression
+when upgrading Hugo. No config-file parser, duplicated ignore rules, environment
+reader or dependency installation is involved. Arbitrary computed/cascaded vocabulary,
+custom source trees or multidimensional mounts still require explicit validation;
+this does not promise every native Hugo content organization as discovered vocabulary.
+
+Run `python3 tests/check_content_exclusions.py /absolute/fresh-output-directory`
+for native ignore/mount/config-overlay/environment, HTML/plain Markdown/resource,
+multilingual, symlink, inferred-term and included-invalid-content coverage.
 
 Structural source/route namespaces, malformed paths, Unicode slug conflicts, aliases/static
 collisions and private generated metadata remain guarded. Tags/categories use the documented
@@ -111,12 +149,12 @@ flat string-array input; nested arrays are not a native hierarchy API. Author/se
 flat identities; they do not activate slash hierarchy. All labels are escaped; body/credit content
 uses native Markdown/plain text; theme-owned copy stays EN/ZH, with no client-side membership engine.
 
-P2-G changes presentation only: article term badges live in the selected footer by default
+Article term badges live in the selected footer by default
 (optional duplicate header), cards reuse normalized direct assignments, ordered authors may
 also be selected as closing attribution, and the existing scoped series sequence appears
 in the article footer. Hiding/reordering a display item never changes native membership.
 
-P2-GR presentation uses Stellar-style compact tag chips for flat global tags and quiet
+Presentation uses Stellar-style compact tag chips for flat global tags and quiet
 directory rows for categories/hierarchical indexes. Full native counts and nested links
 remain; pagination applies to article results, not tag/category vocabulary indexes. Contextual result headers consolidate global/scoped links and show
 the full count once in the list metadata; authors/series breadcrumbs use native display

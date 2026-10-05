@@ -6,7 +6,7 @@
 {{- $leaf := false -}}
 {{- $languages := slice -}}
 {{- range hugo.Sites -}}{{- $languages = $languages | append .Language.Name -}}{{- end -}}
-{{- range os.ReadDir . -}}
+{{- range . -}}
   {{- if and (not .IsDir) (strings.HasSuffix .Name ".md") -}}
     {{- $stem := strings.TrimSuffix ".md" .Name -}}
     {{- $suffix := strings.TrimPrefix "." (path.Ext $stem) -}}
@@ -16,7 +16,7 @@
     {{- if eq $name "index.md" -}}{{- $leaf = true -}}{{- end -}}
     {{- if or (and $explicit (eq $suffix site.Language.Name)) (and (not $explicit) site.Language.IsDefault) -}}
       {{- if or $explicit (not (isset $files $name)) -}}
-        {{- $files = merge $files (dict $name .Name) -}}
+        {{- $files = merge $files (dict $name .Meta.Filename) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

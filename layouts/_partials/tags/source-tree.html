@@ -1,0 +1,24 @@
+{{- /* Use Hugo's mounted content filesystem and native source-ignore policy.
+       The adapter passes these before page collections are ready. Do not cache
+       across builds: exclusions and filesystem entries can change in preview. */ -}}
+{{- $context := .context -}}{{- $dir := .dir -}}
+{{- $handle := $context.fs.Open $dir -}}
+{{- $entries := slice -}}
+{{- range $handle.ReadDir -1 -}}
+  {{- if not ($context.source.IgnoreFile .Meta.Filename) -}}
+    {{- $entries = $entries | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $closed := $handle.Close -}}
+{{- $local := partial "tags/files.html" $entries -}}
+{{- $children := dict -}}
+{{- if not $local.leaf -}}
+  {{- range $entries -}}
+    {{- if .IsDir -}}
+      {{- $path := path.Join $dir .Name -}}
+      {{- $child := partial "tags/source-tree.html" (dict "context" $context "dir" $path) -}}
+      {{- if $child.hasContent -}}{{- $children = merge $children (dict .Name $child) -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "dir" $dir "entries" $entries "local" $local "children" $children "hasContent" (or (gt (len $local.files) 0) (gt (len $children) 0))) -}}
