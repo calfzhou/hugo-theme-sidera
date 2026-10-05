@@ -9,7 +9,7 @@ def write(name,text):
  p=SITE/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
 write('hugo.toml',f'''baseURL='https://example.org/'
 title='Icon checks'
-theme='sidera'
+theme='{THEME.name}'
 themesDir={json.dumps(str(THEME.parent))}
 [taxonomies]
 _merge='shallow'
