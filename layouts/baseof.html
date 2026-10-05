@@ -42,7 +42,8 @@
   {{ end }}
   <meta name="referrer" content="strict-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="sidera:icon-attribution" content="Solar icons by 480 Design; maintained extensions by Hakim Saoudi · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/saoudi-h/solar-icons · normalized currentColor and sizing; per-key provenance in icon_sources.yaml; accepted Stellar 1.44.0 shields/ornaments retained">
+  {{ with resources.Get "licenses/sidera-mit.txt" }}<link rel="license" href="{{ .RelPermalink }}">{{ end }}
+  <meta name="sidera:icon-attribution" content="Solar subset by 480 Design; maintained extensions by Hakim Saoudi · CC BY 4.0 · https://creativecommons.org/licenses/by/4.0/ · https://github.com/saoudi-h/solar-icons · normalized currentColor and sizing; per-key provenance in icon_sources.yaml; accepted Stellar 1.44.0 shields/ornaments retained; four original Sidera Parallax derivatives by Eureka, copyright 2026 Calf, MIT">
   {{ $notices := resources.Get "licenses/sidera-third-party.txt" }}
   <link rel="license" href="{{ $notices.RelPermalink }}">
   <meta name="color-scheme" content="light dark">

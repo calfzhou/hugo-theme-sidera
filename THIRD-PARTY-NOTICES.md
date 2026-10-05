@@ -1,5 +1,10 @@
 # Third-party notices
 
+Original Sidera code, documentation and Parallax artwork are licensed under the
+MIT license in LICENSE, copyright (c) 2026 Calf. The following third-party material
+retains its own terms and attribution. A consuming site owns its content license.
+
+
 Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
 hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers, pagination and toast. Site notification motion also follows
 Stellar main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.ejs and bread-nav.styl; Sidera uses plain-text messages instead of upstream innerHTML.
@@ -21,8 +26,8 @@ source/js/plugins/copycode.js, with native buttons, localized failure text and m
 Goldmark/Chroma structure replaces Hexo markup; readable palette tokens and keyboard
 scrollbars are retained rather than copying hidden scrollbars or low-contrast colors.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
-This notice applies to those adaptations; it does not grant a distribution license
-for the rest of Sidera or site content. No reading/UI fonts are bundled; matched KaTeX math fonts are documented below. The small local icon subset below has a separate license.
+This upstream notice applies to those adaptations; original Sidera material is
+covered separately by LICENSE, and site content retains its own rights. No reading/UI fonts are bundled; matched KaTeX math fonts are documented below. The small local icon subset below has a separate license.
 
 MIT License
 
@@ -49,7 +54,7 @@ SOFTWARE.
 
 ## Solar icons — 480 Design and maintained extensions (CC BY 4.0)
 
-The **44 named inline SVG entries** in `data/sidera/icons.yaml` use Solar Icons.
+The **45 Solar inline SVG entries** in `data/sidera/icons.yaml` use Solar Icons.
 Original artwork: **480 Design**, [Solar Icon Set](https://github.com/480-Design/Solar-Icon-Set),
 [original Figma set](https://www.figma.com/community/file/1166831539721848736).
 License: [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
@@ -62,20 +67,20 @@ is attributed in that repository to **Hakim Saoudi** as maintained extensions.
 Those entries retain the same declared CC BY 4.0 terms; package-code MIT is not
 misrepresented as the artwork license.
 
-`data/sidera/icon_sources.yaml` maps every **Sidera-owned semantic key** to the
+`data/sidera/icon_sources.yaml` maps every **Solar-derived semantic key** to the
 exact Solar name/style, origin/revision/path, author/license, normalized SHA-256
 and (for new selections) original source-file hash. Normalization removes intrinsic
 SVG size, converts fixed source paint to currentColor, retains geometry/stroke/
 duotone opacity, and adds decorative accessibility attributes only at rendering.
 
-The accepted shield-user/check/up/warning and story double arrows preserve their
+The shield-user/check/up/warning and story double arrows preserve their
 exact geometry from Stellar **1.44.0 / 1f4cb4bc**, `_data/icons.yml`, rather than
 silently exchanging them for a newer maintained rendition. All other built-in UI
 artwork, including search, sharing, drawers and diagram operations, now uses the
 registry. Site-provided replacements are the site's responsibility and cannot
-claim the replaced entry's provenance automatically. See ICONS.md for the bounded
-custom SVG format and complete Sidera/Solar mapping. No package, font, CDN or client
-icon loader is required. This attribution does not grant a Sidera project license.
+claim the replaced entry's provenance automatically. See docs/content/customize/icons.md for the bounded
+custom SVG format and data/sidera/icon_sources.yaml for the per-key mapping. No package, font, CDN or client
+icon loader is required. Original Sidera material is covered separately by LICENSE.
 
 ### Historical Stellar drawer attribution retained
 
@@ -120,13 +125,13 @@ SOFTWARE.
 Source: https://registry.npmjs.org/katex/-/katex-0.18.4.tgz (KaTeX npm package).
 Retrieved using `npm pack katex@0.18.4 --ignore-scripts`; no install or lifecycle
 script. `provenance.json` records npm SHA-512 integrity, archive SHA-256 and every
-copied file's SHA-256. The focused B test verifies those hashes and CSS font paths.
+copied file's SHA-256. The asset checks verify those hashes and CSS font paths.
 
 Hugo embeds the build-time KaTeX renderer; these assets only style its HTML+MathML
 output. Publish them conditionally with matching native resources, including LICENSE;
 no CDN, client renderer, remotely fetched font, or runtime Node dependency is needed.
 A later Hugo/KaTeX upgrade must review the renderer/assets together, not silently
-mix versions. This upstream permission is not a Sidera distribution-license grant.
+mix versions. Original Sidera licensing is specified separately in LICENSE.
 
 The MIT License (MIT)
 
@@ -181,14 +186,14 @@ pako (MIT/Zlib), Lodash and Cytoscape-related MIT notices. Additional full licen
 for the explicitly identified bundled DOMPurify versions 3.4.12/3.4.15, pako 2.2.0
 and lodash-es 4.18.1 were extracted from their exact npm packages (ignore-scripts,
 no installation); source/archive integrity is recorded alongside each copied file.
-These preserve upstream obligations, not a Sidera distribution license grant or a
-complete legal certification of every upstream bundled dependency.
+These preserve upstream obligations independently of Sidera’s LICENSE; they are not
+a complete legal certification of every upstream bundled dependency.
 
 Both vendored bundles remain byte-identical; Sidera's controller/setup/sandbox code
 is separate. No CDNs or fonts load for diagrams. Actual diagram pages publish the
 relevant original licenses as native resources. The opaque sandbox intentionally
 blocks unused networking/eval/editing; its output becomes an inert SVG image. See
-DIAGRAMS.md for the exact feature, security, source-only fallback and CSP boundaries.
+docs/content/authoring/diagrams.md for the exact feature, security, source-only fallback and CSP boundaries.
 
 ### Search presentation and journey
 
@@ -200,8 +205,8 @@ The existing Stellar MIT license above applies to these adaptations (copyright 2
 Sidera's native eligibility/graph generation, shared text model and bounded literal DOM
 matching are separately implemented, without copying query-as-HTML or raw-source filters.
 The search magnifier and result/external/close glyphs now use the Solar registry
-credited above; no separately authored runtime UI geometry remains.
-No search dependency, remote backend, CDN or distribution-license decision is introduced.
+credited above; original Sidera logo derivatives are attributed separately below.
+No search dependency, remote backend or CDN is introduced.
 
 Search's animated rainbow also follows Stellar 1.44.0 `_config.yml`'s
 `style.gradient.searchbar` and `search.styl`'s 20-second background-position motion;
@@ -213,17 +218,21 @@ Sidera adds inactive pause and reduced-motion handling under the same retained M
 byte-identical copies of Eureka's directly authored fixed-color Parallax B,
 selected by the user on 2026-09-30. The 32px
 PNG is a direct librsvg rendition of the square SVG. There is no third-party logo,
-font outline, raster trace or external icon provenance for this mark. See IDENTITY.md
-for exact source hashes, native usage, reproduction and accepted visual limits.
-Originality/provenance does not assert a license grant or trademark clearance.
+font outline, raster trace or external icon provenance for this mark. See docs/content/customize/_index.md
+for native usage and visual limits; original icon records retain source hashes.
+Original Parallax artwork is covered by Sidera’s MIT LICENSE. No trademark clearance
+is asserted. The four sidera-bold, sidera-bold-duotone, sidera-linear and
+sidera-line-duotone entries are original derivatives of this mark in Solar-like
+styles, not upstream Solar icons. Eureka authored the geometry; copyright 2026 Calf.
+Their per-key records use original-design provenance, not fabricated Solar paths.
 
 ## Notice delivery
 
 This document is also copied verbatim to `assets/licenses/sidera-third-party.txt`,
 which the shared head publishes as a native local resource linked with `rel=license`.
-The showcase validator checks equality so the rendered-site notice cannot silently
+The native manual validator checks equality so the rendered-site notice cannot silently
 drift. This preserves the existing third-party terms in static output even when
-Hugo minification removes CSS comments; it does not license Sidera or site content.
+Hugo minification removes CSS comments; it does not replace LICENSE or license site content.
 Keep both copies synchronized when updating notices. Vendor-specific license files
 continue to publish with their conditional math/diagram resources.
 
