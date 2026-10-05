@@ -55,6 +55,7 @@
   <script src="{{ $notifications.RelPermalink }}" integrity="{{ $notifications.Data.Integrity }}" defer></script>
   {{ $js := resources.Get "js/navigation.js" | minify | fingerprint }}
   <script data-sidera-navigation data-site-url="{{ site.BaseURL }}" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{ partial "sidera/page-reveal.html" site }}
   {{ $share := resources.Get "js/share.js" | minify | fingerprint }}
   <script src="{{ $share.RelPermalink }}" integrity="{{ $share.Data.Integrity }}" defer></script>
   {{ partial "sidera/head-extra.html" (dict "Page" . "Owner" (partial "collection-owner.html" .) "Region" "head" "Settings" (partialCached "sidera/settings.html" . .Language.Lang .Path)) }}

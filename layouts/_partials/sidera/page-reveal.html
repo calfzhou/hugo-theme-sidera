@@ -1,0 +1,11 @@
+{{- /* Page-entry motion is site/language policy, independent of content presets. */ -}}
+{{- $enabled := true -}}
+{{- if isset .Params "page_reveal" -}}
+  {{- if ne (printf "%T" .Params.page_reveal) "bool" -}}
+    {{- errorf "Sidera site/language params.page_reveal must be boolean" -}}
+  {{- else -}}{{- $enabled = .Params.page_reveal -}}{{- end -}}
+{{- end -}}
+{{- if $enabled -}}
+  {{- $script := resources.Get "js/page-reveal.js" | minify | fingerprint -}}
+<script data-sidera-page-reveal src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}" defer></script>
+{{- end -}}

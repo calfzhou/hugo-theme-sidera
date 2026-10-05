@@ -85,6 +85,13 @@ repository/category identity before enabling them. Remote images, badges, fonts,
 video and comment providers retain the network policies documented in their guides.
 No site token belongs in public configuration.
 
+## Page-entry motion
+
+A short staggered fade/slide is enabled by default for initially visible cards and
+major regions. Set site/language `params.page_reveal = false` to opt out. Reduced
+motion, anchor/history navigation and no-JS retain immediate readable content.
+See [SHELL.md](SHELL.md#page-entry-reveal) for scope, timing and safety.
+
 ## Not-found page
 
 The native `404.html` uses a local Solar warning visual, localized recovery text and

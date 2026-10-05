@@ -279,6 +279,14 @@ metadata never enables them. Standalone reading/shell, localization, dark/light/
 local resources and safety remain intact. The [source-link contract](LINKS.md) defines exact resolution and validation.
 No full browser/accessibility certification or distribution license grant is implied.
 
+## Page-entry motion policy
+
+Site/language `params.page_reveal` is a boolean, default **true**. Explicit false
+omits the local controller. It is independent of presets, scopes and content state;
+do not author it on pages or in cascades/preset defaults. See
+[SHELL.md](SHELL.md#page-entry-reveal) for the bounded sequence and reduced-motion,
+focus, history, anchor and no-JS behavior. It never changes publication or layout.
+
 ## Component instances
 
 All six configurable regions accept component/widget names, `{component: name, config: {...}}`

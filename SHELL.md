@@ -1070,3 +1070,29 @@ one universal sidebar or change nested-root/publication boundaries. Native page 
 configuration dependencies govern rebuild invalidation; no persistent disk cache or
 new setting is required. Live-rebuild tests cover dates, cascaded counts, ownership,
 new pages and publication exclusions.
+
+
+## Page-entry reveal
+
+Page-entry motion is **on by default**. Set site/language `params.page_reveal=false`
+to omit its local script; the value must be boolean. This is not a page/cascade or
+preset setting. No site-specific override is required to inherit the default.
+
+On a normal top-of-page load, initially visible cards, sidebar blocks and major
+article regions fade in while moving upward 8px. Each column sequences independently
+from top to bottom: 100ms staggering, capped at 300ms, with a 1000ms ease-out animation.
+The article body is one region, never a sequence of individual paragraphs. Lower,
+clipped or closed-drawer content stays visible normally when reached; this is a
+page-entry effect, not a scroll-triggered reveal or a delayed content loader.
+
+Native Web Animations use opacity and the independent translate property, leaving
+layout positions and existing hover transforms unchanged. Content is never hidden
+in source markup or CSS. No JavaScript, a blocked/missing script, unsupported animation,
+or an initialization failure leaves normal visible content. There is no CDN library,
+watchdog, scroll observer, body re-render or provider dependency.
+
+Reduced-motion preference skips the effect; changing that preference cancels active
+animations. Focus interaction also cancels motion so focused links remain visible.
+Hash destinations, restored nonzero scroll positions and back/forward navigation
+skip the sequence. Pagehide cancels it, and BFCache restoration does not replay it.
+No timing controls or per-element authoring flags are needed.
