@@ -89,6 +89,8 @@ def main():
                     ids={a.get('id') for _,a in DOM(dest.read_text()).nodes}
                     assert unquote(url.fragment) in ids,(route,target,'missing anchor')
         root=(out/('/'.join(x for x in [language,prefix] if x))/'index.html').read_text()
+        root_hrefs={a.get('href') for tag,a in DOM(root).nodes if tag=='a'}
+        assert 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0' in root_hrefs and 'https://xaoxuu.com/' in root_hrefs
         assert probe(root)['logo']=='images/sidera-parallax-circle.svg'
         assert probe(root)['order']==['getting-started','organize','customize','authoring','reader','publishing']
         # Full six-child order in native immediate cards, not an assumed title sort.
@@ -109,7 +111,7 @@ def main():
             assert any(a.get('rel')=='license' and a.get('href','').endswith('/'+asset) for _,a in DOM(root).nodes)
         # README/agent/old root guidance are not published as source content.
         assert any(a.get('src','').endswith('/images/sidera-parallax-circle.svg') and a.get('alt')=='' for _,a in DOM((out/(language+'/' if language else '')/'index.html').read_text()).nodes)
-        assert not any(p.name in ('AGENTS.md','README.md','CONTRACT.md') for p in out.rglob('*'))
+        assert not any(p.name in {doc.name for doc in THEME.glob('*.md')} for p in out.rglob('*'))
     on=build('baseline',mounts('manual'));verify(on,'manual')
     global_comments=build('global-comments', '[params]\ncomments=true\n'+mounts('manual')); verify(global_comments,'manual')
     assert probe((global_comments/'notes/hello/index.html').read_text())['comments'] is True

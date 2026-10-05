@@ -6,8 +6,8 @@ retains its own terms and attribution. A consuming site owns its content license
 
 
 Component CSS in assets/css/sidera.css adapts layout, palette, banner, identity and component rules from
-hexo-theme-stellar 1.44.0 (1f4cb4bc): collection, list, sidebar, widgets, footers, pagination and toast. Site notification motion also follows
-Stellar main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.ejs and bread-nav.styl; Sidera uses plain-text messages instead of upstream innerHTML.
+[hexo-theme-stellar 1.44.0][stellar-144] (1f4cb4bc): collection, list, sidebar, widgets, footers, pagination and toast. Site notification motion also follows
+[Stellar][stellar] main.js hud.toast/theme.js; article-date reveal follows navbar/dateinfo.ejs and bread-nav.styl; Sidera uses plain-text messages instead of upstream innerHTML.
 Pinned collection tabs also adapt navbar.styl and the bar-glass/newblur mixins in _defines/func.styl; geometry tracking follows main.js navbarPin.
 Reading navigation follows the read-next block in partial/related.styl.
 Article pills also follow article-tags.styl and the tag-chip mixin in _defines/func.styl.
@@ -74,7 +74,7 @@ SVG size, converts fixed source paint to currentColor, retains geometry/stroke/
 duotone opacity, and adds decorative accessibility attributes only at rendering.
 
 The shield-user/check/up/warning and story double arrows preserve their
-exact geometry from Stellar **1.44.0 / 1f4cb4bc**, `_data/icons.yml`, rather than
+exact geometry from [Stellar][stellar] **1.44.0 / 1f4cb4bc**, `_data/icons.yml`, rather than
 silently exchanging them for a newer maintained rendition. All other built-in UI
 artwork, including search, sharing, drawers and diagram operations, now uses the
 registry. Site-provided replacements are the site's responsibility and cannot
@@ -82,17 +82,17 @@ claim the replaced entry's provenance automatically. See docs/content/customize/
 custom SVG format and data/sidera/icon_sources.yaml for the per-key mapping. No package, font, CDN or client
 icon loader is required. Original Sidera material is covered separately by LICENSE.
 
-### Historical Stellar drawer attribution retained
+### Historical [Stellar][stellar] drawer attribution retained
 
 The earlier default:leftbar/default:rightbar custom artwork was adapted under
-Stellar's MIT notice above. It is superseded at runtime by Solar panel/list icons;
+[Stellar][stellar]'s MIT notice above. It is superseded at runtime by Solar panel/list icons;
 the historical credit is retained, not a claim that these custom paths still ship.
 Earlier handmade home/link/share/search and diagram SVGs are likewise no longer
 runtime UI artwork. Reference/history files are not removed by this integration.
 
 ## React Bits
 
-The card hover spotlight in Sidera CSS/navigation.js adapts Stellar’s card-hover
+The card hover spotlight in Sidera CSS/navigation.js adapts [Stellar][stellar]’s card-hover
 implementation, which in turn adapts Spotlight Card in
 [React Bits](https://github.com/DavidHDev/react-bits).
 
@@ -157,9 +157,9 @@ SOFTWARE.
 
 ## Used content components (container)
 
-The content primitive CSS also adapts Stellar 1.44.0
+The content primitive CSS also adapts [Stellar 1.44.0][stellar-144]
 `source/css/_components/tag-plugins/{inline-labels,mark,quot,link,copy,folding,grid,note}.styl`,
-covered by the xaoxuu MIT notice above. Native shortcodes, typed arguments and the
+covered by the [xaoxuu][xaoxuu] MIT notice above. Native shortcodes, typed arguments and the
 existing Sidera Clipboard handler replace Hexo tags/browser onclick strings.
 Quote ornaments are typographic characters, not copied icon paths. No new third-party
 sticker/font/icon package was added. The emoji shortcode and blobcat requirement
@@ -199,16 +199,16 @@ docs/content/authoring/diagrams.md for the exact feature, security, source-only 
 
 The inline sidebar search layout, widget replacement while searching, title-above-link
 result structure, section/excerpt treatment, keyword accents and `?kw=`/heading journey
-are adapted from the read-only Stellar **1.44.0** reference: `layout/_partial/sidebar/search.ejs`,
+are adapted from the read-only [Stellar][stellar] **1.44.0** reference: `layout/_partial/sidebar/search.ejs`,
 `source/css/_components/sidebar/{search,sidebar}.styl`, and `source/js/search/{local-search,highlight,shortcut}.js`.
-The existing Stellar MIT license above applies to these adaptations (copyright 2021 xaoxuu).
+The existing [Stellar][stellar] MIT license above applies to these adaptations (copyright 2021 [xaoxuu][xaoxuu]).
 Sidera's native eligibility/graph generation, shared text model and bounded literal DOM
 matching are separately implemented, without copying query-as-HTML or raw-source filters.
 The search magnifier and result/external/close glyphs now use the Solar registry
 credited above; original Sidera logo derivatives are attributed separately below.
 No search dependency, remote backend or CDN is introduced.
 
-Search's animated rainbow also follows Stellar 1.44.0 `_config.yml`'s
+Search's animated rainbow also follows [Stellar 1.44.0][stellar-144] `_config.yml`'s
 `style.gradient.searchbar` and `search.styl`'s 20-second background-position motion;
 Sidera adds inactive pause and reduced-motion handling under the same retained MIT notice.
 
@@ -238,7 +238,11 @@ continue to publish with their conditional math/diagram resources.
 
 ## In-article timeline
 
-Timeline line/marker/header/card styling adapts Stellar 1.44.0 (1f4cb4bc),
-source/css/_components/tag-plugins/timeline.styl, copyright 2021 xaoxuu,
+Timeline line/marker/header/card styling adapts [Stellar 1.44.0][stellar-144] (1f4cb4bc),
+source/css/_components/tag-plugins/timeline.styl, copyright 2021 [xaoxuu][xaoxuu],
 under the MIT notice retained above. Native timeline/event composition is
 implemented by Sidera; no sidebar timeline, API service or JS widget is copied.
+
+[stellar]: https://xaoxuu.com/wiki/stellar/
+[stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
+[xaoxuu]: https://xaoxuu.com/

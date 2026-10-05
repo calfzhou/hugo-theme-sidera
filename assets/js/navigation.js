@@ -1,3 +1,4 @@
+// Stellar source: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0 · xaoxuu: https://xaoxuu.com/
 // Native auto-popovers provide Escape, light-dismiss, focus return and one open
 // region at a time. Without support/script, the original in-flow details stay open.
 if ('showPopover' in HTMLElement.prototype) {

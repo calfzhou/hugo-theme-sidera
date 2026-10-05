@@ -85,6 +85,9 @@ checks/limits without claiming universal browser, accessibility or legal certifi
 ## Provenance and changes
 
 Original material uses LICENSE (MIT, Calf); imported material retains its own terms.
+Keep public credits linked: [Stellar](https://xaoxuu.com/wiki/stellar/),
+[Stellar 1.44.0 source](https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0),
+and [xaoxuu](https://xaoxuu.com/). Preserve verbatim upstream license text.
 Keep THIRD-PARTY-NOTICES.md and assets/licenses/sidera-third-party.txt identical;
 LICENSE and assets/licenses/sidera-mit.txt must also match. Preserve conditional
 vendor/font notices and byte hashes; no unnecessary dependency/font downloads.

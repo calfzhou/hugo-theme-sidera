@@ -15,8 +15,10 @@ clearance or endorsement is asserted.
 
 ## Upstream material keeps its terms
 
-Sidera is independently implemented for Hugo, inspired by **Hexo Stellar 1.44.0**
-by **xaoxuu**. Adapted styles/interactions retain Stellar's MIT notice. It is not an
+[Stellar user documentation][stellar] · [Stellar 1.44.0 source][stellar-144] · [xaoxuu][xaoxuu]
+
+Sidera is independently implemented for Hugo, inspired by **[Hexo Stellar 1.44.0][stellar-144]**
+by **[xaoxuu][xaoxuu]**. Adapted styles/interactions retain [Stellar][stellar]'s MIT notice. It is not an
 official port and does not promise configuration or feature parity.
 
 - Solar UI artwork: 480 Design; maintained extensions by Hakim Saoudi; **CC BY 4.0**.
@@ -40,3 +42,7 @@ A consuming site's articles, photographs, brand/trademarks, scaffold files and
 third-party embeds retain their own rights. Set a truthful content license notice
 rather than assuming the theme's software license applies. You remain responsible
 for provider permissions and artwork/font rights you add.
+
+[stellar]: https://xaoxuu.com/wiki/stellar/
+[stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
+[xaoxuu]: https://xaoxuu.com/

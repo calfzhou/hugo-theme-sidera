@@ -1,3 +1,4 @@
+// Stellar source: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0 · xaoxuu: https://xaoxuu.com/
 /* Local text model shared by result matching and destination highlighting.
  * Stellar 1.44 search journey informed the UI; see THIRD-PARTY-NOTICES.md.
  * No query regex, HTML interpretation, stemming, network or persistent storage. */

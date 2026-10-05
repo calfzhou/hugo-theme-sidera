@@ -27,6 +27,7 @@ component = 'recent'
 order = 'publication'
 
 # Stellar's default heading range, consumed through a narrow site-side import.
+# Source: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0 (xaoxuu: https://xaoxuu.com/)
 [markup.tableOfContents]
 startLevel = 1
 endLevel = 6

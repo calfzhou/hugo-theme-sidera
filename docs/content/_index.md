@@ -36,6 +36,10 @@ Theme controls are available in English and Simplified Chinese. Content is not
 translated automatically. [Embed this manual](getting-started/embed.md) only when you
 want it on your site; activating Sidera alone does not publish it.
 
-Sidera takes layout and interaction inspiration from **Hexo Stellar 1.44.0** by
-**xaoxuu**. It is not an official port and does not use Stellar's configuration API.
+Sidera takes layout and interaction inspiration from **[Hexo Stellar 1.44.0][stellar-144]** by
+**[xaoxuu][xaoxuu]**. It is not an official port and does not use [Stellar][stellar]'s configuration API.
 See [credits and licenses](publishing/credits.md).
+
+[stellar]: https://xaoxuu.com/wiki/stellar/
+[stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
+[xaoxuu]: https://xaoxuu.com/

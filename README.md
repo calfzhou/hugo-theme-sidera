@@ -1,7 +1,7 @@
 # Sidera
 
 An independent **Hugo theme for blogs, notebooks and documentation**, inspired by
-**Hexo Stellar 1.44.0** by **xaoxuu**—not an official port or its configuration API.
+**[Hexo Stellar 1.44.0][stellar-144]** by **[xaoxuu][xaoxuu]** — not an official port or its configuration API.
 
 - Native sections/bundles, optional presets, tags, authors and chronological series.
 - Ordered body-bearing docs trees; source-relative Markdown links and local resources.
@@ -112,6 +112,10 @@ AI generation and keep comments off. Theme UI languages do not auto-translate bo
 [Contributor/agent guidance](AGENTS.md)
 
 Original Sidera material is [MIT licensed](LICENSE), copyright 2026 Calf.
-[Third-party notices](THIRD-PARTY-NOTICES.md) retain Stellar's MIT credit to xaoxuu,
+[Third-party notices](THIRD-PARTY-NOTICES.md) retain [Stellar][stellar]'s MIT credit to [xaoxuu][xaoxuu],
 Solar CC BY attribution and bundled renderer/font terms; they are also published
 with generated pages. This does not license your site content or imply endorsement.
+
+[stellar]: https://xaoxuu.com/wiki/stellar/
+[stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
+[xaoxuu]: https://xaoxuu.com/

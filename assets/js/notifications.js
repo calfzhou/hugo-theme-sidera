@@ -1,3 +1,4 @@
+// Stellar source: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0 · xaoxuu: https://xaoxuu.com/
 // Source-led Stellar toast presentation, with plain-text messages and one latest notification.
 (() => {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');

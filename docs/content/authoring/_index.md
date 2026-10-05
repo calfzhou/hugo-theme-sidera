@@ -32,7 +32,7 @@ identity and license. Supported strings are `manual`, `reviewed`, `polished`,
 `generated`; empty clears. Labels are localized as Written entirely by a human,
 AI-reviewed, AI-polished, AI-generated. Do not write `ai-generated` as the enum or
 apply a default unless it is true for that content. Icons-off retains disclosure text.
-The inherited Stellar label colors do not meet small-text AA contrast everywhere.
+The inherited [Stellar][stellar] label colors do not meet small-text AA contrast everywhere.
 
 ## Source-relative links
 
@@ -97,3 +97,7 @@ are not promised. Describe formulas in prose for search: math subtrees are exclu
 
 [Hugo's Markdown guidance](https://gohugo.io/content-management/formats/) covers the
 underlying engine. Avoid `useEmbedded='always'` if you need theme render hooks.
+
+[stellar]: https://xaoxuu.com/wiki/stellar/
+[stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
+[xaoxuu]: https://xaoxuu.com/
