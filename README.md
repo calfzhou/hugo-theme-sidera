@@ -1,125 +1,117 @@
 # Sidera
 
-A Hugo theme for blogs, notebooks, documentation and connected knowledge, inspired
-by Stellar. Sidera uses native content, taxonomies, resources and template lookup;
-it is not a Stellar configuration port.
+An independent **Hugo theme for blogs, notebooks and documentation**, inspired by
+**Hexo Stellar 1.44.0** by **xaoxuu**—not an official port or its configuration API.
 
-## Requirements and setup
+- Native sections/bundles, optional presets, tags, authors and chronological series.
+- Ordered body-bearing docs trees; source-relative Markdown links and local resources.
+- English/Simplified Chinese UI, light/dark/auto, native menus and configurable widgets.
+- Local search/backlinks, math, code inclusion, safe content components and local diagrams.
+- Optional Giscus comments; no comments or manual publication on ordinary activation.
 
-Use **Hugo 0.166.0 extended**. Building does not require Node, Python, a package
-installer or a sibling source checkout. Initialize the consuming site's exact
-committed theme submodule with `git submodule update --init --recursive`.
+## Quick start
 
-A consuming site's minimal configuration includes:
+Use **Hugo 0.166.0 extended** and Git. This is the verified version, not an untested
+support range. Normal builds need no Node, Python, package installer or sibling repo.
+Native adapter APIs and the matching bundled KaTeX 0.18.4 assets are version-sensitive.
+
+```sh
+hugo new site my-site --format toml
+cd my-site
+git init
+git submodule add -b p4-pilot https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+```
+
+The documented source is on `p4-pilot`; commit the exact submodule revision in your
+site. Existing site clones need `git submodule update --init --recursive`.
+Replace generated `hugo.toml` with this, using your own URL/title before publishing:
 
 ```toml
+baseURL = 'https://example.org/'
+title = 'My notebook'
 theme = 'sidera'
+defaultContentLanguage = 'en'
+locale = 'en-US'
+
 [taxonomies]
 _merge = 'shallow'
 [permalinks.term]
 _merge = 'shallow'
 [markup.tableOfContents]
 _merge = 'shallow'
+[markup.goldmark.parser]
+_merge = 'deep'
+[markup.goldmark.parser.attribute]
+_merge = 'shallow'
+[markup.goldmark.extensions.passthrough]
+_merge = 'deep'
+
+[frontmatter]
+date = ['date', 'publishDate', 'pubdate', 'published']
+publishDate = ['publishDate', 'pubdate', 'published', 'date']
+lastmod = ['lastmod', 'modified', 'publishDate', 'pubdate', 'published', 'date']
+
 ```
 
-Choose the site's base URL, language, time zone, date chains and article permalinks
-explicitly. [CONTRACT.md](CONTRACT.md) is the authoritative content/configuration
-reference, including narrow markup imports for advanced Markdown. Do not broadly
-merge security settings or enable unsafe HTML merely to render ordinary content.
+Create `content/notes/_index.md`:
 
-```sh
-hugo --panicOnWarning
-hugo server --bind 127.0.0.1 --port 1313 --disableFastRender
+```markdown
+---
+title: Notes
+preset: notes
+---
+A notebook of useful observations.
 ```
 
-Use a free preview port and stop the server with Ctrl-C. Authoritative build checks
-should use a fresh destination; preview state is not proof that removed or excluded
-files are absent from a deployment artifact.
+Create `content/notes/hello/index.md`:
 
-## Content model
+```markdown
+---
+title: Hello, Sidera
+date: 2026-01-01T09:00:00Z
+tags: [learning]
+---
+## One useful idea
 
-- Native top-level sections are browsing roots; nested roots opt in with local
-  `params.scope_root: true`.
-- `preset: blog`, `notes` or `docs` on a section supplies optional defaults. It does
-  not establish scope or impose a content type. Native cascade and explicit false /
-  empty overrides retain precedence.
-- Tags, categories, authors and series use native top-level metadata. Global
-  identities and contextual views share one source of truth. Archives and tag /
-  category vocabulary indexes are complete; article/term results paginate.
-- `index.md` forms a leaf bundle; `_index.md` forms a body-bearing branch. Source-
-  relative Markdown links and adjacent public resources remain editor-friendly.
-- Missing dates are not invented from Git, filesystem modification time or build
-  time. `type: story` selects reading typography; optional `params.ai_label` is an
-  explicit localized disclosure, not an authorship or license claim.
-- Native content exclusions apply before taxonomy/scope discovery. Editor settings,
-  templates and support files should be excluded explicitly; hidden UI is not privacy.
-
-## Guides
-
-| Area | Reference |
-|---|---|
-| Content, native fields, scope and validation | [CONTRACT.md](CONTRACT.md) |
-| Optional presets and inheritance | [PRESETS.md](PRESETS.md) |
-| Menus, sidebars, footers, widgets and appearance | [SHELL.md](SHELL.md) |
-| Tags, categories, authors, series and exclusions | [TAXONOMIES.md](TAXONOMIES.md) |
-| Body-bearing page trees and opt-in documentation | [DOCS.md](DOCS.md) |
-| Markdown, images, attributes, math, code and story text | [MARKDOWN.md](MARKDOWN.md) |
-| Native source links, resources, queries and fragments | [LINKS.md](LINKS.md) |
-| Exact code-file inclusion and downloads | [SNIPPETS.md](SNIPPETS.md) |
-| Containers, cards, timeline, images and inline components | [COMPONENTS.md](COMPONENTS.md) |
-| Mermaid, drawio and GitHub badges | [DIAGRAMS.md](DIAGRAMS.md) |
-| Click-to-load video | [VIDEO.md](VIDEO.md) |
-| Search, destination highlighting and reference graph | [DISCOVERY.md](DISCOVERY.md) |
-| Optional Giscus comments and identity/privacy rules | [COMMENTS.md](COMMENTS.md) |
-| Build-time configured Markdown interpolation | [CONFIG-MARKDOWN.md](CONFIG-MARKDOWN.md) |
-| English/Chinese UI messages | [I18N.md](I18N.md) |
-| Named Solar icons and site overrides | [ICONS.md](ICONS.md) |
-| Optional Parallax identity resources | [IDENTITY.md](IDENTITY.md) |
-
-Routine customization uses native site/language params, menus, cascade and data.
-Advanced overrides use Hugo's normal partial/asset lookup. Font stacks do not
-implicitly download fonts; external font loading remains a site choice.
-
-Comments are off by default. Set up the consuming site's own verified Giscus
-repository/category identity before enabling them. Remote images, badges, fonts,
-video and comment providers retain the network policies documented in their guides.
-No site token belongs in public configuration.
-
-## Page-entry motion
-
-A short staggered fade/slide is enabled by default for initially visible cards and
-major regions. Set site/language `params.page_reveal = false` to opt out. Reduced
-motion, anchor/history navigation and no-JS retain immediate readable content.
-See [SHELL.md](SHELL.md#page-entry-reveal) for scope, timing and safety.
-
-## Not-found page
-
-The native `404.html` uses a local Solar warning visual, localized recovery text and
-Home action within the shared shell. It has no article metadata/comments or search /
-sitemap membership and carries `noindex`. Hosts must independently serve it with
-HTTP 404 for missing URLs. Generating a file does not configure hosting or DNS.
-
-## Verification
-
-Tests in `tests/` create isolated fixtures and require a fresh output-directory
-argument. Python checks use the standard library; browser checks use the consuming
-project's documented isolated harness, never an unrelated live browser profile.
-
-```sh
-python3 tests/check_content_exclusions.py /absolute/fresh-exclusion-check
-python3 tests/check_taxonomy_indexes.py /absolute/fresh-taxonomy-check
-python3 tests/check_archives.py /absolute/fresh-archive-check
+Keep the source simple and make the links meaningful.
 ```
 
-Keep generated output outside tracked source. Do not execute included article code,
-post provider comments/reactions, or publish a test site as part of local verification.
-Version-sensitive adapter APIs are tested on the declared Hugo version; rerun the
-relevant checks before upgrading.
+Run `hugo --panicOnWarning`, then
+`hugo server --bind 127.0.0.1 --port 1313 --disableFastRender` on a free port.
+Stop with Ctrl-C. Build releases into a fresh destination, not a stale preview folder.
+The narrow imports above preserve safe Markdown; do not broadly enable unsafe HTML.
 
-## Attribution and rights
+## User manual
 
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) records Stellar, Solar, KaTeX,
-diagram runtime and other applicable provenance/terms. Its matching asset is linked
-from generated pages so notices remain available after minification. Keep both
-copies synchronized. Third-party terms do not grant an overall distribution license
-for original Sidera code/artwork or license a consuming site's content.
+[Read the manual source](docs/content/_index.md), starting with
+[Getting started](docs/content/getting-started/_index.md). It covers organization,
+customization, authoring, reader features, [parameters](docs/content/publishing/parameters.md)
+and [shortcodes](docs/content/publishing/shortcodes.md).
+
+To render the manual on your own site, explicitly add:
+
+```toml
+[[module.mounts]]
+source = 'content'
+target = 'content'
+[[module.mounts]]
+source = 'themes/sidera/docs/content'
+target = 'content/manual'
+```
+
+No copying or external docs service is required. Choose another prefix if preferred;
+[embedding instructions](docs/content/getting-started/embed.md) include the native
+`pageRef` menu with `sidera-bold-duotone`. The other original logo-icon styles are
+`sidera-bold`, `sidera-linear`, `sidera-line-duotone`. Manual pages visibly disclose
+AI generation and keep comments off. Theme UI languages do not auto-translate bodies.
+
+## Help, contributing and rights
+
+[Help and troubleshooting](docs/content/publishing/troubleshooting.md) ·
+[Issues](https://github.com/calfzhou/hugo-theme-sidera/issues) ·
+[Contributor/agent guidance](AGENTS.md)
+
+Original Sidera material is [MIT licensed](LICENSE), copyright 2026 Calf.
+[Third-party notices](THIRD-PARTY-NOTICES.md) retain Stellar's MIT credit to xaoxuu,
+Solar CC BY attribution and bundled renderer/font terms; they are also published
+with generated pages. This does not license your site content or imply endorsement.

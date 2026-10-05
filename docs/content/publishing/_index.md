@@ -1,17 +1,24 @@
-+++
-title = "Publish the sample"
+---
+title: "Reference and help"
+params:
+  ai_label: generated
+  children:
+    order: [parameters, shortcodes, troubleshooting, credits]
+---
 
-+++
+Use these references when a tutorial leaves a configuration detail open:
 
-A consuming site chooses a native filesystem mount and a namespace. No route prefix is embedded in these links.
+- [Public parameters](parameters.md): placement, defaults, inheritance, component options.
+- [Shortcodes](shortcodes.md): supported arguments, resource boundaries and notation.
+- [Troubleshooting](troubleshooting.md): build diagnostics, publication and upgrade checks.
+- [Credits and licenses](credits.md): original MIT material and retained upstream rights.
 
-[Return to the documentation root](../_index.md).
+The manual covers the implemented public API, not every Hugo feature or internal
+helper. Theme source/tests are authoritative for runtime behavior. Start from the
+[minimal site](../getting-started/_index.md) when isolating a problem, and keep
+optional services disabled until you intend to use them.
 
-## Page shell
-
-The shared shell also applies to standalone pages. New layout settings live under
-`params`: `left` and `right` are ordered component arrays; `false` or `[]`
-disables a region. Omitted keys use the applicable preset defaults, then site settings; ordinary ancestor
-params do not implicitly cascade. A right `toc` component disappears when there are no body headings.
-See the theme's SHELL.md for the implemented contract; footer customization is not
-part of this slice.
+Project development instructions live outside the manual in repository `AGENTS.md`.
+For a reproducible issue, include Hugo version, relevant config/front matter and a
+small public example at the [repository issue tracker](https://github.com/calfzhou/hugo-theme-sidera/issues).
+Do not include credentials, private articles or generated archives of your whole site.

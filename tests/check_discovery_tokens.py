@@ -8,7 +8,7 @@ THEME=Path(__file__).resolve().parents[1];RUN=Path(sys.argv[1]).resolve();assert
 (SITE/'hugo.toml').write_text(f'''baseURL='https://example.invalid/'
 theme='{THEME.name}'
 themesDir={json.dumps(str(THEME.parent))}
-disableKinds=['taxonomy','term','RSS','sitemap']
+disableKinds=['taxonomy','term','RSS','sitemap','404']
 [outputs]
 home=['JSON']
 [taxonomies]
