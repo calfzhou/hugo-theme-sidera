@@ -1,4 +1,6 @@
 ---
+date: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-05T23:21:29+08:00
 title: "Embed the manual"
 params:
   ai_label: generated
@@ -63,3 +65,13 @@ not a body merge. Keep its required tree/order metadata coherent. Remove the
 manual mount and its own menu entry to unpublish it; build into a fresh output
 directory. The always-available **docs preset term** is not the manual and does
 not mean manual publication is enabled.
+
+## Dates and the default sidebar
+
+The manual keeps explicit native `date` and `lastmod` values in each page's front
+matter. They travel with the source when mounted; copying a checkout or rebuilding
+does not reset them. No runtime Git history or filesystem timestamp is required.
+
+The manual inherits the normal docs preset leftbar: menu, page tree, recently
+updated and recently published. It does not replace the preset's region selection;
+normal native consumer cascade/override rules still apply.

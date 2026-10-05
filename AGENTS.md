@@ -42,6 +42,10 @@ small partial seams over a new registry/framework or duplicated rendering path.
 - docs/content is opt-in, prefix-independent, at most three authored levels including
   its root. Every manual node carries params.ai_label: generated. English body is
   authored once; filenames remain translation-ready. Do not mount root agent files.
+  Keep explicit timezone-bearing date/lastmod on every manual node: preserve the
+  original creation date, update lastmod for meaningful edits only, never from build
+  time or bulk unrelated changes. Keep the manual on the normal docs preset leftbar
+  unless a different manual composition is explicitly requested.
 
 ## Safety, accessibility and localization
 

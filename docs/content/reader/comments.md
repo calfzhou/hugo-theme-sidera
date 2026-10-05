@@ -1,4 +1,6 @@
 ---
+date: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-05T22:48:24+08:00
 title: "Optional Giscus comments"
 params:
   ai_label: generated

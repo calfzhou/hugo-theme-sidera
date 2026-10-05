@@ -2,6 +2,7 @@
 Run with a fresh absolute output directory; standard library, no network/provider calls.
 """
 from pathlib import Path
+from datetime import datetime
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote, urljoin
 import json, re, shutil, subprocess, sys
@@ -30,12 +31,20 @@ def main():
     sources=sorted((THEME/'docs/content').rglob('*.md'))
     assert all(len(p.relative_to(THEME/'docs/content').parts)<=3 for p in sources)
     assert all('  ai_label: generated\n' in p.read_text().split('---',2)[1] for p in sources)
+    timestamps={}
+    for p in sources:
+        fm=p.read_text().split('---',2)[1]
+        values={key:datetime.fromisoformat(re.search(r'^'+key+r': (.+)$',fm,re.M)[1]) for key in ('date','lastmod')}
+        assert all(d.tzinfo is not None for d in values.values()),p
+        assert values['date']<=values['lastmod'],p
+        timestamps[p]=values
+        assert not re.search(r'^\s+left:',fm,re.M), 'Manual should inherit the docs preset leftbar'
     expected=[]
     for p in sources:
         rel=p.relative_to(THEME/'docs/content'); expected.append('/'+str(rel.parent if p.stem in ('index','_index') else rel.with_suffix('')).strip('.')+'/')
     expected=[re.sub('/+','/',x) for x in expected]
     # Serialize effective native values/order rather than infer cascade from source alone.
-    write(site,'layouts/_partials/sidera/head-extra.html', '''<script type="application/json" id="manual-probe">{{ $s := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path }}{{ dict "kind" .Page.Kind "ai" $s.ai_label "comments" $s.comments "logo" .Page.Params.logo "order" .Page.Params.children.order | jsonify | safeJS }}</script>''')
+    write(site,'layouts/_partials/sidera/head-extra.html', '''<script type="application/json" id="manual-probe">{{ $s := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path }}{{ dict "kind" .Page.Kind "ai" $s.ai_label "date" (.Page.Date.Format "2006-01-02T15:04:05Z07:00") "lastmod" (.Page.Lastmod.Format "2006-01-02T15:04:05Z07:00") "left" $s.left "comments" $s.comments "logo" .Page.Params.logo "order" .Page.Params.children.order | jsonify | safeJS }}</script>''')
     results=[]
     def build(name, overlay=''):
         write(site,'probe.toml',overlay); out=run/(name+'-public')
@@ -56,15 +65,23 @@ def main():
     assert 'docs/content' not in (off/'sitemap.xml').read_text()
     for p in off.rglob('*.json'):
         assert 'Sidera user manual' not in p.read_text()
-    def verify(out, prefix, base='', language='', label='AI-generated'):
+    def verify(out, prefix, base='', language='', label='AI-generated', left=None):
+        if left is None:left=['menu','page-tree','recent-updates','recent-published']
         urls=[]; sections=0
-        for suffix in expected:
+        for source,suffix in zip(sources,expected):
             route='/'+('/'.join(x for x in [language,prefix] if x))+suffix
             file=out/route.lstrip('/')/'index.html';assert file.exists(),(out,route)
             text=file.read_text(); dom=DOM(text); data=probe(text)
             sections += data['kind']=='section'
             assert data['ai']=='generated' and data['comments'] is False,(route,data)
             assert label in text and dom.cls('ai-label'),route
+            assert data['left']==left,(route,data['left'])
+            for key in ('date','lastmod'):
+                assert datetime.fromisoformat(data[key])==timestamps[source][key],(route,key,data)
+            dates=re.search(r'<div class="article-dates"[\s\S]*?</div>',text)[0]
+            assert timestamps[source]['lastmod'] in [datetime.fromisoformat(a['datetime']) for tag,a in DOM(dates).nodes if tag=='time']
+            recents=[a['data-recent'] for _,a in dom.nodes if 'data-recent' in a]
+            assert recents==(['modification','publication'] if 'recent-updates' in left else []),(route,recents)
             if data['order']:
                 child_links=[a['href'].rstrip('/').split('/')[-1] for tag,a in dom.nodes if tag=='a' and 'card-title' in a.get('class','').split()]
                 assert child_links==data['order'], (route,child_links,data['order'])
@@ -89,6 +106,14 @@ def main():
                     ids={a.get('id') for _,a in DOM(dest.read_text()).nodes}
                     assert unquote(url.fragment) in ids,(route,target,'missing anchor')
         root=(out/('/'.join(x for x in [language,prefix] if x))/'index.html').read_text()
+        if 'recent-updates' in left:
+            candidates=[(p,suffix) for p,suffix in zip(sources,expected) if suffix!='/']
+            for order,key in [('modification','lastmod'),('publication','date')]:
+                ordered=sorted(candidates,key=lambda item:(-timestamps[item[0]][key].timestamp(),re.search(r'^title: "(.*)"$',item[0].read_text(),re.M)[1].casefold(),item[1]))
+                listing=re.search(r'<ul[^>]*data-recent="'+order+r'"[^>]*>(.*?)</ul>',root,re.S)[1]
+                links=[a['href'] for tag,a in DOM(listing).nodes if tag=='a']
+                prefix_url=base+'/'+('/'.join(x for x in [language,prefix] if x))
+                assert links==[prefix_url+suffix for _,suffix in ordered[:10]],(order,links)
         root_hrefs={a.get('href') for tag,a in DOM(root).nodes if tag=='a'}
         assert 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0' in root_hrefs and 'https://xaoxuu.com/' in root_hrefs
         assert probe(root)['logo']=='images/sidera-parallax-circle.svg'
@@ -113,6 +138,7 @@ def main():
         assert any(a.get('src','').endswith('/images/sidera-parallax-circle.svg') and a.get('alt')=='' for _,a in DOM((out/(language+'/' if language else '')/'index.html').read_text()).nodes)
         assert not any(p.name in {doc.name for doc in THEME.glob('*.md')} for p in out.rglob('*'))
     on=build('baseline',mounts('manual'));verify(on,'manual')
+    overridden=build('consumer-left', "[cascade.params]\nleft=['menu']\n"+mounts('manual'));verify(overridden,'manual',left=['menu'])
     global_comments=build('global-comments', '[params]\ncomments=true\n'+mounts('manual')); verify(global_comments,'manual')
     assert probe((global_comments/'notes/hello/index.html').read_text())['comments'] is True
     nested=build('nested',"baseURL='https://example.org/preview/'\n"+mounts('library/sidera'));verify(nested,'library/sidera',base='/preview')

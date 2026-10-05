@@ -1,4 +1,6 @@
 ---
+date: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-05T23:21:29+08:00
 title: "Sidera user manual"
 preset: docs
 params:
@@ -6,14 +8,12 @@ params:
   scope_root: true
   name: Sidera
   logo: images/sidera-parallax-circle.svg
-  left: [menu, page-tree]
   comments: false
   license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/LICENSE). Third-party material retains its own terms."
   children:
     order: [getting-started, organize, customize, authoring, reader, publishing]
 cascade:
   params:
-    left: [menu, page-tree]
     comments: false
     license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/LICENSE). Third-party material retains its own terms."
 ---

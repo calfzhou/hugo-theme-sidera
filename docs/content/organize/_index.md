@@ -1,4 +1,6 @@
 ---
+date: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-05T23:21:29+08:00
 title: "Organize content"
 params:
   ai_label: generated
@@ -66,3 +68,19 @@ card; collection cards show latest owned article activity rather than root edit 
 
 For generic engine concepts see Hugo's [content organization](https://gohugo.io/content-management/organization/)
 and [page bundles](https://gohugo.io/content-management/page-bundles/).
+
+## Dates and maintenance
+
+For maintained documentation, keep explicit native timestamps:
+
+```yaml
+date: 2026-01-01T09:00:00+08:00
+lastmod: 2026-01-03T14:30:00+08:00
+```
+
+Keep `date` as the original creation date; update `lastmod` when the page receives
+a meaningful content or configuration change. Include a timezone offset. Do not
+bump every page on each build, deploy or unrelated edit. These are page-local fields,
+not dates to cascade over a whole collection. The docs preset emphasizes updates
+and uses these timestamps for its recent-document lists; missing dates are not
+invented by the theme. A consuming site still owns its native date-resolution policy.
