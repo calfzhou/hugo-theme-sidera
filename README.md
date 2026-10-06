@@ -9,6 +9,10 @@ An independent **Hugo theme for blogs, notebooks and documentation**, inspired b
 - Local search/backlinks, math, code inclusion, safe content components and local diagrams.
 - Optional Giscus comments; no comments or manual publication on ordinary activation.
 
+## Live site
+
+[GoCalf](https://gocalf.com/) is a live site built with Sidera.
+
 ## Quick start
 
 Use **Hugo 0.166.0 extended** and Git. This is the verified version, not an untested
@@ -82,6 +86,8 @@ Stop with Ctrl-C. Build releases into a fresh destination, not a stale preview f
 The narrow imports above preserve safe Markdown; do not broadly enable unsafe HTML.
 
 ## User manual
+
+Read online: [Sidera user manual | GoCalf](http://gocalf.com/sidera/).
 
 [Read the manual source](docs/content/_index.md), starting with
 [Getting started](docs/content/getting-started/_index.md). It covers organization,
