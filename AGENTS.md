@@ -101,7 +101,8 @@ retain pinned source/name/style/author/CC BY records; original Sidera derivative
 use explicit original-design records, not fabricated Solar paths. Fixed-color
 Parallax circle/square/favicon bytes are independent and must remain unchanged.
 
-Check branch/status and preserve unrelated edits. Keep coherent commits with
+Ongoing theme development uses `main`; ordinary refinements do not require a
+long-lived feature branch. Check branch/status and preserve unrelated edits. Keep coherent commits with
 Co-Authored-By: Eureka when Eureka contributes. Ask before deleting files; publication,
 release and consumer dependency updates need their own authorization. Update manual,
 validation and focused regression together for any public contract change.

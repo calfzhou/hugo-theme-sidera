@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T23:10:14+08:00
+lastmod: 2026-10-06T09:47:10+08:00
 title: "Credits and licenses"
 params:
   ai_label: generated
@@ -10,7 +10,7 @@ params:
 
 Original Sidera code, documentation, Parallax artwork and its four named icon
 derivatives are **MIT licensed, copyright (c) 2026 Calf**. Read the standard
-[LICENSE](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/LICENSE).
+[LICENSE](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE).
 Eureka directly authored the Parallax geometry; the UI derivatives are original
 Sidera artwork in Solar-like styles, not upstream Solar icons. No trademark
 clearance or endorsement is asserted.
@@ -32,7 +32,7 @@ official port and does not promise configuration or feature parity.
 - drawio viewer 31.5.2: retained Apache-2.0 and embedded dependency notices, including
   the applicable DOMPurify, pako and Lodash license files.
 
-The complete [third-party notices](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/THIRD-PARTY-NOTICES.md)
+The complete [third-party notices](https://github.com/calfzhou/hugo-theme-sidera/blob/main/THIRD-PARTY-NOTICES.md)
 remain at repository root. Generated pages publish native local links with
 `rel=license` to those notices and the original-material MIT text; conditional math/
 diagram assets also publish their own licenses. Keep notices when redistributing.

@@ -23,6 +23,7 @@ def main():
     site=run/'site'; site.mkdir(); (site/'themes').mkdir()
     shutil.copytree(THEME, site/'themes/sidera', ignore=shutil.ignore_patterns('.git', '__pycache__'))
     readme=(THEME/'README.md').read_text()
+    assert 'git submodule add -b main https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera' in readme
     cfg=re.search(r'```toml\n(.*?)```', readme, re.S)[1]
     write(site, 'hugo.toml',cfg)
     examples=re.findall(r'```markdown\n(.*?)```',readme,re.S)

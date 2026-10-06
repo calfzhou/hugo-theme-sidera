@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T23:21:29+08:00
+lastmod: 2026-10-06T09:47:10+08:00
 title: "Sidera user manual"
 preset: docs
 params:
@@ -9,13 +9,13 @@ params:
   name: Sidera
   logo: images/sidera-parallax-circle.svg
   comments: false
-  license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/LICENSE). Third-party material retains its own terms."
+  license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE). Third-party material retains its own terms."
   children:
     order: [getting-started, organize, customize, authoring, reader, publishing]
 cascade:
   params:
     comments: false
-    license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/p4-pilot/LICENSE). Third-party material retains its own terms."
+    license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE). Third-party material retains its own terms."
 ---
 
 Sidera is an independent Hugo theme for blogs, notebooks and documentation. Native

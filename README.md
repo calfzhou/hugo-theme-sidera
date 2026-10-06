@@ -23,10 +23,10 @@ Native adapter APIs and the matching bundled KaTeX 0.18.4 assets are version-sen
 hugo new site my-site --format toml
 cd my-site
 git init
-git submodule add -b p4-pilot https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git submodule add -b main https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
 ```
 
-The documented source is on `p4-pilot`; commit the exact submodule revision in your
+The documented source is on `main`; commit the exact submodule revision in your
 site. Existing site clones need `git submodule update --init --recursive`.
 Replace generated `hugo.toml` with this, using your own URL/title before publishing:
 

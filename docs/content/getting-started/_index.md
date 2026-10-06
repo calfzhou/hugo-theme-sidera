@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-06T09:47:10+08:00
 title: "Getting started"
 params:
   ai_label: generated
@@ -21,10 +21,10 @@ Start a new site, initialize Git, and add the public theme:
 hugo new site my-site --format toml
 cd my-site
 git init
-git submodule add -b p4-pilot https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git submodule add -b main https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
 ```
 
-The documented source currently lives on `p4-pilot`; a submodule records an exact
+The documented source currently lives on `main`; a submodule records an exact
 revision, not a floating release. Commit that gitlink in your site. To clone an
 existing site, use `git clone --recurse-submodules SITE_URL`, or run
 `git submodule update --init --recursive` after cloning. A plain archive of a site
