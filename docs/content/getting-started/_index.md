@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-06T09:47:10+08:00
+lastmod: 2026-10-06T10:22:39+08:00
 title: "Getting started"
 params:
   ai_label: generated
@@ -21,11 +21,14 @@ Start a new site, initialize Git, and add the public theme:
 hugo new site my-site --format toml
 cd my-site
 git init
-git submodule add -b main https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git submodule add https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git -C themes/sidera checkout --detach v1.0.0
 ```
 
-The documented source currently lives on `main`; a submodule records an exact
-revision, not a floating release. Commit that gitlink in your site. To clone an
+Choose a published stable tag (`v1.0.0` above) from the
+[GitHub releases](https://github.com/calfzhou/hugo-theme-sidera/releases). A notes entry
+is not proof of publication. Commit `.gitmodules` and the exact theme gitlink in
+your site; a submodule is not a floating release. See [release notes and upgrades](../publishing/releases.md). To clone an
 existing site, use `git clone --recurse-submodules SITE_URL`, or run
 `git submodule update --init --recursive` after cloning. A plain archive of a site
 repository does not include its submodule content.

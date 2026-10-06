@@ -106,3 +106,34 @@ long-lived feature branch. Check branch/status and preserve unrelated edits. Kee
 Co-Authored-By: Eureka when Eureka contributes. Ask before deleting files; publication,
 release and consumer dependency updates need their own authorization. Update manual,
 validation and focused regression together for any public contract change.
+
+
+## Native release checklist
+
+Release identity is an immutable annotated Git tag; do not add a parallel version
+file or package/version automation. Maintain user-facing notes only in
+`docs/content/publishing/releases.md`, with native date/lastmod and AI-label rules.
+Before releasing: inspect clean main/remote ancestry, verify examples/manual and
+relevant tests with the supported Hugo, retain all license mirrors, and build a
+consumer from the exact anonymously fetched public commit. Ask for authorization
+showing the version, full tested commit and extracted notes. A normal main push is
+not release permission. Check both local/remote tags and GitHub Releases for a
+collision; stop rather than replace any existing release/tag.
+
+After approval, use ordinary Git and optionally GitHub CLI (or GitHub's release UI):
+
+```sh
+version=v1.0.0
+commit=$(git rev-parse HEAD) # must equal the approved, tested public commit
+notes=$(mktemp)
+git show "$commit:docs/content/publishing/releases.md" |
+  awk -v heading="## $version" '$0 == heading { found=1; print; next } found && /^## / { exit } found { print }' > "$notes"
+test -s "$notes"
+git tag -a "$version" "$commit" -F "$notes"
+git push origin "refs/tags/$version"
+gh release create "$version" --verify-tag --title "Sidera $version" --notes-file "$notes"
+```
+
+Verify the remote peeled tag equals the approved commit and the Release is actually
+published. Never force-move a tag; correct a released defect in a new version. Keep
+consumer updates, source merges and site deployments as separate authorized actions.

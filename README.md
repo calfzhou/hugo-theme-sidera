@@ -23,11 +23,15 @@ Native adapter APIs and the matching bundled KaTeX 0.18.4 assets are version-sen
 hugo new site my-site --format toml
 cd my-site
 git init
-git submodule add -b main https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git submodule add https://github.com/calfzhou/hugo-theme-sidera.git themes/sidera
+git -C themes/sidera checkout --detach v1.0.0
 ```
 
-The documented source is on `main`; commit the exact submodule revision in your
-site. Existing site clones need `git submodule update --init --recursive`.
+Choose a published stable tag from [Releases](https://github.com/calfzhou/hugo-theme-sidera/releases)
+(`v1.0.0` above). A manual release-notes entry alone does not mean its tag is published.
+Commit `.gitmodules` and the exact `themes/sidera` gitlink in your site. Existing site
+clones need `git submodule update --init --recursive`; this restores the committed
+revision, not the newest tag or main tip.
 Replace generated `hugo.toml` with this, using your own URL/title before publishing:
 
 ```toml
@@ -84,6 +88,32 @@ Run `hugo --panicOnWarning`, then
 `hugo server --bind 127.0.0.1 --port 1313 --disableFastRender` on a free port.
 Stop with Ctrl-C. Build releases into a fresh destination, not a stale preview folder.
 The narrow imports above preserve safe Markdown; do not broadly enable unsafe HTML.
+
+## Updates: stable releases or main
+
+Normal consumers select a published tag deliberately:
+
+```sh
+git -C themes/sidera fetch origin --tags
+git -C themes/sidera checkout --detach v1.0.0
+# Build/test your site, then commit the updated themes/sidera gitlink.
+```
+
+Owners testing ongoing development can instead follow `main`:
+
+```sh
+git -C themes/sidera fetch origin main
+git -C themes/sidera switch main
+git -C themes/sidera merge --ff-only origin/main
+# Build/test your site, then commit the updated themes/sidera gitlink.
+```
+
+Check for local changes before either workflow; stop on divergence rather than
+resetting work. If an existing submodule has no local main branch, use
+`git -C themes/sidera switch --track origin/main` once. Neither a `main` branch
+setting nor a build automatically advances a site's committed submodule pin.
+Git tags are the version source of truth; there is no separate VERSION file.
+See [release notes](docs/content/publishing/releases.md).
 
 ## User manual
 

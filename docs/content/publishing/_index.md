@@ -1,11 +1,11 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-06T10:22:39+08:00
 title: "Reference and help"
 params:
   ai_label: generated
   children:
-    order: [parameters, shortcodes, troubleshooting, credits]
+    order: [parameters, shortcodes, troubleshooting, releases, credits]
 ---
 
 Use these references when a tutorial leaves a configuration detail open:
@@ -13,6 +13,7 @@ Use these references when a tutorial leaves a configuration detail open:
 - [Public parameters](parameters.md): placement, defaults, inheritance, component options.
 - [Shortcodes](shortcodes.md): supported arguments, resource boundaries and notation.
 - [Troubleshooting](troubleshooting.md): build diagnostics, publication and upgrade checks.
+- [Releases and upgrades](releases.md): stable tags, main development and release notes.
 - [Credits and licenses](credits.md): original MIT material and retained upstream rights.
 
 The manual covers the implemented public API, not every Hugo feature or internal
