@@ -47,7 +47,7 @@ def main():
         rel=p.relative_to(THEME/'docs/content'); expected.append('/'+str(rel.parent if p.stem in ('index','_index') else rel.with_suffix('')).strip('.')+'/')
     expected=[re.sub('/+','/',x) for x in expected]
     # Serialize effective native values/order rather than infer cascade from source alone.
-    write(site,'layouts/_partials/sidera/head-extra.html', '''<script type="application/json" id="manual-probe">{{ $s := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path }}{{ dict "kind" .Page.Kind "ai" $s.ai_label "date" (.Page.Date.Format "2006-01-02T15:04:05Z07:00") "lastmod" (.Page.Lastmod.Format "2006-01-02T15:04:05Z07:00") "left" $s.left "comments" $s.comments "logo" .Page.Params.logo "order" .Page.Params.children.order | jsonify | safeJS }}</script>''')
+    write(site,'layouts/_partials/sidera/head-extra.html', '''<script type="application/json" id="manual-probe">{{ $s := partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path }}{{ dict "kind" .Page.Kind "authorCount" (len (.Page.GetTerms "authors")) "ai" $s.ai_label "date" (.Page.Date.Format "2006-01-02T15:04:05Z07:00") "lastmod" (.Page.Lastmod.Format "2006-01-02T15:04:05Z07:00") "left" $s.left "comments" $s.comments "logo" .Page.Params.logo "order" .Page.Params.children.order | jsonify | safeJS }}</script>''')
     results=[]
     def build(name, overlay=''):
         write(site,'probe.toml',overlay); out=run/(name+'-public')
@@ -77,6 +77,7 @@ def main():
             text=file.read_text(); dom=DOM(text); data=probe(text)
             sections += data['kind']=='section'
             assert data['ai']=='generated' and data['comments'] is False,(route,data)
+            assert data['authorCount']==0,(route,data)
             assert label in text and dom.cls('ai-label'),route
             assert data['left']==left,(route,data['left'])
             for key in ('date','lastmod'):
@@ -143,6 +144,10 @@ def main():
     on=build('baseline',mounts('manual'));verify(on,'manual')
     overridden=build('consumer-left', "[cascade.params]\nleft=['menu']\n"+mounts('manual'));verify(overridden,'manual',left=['menu'])
     global_comments=build('global-comments', '[params]\ncomments=true\n'+mounts('manual')); verify(global_comments,'manual')
+    write(site, 'content/authors/editor/_index.md', '---\ntitle: Editor\nauthors: []\n---\n')
+    global_authors=build('global-authors', "[cascade]\nauthors=['editor']\n"+mounts('manual')); verify(global_authors,'manual')
+    assert probe((global_authors/'notes/hello/index.html').read_text())['authorCount']==1
+
     assert probe((global_comments/'notes/hello/index.html').read_text())['comments'] is True
     nested=build('nested',"baseURL='https://example.org/preview/'\n"+mounts('library/sidera'));verify(nested,'library/sidera',base='/preview')
     zh=build('chinese',"defaultContentLanguage='zh'\nlocale='zh-CN'\n"+mounts('manual'));verify(zh,'manual',label='由 AI 生成')

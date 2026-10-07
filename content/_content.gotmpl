@@ -3,6 +3,28 @@
 {{- range slice "routes" "native" "identities" "native_collisions" "authored" -}}{{- $nodes.Set . dict -}}{{- end -}}
 {{- $tree := partial "tags/source-tree.html" (dict "dir" "." "context" (dict "fs" .Site.BaseFs.Content.Fs "source" .Site.SourceSpec)) -}}
 {{- partial "tags/discover.html" (dict "owner" "" "nodes" $nodes "tree" $tree) -}}
+{{- /* Declared author profiles register identities even when assignments arrive via
+     native cascade. Inventory routes only; native published Pages decide membership. */ -}}
+{{- range $path, $_ := $nodes.Get "authored" -}}
+  {{- if and (hasPrefix $path "authors/") (ne $path "authors/_index.md") (hasSuffix $path "/_index.md") -}}
+    {{- $raw := strings.TrimSuffix "/_index.md" (strings.TrimPrefix "authors/" $path) -}}
+    {{- $key := printf "authors/%s" $raw -}}
+    {{- if not (isset ($nodes.Get "native") $key) -}}
+      {{- $nodes.SetInMap "native" $key (dict "taxonomy" "authors" "raw" $raw "key" $raw) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range $route, $node := $nodes.Get "routes" -}}
+  {{- if and (eq $node.taxonomy "authors") (not $node.key) -}}
+    {{- range $nodes.Get "native" -}}
+      {{- if eq .taxonomy "authors" -}}
+        {{- range partial "tags/normalize.html" (dict "tags" (slice .raw) "source" $route) -}}
+          {{- $nodes.SetInMap "routes" (printf "%s/%s" $route .slug) (dict "key" .key "slug" .slug "taxonomy" "authors") -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
 {{- range $path, $conflict := $nodes.Get "native_collisions" -}}{{- errorf "Sidera native taxonomy path collision at %s: %s" $path $conflict -}}{{- end -}}
 {{- range $route, $node := $nodes.Get "routes" -}}
   {{- if $node.archive -}}

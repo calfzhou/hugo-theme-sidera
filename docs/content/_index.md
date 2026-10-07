@@ -1,8 +1,9 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-06T09:47:10+08:00
+lastmod: 2026-10-07T22:19:57+08:00
 title: "Sidera user manual"
 preset: docs
+authors: []
 params:
   ai_label: generated
   scope_root: true
@@ -13,6 +14,7 @@ params:
   children:
     order: [getting-started, organize, customize, authoring, reader, publishing]
 cascade:
+  authors: []
   params:
     comments: false
     license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE). Third-party material retains its own terms."

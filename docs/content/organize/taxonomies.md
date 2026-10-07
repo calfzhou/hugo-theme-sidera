@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-07T22:24:52+08:00
 title: "Taxonomies, authors and series"
 params:
   ai_label: generated
@@ -48,6 +48,29 @@ Optional local `params.avatar` selects a safe local image. Multiple authors reta
 their authored order; `byline` is separate credit text. `show_authors: false` hides
 attribution, not membership. Native global author identity is not duplicated for
 each collection. Explicit term slug/URL can keep a route stable when changing a name.
+
+## Default authors and per-page overrides
+
+Use Hugo's native site cascade rather than repeating an author on every article:
+
+```toml
+[cascade]
+authors = ['editor']
+```
+
+A page's top-level `authors: [guest]` replaces the default; `authors: []` opts out.
+Create a profile under `content/authors/<key>/_index.md` for each cascaded author.
+The profile registers the author identity for contextual route discovery even when
+no source article explicitly repeats the assignment. These routes may be empty in
+collections without that author; only native published assignments populate them.
+Explicit profiles may also set `authors: []` to avoid attributing a profile to the
+site's default author. Site/language cascade matching remains Hugo's responsibility,
+not a theme-specific inheritance implementation.
+
+The bundled manual opts out with empty root and descendant authors, so an embedding
+site's default does not attribute it to the site owner. Keep its MIT notice distinct
+from the site's article license. [Configured Markdown](../reader/configured-markdown.md)
+can insert linked author names into your own license text with `{page.authors}`.
 
 ## Sequence a series
 

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-07T22:24:52+08:00
 title: "Configured Markdown"
 params:
   ai_label: generated
@@ -18,11 +18,27 @@ footer_text = '**{site.title}** — notes worth returning to.'
 article_text = 'You have been reading **{page.title}**.'
 ```
 
-Only two built-in values exist: `{site.title}` (current-language native Site.Title)
-and `{page.title}` (the Page displaying the component). There is no automatic theme
-version, author identity or release link. Unknown/empty text tokens stay visibly
-literal. Names are case-sensitive lowercase dotted identifiers, not property traversal.
-The pass is nonrecursive; values are escaped plain strings, never Markdown/templates.
+Built-in values:
+
+- `{site.title}`: current-language native Site.Title, escaped as plain text.
+- `{page.title}`: the Page displaying the component, escaped as plain text.
+- `{page.authors}`: that Page's native author terms, rendered as linked names in
+  native order (duplicates removed). Titles come from author profiles; destinations
+  use the same global/scoped link policy as the existing author components.
+
+For example, `license = 'Written by {page.authors}. Licensed under …'` includes
+linked credit without hard-coding an author. Use this token directly in prose,
+not inside another link, a URL destination or Markdown emphasis delimiters.
+An explicit `authors: []` produces empty text; provide a suitable license notice
+on pages with no author rather than leaving an incomplete attribution sentence.
+`show_authors: false` hides the optional author UI, not this explicitly requested
+license credit. Author attribution and AI-generation labels are separate choices.
+
+There is no automatic theme version or release link. Unknown/empty ordinary text
+values stay visibly literal. Names are case-sensitive lowercase dotted identifiers,
+not property traversal. The pass is nonrecursive. Author names and ordinary values
+are escaped data; only `{page.authors}` constructs Markdown links from native terms,
+never from author-supplied HTML. Code, TeX and escaped tokens remain literal.
 
 ## Add one real value through native lookup
 

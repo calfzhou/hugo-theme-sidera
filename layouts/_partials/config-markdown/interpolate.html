@@ -2,7 +2,7 @@
      spans are conservatively opaque; this is not a Markdown or expression engine. */ -}}
 {{- $text := .Text -}}
 {{- if findRE `\{(?:url:)?[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+\}` $text -}}
-  {{- $values := dict "site.title" .Page.Site.Title "page.title" .Page.Title -}}
+  {{- $values := dict "site.title" .Page.Site.Title "page.title" .Page.Title "page.authors" "" -}}
   {{- $extra := partial "config-markdown/values.html" . -}}
   {{- if not (reflect.IsMap $extra) -}}
     {{- errorf "Sidera configured Markdown: values partial must return a string map" -}}
@@ -37,32 +37,27 @@
     {{- else if hasPrefix . "{" -}}
       {{- $key := strings.TrimSuffix "}" (strings.TrimPrefix "{" .) -}}
       {{- $url := hasPrefix $key "url:" -}}{{- $key = strings.TrimPrefix "url:" $key -}}
-      {{- if and $url (not (index $values $key)) -}}
-        {{- errorf "Sidera configured Markdown: URL token %s requires a nonempty value" $key -}}
-      {{- end -}}
-      {{- if isset $values $key -}}
-        {{- $value := index $values $key -}}
-        {{- /* Empty and absent values both keep the token visible; no invented fallback. */ -}}
-        {{- if ne $value "" -}}
-          {{- if $url -}}
-            {{- $value = partial "sidera/url.html" (dict "url" $value "source" (printf "configured Markdown token %s" $key)) -}}
-            {{- if findRE `[\x7f<>"{}]` $value -}}{{- errorf "Sidera configured Markdown: invalid URL token %s" $key -}}{{- end -}}
-            {{- /* URL punctuation must not close a Markdown destination or inject a title. */ -}}
-            {{- $part = $value -}}
-            {{- range $char, $encoded := dict "(" "%28" ")" "%29" "[" "%5B" "]" "%5D" "`" "%60" -}}
-              {{- $part = replace $part $char $encoded -}}
-            {{- end -}}
-          {{- else -}}
-            {{- /* Encode ASCII punctuation BEFORE Markdown. HTML escaping alone leaves
-                 ](url), emphasis, code and entity attacks active. Rune iteration avoids
-                 replacement-string ($1/backslash) interpretation and keeps Unicode. */ -}}
-            {{- $part = "" -}}
-            {{- range split $value "" -}}
-              {{- $char := . -}}
-              {{- if findRE `[[:punct:]\x00-\x20\x7f]` . -}}
-                {{- $char = printf "&#%d;" (index (string .) 0) -}}
+      {{- if eq $key "page.authors" -}}
+        {{- if $url -}}{{- errorf "Sidera configured Markdown: page.authors is linked text, not a URL" -}}
+        {{- else -}}{{- $part = partial "config-markdown/authors.html" $ -}}{{- end -}}
+      {{- else -}}
+        {{- if and $url (not (index $values $key)) -}}
+          {{- errorf "Sidera configured Markdown: URL token %s requires a nonempty value" $key -}}
+        {{- end -}}
+        {{- if isset $values $key -}}
+          {{- $value := index $values $key -}}
+          {{- /* Empty and absent values both keep the token visible; no invented fallback. */ -}}
+          {{- if ne $value "" -}}
+            {{- if $url -}}
+              {{- $value = partial "sidera/url.html" (dict "url" $value "source" (printf "configured Markdown token %s" $key)) -}}
+              {{- if findRE `[\x7f<>"{}]` $value -}}{{- errorf "Sidera configured Markdown: invalid URL token %s" $key -}}{{- end -}}
+              {{- /* URL punctuation must not close a Markdown destination or inject a title. */ -}}
+              {{- $part = $value -}}
+              {{- range $char, $encoded := dict "(" "%28" ")" "%29" "[" "%5B" "]" "%5D" "`" "%60" -}}
+                {{- $part = replace $part $char $encoded -}}
               {{- end -}}
-              {{- $part = printf "%s%s" $part $char -}}
+            {{- else -}}
+              {{- $part = partial "config-markdown/escape-text.html" $value -}}
             {{- end -}}
           {{- end -}}
         {{- end -}}

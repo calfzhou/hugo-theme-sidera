@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T23:21:29+08:00
+lastmod: 2026-10-07T22:24:52+08:00
 title: "Embed the manual"
 params:
   ai_label: generated
@@ -52,8 +52,10 @@ and AI labels; an absent translation is not an English fallback page.
 Every current manual node explicitly sets `params.ai_label: generated`. The root
 also disables comments locally and by cascade so an embedding site's global
 comment policy does not contact a provider merely to display this manual. Preserve
-that quiet behavior when overriding manual pages. Your unrelated content is not
-relabeled or otherwise changed.
+that quiet behavior when overriding manual pages. Empty `authors: []` on the root
+and its cascade also opt out of an embedding site's default author. The manual keeps
+its own MIT content notice, not the site's article attribution/license. Your unrelated
+content is not relabeled or otherwise changed.
 
 On a multilingual site with an English-only manual, define its menu under
 `[[languages.en.menus.primary]]` and `[languages.en.menus.primary.params]`, not

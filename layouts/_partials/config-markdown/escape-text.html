@@ -1,0 +1,11 @@
+{{- /* Encode before Markdown: HTML escaping alone leaves links/emphasis active.
+     Values are data, including punctuation, entities, whitespace and token syntax. */ -}}
+{{- $text := "" -}}
+{{- range split . "" -}}
+  {{- $char := . -}}
+  {{- if findRE `[[:punct:]\x00-\x20\x7f]` . -}}
+    {{- $char = printf "&#%d;" (index (string .) 0) -}}
+  {{- end -}}
+  {{- $text = printf "%s%s" $text $char -}}
+{{- end -}}
+{{- return $text -}}

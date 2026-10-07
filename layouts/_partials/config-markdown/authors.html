@@ -1,0 +1,12 @@
+{{- /* Only native terms supply link structure; labels are escaped data, never HTML.
+     Resolve in the displaying Page context, retaining native order and link policy. */ -}}
+{{- $links := slice -}}
+{{- range .Page.GetTerms "authors" | uniq -}}
+  {{- $target := partial "taxonomies/link.html" (dict "page" $.Page "term" .) -}}
+  {{- $url := partial "sidera/url.html" (dict "url" $target.RelPermalink "source" "configured Markdown authors") -}}
+  {{- range $char, $encoded := dict "(" "%28" ")" "%29" "[" "%5B" "]" "%5D" "`" "%60" -}}
+    {{- $url = replace $url $char $encoded -}}
+  {{- end -}}
+  {{- $links = $links | append (printf "[%s](%s)" (partial "config-markdown/escape-text.html" .LinkTitle) $url) -}}
+{{- end -}}
+{{- return (delimit $links ", ") -}}
