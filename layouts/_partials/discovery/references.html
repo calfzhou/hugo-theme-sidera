@@ -1,14 +1,7 @@
 {{- $page := .Page -}}{{- $items := slice -}}
 {{- if .Settings.link_graph -}}
-  {{- $catalog := partialCached "discovery/catalog.html" .Page "catalog" -}}
-  {{- $own := dict -}}{{- range $catalog -}}{{- if eq .url $page.RelPermalink -}}{{- $own = . -}}{{- end -}}{{- end -}}
-  {{- if $own -}}
-  {{- range $catalog -}}
-    {{- if and .graph (ne .url $page.RelPermalink) -}}
-      {{- if or (and (eq $.Name "outgoing") (in $own.links .url)) (and (eq $.Name "backlinks") (in .links $page.RelPermalink)) -}}{{- $items = $items | append . -}}{{- end -}}
-    {{- end -}}
-  {{- end -}}
-  {{- end -}}
+  {{- $relations := partialCached "discovery/relations.html" .Page "relations" -}}
+  {{- $items = index (index $relations .Name) $page.RelPermalink | default slice -}}
 {{- end -}}
 {{- with $items -}}
 <section class="footer-section" aria-labelledby="{{ $.Instance }}-heading">

@@ -1,0 +1,22 @@
+{{- /* Immutable option maps, cached by region rather than rebuilt per instance. */ -}}
+{{- $schemas := dict
+  "social" (dict "menu" "social_menu" "icons" "icons")
+  "collection-nav" (dict "items" "")
+  "menu" (dict "menu" "menu" "icons" "icons" "taxonomies" "taxonomy_navigation")
+  "collections" (dict "icons" "icons")
+  "taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons" "tag_icons" "tag_icons")
+  "site-taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons")
+  "page-tree" dict
+  "toc" (dict "icons" "icons")
+  "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections" "scope" "")
+  "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
+  "text" (dict "title" "" "text" "text")
+  "links" (dict "menu" "links_menu" "icons" "icons") -}}
+{{- $builtins := merge $schemas (dict "outgoing" dict "backlinks" dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "credit" dict) -}}
+{{- if eq . "widget-definition" -}}{{- $schemas = $builtins -}}{{- end -}}
+{{- if eq . "article-footer" -}}
+  {{- $schemas = dict "outgoing" dict "backlinks" dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "text" (dict "title" "" "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
+{{- else if eq . "site-footer" -}}
+  {{- $schemas = dict "text" (dict "title" "" "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
+{{- end -}}
+{{- return (dict "schemas" $schemas "builtins" $builtins) -}}

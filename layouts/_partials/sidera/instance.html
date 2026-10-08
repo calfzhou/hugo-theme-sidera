@@ -1,25 +1,7 @@
 {{- /* Fixed component options. No authored partial paths, Page mutation or resolver recursion. */ -}}
-{{- $schemas := dict
-  "social" (dict "menu" "social_menu" "icons" "icons")
-  "collection-nav" (dict "items" "")
-  "menu" (dict "menu" "menu" "icons" "icons" "taxonomies" "taxonomy_navigation")
-  "collections" (dict "icons" "icons")
-  "taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons" "tag_icons" "tag_icons")
-  "site-taxonomies" (dict "taxonomies" "taxonomy_navigation" "icons" "icons")
-  "page-tree" dict
-  "toc" (dict "icons" "icons")
-  "recent" (dict "order" "" "count" "recent_count" "sections" "recent_sections" "scope" "")
-  "profile" (dict "title" "" "text" "" "image" "" "menu" "" "icons" "icons")
-  "text" (dict "title" "" "text" "text")
-  "links" (dict "menu" "links_menu" "icons" "icons") -}}
-{{- $builtins := merge $schemas (dict "outgoing" dict "backlinks" dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "credit" dict) -}}
-{{- if eq .Region "widget-definition" -}}{{- $schemas = $builtins -}}{{- end -}}
+{{- $schemaSet := partialCached "sidera/component-schemas.html" .Region .Region -}}
+{{- $schemas := $schemaSet.schemas -}}{{- $builtins := $schemaSet.builtins -}}
 {{- with .Definition -}}{{- if isset $builtins . -}}{{- errorf "Sidera widget %q cannot shadow a built-in component" . -}}{{- end -}}{{- end -}}
-{{- if eq .Region "article-footer" -}}
-  {{- $schemas = dict "outgoing" dict "backlinks" dict "terms" dict "meta" (dict "show" "show_updated") "authors" (dict "show" "show_authors" "edit_url" "edit_url") "references" (dict "entries" "references") "license" (dict "text" "license") "share" (dict "targets" "share" "icons" "icons") "series" dict "text" (dict "title" "" "text" "article_text") "links" (dict "menu" "article_links_menu" "icons" "icons") -}}
-{{- else if eq .Region "site-footer" -}}
-  {{- $schemas = dict "text" (dict "title" "" "text" "footer_text") "links" (dict "menu" "footer_menu" "icons" "icons") "credit" dict -}}
-{{- end -}}
 {{- $source := .Source | default "component instance" -}}{{- with .Page -}}{{- $source = .Path -}}{{- end -}}
 {{- $name := "" -}}{{- $widget := "" -}}{{- $config := dict -}}
 {{- if eq (printf "%T" .Entry) "string" -}}
@@ -100,10 +82,14 @@
 {{- end -}}
 {{- /* Sitemap links are text-first; explicit instance/widget options remain available. */ -}}
 {{- if and (eq .Region "site-footer") (eq $name "links") (not (isset $config "icons")) -}}{{- $overrides = merge $overrides (dict "icons" false) -}}{{- end -}}
-{{- /* Construct each key once: merge must not refill cleared nested maps from shared settings. */ -}}
-{{- $settings := dict -}}
-{{- range $key, $value := .Settings -}}
-  {{- if isset $overrides $key -}}{{- $value = index $overrides $key -}}{{- end -}}
-  {{- $settings = merge $settings (dict $key $value) -}}
+{{- /* Settings are read-only. Copy only for overrides, preserving cleared nested maps. */ -}}
+{{- $settings := .Settings -}}
+{{- if $overrides -}}
+  {{- $values := collections.NewScratch -}}
+  {{- range $key, $value := .Settings -}}
+    {{- if isset $overrides $key -}}{{- $value = index $overrides $key -}}{{- end -}}
+    {{- $values.Set $key $value -}}
+  {{- end -}}
+  {{- $settings = $values.Values -}}
 {{- end -}}
 {{- return (dict "Page" .Page "Owner" .Owner "Region" .Region "Name" $name "Widget" $widget "Config" $config "Settings" $settings) -}}

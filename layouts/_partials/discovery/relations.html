@@ -1,0 +1,24 @@
+{{- /* Build immutable adjacency lists once, from the deferred native catalog. */ -}}
+{{- $catalog := partialCached "discovery/catalog.html" . "catalog" -}}
+{{- $state := collections.NewScratch -}}
+{{- $state.Set "byURL" dict -}}{{- $state.Set "outgoing" dict -}}{{- $state.Set "backlinks" dict -}}
+{{- range $catalog -}}{{- $state.SetInMap "byURL" .url . -}}{{- end -}}
+{{- $byURL := $state.Get "byURL" -}}
+{{- range $catalog -}}
+  {{- $source := . -}}
+  {{- range .links -}}
+    {{- with index $byURL . -}}
+      {{- if ne .url $source.url -}}
+        {{- if .graph -}}
+          {{- $items := index ($state.Get "outgoing") $source.url | default slice -}}
+          {{- $state.SetInMap "outgoing" $source.url ($items | append .) -}}
+        {{- end -}}
+        {{- if $source.graph -}}
+          {{- $items := index ($state.Get "backlinks") .url | default slice -}}
+          {{- $state.SetInMap "backlinks" .url ($items | append $source) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "outgoing" ($state.Get "outgoing") "backlinks" ($state.Get "backlinks")) -}}
