@@ -23,7 +23,9 @@ icon='sidera-bold-duotone'
 ''')
 keys=['sidera-bold','sidera-bold-duotone','sidera-linear','sidera-line-duotone']
 write('content/manual/_index.md','---\ntitle: Icon manual\npreset: docs\nparams:\n  logo: images/sidera-parallax-circle.svg\n---\n'+ '\n'.join('{{< link href="/manual/" text="'+key+'" icon="'+key+'" >}}' for key in keys))
-write('layouts/_partials/sidera/head-extra.html','<script type="application/json" id="icons-probe">{{ dict "icons" (partialCached "sidera/icons.html" site "icons") "sources" hugo.Data.sidera.icon_sources | jsonify | safeJS }}</script>')
+write('layouts/_partials/sidera/head-extra.html','''{{ $icons := partialCached "sidera/icons.html" site "icons" }}{{ $rendered := collections.NewScratch }}
+{{ range $key, $_ := $icons }}{{ $rendered.Set $key (partial "sidera/icon.html" $key) }}{{ end }}
+<script type="application/json" id="icons-probe">{{ dict "icons" $icons "sources" hugo.Data.sidera.icon_sources "rendered" $rendered.Values "empty" (partial "sidera/icon.html" "") | jsonify | safeJS }}</script>''')
 passed=[]; rejected=[]
 def build(name,config='',diagnostic=None):
  write('probe.toml',config);out=RUN/(name+'-public')
@@ -34,6 +36,10 @@ def build(name,config='',diagnostic=None):
  return out
 out=build('baseline');text=(out/'manual/index.html').read_text()
 data=json.loads(re.search(r'id="icons-probe">(.*?)</script>',text,re.S)[1]);assert set(data['icons'])==set(data['sources'])
+assert data['empty']==''
+for key,svg in data['icons'].items():
+ expected=re.sub(r'^<svg\s','<svg class="icon" aria-hidden="true" focusable="false" ',re.sub(r'>\s+<','><',svg.strip()))
+ assert data['rendered'][key]==expected,key
 originals=[];solars=[]
 for key,meta in data['sources'].items():
  svg=data['icons'][key].strip();root=ET.fromstring(svg)
@@ -62,6 +68,10 @@ assert '<a class="menu' in text or 'native-menu' in text
 custom='<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5"/></svg>'
 write('data/icons.yaml','sidera-bold-duotone: '+json.dumps(custom)+'\ncustom-example: '+json.dumps(custom)+'\n')
 out=build('override');text=(out/'manual/index.html').read_text();assert text.count('r="7"')>=2
+probe=json.loads(re.search(r'id="icons-probe">(.*?)</script>',text,re.S)[1])
+assert probe['icons']['custom-example']==custom
+assert 'r="7"' in probe['rendered']['custom-example']
+assert probe['rendered']['custom-example']==probe['rendered']['sidera-bold-duotone']
 for name,cfg in [('icons-off','[params]\nicons=false\n'),('chinese-off',"defaultContentLanguage='zh'\nlocale='zh-CN'\n[params]\nicons=false\n")]:
  out=build(name,cfg)
  for route in ['index.html','manual/index.html']:
@@ -85,6 +95,30 @@ bad={
 for name,value in bad.items():
  write('data/icons.yaml','unused-unsafe: '+json.dumps(value)+'\n');build('reject-'+name,'[params]\nicons=false\n','Sidera icon')
 write('data/icons.yaml','{}\n');write('content/invalid.md','---\ntitle: Invalid\n---\n{{< link href="/" text="Bad" icon="unknown.svg" >}}');build('reject-key',diagnostic='unknown icon')
+# Validate the public renderer even when selecting no icon, and keep native
+# registry/renderer template overrides ahead of the theme's cached implementation.
+write('content/invalid.md','---\ntitle: Renderer checks\n---\n')
+write('layouts/_partials/sidera/head-extra.html','{{ partial "sidera/icon.html" false }}')
+build('reject-name-type',diagnostic='icon name must be a string')
+write('data/icons.yaml','unused-unsafe: false\n')
+write('layouts/_partials/sidera/head-extra.html','{{ partial "sidera/icon.html" "" }}')
+build('reject-empty-selection',diagnostic='Sidera icon')
+write('data/icons.yaml','{}\n')
+write('layouts/_partials/sidera/head-extra.html','<div id="override-probe">{{ partial "sidera/icon.html" "home" }}</div>')
+write('layouts/_partials/sidera/icons.html', '{{ return (merge hugo.Data.sidera.icons (dict "home" '+json.dumps(custom)+')) }}')
+out=build('registry-template-override')
+assert '<div id="override-probe"><svg class="icon"' in (out/'index.html').read_text()
+assert 'r="7"' in (out/'index.html').read_text()
+write('layouts/_partials/sidera/icons.html', '{{ $svg := '+json.dumps(custom)+' }}{{ if eq .Language.Lang "zh" }}{{ $svg = replace $svg `r="7"` `r="8"` }}{{ end }}{{ return (merge hugo.Data.sidera.icons (dict "home" $svg)) }}')
+write('content/manual/_index.zh.md','---\ntitle: Chinese manual\npreset: docs\n---\n')
+bilingual="defaultContentLanguage='en'\n[languages.en]\nweight=1\n[languages.zh]\nweight=2\nlocale='zh-CN'\n"
+out=build('language-registry-override', bilingual)
+for route,radius in [('index.html','7'),('zh/index.html','8')]:
+ probe=re.search(r'<div id="override-probe">(.*?)</div>',(out/route).read_text(),re.S)[1]
+ assert 'r="'+radius+'"' in probe,(route,probe)
+write('layouts/_partials/sidera/icon.html','<span class="custom-icon">{{ . }}</span>')
+out=build('renderer-template-override', bilingual)
+assert '<div id="override-probe"><span class="custom-icon">home</span></div>' in (out/'index.html').read_text()
 # Pin original image bytes independently of derivative provenance.
 expected={'sidera-parallax-circle.svg':'ebe20ad690732ea31d77b7a7de72308f305b5927ca2c87fb07b7a007a9b85a68','sidera-parallax-square.svg':'f21dc7afd04c9f4d4873ac39ee03e77d6affc093780d669177636b36e215ec7c'}
 for name,digest in expected.items():assert hashlib.sha256((THEME/'assets/images'/name).read_bytes()).hexdigest()==digest

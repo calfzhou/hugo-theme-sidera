@@ -1,7 +1,7 @@
-{{- $icons := partialCached "sidera/icons.html" site "icons" -}}
+{{- $icons := partialCached "sidera/rendered-icons.html" site "rendered-icons" -}}
 {{- if ne (printf "%T" .) "string" -}}{{- errorf "Sidera icon name must be a string" -}}
 {{- else if . -}}
   {{- with index $icons . -}}
-    {{- replaceRE `^<svg\s` `<svg class="icon" aria-hidden="true" focusable="false" ` (replaceRE `>\s+<` "><" (strings.TrimSpace .)) | safeHTML -}}
+    {{- . -}}
   {{- else -}}{{- errorf "Sidera: unknown icon %q (define it in data/icons.yaml)" . -}}{{- end -}}
 {{- end -}}

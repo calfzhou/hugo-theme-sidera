@@ -1,0 +1,8 @@
+{{- /* Keep the validated source registry intact; cache final markup as one map,
+     not one partial-cache entry per icon. Native registry overrides still apply. */ -}}
+{{- $rendered := collections.NewScratch -}}
+{{- range $name, $svg := partialCached "sidera/icons.html" . "icons" -}}
+  {{- $markup := replaceRE `^<svg\s` `<svg class="icon" aria-hidden="true" focusable="false" ` (replaceRE `>\s+<` "><" (strings.TrimSpace $svg)) | safeHTML -}}
+  {{- $rendered.Set $name $markup -}}
+{{- end -}}
+{{- return $rendered.Values -}}

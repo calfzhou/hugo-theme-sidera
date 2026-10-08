@@ -21,10 +21,11 @@
   {{- end -}}
 {{- end -}}
 {{- $scopes = $scopes | append $page.Site.Params | append $defaults -}}
-{{- $settings := dict -}}
+{{- $values := collections.NewScratch -}}
 {{- range $key, $_ := $defaults -}}
-  {{- range $scopes -}}{{- if isset . $key -}}{{- $settings = merge $settings (dict $key (index . $key)) -}}{{- break -}}{{- end -}}{{- end -}}
+  {{- range $scopes -}}{{- if isset . $key -}}{{- $values.Set $key (index . $key) -}}{{- break -}}{{- end -}}{{- end -}}
 {{- end -}}
+{{- $settings := $values.Values -}}
 {{- $identity := dict -}}{{- if isset $page.Site.Params "identity" -}}{{- $identity = $page.Site.Params.identity -}}{{- end -}}
 {{- $settings = merge $settings (dict "identity" $identity) -}}
 {{- return (partial "model/settings-valid.html" (dict "page" $page "settings" $settings)) -}}
