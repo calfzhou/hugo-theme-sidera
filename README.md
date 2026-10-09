@@ -9,9 +9,10 @@ An independent **Hugo theme for blogs, notebooks and documentation**, inspired b
 - Local search/backlinks, math, code inclusion, safe content components, local diagrams and interactive ECharts.
 - Optional Giscus comments; no comments or manual publication on ordinary activation.
 
-## Live site
+## Live sites
 
-[GoCalf](https://gocalf.com/) is a live site built with Sidera.
+- [Fieldbook showcase](https://calfzhou.github.io/sidera-showcase/) — a small demo and development playground.
+- [GoCalf](https://gocalf.com/) — a live site built with Sidera.
 
 ## Quick start
 
