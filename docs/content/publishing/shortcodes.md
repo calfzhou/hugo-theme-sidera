@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-09T22:32:54+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -107,6 +107,18 @@ only the repository link. Provider reliability and media codecs remain external 
 No diagram title/disabled aliases are accepted. Native Mermaid is a fence, not a
 shortcode; only caption/class/id attributes are supported. Read
 [diagrams, video and badges](../authoring/diagrams.md) before enabling them.
+
+## Interactive charts
+
+`echarts` accepts either an inline JSON body or an exact current-page `.json` `src`,
+plus optional `.json` `data`. Both forms share the native `echarts` fence renderer.
+Use `{{</* echarts src="chart.json" /*/>}}` for a bodyless shortcode; `/>` is required.
+Optional `caption` is nonblank plain text; `height` is 200–1200 pixels
+(default 360); safe `class`/`id` tokens are supported. No `title`, `disabled`, remote
+URL, CSV, YAML or JavaScript callback aliases. Line, bar, pie/donut and scatter charts
+stay interactive in local sandboxed frames, with source viewing and a self-contained JSON download.
+Read [interactive charts](../authoring/charts.md) for examples, dataset conflicts,
+option boundaries, accessibility and CSP requirements.
 
 ## Overrides
 

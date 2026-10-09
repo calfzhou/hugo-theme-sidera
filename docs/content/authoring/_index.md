@@ -1,16 +1,17 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T23:10:14+08:00
+lastmod: 2026-10-09T22:10:00+08:00
 title: "Write content"
 params:
   ai_label: generated
   children:
-    order: [components, snippets, diagrams, example]
+    order: [components, snippets, diagrams, charts, example]
 ---
 
 Use ordinary Markdown first: headings, lists, tables, links, quotes, fenced code and
 native Hugo footnotes. The safe renderer does not require raw HTML. Optional
-[components](components.md), [code resources](snippets.md) and [diagrams/media](diagrams.md)
+[components](components.md), [code resources](snippets.md), [diagrams/media](diagrams.md)
+and [interactive charts](charts.md)
 solve specific tasks; see a [small live example](example/_index.md).
 
 ## Story typography and AI disclosure

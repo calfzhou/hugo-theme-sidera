@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-06T09:47:10+08:00
+lastmod: 2026-10-09T22:10:00+08:00
 title: "Credits and licenses"
 params:
   ai_label: generated
@@ -31,11 +31,13 @@ official port and does not promise configuration or feature parity.
 - Mermaid 11.17.2: retained MIT and bundled dependency notices.
 - drawio viewer 31.5.2: retained Apache-2.0 and embedded dependency notices, including
   the applicable DOMPurify, pako and Lodash license files.
+- Apache ECharts 6.1.0 common bundle: retained Apache-2.0 LICENSE/NOTICE and
+  bundled d3, zrender and tslib license notices.
 
 The complete [third-party notices](https://github.com/calfzhou/hugo-theme-sidera/blob/main/THIRD-PARTY-NOTICES.md)
 remain at repository root. Generated pages publish native local links with
-`rel=license` to those notices and the original-material MIT text; conditional math/
-diagram assets also publish their own licenses. Keep notices when redistributing.
+`rel=license` to those notices and the original-material MIT text; conditional math,
+diagram and chart assets also publish their own licenses. Keep notices when redistributing.
 Original MIT terms do not relicense imported artwork or vendor code.
 
 ## Your site remains yours

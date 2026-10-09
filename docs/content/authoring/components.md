@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-09T22:10:00+08:00
 title: "Compose content"
 params:
   ai_label: generated
@@ -50,7 +50,7 @@ Timeline requires direct event children; event titles are literal strings, not p
 dates/Markdown. It is authored content, not a sidebar feed or data service.
 
 Use `kbd`, `mark` and `u` inline for escaped text. Standalone `quot`, `copy`, `link`,
-`snippet`, `image`, `video`, `diagramsnet`, `badge_github` belong on their own lines.
+`snippet`, `image`, `video`, `diagramsnet`, `echarts`, `badge_github` belong on their own lines.
 Attribution is ordinary Markdown. Link cards use an authored destination/label;
 optional content image/alt is separate from the named icon. Nothing fetches remote
 metadata to manufacture a preview. Quote numeric text strings and use actual booleans,
