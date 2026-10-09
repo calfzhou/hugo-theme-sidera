@@ -1,13 +1,14 @@
 {{- /* Native published Pages + direct assignments, never a term's recursive .Pages.
       Hugo's parent term .Pages may contain duplicates or leak children in flat mode. */ -}}
 {{- $owner := .owner -}}{{- $taxonomy := .taxonomy -}}
+{{- $owners := dict -}}{{- if $owner -}}{{- $owners = partialCached "collection-owners.html" site site.Language.Lang -}}{{- end -}}
 {{- $policy := partial "taxonomies/policy.html" $owner -}}
 {{- $nested := in $policy.hierarchy $taxonomy -}}
 {{- $nodes := dict -}}{{- $assigned := dict -}}{{- $all := slice -}}
 {{- range site.Pages -}}
   {{- $page := . -}}
   {{- if and (in (slice "page" "section") .Kind) (not .Params.sidera.tag_view) -}}
-    {{- $belongs := or (not $owner) (eq (partial "collection-owner.html" .) $owner) -}}
+    {{- $belongs := or (not $owner) (eq (index $owners .Path) $owner) -}}
     {{- if $belongs -}}
       {{- $values := slice -}}{{- if isset .Params $taxonomy -}}{{- $values = index .Params $taxonomy -}}{{- end -}}
       {{- if and (in (slice "authors" "series") $taxonomy) (eq (printf "%T" $values) "string") -}}{{- $values = slice $values -}}{{- end -}}

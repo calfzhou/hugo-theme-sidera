@@ -1,0 +1,10 @@
+{{- /* Ownership for the native site inventory only. Compute once for the scoped
+     taxonomy models instead of repeating ancestor traversal for every taxonomy.
+     Local/hidden Pages outside Site.Pages still use collection-owner.html directly. */ -}}
+{{- $owners := collections.NewScratch -}}
+{{- range .Pages -}}
+  {{- if in (slice "page" "section") .Kind -}}
+    {{- $owners.Set .Path (partial "collection-owner.html" .) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $owners.Values -}}

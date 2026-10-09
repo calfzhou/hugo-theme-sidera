@@ -2,12 +2,30 @@
      control/math/payload subtrees. This is a bounded theme-output reader, not an
      arbitrary HTML parser. The same rules drive the browser's DOM traversal. */ -}}
 {{- $html := replaceRE `(?s)<!--.*?-->|<(script|style|noscript|template)\b[^>]*>.*?</(script|style|noscript|template)>` "" (string .) -}}
-{{- $tokens := collections.NewScratch -}}
-{{- $stack := slice -}}{{- $skip := false -}}{{- $noCaption := false -}}
+{{- $tokens := collections.NewScratch -}}{{- $balance := collections.NewScratch -}}
+{{- $voids := hugo.Data.sidera_discovery.voids -}}
+{{- $stack := slice -}}{{- $skipDepth := 0 -}}{{- $skip := false -}}{{- $noCaption := false -}}
 {{- $sections := slice -}}{{- $id := "" -}}{{- $title := "" -}}{{- $text := "" -}}{{- $heading := false -}}
 {{- range findRE `<[^>]*>|[^<]+` $html -}}
   {{- $token := . -}}
   {{- if hasPrefix $token "<" -}}
+    {{- /* Excluded descendants need only balancing, not attribute interpretation.
+         Use a separate memo so the same tag outside exclusion is still parsed fully. */ -}}
+    {{- if $skip -}}
+      {{- if hasPrefix $token "</" -}}
+        {{- if gt $skipDepth 0 -}}{{- $skipDepth = sub $skipDepth 1 -}}{{- continue -}}{{- end -}}
+      {{- else -}}
+        {{- $shape := $tokens.Get $token -}}
+        {{- if not $shape -}}{{- $shape = $balance.Get $token -}}{{- end -}}
+        {{- if not $shape -}}
+          {{- $tag := lower (replaceRE `(?s)^</?([a-zA-Z0-9]+).*` "$1" $token) -}}
+          {{- $shape = dict "void" (or (in $voids $tag) (hasSuffix $token "/>")) -}}
+          {{- $balance.Set $token $shape -}}
+        {{- end -}}
+        {{- if not $shape.void -}}{{- $skipDepth = add $skipDepth 1 -}}{{- end -}}
+        {{- continue -}}
+      {{- end -}}
+    {{- end -}}
     {{- $info := $tokens.Get $token -}}
     {{- if not $info -}}{{- $info = partial "discovery/token.html" $token -}}{{- $tokens.Set $token $info -}}{{- end -}}
     {{- $tag := $info.tag -}}{{- $closing := $info.closing -}}

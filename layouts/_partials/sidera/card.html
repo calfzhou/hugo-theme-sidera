@@ -31,7 +31,7 @@
         {{ $model := partialCached "taxonomies/model.html" (dict "owner" $owner "taxonomy" $taxonomy) $scope $taxonomy }}
         {{ range index $model.assigned $page.Path }}
           {{ $term := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
-          {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $term) }}
+          {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $term "owner" $owner) }}
           <a class="term-badge" href="{{ $target.RelPermalink }}">{{ if eq $taxonomy "tags" }}{{ partial "sidera/taxonomy-icon.html" (dict "Taxonomy" $taxonomy "Key" .key "Settings" $settings) }}{{ end }}{{ .key }}</a>
         {{ end }}
       {{ end }}

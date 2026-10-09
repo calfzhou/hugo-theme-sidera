@@ -1,0 +1,27 @@
+{{- /* Validate stable entry data once; current/ancestor state stays in the renderer. */ -}}
+{{- $entry := .Entry -}}{{- $menu := .Name -}}
+{{- if and $entry.PageRef (not $entry.Page) -}}{{- errorf "Sidera menu %s: unresolved pageRef %s" $menu $entry.PageRef -}}{{- end -}}
+{{- with $entry.ConfiguredURL -}}{{- $validated := partial "sidera/url.html" (dict "url" . "source" (printf "menu %s/%s" $menu $entry.Name)) -}}{{- end -}}
+{{- $label := $entry.Name -}}
+{{- /* A color is data, never arbitrary authored CSS. Empty restores the theme accent. */ -}}
+{{- $color := "" -}}
+{{- if isset ($entry.Params | default dict) "color" -}}
+  {{- $value := $entry.Params.color -}}
+  {{- if ne (printf "%T" $value) "string" -}}
+    {{- errorf "Sidera menu %s/%s: params.color must be a hex color string or empty" $menu $label -}}
+  {{- else if $value -}}
+    {{- if not (findRE `^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$` $value) -}}
+      {{- errorf "Sidera menu %s/%s: params.color must be a hex color (#RGB, #RGBA, #RRGGBB or #RRGGBBAA)" $menu $label -}}
+    {{- else -}}{{- $color = $value -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if partial "model/is-root.html" . -}}{{- $icon = (partialCached "sidera/settings.html" . .Language.Lang .Path).icon -}}{{- end -}}{{- end -}}
+  {{- with $entry.Page -}}{{- if isset (.Params | default dict) "icon" -}}{{- $icon = .Params.icon -}}{{- end -}}{{- end -}}
+  {{- if isset ($entry.Params | default dict) "icon" -}}{{- $icon = $entry.Params.icon -}}{{- end -}}
+  {{- $iconHTML := partial "sidera/icon.html" $icon -}}
+{{- $url := "" -}}{{- $target := "" -}}
+{{- if $entry.URL -}}
+  {{- $url = partial "sidera/url.html" (dict "url" $entry.URL "source" (printf "menu %s/%s" $menu $entry.Name)) -}}
+  {{- $target = partial "links/target.html" $entry.URL -}}
+{{- else if not $entry.Children -}}{{- errorf "Sidera menu %s: %s has neither a destination nor children" $menu $entry.Name -}}{{- end -}}
+{{- return (dict "Label" $label "Color" $color "Icon" $iconHTML "URL" $url "Target" $target) -}}

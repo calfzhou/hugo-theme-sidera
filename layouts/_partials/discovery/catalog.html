@@ -10,13 +10,17 @@
     {{- if and .IsSection (eq $settings.list_mode "recursive") (not $settings.list_header) -}}{{- continue -}}{{- end -}}
     {{- $owner := partial "collection-owner.html" . -}}{{- $scope := "" -}}{{- $label := .Site.Title -}}
     {{- with $owner -}}{{- $scope = .RelPermalink -}}{{- $label = partial "collection-name.html" . -}}{{- end -}}
-    {{- $body := string (partial "images/list-captions.html" .Content) -}}{{- $links := slice -}}
+    {{- $raw := string .Content -}}{{- $cached := .Store.Get "sidera-search-body" -}}
+    {{- $body := "" -}}
+    {{- if and $cached (isset $cached "raw") (eq $cached.raw $raw) -}}{{- $body = $cached.html -}}
+    {{- else -}}{{- $body = string (partial "images/list-captions.html" $raw) -}}{{- end -}}
+    {{- $links := slice -}}
     {{- range findRE `<a\s[^>]*\sdata-content-page="[^"]*"[^>]*>` $body -}}
       {{- $links = $links | append (htmlUnescape (replaceRE `.*\sdata-content-page="([^"]*)".*` "$1" .)) -}}
     {{- end -}}
     {{- /* Store values may survive a server rebuild. Reuse only an exact current
          rendered body; fallback also supports custom own-body renderers. */ -}}
-    {{- $cached := .Store.Get "sidera-search-body" -}}{{- $sections := slice -}}
+    {{- $sections := slice -}}
     {{- if and $cached (eq $cached.html $body) (eq $cached.rules $rules) -}}{{- $sections = $cached.sections -}}
     {{- else -}}{{- $sections = partial "discovery/text.html" $body -}}{{- end -}}
     {{- $catalog = $catalog | append (dict "url" .RelPermalink "title" .Title "language" .Language.Lang "scope" $scope "context" $label "links" ($links | uniq | sort) "graph" $settings.link_graph "index" $settings.search_index "sections" $sections) -}}

@@ -15,6 +15,13 @@ _merge='shallow'
 [permalinks.term]
 _merge='shallow'
 ''')
+# The shared inventory must agree with direct ownership, including nested roots
+# and generated views, in each language/publication variant below.
+write('layouts/_partials/sidera/head-extra.html','{{- partialCached "check-owners.html" site site.Language.Lang -}}')
+write('layouts/_partials/check-owners.html','''{{- $owners := partialCached "collection-owners.html" . .Language.Lang -}}
+{{- range .Pages -}}{{- if in (slice "page" "section") .Kind -}}
+  {{- if ne (index $owners .Path) (partial "collection-owner.html" .) -}}{{- errorf "ownership inventory mismatch: %s" .Path -}}{{- end -}}
+{{- end -}}{{- end -}}''')
 for owner in ['notebook','journal']:
  for i in range(5):
   tag='science/math' if i%2 else 'science/physics';category='work/notes' if i%2 else 'work/tools'

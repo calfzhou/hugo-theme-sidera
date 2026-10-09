@@ -1,34 +1,14 @@
 {{- $entry := .Entry -}}{{- $ctx := .Context -}}{{- $depth := .Depth -}}
 {{- if gt $depth 2 -}}{{- errorf "Sidera menu %s: %s exceeds two levels" $ctx.Name $entry.Name -}}{{- end -}}
-{{- if and $entry.PageRef (not $entry.Page) -}}{{- errorf "Sidera menu %s: unresolved pageRef %s" $ctx.Name $entry.PageRef -}}{{- end -}}
+{{- $data := partialCached "sidera/menu-entry-data.html" (dict "Entry" $entry "Name" $ctx.Name) $ctx.Page.Language.Lang $ctx.Name $entry.KeyName $entry.Parent -}}
 {{- $current := $ctx.Page.IsMenuCurrent $ctx.Name $entry -}}
 {{- $ancestor := $ctx.Page.HasMenuCurrent $ctx.Name $entry -}}
 {{- with $entry.Page -}}{{- if and (not .IsHome) (or (.IsAncestor $ctx.Page) (eq . $ctx.Owner)) -}}{{- $ancestor = true -}}{{- end -}}{{- end -}}
-{{- with $entry.ConfiguredURL -}}{{- $validated := partial "sidera/url.html" (dict "url" . "source" (printf "menu %s/%s" $ctx.Name $entry.Name)) -}}{{- end -}}
-{{- $label := $entry.Name -}}
-{{- /* A color is data, never arbitrary authored CSS. Empty restores the theme accent. */ -}}
-{{- $color := "" -}}
-{{- if isset ($entry.Params | default dict) "color" -}}
-  {{- $value := $entry.Params.color -}}
-  {{- if ne (printf "%T" $value) "string" -}}
-    {{- errorf "Sidera menu %s/%s: params.color must be a hex color string or empty" $ctx.Name $label -}}
-  {{- else if $value -}}
-    {{- if not (findRE `^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$` $value) -}}
-      {{- errorf "Sidera menu %s/%s: params.color must be a hex color (#RGB, #RGBA, #RRGGBB or #RRGGBBAA)" $ctx.Name $label -}}
-    {{- else -}}{{- $color = $value -}}{{- end -}}
-  {{- end -}}
-{{- end -}}
 <li>
-  {{- $icon := "link" -}}{{- with $entry.Page -}}{{- $icon = "page" -}}{{- if .IsHome -}}{{- $icon = "home" -}}{{- else if partial "model/is-root.html" . -}}{{- $icon = (partialCached "sidera/settings.html" . .Language.Lang .Path).icon -}}{{- end -}}{{- end -}}
-  {{- with $entry.Page -}}{{- if isset (.Params | default dict) "icon" -}}{{- $icon = .Params.icon -}}{{- end -}}{{- end -}}
-  {{- if isset ($entry.Params | default dict) "icon" -}}{{- $icon = $entry.Params.icon -}}{{- end -}}
-  {{- $iconHTML := partial "sidera/icon.html" $icon -}}
-  {{- if $entry.URL -}}
-    <a{{ with $color }} style="{{ printf "--menu-accent: %s" . | safeCSS }}"{{ end }} href="{{ partial "sidera/url.html" (dict "url" $entry.URL "source" (printf "menu %s/%s" $ctx.Name $entry.Name)) }}"{{ partial "links/target.html" $entry.URL }}{{ if $current }} aria-current="page"{{ else if $ancestor }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $iconHTML }}{{ end }}<span>{{ $label }}</span></a>
+  {{- if $data.URL -}}
+    <a{{ with $data.Color }} style="{{ printf "--menu-accent: %s" . | safeCSS }}"{{ end }} href="{{ $data.URL }}"{{ $data.Target }}{{ if $current }} aria-current="page"{{ else if $ancestor }} aria-current="location"{{ end }}>{{ if $ctx.Settings.icons }}{{ $data.Icon }}{{ end }}<span>{{ $data.Label }}</span></a>
   {{- else -}}
-    {{- if $entry.PageRef -}}{{- errorf "Sidera menu %s: unresolved pageRef %s" $ctx.Name $entry.PageRef -}}{{- end -}}
-    {{- if not $entry.Children -}}{{- errorf "Sidera menu %s: %s has neither a destination nor children" $ctx.Name $entry.Name -}}{{- end -}}
-    <span class="menu-group"{{ if $ancestor }} data-active-ancestor="true"{{ end }}>{{ $label }}</span>
+    <span class="menu-group"{{ if $ancestor }} data-active-ancestor="true"{{ end }}>{{ $data.Label }}</span>
   {{- end -}}
   {{- with $entry.Children -}}<ul>{{ range . }}{{ partial "sidera/menu-entry.html" (dict "Entry" . "Context" $ctx "Depth" (add $depth 1)) }}{{ end }}</ul>{{- end -}}
 </li>

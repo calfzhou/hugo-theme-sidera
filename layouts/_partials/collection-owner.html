@@ -1,4 +1,5 @@
+{{- /* Ancestors are sections/home: a small cache, not one entry per article. */ -}}
 {{- $owner := false -}}
 {{- if partial "model/is-root.html" . -}}{{- $owner = . -}}
-{{- else -}}{{- range .Ancestors -}}{{- if partial "model/is-root.html" . -}}{{- $owner = . -}}{{- break -}}{{- end -}}{{- end -}}{{- end -}}
+{{- else -}}{{- range .Ancestors -}}{{- if partialCached "model/is-root.html" . .Language.Lang .Path -}}{{- $owner = . -}}{{- break -}}{{- end -}}{{- end -}}{{- end -}}
 {{- return $owner -}}

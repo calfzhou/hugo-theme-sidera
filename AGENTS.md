@@ -74,6 +74,7 @@ python3 tests/check_discovery_tokens.py /absolute/fresh-discovery-check
 python3 tests/check_discovery_relations.py /absolute/fresh-relations-check
 python3 tests/check_component_instances.py /absolute/fresh-instance-check
 python3 tests/check_settings_resolution.py /absolute/fresh-settings-check
+python3 tests/check_menus.py /absolute/fresh-menu-check
 ```
 
 Run the relevant existing check_*.py files for affected images, links, taxonomy,

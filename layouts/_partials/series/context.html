@@ -1,7 +1,7 @@
 {{- $page := . -}}{{- $owner := partial "collection-owner.html" . -}}{{- $scope := "global" -}}{{- with $owner -}}{{- $scope = .Path -}}{{- end -}}
 {{- $context := dict -}}
 {{- range ($page.GetTerms "series" | uniq) -}}
-  {{- $term := . -}}{{- $target := partial "taxonomies/link.html" (dict "page" $page "term" .) -}}
+  {{- $term := . -}}{{- $target := partial "taxonomies/link.html" (dict "page" $page "term" . "owner" $owner) -}}
   {{- $pages := partialCached "series/pages.html" (dict "Term" . "Owner" $owner) .Path $scope -}}
   {{- range $index, $item := $pages -}}{{- if eq $item $page -}}
     {{- $context = dict "Term" $term "Target" $target "Pages" $pages "Position" (add $index 1) "Total" (len $pages) -}}

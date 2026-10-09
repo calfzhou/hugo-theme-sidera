@@ -2,6 +2,7 @@
      Parse search sections here while Hugo renders pages concurrently. The deferred
      catalog still owns publication/graph selection; this is only per-body work. */ -}}
 {{- .Store.Set "sidera-content-rendered" true -}}
-{{- $body := partial "images/list-captions.html" .Content -}}
-{{- .Store.Set "sidera-search-body" (dict "html" (string $body) "rules" (hugo.Data.sidera_discovery | jsonify) "sections" (partial "discovery/text.html" $body)) -}}
+{{- $raw := string .Content -}}
+{{- $body := partial "images/list-captions.html" $raw -}}
+{{- .Store.Set "sidera-search-body" (dict "raw" $raw "html" (string $body) "rules" (hugo.Data.sidera_discovery | jsonify) "sections" (partial "discovery/text.html" $body)) -}}
 {{- $body -}}

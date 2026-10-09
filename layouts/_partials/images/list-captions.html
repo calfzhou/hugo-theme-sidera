@@ -1,10 +1,11 @@
 {{- /* Goldmark's image context has IsBlock but no list ancestry or list hook.
      Read only rendered HTML: keep list depth, unwrap our exact automatic figures.
      Opaque HTML/comments and explicit image/figure shortcodes remain untouched.
-     Use this at body output AND search extraction so captions are not merely hidden. */ -}}
+     Stream unchanged/replaced tokens to the partial output: growing a token slice
+     would repeatedly copy it. Input remains trusted native rendered HTML. */ -}}
 {{- $html := string . -}}
 {{- if and (strings.Contains $html "<li") (strings.Contains $html `<figure class="md-figure">`) -}}
-  {{- $depth := 0 -}}{{- $parts := slice -}}
+  {{- $depth := 0 -}}
   {{- $figure := `<figure class="md-figure">(<img\b[^>]*>)<figcaption>[^<]*</figcaption></figure>` -}}
   {{- $tokens := printf `(?s)<!--.*?-->|<(?:script|style|textarea|template|noscript)\b[^>]*>.*?</(?:script|style|textarea|template|noscript)>|%s|<[^>]*>|[^<]+` $figure -}}
   {{- range findRE $tokens $html -}}
@@ -14,8 +15,8 @@
     {{- else if and (gt $depth 0) (hasPrefix $token `<figure class="md-figure">`) -}}
       {{- $token = replaceRE $figure "$1" $token -}}
     {{- end -}}
-    {{- $parts = $parts | append $token -}}
+    {{- $token | safeHTML -}}
   {{- end -}}
-  {{- $html = delimit $parts "" -}}
+{{- else -}}
+  {{- $html | safeHTML -}}
 {{- end -}}
-{{- return ($html | safeHTML) -}}

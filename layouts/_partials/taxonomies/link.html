@@ -1,6 +1,6 @@
 {{- /* Native term identity remains global; choose a real contextual projection. */ -}}
 {{- $page := .page -}}{{- $term := .term -}}{{- $target := $term -}}
-{{- $owner := partial "collection-owner.html" $page -}}
+{{- $owner := false -}}{{- if isset . "owner" -}}{{- $owner = .owner -}}{{- else -}}{{- $owner = partial "collection-owner.html" $page -}}{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path -}}
 {{- $mode := "global" -}}{{- if in (slice "tags" "categories" "series") $term.Data.Plural -}}{{- $mode = "section" -}}{{- end -}}
 {{- if isset $settings.taxonomy_links $term.Data.Plural -}}{{- $mode = index $settings.taxonomy_links $term.Data.Plural -}}{{- end -}}

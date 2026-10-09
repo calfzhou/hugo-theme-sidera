@@ -7,7 +7,7 @@
         <ul id="{{ $prefix }}assigned-{{ $taxonomy }}" class="tag-chips" aria-label="{{ T $taxonomy }}">
           {{ range $direct }}
             {{ $native := partial "taxonomies/page.html" (dict "owner" false "taxonomy" $taxonomy "key" .key "slug" .slug) }}
-            {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $native) }}
+            {{ $target := partial "taxonomies/link.html" (dict "page" $page "term" $native "owner" $owner) }}
             <li><a href="{{ $target.RelPermalink }}">{{ partial "sidera/taxonomy-icon.html" (dict "Taxonomy" $taxonomy "Key" .key "Settings" $.Settings) }}<span>{{ .key }}</span></a></li>
           {{ end }}
         </ul>
