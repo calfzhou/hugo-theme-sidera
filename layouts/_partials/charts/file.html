@@ -1,0 +1,12 @@
+{{- $source := "" -}}
+{{- $key := .key -}}
+{{- $valid := and (ne $key "") (not (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $key)) (eq (lower (path.Ext $key)) ".json") -}}
+{{- if not $valid -}}
+  {{- errorf "Sidera echarts: %s must be an exact local .json page resource key (%s)" .name .position -}}
+{{- else -}}
+  {{- with .page.Resources.Get $key -}}
+    {{- if eq .ResourceType "page" -}}{{- errorf "Sidera echarts: %s must be a file (%s)" $.name $.position -}}
+    {{- else -}}{{- $source = .Content -}}{{- end -}}
+  {{- else -}}{{- errorf "Sidera echarts: missing page resource %q (%s)" $key $.position -}}{{- end -}}
+{{- end -}}
+{{- return $source -}}

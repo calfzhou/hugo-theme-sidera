@@ -563,3 +563,29 @@ other = "The page may have moved or been removed, or the address may be incorrec
 
 [not_found_home]
 other = "Back to Home"
+
+# Interactive charts
+
+[chart_title]
+other = "Interactive chart"
+
+[chart_loading]
+other = "Loading interactive chart…"
+
+[chart_ready]
+other = "Interactive chart ready. Source and download remain available."
+
+[chart_error]
+other = "The chart could not be displayed. View or download its JSON source."
+
+[chart_nojs]
+other = "JavaScript is required for the interactive chart. You can still view or download its JSON source."
+
+[chart_source]
+other = "View source"
+
+[chart_download]
+other = "Download JSON"
+
+[chart_controls]
+other = "Chart source controls"

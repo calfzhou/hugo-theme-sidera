@@ -1,0 +1,2 @@
+{{- with .Options -}}{{- errorf "Sidera echarts: highlight options are not chart attributes (%s)" $.Position -}}{{- end -}}
+{{- partial "charts/figure.html" (dict "page" .PageInner "source" .Inner "params" .Attributes "position" .Position) -}}

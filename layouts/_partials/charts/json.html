@@ -1,0 +1,10 @@
+{{- /* Force JSON: Unmarshal's automatic format detection also accepts YAML. */ -}}
+{{- $value := false -}}
+{{- if or (not (strings.ContainsNonSpace .source)) (gt (len .source) 1000000) -}}
+  {{- errorf "Sidera echarts: %s must be nonempty JSON, at most 1 MB (%s)" .name .position -}}
+{{- else -}}
+  {{- $parsed := try (transform.Unmarshal (dict "format" "json") .source) -}}
+  {{- with $parsed.Err -}}{{- errorf "Sidera echarts: invalid %s JSON (%s): %s" $.name $.position . -}}
+  {{- else -}}{{- $value = $parsed.Value -}}{{- end -}}
+{{- end -}}
+{{- return $value -}}

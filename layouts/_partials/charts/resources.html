@@ -1,0 +1,15 @@
+{{- $root := "vendor/echarts-6.1.0/" -}}
+{{- $manifest := resources.Get (printf "%sprovenance.json" $root) -}}
+{{- if not $manifest -}}{{- errorf "Sidera echarts: missing vendor manifest" -}}{{- end -}}
+{{- range $name, $sha := (transform.Unmarshal $manifest.Content).files -}}
+  {{- with resources.Get (printf "%s%s" $root $name) -}}
+    {{- if ne (crypto.SHA256 .Content) $sha -}}{{- errorf "Sidera echarts: integrity mismatch for %s" $name -}}{{- end -}}
+    {{- /* Publish every vendored notice with the conditional chart assets. */ -}}
+    {{- if ne $name "echarts.common.min.js" -}}{{- $published := .RelPermalink -}}{{- end -}}
+  {{- else -}}{{- errorf "Sidera echarts: missing vendor file %s" $name -}}{{- end -}}
+{{- end -}}
+{{- $library := resources.Get (printf "%secharts.common.min.js" $root) | fingerprint -}}
+{{- $controller := resources.Get "js/chart-frame.js" | minify | fingerprint -}}
+{{- $html := partial "charts/frame.html" (dict "library" $library "controller" $controller) -}}
+{{- $frame := resources.FromString "charts/echarts-6.1.0.html" $html | fingerprint -}}
+{{- return $frame.RelPermalink -}}

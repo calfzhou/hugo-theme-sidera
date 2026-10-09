@@ -15,7 +15,7 @@ the product. Do not import a consuming site's content, settings or private paths
 | Markdown and links | layouts/_markup/; layouts/_partials/links/, images/, code-block.html |
 | Shortcodes and composition | layouts/_shortcodes/; layouts/_partials/components/; component private-node branches in render hooks |
 | Search and references | layouts/_partials/discovery/; assets/js/search.js and discovery data rules |
-| Providers/diagrams | layouts/_partials/comments/, diagrams/; matching local assets/controllers |
+| Providers/diagrams/charts | layouts/_partials/comments/, diagrams/, charts/; matching local assets/controllers |
 | UI, assets, messages | assets/css/, assets/js/, data/sidera/icons.yaml and icon_sources.yaml; i18n/en.toml and zh-CN.toml |
 
 Check actual filenames/callers before editing. Prefer native helpers and existing
@@ -141,3 +141,23 @@ gh release create "$version" --verify-tag --title "Sidera $version" --notes-file
 Verify the remote peeled tag equals the approved commit and the Release is actually
 published. Never force-move a tag; correct a released defect in a new version. Keep
 consumer updates, source merges and site deployments as separate authorized actions.
+
+## Interactive charts
+
+`charts/figure.html` is the shared fence/shortcode boundary. Keep exact native page
+resource lookup, strict JSON, byte/depth/array limits and capability rejection in
+both authoring paths. Inline/file configuration must not compete; external data
+must not overwrite a dataset source. Use the native leaf bridge for nesting.
+The pinned ECharts common bundle deliberately supports line/bar/pie/scatter, not
+all ECharts modules. Retain verbatim vendor files/notices and manifest hashes.
+Do not enable HTML tooltips, image/URL options, callbacks, same-origin sandbox
+permissions, eval or network access to make a chart work. Frames are interactive;
+do not substitute diagram-style inert SVG images. Resolved source and JSON download must remain available
+without JS and after failure; use data-search-exclude for payload/control subtrees.
+Reuse diagram hover/focus/touch toolbar styling; icons-off must retain visible text.
+
+Run `tests/check_charts.py /absolute/fresh-output` here using uv/Python 3.11+.
+In the showcase, `tests/check_charts_browser.mjs` consumes that directory through
+its owned browser harness (explicit free HTTP/CDP ports, nvm-selected Node). Cover
+prefix/locales, Content/Summary versus Plain, folds/grids, interaction/state,
+reduced motion, no-JS/failure, safe messages and no external renderer requests.

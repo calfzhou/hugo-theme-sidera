@@ -1,0 +1,27 @@
+{{- /* Bound traversal and reject capabilities, not user prose. Data cells are
+     opaque JSON: a column called "link" is data, not a title navigation option. */ -}}
+{{- if gt .depth 24 -}}
+  {{- errorf "Sidera echarts: JSON nesting exceeds 24 levels (%s)" .position -}}
+{{- else if reflect.IsMap .value -}}
+  {{- range $key, $value := .value -}}
+    {{- if in (slice "__proto__" "prototype" "constructor") $key -}}
+      {{- errorf "Sidera echarts: unsafe JSON key %q (%s)" $key $.position -}}
+    {{- end -}}
+    {{- if not $.data -}}
+      {{- if and (eq $key "tooltip") (not (reflect.IsMap $value)) -}}{{- errorf "Sidera echarts: tooltip must be an object (%s)" $.position -}}{{- end -}}
+      {{- if in (slice "link" "sublink" "image" "graphic" "toolbox" "extraCssText" "appendTo" "appendToBody" "className" "transform" "universalTransition") $key -}}
+        {{- errorf "Sidera echarts: unsupported option %q (%s)" $key $.position -}}
+      {{- end -}}
+      {{- if and (eq $key "renderMode") (ne $value "richText") -}}
+        {{- errorf "Sidera echarts: only richText tooltips are supported (%s)" $.position -}}
+      {{- end -}}
+      {{- if and (eq (printf "%T" $value) "string") (strings.HasPrefix $value "image://") -}}
+        {{- errorf "Sidera echarts: external/image symbols are not supported (%s)" $.position -}}
+      {{- end -}}
+    {{- end -}}
+    {{- partial "charts/validate.html" (dict "value" $value "depth" (add $.depth 1) "position" $.position "data" (or $.data (eq $key "source"))) -}}
+  {{- end -}}
+{{- else if reflect.IsSlice .value -}}
+  {{- if gt (len .value) 10000 -}}{{- errorf "Sidera echarts: arrays are limited to 10000 items (%s)" .position -}}{{- end -}}
+  {{- range .value -}}{{- partial "charts/validate.html" (dict "value" . "depth" (add $.depth 1) "position" $.position "data" $.data) -}}{{- end -}}
+{{- end -}}

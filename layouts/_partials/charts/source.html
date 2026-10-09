@@ -1,0 +1,11 @@
+{{- /* Both authoring forms expose a reusable resolved JSON resource. Reuse the
+     diagram hover/focus/touch toolbar, without adding diagram renderer behavior. */ -}}
+{{- $download := resources.FromString (printf "charts/source/%s.json" (crypto.SHA256 .source)) .source -}}
+<div class="diagram-canvas chart-canvas" data-search-exclude>
+  <div class="diagram-tools chart-tools" role="group" aria-label="{{ T "chart_controls" }}">
+    <button type="button" class="diagram-action" data-chart-action="source" title="{{ T "chart_source" }}" aria-label="{{ T "chart_source" }}" aria-expanded="false" hidden>{{ if .icons }}{{ partial "sidera/icon.html" "code" }}{{ else }}{{ T "chart_source" }}{{ end }}</button>
+    <a class="diagram-action chart-download" href="{{ $download.RelPermalink }}" download="chart.json" title="{{ T "chart_download" }}" aria-label="{{ T "chart_download" }}">{{ if .icons }}{{ partial "sidera/icon.html" "download" }}{{ else }}{{ T "chart_download" }}{{ end }}</a>
+  </div>
+  <div class="chart-view" hidden></div>
+  <details class="chart-source" open><summary>{{ T "chart_source" }}</summary><pre><code>{{ .source }}</code></pre></details>
+</div>

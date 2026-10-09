@@ -195,6 +195,31 @@ relevant original licenses as native resources. The opaque sandbox intentionally
 blocks unused networking/eval/editing; its output becomes an inert SVG image. See
 docs/content/authoring/diagrams.md for the exact feature, security, source-only fallback and CSP boundaries.
 
+## Local interactive chart runtime
+
+**Apache ECharts 6.1.0**: unmodified npm `dist/echarts.common.min.js` (line, bar,
+pie and scatter, with SVG/Canvas renderers and common components). Source:
+https://registry.npmjs.org/echarts/-/echarts-6.1.0.tgz . Retrieved with
+`npm pack echarts@6.1.0 --ignore-scripts`; no installation or lifecycle scripts.
+The package's Apache-2.0 LICENSE, NOTICE and BSD-3-Clause `licenses/LICENSE-d3`
+are retained verbatim in `assets/vendor/echarts-6.1.0/`. ECharts' NOTICE states:
+
+Apache ECharts
+Copyright 2017-2026 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (https://www.apache.org/).
+
+The bundled dependencies **zrender 6.1.0** (BSD-3-Clause) and **tslib 2.3.0**
+(0BSD) retain their exact npm LICENSE and, for tslib, CopyrightNotice files.
+`provenance.json` records every source archive, npm SHA-512 integrity, archive
+SHA-256, copied member and file SHA-256. The resource pipeline verifies all copied
+hashes and publishes these notices with the conditional chart assets. The common
+bundle remains byte-identical; Sidera's original integration is separate and uses
+SVG rendering in live opaque sandboxes, not remote services or injected host HTML.
+See docs/content/authoring/charts.md for supported input and runtime restrictions.
+Original Sidera material remains MIT licensed; these components retain their terms.
+
 ### Search presentation and journey
 
 The inline sidebar search layout, widget replacement while searching, title-above-link

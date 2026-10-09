@@ -560,3 +560,29 @@ other = "页面可能已被移动或删除，也可能是地址输入有误。"
 
 [not_found_home]
 other = "返回主页"
+
+# Interactive charts
+
+[chart_title]
+other = "交互式图表"
+
+[chart_loading]
+other = "正在加载交互式图表…"
+
+[chart_ready]
+other = "交互式图表已就绪。仍可查看和下载源代码。"
+
+[chart_error]
+other = "无法显示图表。请查看或下载其 JSON 源代码。"
+
+[chart_nojs]
+other = "交互式图表需要 JavaScript。您仍可查看或下载其 JSON 源代码。"
+
+[chart_source]
+other = "查看源代码"
+
+[chart_download]
+other = "下载 JSON"
+
+[chart_controls]
+other = "图表源代码控件"

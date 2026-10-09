@@ -869,6 +869,8 @@ details[open] > summary :where(.folding-toggle,.disclosure-text) > .when-open { 
 .github-badges { margin:1rem 0; }.badge-repo { font-size:.9em; font-weight:500; }.badge-images { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; align-items:center; }.prose .badge-images img { background:transparent; display:block; height:20px; width:auto; max-width:100%; border-radius:0; margin:0; }.badge-images > span { max-width:100%; min-width:0; }.prose .badge-status:not(.visually-hidden),.badge-failed { font-size:.75em; color:var(--muted); margin:6px 0; }
 /* A B inversion wrapper filters the whole component. Pair its chrome with the
    same fixed light palette as the SVG instead of dark-theming it a second time. */
+:is(.invert-when-dark,.invert-when-light) .content-chart,
+.content-chart:is(.invert-when-dark,.invert-when-light),
 :is(.invert-when-dark,.invert-when-light) .content-diagram,
 .content-diagram:is(.invert-when-dark,.invert-when-light),
 .diagram-dialog[data-fixed-light] > .diagram-canvas {
@@ -995,8 +997,8 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .search-section-marker { --icon-size: 1em; }
 .search-wrapper[data-icons="false"] .search-button { flex-basis: auto; font-size: 12px; }
 .search-wrapper[data-icons="false"] .search-clear { font: 12px var(--ui); flex: none; }
-:is(.content-diagram,.diagram-dialog,.image-dialog)[data-icons="false"] .diagram-action { width: auto; height: auto; min-height: 28px; padding: 5px 8px; font: 12px var(--ui); }
-@media (hover:none),(pointer:coarse) { :is(.content-diagram,.diagram-dialog,.image-dialog)[data-icons="false"] .diagram-action { min-height: 44px; } }
+:is(.content-diagram,.content-chart,.diagram-dialog,.image-dialog)[data-icons="false"] .diagram-action { width: auto; height: auto; min-height: 28px; padding: 5px 8px; font: 12px var(--ui); }
+@media (hover:none),(pointer:coarse) { :is(.content-diagram,.content-chart,.diagram-dialog,.image-dialog)[data-icons="false"] .diagram-action { min-height: 44px; } }
 
 /* In-article timeline: Stellar 1.44.0 tag-plugins/timeline.styl (xaoxuu, MIT).
    Native ordered events, not its unrelated sidebar/API widget. */
@@ -1045,3 +1047,14 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .not-found-description { max-width: 34em; margin: 14px 0 0; color: var(--muted); font-size: 16px; }
 .not-found-home { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 28px; padding: 10px 22px; border: 1px solid #17191b; border-radius: 8px; background: var(--not-found-accent); color: #17191b; font-weight: 600; text-decoration: none; }
 .not-found-home:is(:hover,:focus-visible) { background: #ffd16c; color: #17191b; text-decoration: none; }
+
+/* Interactive charts keep native legends; only source/download live outside. */
+.prose .content-chart { margin:1.25rem 0; min-width:0; }
+.chart-view { width:100%; height:var(--chart-height,360px); }
+.chart-frame { display:block; width:100%; height:100%; border:0; }
+.prose .chart-status { margin:8px 0; font-size:.85em; color:var(--muted); }
+.chart-canvas.chart-hover > .diagram-tools { opacity:1; pointer-events:auto; }
+.chart-source { margin:8px 0; }
+.chart-source[data-enhanced]:not([open]) { display:none; }
+.chart-source > summary { cursor:pointer; min-height:44px; padding-block:10px; font-size:.85em; color:var(--link); }
+.chart-source pre { max-height:320px; overflow:auto; }

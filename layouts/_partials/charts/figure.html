@@ -1,0 +1,78 @@
+{{- $page := .page -}}{{- $position := .position -}}{{- $params := .params -}}
+{{- $source := .source -}}{{- $caption := "" -}}{{- $height := 360 -}}{{- $class := "" -}}{{- $id := "" -}}
+{{- range $key, $value := $params -}}
+  {{- if not (in (slice "src" "data" "caption" "height" "class" "id") $key) -}}{{- errorf "Sidera echarts: unsupported parameter %q (%s)" $key $position -}}{{- end -}}
+  {{- if eq $key "height" -}}
+    {{- if not (findRE `^[1-9][0-9]{2,3}$` (string $value)) -}}{{- errorf "Sidera echarts: height must be an integer from 200 to 1200 pixels (%s)" $position -}}
+    {{- else if or (lt (int $value) 200) (gt (int $value) 1200) -}}{{- errorf "Sidera echarts: height must be from 200 to 1200 pixels (%s)" $position -}}
+    {{- else -}}{{- $height = int $value -}}{{- end -}}
+  {{- else -}}
+    {{- if or (ne (printf "%T" $value) "string") (not (strings.ContainsNonSpace (string $value))) -}}{{- errorf "Sidera echarts: %s must be a nonblank string (%s)" $key $position -}}{{- end -}}
+    {{- if eq $key "caption" -}}{{- $caption = string $value -}}{{- end -}}
+    {{- if in (slice "class" "id") $key -}}
+      {{- $pattern := `^[A-Za-z_][A-Za-z0-9_-]*(?: [A-Za-z_][A-Za-z0-9_-]*)*$` -}}{{- if eq $key "id" -}}{{- $pattern = `^[A-Za-z_][A-Za-z0-9_-]*$` -}}{{- end -}}
+      {{- if not (findRE $pattern (string $value)) -}}{{- errorf "Sidera echarts: invalid %s (%s)" $key $position -}}{{- end -}}
+      {{- if eq $key "id" -}}{{- $id = string $value -}}{{- else -}}{{- $class = string $value -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if isset $params "src" -}}
+  {{- if strings.ContainsNonSpace $source -}}{{- errorf "Sidera echarts: use src or inline JSON, not both (%s)" $position -}}{{- end -}}
+  {{- $source = partial "charts/file.html" (dict "page" $page "key" (string $params.src) "name" "src" "position" $position) -}}
+{{- end -}}
+{{- $option := partial "charts/json.html" (dict "source" $source "name" "configuration" "position" $position) -}}
+{{- if not (reflect.IsMap $option) -}}
+  {{- errorf "Sidera echarts: configuration must be a JSON object (%s)" $position -}}
+{{- else -}}
+  {{- range $key, $value := $option -}}
+    {{- if not (in (slice "title" "legend" "grid" "xAxis" "yAxis" "dataset" "series" "tooltip" "axisPointer" "dataZoom" "color" "backgroundColor" "textStyle" "animation" "animationDuration" "animationDurationUpdate" "animationEasing" "animationEasingUpdate" "animationDelay" "animationDelayUpdate") $key) -}}
+      {{- errorf "Sidera echarts: unsupported top-level option %q (%s)" $key $position -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if isset $params "data" -}}
+    {{- $raw := partial "charts/file.html" (dict "page" $page "key" (string $params.data) "name" "data" "position" $position) -}}
+    {{- $data := partial "charts/json.html" (dict "source" $raw "name" "dataset" "position" $position) -}}
+    {{- if not (reflect.IsSlice $data) -}}{{- errorf "Sidera echarts: data file must contain an array of rows (%s)" $position -}}
+    {{- else -}}
+      {{- $dataset := dict -}}{{- if isset $option "dataset" -}}{{- $dataset = $option.dataset -}}{{- end -}}
+      {{- if not (reflect.IsMap $dataset) -}}{{- errorf "Sidera echarts: data requires a single dataset object (%s)" $position -}}
+      {{- else if or (isset $dataset "source") (isset $dataset "transform") (isset $dataset "fromDatasetIndex") (isset $dataset "fromDatasetId") -}}
+        {{- errorf "Sidera echarts: data conflicts with the configured dataset source or transform (%s)" $position -}}
+      {{- else -}}
+        {{- $option = merge $option (dict "dataset" (merge $dataset (dict "source" $data))) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $series := $option.series -}}
+  {{- if not (reflect.IsSlice $series) -}}{{- errorf "Sidera echarts: series must be an array (%s)" $position -}}
+  {{- else if or (eq (len $series) 0) (gt (len $series) 50) -}}{{- errorf "Sidera echarts: use 1 to 50 series (%s)" $position -}}
+  {{- else -}}
+    {{- range $series -}}
+      {{- if not (reflect.IsMap .) -}}{{- errorf "Sidera echarts: each series must be an object (%s)" $position -}}
+      {{- else if not (in (slice "line" "bar" "pie" "scatter") .type) -}}{{- errorf "Sidera echarts: supported series types are line, bar, pie and scatter (%s)" $position -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $datasets := slice -}}
+  {{- if isset $option "dataset" -}}
+    {{- if reflect.IsMap $option.dataset -}}{{- $datasets = slice $option.dataset -}}
+    {{- else if reflect.IsSlice $option.dataset -}}{{- $datasets = $option.dataset -}}
+    {{- else -}}{{- errorf "Sidera echarts: dataset must be an object or array of objects (%s)" $position -}}{{- end -}}
+  {{- end -}}
+  {{- range $datasets -}}
+    {{- if not (reflect.IsMap .) -}}{{- errorf "Sidera echarts: each dataset must be an object (%s)" $position -}}
+    {{- else if isset . "source" -}}
+      {{- if not (reflect.IsSlice .source) -}}{{- errorf "Sidera echarts: dataset source must be an array of rows (%s)" $position -}}
+      {{- else -}}{{- range .source -}}{{- if not (or (reflect.IsSlice .) (reflect.IsMap .)) -}}{{- errorf "Sidera echarts: dataset rows must be arrays or objects (%s)" $position -}}{{- end -}}{{- end -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- partial "charts/validate.html" (dict "value" $option "depth" 0 "position" $position "data" false) -}}
+  {{- $json := $option | jsonify (dict "indent" "  ") -}}
+  {{- if gt (len $json) 1000000 -}}{{- errorf "Sidera echarts: combined configuration exceeds 1 MB (%s)" $position -}}{{- end -}}
+  {{- $label := $caption | default (T "chart_title") -}}
+  {{- $icons := (partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path).icons -}}
+<figure class="content-chart{{ with $class }} {{ . }}{{ end }}"{{ with $id }} id="{{ . }}"{{ end }} data-sidera-chart data-icons="{{ $icons }}" data-state="idle" data-chart-label="{{ $label }}" style="{{ printf "--chart-height:%dpx" $height | safeCSS }}">
+  {{ partial "charts/source.html" (dict "source" $json "icons" $icons) }}
+  {{ with $caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+  <p class="chart-status" role="status" data-loading="{{ T "chart_loading" }}" data-ready="{{ T "chart_ready" }}" data-error="{{ T "chart_error" }}" data-search-exclude>{{ T "chart_nojs" }}</p>
+</figure>
+{{- end -}}

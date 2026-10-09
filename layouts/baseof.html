@@ -17,6 +17,11 @@
       {{ $controller := resources.Get "js/diagrams.js" | minify | fingerprint }}
       <script data-sidera-diagrams-script data-close="{{ T "diagram_close" }}" data-mermaid="{{ $mermaid }}" data-drawio="{{ $drawio }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}" defer></script>
     {{ end }}
+    {{ if .page.Store.Get "sidera-charts" }}
+      {{ $frame := partialCached "charts/resources.html" .page "echarts-6.1.0" }}
+      {{ $charts := resources.Get "js/charts.js" | minify | fingerprint }}
+      <script data-sidera-charts-script data-frame="{{ $frame }}" src="{{ $charts.RelPermalink }}" integrity="{{ $charts.Data.Integrity }}" defer></script>
+    {{ end }}
     {{ if .page.Store.Get "sidera-badges" }}
       {{ $badges := resources.Get "js/badges.js" | minify | fingerprint }}
       <script data-sidera-badges-script src="{{ $badges.RelPermalink }}" integrity="{{ $badges.Data.Integrity }}" defer></script>
