@@ -161,3 +161,14 @@ In the showcase, `tests/check_charts_browser.mjs` consumes that directory throug
 its owned browser harness (explicit free HTTP/CDP ports, nvm-selected Node). Cover
 prefix/locales, Content/Summary versus Plain, folds/grids, interaction/state,
 reduced motion, no-JS/failure, safe messages and no external renderer requests.
+
+Adaptive chart spacing is limited to single-grid Cartesian charts without explicit
+vertical grid bounds or additional layout components. `chart-layout.js` measures
+pinned ECharts component views, not DOM text or guessed row counts. Keep passes
+bounded and out of render-event feedback loops. Do not measure animated axis views;
+queue margin changes with lazyUpdate and consume them through a nonanimated resize.
+Browser resize tests must restore normal motion after reduced-motion checks and
+sample continuous width sweeps, not just settled endpoints. Preserve author geometry and source
+JSON. Run `node tests/check_chart_layout.cjs` with the showcase's nvm-selected Node
+for native renderer geometry; the showcase browser suite also tests resize, palette,
+selection and axis/legend separation in actual sandboxed frames.

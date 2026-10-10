@@ -113,6 +113,12 @@ write('content/charts/index.md', page)
 write('content/charts/charts/options 文件.json', encoded)
 write('content/charts/charts/dataset.json', json.dumps(external))
 write('content/charts/data/sales.json', json.dumps(dataset))
+adaptive = {'title': {'text': 'Ten series'}, 'legend': {}, 'xAxis': {'type': 'category', 'data': [f'i={i}' for i in range(1, 11)]}, 'yAxis': {},
+            'series': [{'name': f'm={m}', 'type': 'line', 'data': [round((m + i) / 20, 3) for i in range(10)]} for m in range(1, 11)]}
+write('content/adaptive/index.md', '---\ntitle: Adaptive layout\n---\n' + '\n\n'.join(
+    '```echarts {id="' + name + '" caption="' + name + '"}\n' + json.dumps(config) + '\n```'
+    for name, config in [('adaptive', adaptive), ('titleless', {**adaptive, 'title': {'show': False}}),
+                         ('fixed', {**adaptive, 'grid': {'top': 65, 'bottom': 80}})]))
 write('content/security/index.md', '---\ntitle: Inert labels\n---\n```echarts {caption="Safe labels"}\n' + json.dumps({**option, 'title': {'text': '<img src=https://blocked.invalid/pixel onerror=alert(1)>'}, 'tooltip': {'formatter': '<script>alert(1)</script>'}}) + '\n```\n')
 write('content/failure/index.md', '---\ntitle: Independent failures\n---\n```echarts {id="broken"}\n{"series":[{"type":"line","data":[1,2]}]}\n```\n\n```echarts {id="healthy"}\n' + encoded + '\n```\n')
 write('content/empty/index.md', '---\ntitle: Empty dataset\n---\n```echarts\n' + json.dumps({**external, 'dataset': {'source': [[]]}}) + '\n```\n')

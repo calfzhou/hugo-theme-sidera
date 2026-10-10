@@ -4,7 +4,7 @@
 (() => {
   const element = document.getElementById('chart');
   const hostOrigin = new URL(location.href).origin;
-  let chart, option, palette, reduced;
+  let chart, option, palette, reduced, layout;
   const reply = message => parent.postMessage(message, hostOrigin);
   // Hover does not reliably cross an opaque frame boundary. Only forward the
   // pointer presence, never author HTML, to the owning chart's toolbar.
@@ -68,7 +68,14 @@
         }
         initial.aria = {enabled: true, label: {description: String(message.label)}};
         chart.setOption(initial);
-        new ResizeObserver(() => { if (element.clientWidth && element.clientHeight) chart.resize({animation: {duration: 0}}); }).observe(element);
+        layout = sideraChartLayout(chart, option);
+        layout();
+        new ResizeObserver(() => {
+          if (chart && element.clientWidth && element.clientHeight) {
+            chart.resize({animation: {duration: 0, delay: 0}});
+            layout(true);
+          }
+        }).observe(element);
         reply({type: 'chart-ready'});
       } else if (chart && message?.type === 'chart-environment') {
         const next = message.palette === 'dark' ? 'dark' : 'light';
@@ -81,7 +88,7 @@
           chart.setOption({...(current.legend ? {legend: current.legend} : {}),
             ...(current.dataZoom ? {dataZoom: current.dataZoom} : {})});
         }
-        reduced = !!message.reduced; motion();
+        reduced = !!message.reduced; motion(); layout();
       }
     } catch {
       chart?.dispose(); chart = null; reply({type: 'chart-error'});
