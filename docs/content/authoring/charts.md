@@ -1,6 +1,6 @@
 ---
 date: 2026-10-09T22:10:00+08:00
-lastmod: 2026-10-09T23:01:51+08:00
+lastmod: 2026-10-10T21:27:25+08:00
 title: "Interactive charts"
 params:
   ai_label: generated
@@ -143,7 +143,7 @@ The visual chart is not a replacement for its data or explanation.
 Native ECharts options control tooltips, legends, stacking, line smoothing, donut
 radii, axes, colors and data zoom. For a legend above the plot, use
 `"legend": {"top": 0}`; when combining a title, legend and zoom slider, configure their
-positions so they do not overlap. Interaction is opt-in through those native options,
+positions so the components do not overlap each other. Interaction is opt-in through those native options,
 not an always-present dashboard toolbar.
 
 Use the chart's own legend to toggle series and its configured zoom controls to
@@ -159,6 +159,26 @@ resize with their container. Light/dark mode changes preserve legend/zoom state.
 An explicit inversion class keeps the chart palette light to avoid double inversion.
 An unspecified chart background is transparent; an explicit `backgroundColor` is
 respected. Reduced-motion preferences disable series and marker animations.
+
+### Adaptive plot spacing
+
+For a simple line/bar/scatter chart with one grid, one x-axis and one y-axis,
+Sidera measures the native legend, title and axis labels to adjust the plot's top
+and bottom margins. A bottom legend can wrap onto more rows without overlapping
+the x-axis labels; a titleless chart no longer keeps a title-sized top gap. The
+chart height stays fixed, so a taller legend leaves a shorter plotting area.
+Spacing is recalculated on resize and light/dark changes; legend selections remain.
+Layout corrections are applied without animation so resizing does not interpolate
+between competing plot margins. This does not disable the configured animations
+for ordinary chart interactions.
+
+Explicit grid `top`, `bottom`, `height`, `y`, `y2`, `containLabel`, `outerBounds` or
+`outerBoundsMode` keeps native ECharts layout instead. Multiple grids/axes/titles/
+legends, vertical legends, data zoom, mixed pie charts and non-edge-anchored
+components are also left author-controlled. This does not reposition a title or
+legend that overlaps another component, wrap long titles, or auto-grow the chart.
+If there is not enough room for an 80px plot, native margins are retained; increase
+`height` or use a paginated `legend.type: "scroll"` for very crowded charts.
 
 ## Supported options and safety
 
