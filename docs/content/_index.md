@@ -8,7 +8,7 @@ params:
   ai_label: generated
   scope_root: true
   name: Sidera
-  logo: images/sidera-parallax-circle.svg
+  logo: images/sidera-parallax-square.svg
   comments: false
   license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE). Third-party material retains its own terms."
   children:
