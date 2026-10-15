@@ -120,7 +120,7 @@ def main():
                 assert links==[prefix_url+suffix for _,suffix in ordered[:10]],(order,links)
         root_hrefs={a.get('href') for tag,a in DOM(root).nodes if tag=='a'}
         assert 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0' in root_hrefs and 'https://xaoxuu.com/' in root_hrefs
-        assert probe(root)['logo']=='images/sidera-parallax-circle.svg'
+        assert probe(root)['logo']=='images/sidera-parallax-square.svg'
         assert probe(root)['order']==['getting-started','organize','customize','authoring','reader','publishing']
         # Full six-child order in native immediate cards, not an assumed title sort.
         # Native markup may order attributes differently; DOM is stable.
@@ -139,7 +139,7 @@ def main():
             assert (out/'licenses'/asset).read_bytes()==(THEME/name).read_bytes()
             assert any(a.get('rel')=='license' and a.get('href','').endswith('/'+asset) for _,a in DOM(root).nodes)
         # README/agent/old root guidance are not published as source content.
-        assert any(a.get('src','').endswith('/images/sidera-parallax-circle.svg') and a.get('alt')=='' for _,a in DOM((out/(language+'/' if language else '')/'index.html').read_text()).nodes)
+        assert any(a.get('src','').endswith('/images/sidera-parallax-square.svg') and 'collection-card-logo' in a.get('class','').split() and a.get('alt')=='' for _,a in DOM((out/(language+'/' if language else '')/'index.html').read_text()).nodes)
         assert not any(p.name in {doc.name for doc in THEME.glob('*.md')} for p in out.rglob('*'))
     on=build('baseline',mounts('manual'));verify(on,'manual')
     overridden=build('consumer-left', "[cascade.params]\nleft=['menu']\n"+mounts('manual'));verify(overridden,'manual',left=['menu'])
@@ -167,6 +167,8 @@ def main():
     # Literal demos must never execute providers, code inclusions or missing resources.
     shortcodes=(on/'manual/publishing/shortcodes/index.html').read_text()
     assert not DOM(shortcodes).cls('content-video') and 'data-snippet' not in shortcodes
+    jsx_manual=(on/'manual/authoring/jsx/index.html').read_text()
+    assert not DOM(jsx_manual).cls('content-jsx') and 'data-sidera-jsx-script' not in jsx_manual
     record={'passed':results,'manual_nodes':len(sources),'section_nodes':sum(p.name=='_index.md' for p in sources),'max_depth':max(len(p.relative_to(THEME/'docs/content').parts) for p in sources),'hugo':subprocess.check_output(['hugo','version'],text=True).strip()}
     (run/'results.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record,indent=2))
 

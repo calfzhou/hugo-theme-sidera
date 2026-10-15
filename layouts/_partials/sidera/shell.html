@@ -1,4 +1,5 @@
 {{- $page := .Page -}}
+{{- $page.Store.Set "sidera-jsx" (strings.Contains (string .Content) `<figure class="content-jsx" data-sidera-jsx`) -}}
 {{- $page.Store.Set "sidera-charts" (ne (len (findRE `<figure class="content-chart[^">]*"[^>]* data-sidera-chart` (string .Content))) 0) -}}
 {{- $page.Store.Set "sidera-badges" (strings.Contains (string .Content) `<div class="github-badges" data-sidera-badges`) -}}
 {{- range $kind := slice "mermaid" "drawio" -}}

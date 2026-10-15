@@ -1,0 +1,91 @@
+{{- $page := .page -}}{{- $source := .source -}}{{- $params := .params | default dict -}}
+{{- if ne site.Params.jsx true -}}{{- errorf "Sidera JSX: executable widgets require site params.jsx = true (%s)" .position -}}{{- end -}}
+{{- range $key, $value := $params -}}
+  {{- if not (in (slice "src" "css" "title" "caption" "appearance" "fallback" "mode" "height") $key) -}}{{- errorf "Sidera JSX: unknown option %q (%s)" $key $.position -}}{{- end -}}
+  {{- if ne $key "height" -}}
+    {{- if or (ne (printf "%T" $value) "string") (not (strings.ContainsNonSpace (string $value))) -}}{{- errorf "Sidera JSX: %s must be a nonblank string (%s)" $key $.position -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $mode := $params.mode | default "page" -}}
+{{- if not (in (slice "page" "sandbox") $mode) -}}{{- errorf "Sidera JSX: mode must be page or sandbox (%s)" .position -}}{{- end -}}
+{{- $appearance := $params.appearance | default "plain" -}}
+{{- if not (in (slice "plain" "card") $appearance) -}}{{- errorf "Sidera JSX: appearance must be plain or card (%s)" .position -}}{{- end -}}
+{{- $height := 280 -}}
+{{- if isset $params "height" -}}
+  {{- $value := $params.height -}}
+  {{- if or (not (findRE `^[1-9][0-9]*$` (string $value))) (lt (int $value) 160) (gt (int $value) 1200) -}}{{- errorf "Sidera JSX: height must be 160–1200 pixels (%s)" $.position -}}{{- end -}}
+  {{- $height = int $value -}}
+{{- end -}}
+{{- if and (isset $params "height") (ne $mode "sandbox") -}}{{- errorf "Sidera JSX: height is only for sandbox mode (%s)" .position -}}{{- end -}}
+{{- $resource := false -}}
+{{- if isset $params "src" -}}
+  {{- if strings.ContainsNonSpace $source -}}{{- errorf "Sidera JSX: use src or a body, not both (%s)" .position -}}{{- end -}}
+  {{- $key := string $params.src -}}
+  {{- if or (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $key) (ne (path.Ext $key) ".jsx") -}}
+    {{- errorf "Sidera JSX: src must be an exact local .jsx page resource (%s)" .position -}}
+  {{- else -}}{{- $resource = $page.Resources.Get $key -}}{{- end -}}
+  {{- if not $resource -}}{{- errorf "Sidera JSX: missing resource %q (%s)" $key .position -}}{{- else -}}{{- $source = $resource.Content -}}{{- end -}}
+{{- end -}}
+{{- if or (not (strings.ContainsNonSpace $source)) (gt (len $source) 1000000) -}}{{- errorf "Sidera JSX: source must be nonempty and at most 1 MB (%s)" .position -}}{{- end -}}
+{{- /* js.Build's virtual importContext dependencies need an explicit cache input
+     during Hugo server rebuilds. Hash module resources, not all article media. */ -}}
+{{- /* Shims also need a content key to invalidate js.Build during native watch. */ -}}
+{{- $dependencies := dict "sidera/ui" (crypto.SHA256 (resources.Get "js/jsx/layout.jsx").Content) -}}
+{{- range $page.Resources -}}
+  {{- if in (slice ".js" ".jsx" ".mjs" ".cjs" ".ts" ".tsx" ".json") (path.Ext .Name) -}}
+    {{- $dependencies = merge $dependencies (dict .Name (crypto.SHA256 .Content)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $key := crypto.SHA256 (printf "%s:%s:%s:%s:%s" $page.Language.Lang $page.Path ($params.src | default "inline") $source ($dependencies | jsonify)) -}}
+{{- if not $resource -}}{{- $resource = resources.FromString (printf "jsx/source/%s.jsx" $key) $source -}}{{- end -}}
+{{- /* Native importContext resolves page-resource keys, not filesystem paths.
+     Use the same bundle-root namespace in both inline and attached modules. */ -}}
+{{- $context := $page.Resources -}}
+{{- $options := dict "target" "es2022" "format" "esm" "minify" true "JSX" "automatic" "importContext" $context "loaders" (dict ".css" "js") "shims" (dict "sidera/ui" "js/jsx/layout.jsx") "externals" (slice "react" "react-dom" "react-dom/client" "react/jsx-runtime") "targetPath" (printf "jsx/components/%s.js" $key) -}}
+{{- $url := "" -}}{{- $css := "" -}}
+{{- with $params.css -}}
+  {{- $key := string . -}}
+  {{- if or (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $key) (ne (path.Ext $key) ".css") -}}
+    {{- errorf "Sidera JSX: css must be an exact local .css page resource (%s)" $.position -}}
+  {{- else -}}
+    {{- with $page.Resources.Get $key -}}{{- $style := . | minify | fingerprint -}}{{- $css = $style.RelPermalink -}}
+    {{- else -}}{{- errorf "Sidera JSX: missing stylesheet %q (%s)" $key $.position -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if eq $mode "sandbox" -}}
+  {{- /* CJS is a compile-only intermediate, wrapped in a lexical module scope.
+       No eval: the final native build bundles this wrapper and the frame runner. */ -}}
+  {{- $compiled := $resource | js.Build (merge $options (dict "format" "cjs" "targetPath" (printf "jsx/intermediate/%s.cjs" $key))) -}}
+  {{- $wrapper := printf `import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMClient from 'react-dom/client';
+import JSX from 'react/jsx-runtime';
+const component = { exports: {} };
+(function(module, exports, require) { %s
+})(component, component.exports, name => {
+  const modules = { 'react': React, 'react-dom': ReactDOM, 'react-dom/client': ReactDOMClient, 'react/jsx-runtime': JSX };
+  if (!(name in modules)) throw new Error('Unsupported external module: ' + name);
+  return modules[name];
+});
+const Component = component.exports.default;
+%s` $compiled.Content (resources.Get "js/jsx/frame.jsx").Content -}}
+  {{- $entry := resources.FromString (printf "jsx/frames/%s.jsx" $key) $wrapper -}}
+  {{- $options = merge (partial "jsx/options.html" .) (dict "format" "iife" "targetPath" (printf "jsx/frames/%s.js" $key)) -}}
+  {{- $built := $entry | js.Build $options | fingerprint -}}
+  {{- $style := resources.Get "css/sidera.css" | minify | fingerprint -}}
+  {{- $ui := resources.Get "css/jsx.css" | minify | fingerprint -}}
+  {{- $frame := partial "jsx/frame.html" (dict "script" $built "style" $style "ui" $ui "css" $css "lang" $page.Language.Lang) -}}
+  {{- $html := resources.FromString (printf "jsx/frames/%s.html" $key) $frame | fingerprint -}}
+  {{- $url = $html.RelPermalink -}}
+{{- else -}}
+  {{- $built := $resource | js.Build $options | fingerprint -}}
+  {{- $url = $built.RelPermalink -}}
+{{- end -}}
+{{- $label := $params.title | default $params.caption | default (T "jsx_title") -}}
+<figure class="content-jsx" data-sidera-jsx data-mode="{{ $mode }}" data-appearance="{{ $appearance }}" data-module="{{ $url }}" data-css="{{ $css }}" data-label="{{ $label }}" data-height="{{ $height }}" data-state="idle">
+  {{ with $params.title }}<div class="jsx-title">{{ . }}</div>{{ end }}
+  <div class="jsx-root" hidden data-search-exclude></div>
+  <p class="jsx-status" role="status" data-search-exclude>{{ T "jsx_nojs" }}</p>
+  <p class="jsx-fallback">{{ $params.fallback | default (T "jsx_fallback") }}</p>
+  {{ with $params.caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>

@@ -172,3 +172,43 @@ sample continuous width sweeps, not just settled endpoints. Preserve author geom
 JSON. Run `node tests/check_chart_layout.cjs` with the showcase's nvm-selected Node
 for native renderer geometry; the showcase browser suite also tests resize, palette,
 selection and axis/legend separation in actual sandboxed frames.
+
+## Executable JSX islands
+
+`params.jsx = true` is an explicit site/language trust opt-in, not an inherited
+page setting. `jsx-live` and `jsx` share `jsx/island.html`; ordinary JSX code fences
+and snippet inclusion remain inert. Author modules compile through native js.Build,
+never SSR/eval/build-time module execution. Page mode intentionally has full page
+privileges; do not describe it as a sandbox. Opaque frame mode keeps allow-scripts
+only, fixed bounded height, local classic scripts and restrictive CSP. Parent and
+source/origin checks limit the frame protocol to readiness/error and theme tokens.
+
+React/React DOM 19.3.0 and Scheduler 0.28.0 production files are verbatim vendored
+npm artifacts; retain manifest hashes, original licenses and both notice mirrors.
+Page-mode components externalize the four supported React imports to one versioned
+runtime through a generated import map. Emit runtime assets only for actual HTML
+islands (including cross-page Content/Summary), not Plain or literal code examples.
+Keep native page resources/importContext and dependency rebuild behavior. Local
+imports use exact bundle-root keys, including from nested modules; do not guess a
+helper basename or silently use a different directory on collision. Keep the bundle
+module digest (including the `sidera/ui` layout shim) in the compilation key:
+virtual importContext/shim dependencies otherwise remain stale across Hugo server
+rebuilds. `sidera/ui` exports only Stack/Row, bundles through native js.Build, and
+uses the existing CSS classes; preserve native props/refs and do not grow a second
+control system or inject global React instances. CSS is
+an explicit local resource option: Hugo 0.166.0 js.Build can return a CSS output
+as the JS resource when importing CSS; a JS loader for .css makes ordinary CSS
+imports fail compilation rather than silently emitting a broken script.
+
+Keep ordinary control, layout, help/error and result styling in `assets/css/jsx.css`,
+scoped to JSX roots with overridable defaults. Specialized component geometry and
+presentation belong to the consuming site. Shared page/frame styling tests must
+cover no-custom-CSS forms, explicit scoped overrides, ordinary prose isolation and
+the validated theme-token channel; do not widen frame permissions for styling.
+
+Run `tests/check_jsx.py <fresh-absolute-output>` with uv/Python. In the showcase,
+build the real site into `<run>/public` and run `tests/check_jsx_browser.mjs <run>`
+with the documented owned harness and free ports. `tests/check_jsx_preview.py
+<fresh-absolute-output>` validates native watch rebuilds with an owned Hugo server. Cover native imports, repeats,
+folds, Unicode, page API, Stack/Row parity/props/gaps, plain/card and title/caption placement,
+light/dark/mobile, frame isolation, no-JS and failures.

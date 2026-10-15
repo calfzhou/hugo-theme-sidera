@@ -586,3 +586,21 @@ other = "下载 JSON"
 
 [chart_controls]
 other = "图表源代码控件"
+
+[jsx_title]
+other = "交互组件"
+
+[jsx_nojs]
+other = "此组件需要 JavaScript。"
+
+[jsx_fallback]
+other = "即使此交互示例不可用，文章仍可阅读。"
+
+[jsx_loading]
+other = "正在加载交互组件…"
+
+[jsx_ready]
+other = "交互组件已就绪。"
+
+[jsx_error]
+other = "组件无法加载，文章的其他内容仍可阅读。"

@@ -1,17 +1,17 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-09T22:10:00+08:00
+lastmod: 2026-10-15T22:49:50+08:00
 title: "Write content"
 params:
   ai_label: generated
   children:
-    order: [components, snippets, diagrams, charts, example]
+    order: [components, snippets, diagrams, charts, jsx, example]
 ---
 
 Use ordinary Markdown first: headings, lists, tables, links, quotes, fenced code and
 native Hugo footnotes. The safe renderer does not require raw HTML. Optional
-[components](components.md), [code resources](snippets.md), [diagrams/media](diagrams.md)
-and [interactive charts](charts.md)
+[components](components.md), [code resources](snippets.md), [diagrams/media](diagrams.md),
+[interactive charts](charts.md) and opt-in [JSX tools](jsx.md)
 solve specific tasks; see a [small live example](example/_index.md).
 
 ## Story typography and AI disclosure
@@ -89,7 +89,8 @@ No automatic gallery/lightbox is added to ordinary Markdown images.
 
 Native blockquote alerts use `> [!NOTE]`, TIP, IMPORTANT, WARNING or CAUTION, followed
 by quoted Markdown. Ordinary fences have native Chroma highlighting, copy UI and
-manual fallback. Source code is data, never executed.
+manual fallback. Ordinary code fences and snippets are data, never executed.
+The separate opt-in `jsx-live` fence is explicitly executable content.
 
 With the passthrough import, `$x^2$` is inline math and `$$...$$` is display math.
 Escape literal currency as `\$`; code remains non-math. Native build-time KaTeX emits

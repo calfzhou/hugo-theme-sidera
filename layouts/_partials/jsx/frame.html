@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="{{ .lang }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="stylesheet" href="{{ .style.RelPermalink }}"><link rel="stylesheet" href="{{ .ui.RelPermalink }}">
+{{ with .css }}<link rel="stylesheet" href="{{ . }}">{{ end }}
+<style>html,body{background:transparent;margin:0}body{padding:4px}#root{min-width:0}</style>
+<script src="{{ .script.RelPermalink }}" defer></script></head><body><div id="root" class="jsx-root"></div></body></html>

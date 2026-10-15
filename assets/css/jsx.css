@@ -1,0 +1,36 @@
+/* Native defaults for trusted JSX. Low-specificity controls/helpers leave room
+   for component-scoped CSS; no component library or author reset is required. */
+.content-jsx { margin: 1.5rem 0; padding: 0; border: 0; background: transparent; min-width: 0; }
+.content-jsx[data-appearance="card"] { padding: 1.2rem; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.content-jsx > .jsx-title { margin: 0 0 .75rem; font: 600 .94rem/1.5 var(--ui); color: var(--text); overflow-wrap: anywhere; }
+/* Bottom captions use the same figure styling as article images and diagrams. */
+.jsx-root { color: var(--text); font-family: var(--ui); min-width: 0; }
+.jsx-root :where(button,input,textarea,select) { font: inherit; color: inherit; }
+.jsx-root :where(input:not([type="range"],[type="checkbox"],[type="radio"],[type="hidden"]),textarea,select) { display: block; width: 100%; max-width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: .6rem .75rem; }
+.jsx-root :where(textarea) { resize: vertical; min-height: 5rem; }
+.jsx-root :where(button) { border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: .5rem .85rem; cursor: pointer; overflow-wrap: anywhere; }
+.jsx-root :where(button:hover,button[aria-pressed="true"]) { background: var(--accent-soft); border-color: var(--accent); }
+.jsx-root :where(button:disabled) { opacity: .5; cursor: not-allowed; }
+.jsx-root :where(input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]) { border-color: var(--pin); }
+.jsx-root :where(:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
+.jsx-root :where(input[type="range"],input[type="checkbox"],input[type="radio"]) { accent-color: var(--accent); }
+.jsx-root :where(label) { display: block; font-size: .85rem; color: var(--muted); }
+.jsx-root :where(output) { display: block; overflow-wrap: anywhere; }
+.jsx-root :where(samp) { font-family: var(--code); }
+.jsx-root :where(.jsx-stack,.jsx-field,.jsx-result) { display: grid; gap: 1rem; min-width: 0; }
+/* Beat the prose margin rule regardless of stylesheet order; stack gaps own spacing. */
+.jsx-root :is(.jsx-stack,.jsx-field,.jsx-result) > p { margin: 0; }
+.jsx-root :where(.jsx-field) { gap: .35rem; }
+.jsx-root :where(.jsx-row) { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; min-width: 0; }
+/* The optional Stack/Row wrappers use these same classes, not inline layout styles. */
+.jsx-root :where(.jsx-stack,.jsx-row):where(.jsx-gap-none) { gap: 0; }
+.jsx-root :where(.jsx-stack,.jsx-row):where(.jsx-gap-small) { gap: .35rem; }
+.jsx-root :where(.jsx-stack,.jsx-row):where(.jsx-gap-large) { gap: 1.5rem; }
+.jsx-root :where(.jsx-metric) { font-size: 2.6rem; font-weight: 650; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+.jsx-root :where(.jsx-result) { gap: .5rem; padding: .85rem; border-inline-start: 3px solid var(--accent); background: var(--accent-soft); overflow-wrap: anywhere; }
+.jsx-root :where(.jsx-note) { font-size: .8rem; color: var(--muted); }
+.jsx-root :where(.jsx-error) { font-size: .85rem; color: var(--pin); }
+.jsx-root :where(.jsx-error:empty) { display: none; }
+.jsx-status,.jsx-fallback { font-size: .85rem; color: var(--muted); }
+.jsx-frame { display: block; width: 100%; border: 0; }
+@media print { .jsx-root,.jsx-status { display:none !important } .jsx-fallback[hidden] { display:block !important } }

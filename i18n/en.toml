@@ -589,3 +589,21 @@ other = "Download JSON"
 
 [chart_controls]
 other = "Chart source controls"
+
+[jsx_title]
+other = "Interactive component"
+
+[jsx_nojs]
+other = "This component needs JavaScript."
+
+[jsx_fallback]
+other = "The article remains readable without this interactive example."
+
+[jsx_loading]
+other = "Loading interactive component…"
+
+[jsx_ready]
+other = "Interactive component ready."
+
+[jsx_error]
+other = "This component could not be loaded. The rest of the article is still available."

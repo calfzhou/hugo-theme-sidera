@@ -1,0 +1,7 @@
+{{- $imports := partialCached "jsx/runtime.html" . "react-19.3.0" site.BaseURL -}}
+<script type="importmap">{{ dict "imports" $imports | jsonify | safeHTML }}</script>
+{{- $css := resources.Get "css/jsx.css" | minify | fingerprint -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- $options := dict "format" "esm" "target" "es2022" "minify" true "JSX" "automatic" "externals" (slice "react" "react-dom/client" "react/jsx-runtime") -}}
+{{- $controller := resources.Get "js/jsx/page.js" | js.Build $options | fingerprint -}}
+<script type="module" data-sidera-jsx-script data-loading="{{ T "jsx_loading" }}" data-ready="{{ T "jsx_ready" }}" data-error="{{ T "jsx_error" }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}"></script>

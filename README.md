@@ -7,6 +7,7 @@ An independent **Hugo theme for blogs, notebooks and documentation**, inspired b
 - Ordered body-bearing docs trees; source-relative Markdown links and local resources.
 - English/Simplified Chinese UI, light/dark/auto, native menus and configurable widgets.
 - Local search/backlinks, math, code inclusion, safe content components, local diagrams and interactive ECharts.
+- Opt-in [JSX islands](docs/content/authoring/jsx.md) in ordinary Markdown, with bundled React and optional iframe isolation.
 - Optional Giscus comments; no comments or manual publication on ordinary activation.
 
 ## Live sites

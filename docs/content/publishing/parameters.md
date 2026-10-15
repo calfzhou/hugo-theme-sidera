@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-15T22:49:50+08:00
 title: "Public parameter reference"
 params:
   ai_label: generated
@@ -68,6 +68,7 @@ Structural/root/local and site-only exceptions are stated explicitly below.
 
 | Additional site/language-only setting | Meaning / default |
 |---|---|
+| jsx | Boolean false; explicit site/language trust opt-in for executable `jsx-live` fences and `jsx` shortcodes. Not page/cascade/preset. See [interactive JSX](../authoring/jsx.md). |
 | page_reveal | Boolean true; progressive entry motion, false omits controller. Not page/cascade/preset. |
 | link_heading_checks | Boolean false; optional native-heading diagnostics for source links, not all HTML IDs. |
 | comment_provider | String giscus; only built-in provider. Trusted native provider partial required for another name. |
@@ -85,7 +86,7 @@ Structural/root/local and site-only exceptions are stated explicitly below.
 not a numeric rank or preset pin. `cover` is an effective Page.Params map (including
 intentional native cascade), not a preset fallback. Root logo/name never cascade.
 Do not author widget definitions, identity, color mode, page motion, heading checks,
-provider or Giscus settings in a page/preset/cascade.
+JSX opt-in, provider or Giscus settings in a page/preset/cascade.
 
 ## Component options
 

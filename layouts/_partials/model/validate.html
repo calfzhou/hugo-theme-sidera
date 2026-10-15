@@ -1,3 +1,4 @@
+{{- if and (isset site.Params "jsx") (ne (printf "%T" site.Params.jsx) "bool") -}}{{- errorf "Sidera JSX: site params.jsx must be boolean" -}}{{- end -}}
 {{- if isset site.Params "ai_label" -}}
   {{- if or (ne (printf "%T" site.Params.ai_label) "string") (not (in (slice "" "manual" "reviewed" "polished" "generated") site.Params.ai_label)) -}}{{- errorf "Sidera ai_label must be empty, manual, reviewed, polished or generated in site/language params" -}}{{- end -}}
 {{- end -}}

@@ -1,0 +1,7 @@
+{{- $base := "vendor/react-19.3.0/" -}}
+{{- return (dict "target" "es2022" "minify" true "JSX" "automatic" "defines" (dict "process.env.NODE_ENV" `"production"`) "shims" (dict
+  "react" (printf "%sreact.production.js" $base)
+  "react/jsx-runtime" (printf "%sreact-jsx-runtime.production.js" $base)
+  "react-dom" (printf "%sreact-dom.production.js" $base)
+  "react-dom/client" (printf "%sreact-dom-client.production.js" $base)
+  "scheduler" (printf "%sscheduler.production.js" $base))) -}}

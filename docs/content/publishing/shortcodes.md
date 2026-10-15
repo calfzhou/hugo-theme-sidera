@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-09T22:32:54+08:00
+lastmod: 2026-10-15T22:49:50+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -119,6 +119,17 @@ URL, CSV, YAML or JavaScript callback aliases. Line, bar, pie/donut and scatter 
 stay interactive in local sandboxed frames, with source viewing and a self-contained JSON download.
 Read [interactive charts](../authoring/charts.md) for examples, dataset conflicts,
 option boundaries, accessibility and CSP requirements.
+
+## JSX tools (opt-in)
+
+`jsx` accepts a module body or an exact page-bundle `src` ending in `.jsx`. Optional
+arguments are `css`, `title`, `caption`, `fallback`, `appearance` (`plain` by default,
+or `card`), `mode` (`page` by default, or `sandbox`) and sandbox `height` (160–1200
+pixels, default 280). Title is a plain-text label above the component; caption is
+plain text below. Neither is required. Plain appearance has no outer border,
+background or padding; appearance is independent of execution mode. Bodyless calls
+use `/>`. Requires the site's explicit `params.jsx = true`; unlike `snippet`, this compiles executable
+JavaScript. See [Interactive JSX](../authoring/jsx.md) for imports, trust and fallbacks.
 
 ## Overrides
 

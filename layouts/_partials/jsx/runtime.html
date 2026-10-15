@@ -1,0 +1,22 @@
+{{- $options := partial "jsx/options.html" . -}}
+{{- $runtime := resources.Get "js/jsx/runtime.js" | js.Build (merge $options (dict "format" "esm" "targetPath" "jsx/react-runtime.js")) | fingerprint -}}
+{{- $imports := dict -}}
+{{- $source := printf `import { React } from %q; export default React; export const { Activity, Children, Component, Fragment, Profiler, PureComponent, StrictMode, Suspense, ViewTransition, addTransitionType, cache, cacheSignal, cloneElement, createContext, createElement, createRef, forwardRef, isValidElement, lazy, memo, startTransition, unstable_useCacheRefresh, use, useActionState, useCallback, useContext, useDebugValue, useDeferredValue, useEffect, useEffectEvent, useId, useImperativeHandle, useInsertionEffect, useLayoutEffect, useMemo, useOptimistic, useReducer, useRef, useState, useSyncExternalStore, useTransition, version } = React;` $runtime.RelPermalink -}}
+{{- $facade := resources.FromString "jsx/react.js" $source | fingerprint -}}
+{{- $imports = merge $imports (dict "react" $facade.RelPermalink) -}}
+{{- $source := printf `import { ReactDOM } from %q; export default ReactDOM; export const { browser, createPortal, flushSync, preconnect, prefetchDNS, preinit, preinitModule, preload, preloadModule, requestFormReset, unstable_batchedUpdates, useFormState, useFormStatus, version } = ReactDOM;` $runtime.RelPermalink -}}
+{{- $facade := resources.FromString "jsx/react-dom.js" $source | fingerprint -}}
+{{- $imports = merge $imports (dict "react-dom" $facade.RelPermalink) -}}
+{{- $source := printf `import { ReactDOMClient } from %q; export default ReactDOMClient; export const { createRoot, hydrateRoot, version } = ReactDOMClient;` $runtime.RelPermalink -}}
+{{- $facade := resources.FromString "jsx/react-dom/client.js" $source | fingerprint -}}
+{{- $imports = merge $imports (dict "react-dom/client" $facade.RelPermalink) -}}
+{{- $source := printf `import { JSX } from %q; export default JSX; export const { Fragment, jsx, jsxs } = JSX;` $runtime.RelPermalink -}}
+{{- $facade := resources.FromString "jsx/react/jsx-runtime.js" $source | fingerprint -}}
+{{- $imports = merge $imports (dict "react/jsx-runtime" $facade.RelPermalink) -}}
+{{- $manifest := resources.Get "vendor/react-19.3.0/provenance.json" | transform.Unmarshal -}}
+{{- range $file, $hash := $manifest.files -}}
+  {{- $r := resources.Get (printf "vendor/react-19.3.0/%s" $file) -}}
+  {{- if ne (crypto.SHA256 $r.Content) $hash -}}{{- errorf "Sidera JSX: vendor integrity mismatch for %s" $file -}}{{- end -}}
+  {{- if strings.HasSuffix $file "LICENSE" -}}{{- $published := $r.RelPermalink -}}{{- end -}}
+{{- end -}}
+{{- return $imports -}}

@@ -1,0 +1,4 @@
+{{- if and .Params (not .IsNamedParams) -}}{{- errorf "Sidera JSX: named arguments required (%s)" .Position -}}{{- end -}}
+{{- partial "components/parent.html" . -}}
+{{- $html := partial "jsx/island.html" (dict "page" .Page "source" .Inner "params" .Params "position" .Position) -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" false) | safeHTML -}}

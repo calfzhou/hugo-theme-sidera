@@ -271,3 +271,36 @@ implemented by Sidera; no sidebar timeline, API service or JS widget is copied.
 [stellar]: https://xaoxuu.com/wiki/stellar/
 [stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
 [xaoxuu]: https://xaoxuu.com/
+
+## Optional JSX islands
+
+The explicit `jsx-live` fence and `jsx` shortcode compile trusted author components
+with Hugo's native esbuild pipeline. Conditional local assets contain unmodified
+production source from React 19.3.0, React DOM 19.3.0 and Scheduler 0.28.0,
+from their exact npm distributions. Copyright (c) Meta Platforms, Inc. and affiliates.
+All three are MIT licensed. See `assets/vendor/react-19.3.0/provenance.json` for
+package integrity and per-file SHA-256; their verbatim licenses live alongside
+the sources and are published when JSX is used. Sidera's mounting, fallback and
+theme integration code is original MIT-licensed work.
+
+MIT License
+
+Copyright (c) Meta Platforms, Inc. and affiliates.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
