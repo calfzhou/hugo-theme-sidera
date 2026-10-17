@@ -11,5 +11,5 @@
 {{- $library := resources.Get (printf "%secharts.common.min.js" $root) | fingerprint -}}
 {{- $controller := slice (resources.Get "js/chart-layout.js") (resources.Get "js/chart-frame.js") | resources.Concat "js/chart-frame.js" | minify | fingerprint -}}
 {{- $html := partial "charts/frame.html" (dict "library" $library "controller" $controller) -}}
-{{- $frame := resources.FromString "charts/echarts-6.1.0.html" $html | fingerprint -}}
+{{- $frame := resources.FromString "charts/echarts-6.1.0.html" $html | minify | fingerprint -}}
 {{- return $frame.RelPermalink -}}

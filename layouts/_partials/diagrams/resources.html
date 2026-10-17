@@ -15,5 +15,5 @@
 {{- $controller := resources.Get (printf "js/%s-frame.js" $kind) | minify | fingerprint -}}
 {{- $stencil := "" -}}{{- if eq $kind "drawio" -}}{{- $stencil = (resources.Get (printf "%sbasic.xml" $root)).Content -}}{{- end -}}
 {{- $html := partial "diagrams/frame.html" (dict "library" $lib.RelPermalink "setup" $setup.RelPermalink "controller" $controller.RelPermalink "stencil" $stencil) -}}
-{{- $frame := resources.FromString (printf "diagrams/%s.html" $version) $html | fingerprint -}}
+{{- $frame := resources.FromString (printf "diagrams/%s.html" $version) $html | minify | fingerprint -}}
 {{- return $frame.RelPermalink -}}

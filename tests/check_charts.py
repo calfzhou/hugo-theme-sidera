@@ -172,8 +172,8 @@ for name, base, lang in [('baseline', 'https://example.invalid/', 'en'),
     assert "connect-src 'none'" in frame and "img-src 'none'" in frame and "script-src 'self'" in frame
     assert 'allow-same-origin' not in frame and 'unsafe-eval' not in frame
     if name == 'subpath':
-        assert 'src="/sidera-showcase/vendor/' in frame
-        assert 'data-frame="/sidera-showcase/charts/' in raw
+        assert any(tag == 'script' and a.get('src', '').startswith('/sidera-showcase/vendor/') for tag, a in DOM(frame).nodes)
+        assert any(a.get('data-frame', '').startswith('/sidera-showcase/charts/') for _, a in dom.nodes)
     assert ('查看源代码' if lang == 'zh' else 'View source') in raw
     for file in manifest['files']:
         if file != 'echarts.common.min.js': assert (out / 'vendor/echarts-6.1.0' / file).exists()

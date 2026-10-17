@@ -77,6 +77,13 @@ python3 tests/check_settings_resolution.py /absolute/fresh-settings-check
 python3 tests/check_menus.py /absolute/fresh-menu-check
 ```
 
+Run `tests/check_minify.py /absolute/fresh-output` for shared head/deferred output
+changes. Minify completed deferred fragments through `sidera/minify-html.html`,
+not by compacting individual templates or stripping final HTML. Pass rendered HTML
+only; keep resource keys content-derived and read Content without publishing internal
+fragments. Generated frame resources minify before fingerprinting. Cover verbose
+custom hooks, inline spaces, pre/textarea contents, distinct pages and frame output.
+
 Run the relevant existing check_*.py files for affected images, links, taxonomy,
 archive, collection, motion or other behavior. Read a test's entry point before
 invoking it; do not assume all tests share a fixture. Strict builds should include

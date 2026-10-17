@@ -1,0 +1,5 @@
+{{- /* Only pass rendered template HTML, never raw author input. Deferred output
+     bypasses page minification. Key by content so pages/locales/watch rebuilds
+     cannot reuse another fragment; reading Content does not publish this resource. */ -}}
+{{- $html := resources.FromString (printf "sidera-internal/html/%s.html" (crypto.SHA256 .)) (string .) | minify -}}
+{{- return ($html.Content | safeHTML) -}}

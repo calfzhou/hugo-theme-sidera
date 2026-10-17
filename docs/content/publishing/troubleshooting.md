@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-17T14:39:04+08:00
 title: "Troubleshooting and limits"
 params:
   ai_label: generated
@@ -28,6 +28,26 @@ hugo --buildDrafts --buildFuture --buildExpired \
 Do not deploy all-states output. A successful watcher render is not proof that old
 files were removed from disk; fresh output is authoritative. A preview spanning a
 new template/format may need one restart, not cache deletion or unsafe HTML.
+
+## Minified output
+
+Sidera minifies its CSS/JavaScript, deferred head and article-footer HTML, and
+its generated diagram, chart and JSX frame pages through Hugo's native resource
+pipeline. Deferred regions are processed after their complete markup is rendered,
+including custom footer components and hooks; their template indentation does not
+need to be manually removed.
+
+Add `--minify` to your production build to minify the rest of each page:
+
+```sh
+hugo --environment production --minify --panicOnWarning
+```
+
+Apply the flag to the actual deployment command too, not just a local Makefile.
+Files copied from `static/` are not transformed. HTML minification respects native
+HTML whitespace rules, including preformatted code and textareas; it does not mean
+that every file is a single line. Do not remove whitespace from final HTML with a
+blanket regular expression: spaces between inline elements can be meaningful.
 
 ## Common symptoms
 

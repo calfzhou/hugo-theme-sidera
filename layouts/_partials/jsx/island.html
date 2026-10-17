@@ -75,7 +75,7 @@ const Component = component.exports.default;
   {{- $style := resources.Get "css/sidera.css" | minify | fingerprint -}}
   {{- $ui := resources.Get "css/jsx.css" | minify | fingerprint -}}
   {{- $frame := partial "jsx/frame.html" (dict "script" $built "style" $style "ui" $ui "css" $css "lang" $page.Language.Lang) -}}
-  {{- $html := resources.FromString (printf "jsx/frames/%s.html" $key) $frame | fingerprint -}}
+  {{- $html := resources.FromString (printf "jsx/frames/%s.html" $key) $frame | minify | fingerprint -}}
   {{- $url = $html.RelPermalink -}}
 {{- else -}}
   {{- $built := $resource | js.Build $options | fingerprint -}}

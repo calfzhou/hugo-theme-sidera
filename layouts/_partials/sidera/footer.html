@@ -17,6 +17,6 @@
   {{- else -}}{{- $extra = partial "sidera/site-footer-extra.html" . -}}{{- end -}}
   {{- $data := dict "Context" . "Items" $prepared "Extra" $extra -}}
   {{- if eq .Region "article-footer" -}}
-    {{- with (templates.Defer (dict "data" $data)) -}}{{- partial "sidera/footer-render.html" . -}}{{- end -}}
+    {{- with (templates.Defer (dict "data" $data)) -}}{{- partial "sidera/minify-html.html" (partial "sidera/footer-render.html" .) -}}{{- end -}}
   {{- else -}}{{- partial "sidera/footer-render.html" $data -}}{{- end -}}
 {{- end -}}
