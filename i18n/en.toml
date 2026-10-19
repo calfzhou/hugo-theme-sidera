@@ -607,3 +607,9 @@ other = "Interactive component ready."
 
 [jsx_error]
 other = "This component could not be loaded. The rest of the article is still available."
+
+[random_article]
+other = "Random article"
+
+[random_article_hint]
+other = "From across the site"

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-15T22:49:50+08:00
+lastmod: 2026-10-19T21:45:25+08:00
 title: "Public parameter reference"
 params:
   ai_label: generated
@@ -45,7 +45,7 @@ Structural/root/local and site-only exceptions are stated explicitly below.
 | left_footer / social_menu | Pinned instance region, default [social]; native menu selector social. Empty menu emits nothing. |
 | top | Same instance array/false contract; default []. Blog and notes presets select collection-nav for their sections. |
 | taxonomy_hubs | index (shared default) or list (explicit all-content opt-in). Only scoped tag/category hub presentation, not native assignments, hierarchy or term membership. |
-| left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults menu + global recent-updates / [toc], with preset overrides. []/false disables, no blank rail. |
+| left / right | Ordered component/widget names or inline component/config and widget/config maps, or false; defaults menu + random + global recent-updates / [toc], with preset overrides. []/false disables, no blank rail. |
 | menu / links_menu / text | Native menu selector ('primary'), optional native links menu (''), native-rendered Markdown (''). Empty clears. |
 | profile | Whole-map identity card: title/text/image/menu strings; {} clears. Not a preset. |
 | widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See component options below. |
@@ -105,6 +105,7 @@ defaults. Native widget definitions belong only in site/language params.widgets.
 | site-taxonomies | taxonomies (array/false), icons | taxonomy_navigation, icons |
 | page-tree | none | Native owner/tree/local order |
 | toc | icons | icons |
+| random | icons | icons; site-wide current-language articles, excluding the current page |
 | recent | order (publication/modification), count (positive integer), sections (boolean), scope (owner/global) | modification, recent_count, recent_sections, owner |
 | profile | title, text, image, menu (strings), icons | profile fields, icons |
 | text | title (plain string), text (Markdown) | text; no title |

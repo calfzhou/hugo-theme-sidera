@@ -103,7 +103,8 @@ summary { cursor: pointer; }
 }
 .site-menu > summary,.context-menu > summary { display: none; }
 .navigation-content ul { list-style: none; margin: 0; padding: 0; }
-.region-component + .region-component { margin-top: 28px; }
+.region-component:has(> [data-sidera-random][hidden]) { display: none; }
+.region-component:not(:has(> [data-sidera-random][hidden])) ~ .region-component { margin-top: 28px; }
 .nav-heading { margin: 0 16px 4px; font-size: 14px; color: var(--quiet); font-weight: 500; }
 .navigation-content a { color: var(--muted); text-decoration: none; }
 .native-menu a,.collection-nav a,.home-link,.page-nav a,.taxonomy-navigation a { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 8px 16px; border-radius: 8px; line-height: 1.2; }
@@ -141,6 +142,11 @@ summary { cursor: pointer; }
 .tree-node[data-icons="false"] > .tree-branch > summary { width: auto; min-width: 32px; padding-inline: 4px; font-size: 11px; }
 .tree-branch > ul { grid-column: 1 / -1; grid-row: 2; margin-left: 16px; padding-left: 0; }
 .tree-branch .tree-branch .tree-branch > ul { margin-left: 3px; padding-left: 4px; }
+/* A quiet site-wide discovery action, using the rail's existing theme tokens. */
+.random-article { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 10px 16px; border: 0; border-radius: 8px; background: var(--panel); color: var(--text); font: inherit; font-size: 15px; text-align: start; cursor: pointer; }
+.random-article-label { display: grid; gap: 2px; min-width: 0; line-height: 1.4; }
+.random-article small { color: var(--muted); font-size: 12px; }
+.random-article:is(:hover,:focus-visible) { background: var(--accent-soft); color: var(--accent); }
 .recent-panel { font-size: 16px; }
 [data-recent] { display: grid; gap: 2px; }
 [data-recent] li { min-width: 0; }

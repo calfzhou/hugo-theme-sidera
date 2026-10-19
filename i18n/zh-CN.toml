@@ -604,3 +604,9 @@ other = "交互组件已就绪。"
 
 [jsx_error]
 other = "组件无法加载，文章的其他内容仍可阅读。"
+
+[random_article]
+other = "随机文章"
+
+[random_article_hint]
+other = "探索全站文章"

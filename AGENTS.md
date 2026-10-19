@@ -84,6 +84,16 @@ only; keep resource keys content-derived and read Content without publishing int
 fragments. Generated frame resources minify before fingerprinting. Cover verbose
 custom hooks, inline spaces, pre/textarea contents, distinct pages and frame output.
 
+Random discovery uses `random/resource.html` for one native current-language URL
+pool and `assets/js/random.js` for uniform skip-current selection. It is independent
+of search and collection scope; keep native publication/list/HTML-render boundaries,
+custom region composition, prefix/language URLs and repeated-instance behavior.
+Run `tests/check_random.py <fresh-absolute-output>` with uv/Python and
+`node tests/check_random.mjs` with the showcase's nvm-selected Node. The showcase's
+`tests/check_random_browser.mjs <same-output>` covers real keyboard navigation,
+light/dark/mobile, EN/ZH, no-JS/failure and empty/singleton behavior using its owned
+browser harness.
+
 Run the relevant existing check_*.py files for affected images, links, taxonomy,
 archive, collection, motion or other behavior. Read a test's entry point before
 invoking it; do not assume all tests share a fixture. Strict builds should include

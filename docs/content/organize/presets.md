@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-19T21:45:25+08:00
 title: "Presets and inheritance"
 params:
   ai_label: generated
@@ -15,9 +15,9 @@ scalar or one-element array; do not assign it to regular pages or cascade member
 
 | Preset | Selecting section | Descendants |
 |---|---|---|
-| blog | Recursive publication list; collection navigation; flat classification; menu and recent updates | Same left components, TOC, update date available; published date first |
-| notes | Recursive modification list; collection navigation; hierarchical tags; menu, tag tree and recent publications | Same left components, TOC, update date available; updated date first |
-| docs | Immediate-child list; menu, page tree and both recent orders; sibling reading navigation | Children mode for sections, same left components, TOC; updated date first |
+| blog | Recursive publication list; collection navigation; flat classification; menu, random article and recent updates | Same left components, TOC, update date available; published date first |
+| notes | Recursive modification list; collection navigation; hierarchical tags; menu, tag tree, random article and recent publications | Same left components, TOC, update date available; updated date first |
+| docs | Immediate-child list; menu, page tree, random article and both recent orders; sibling reading navigation | Children mode for sections, same left components, TOC; updated date first |
 
 All support native authors, taxonomies, shared Markdown and opt-outs. The default
 recent count is 10, independent of article pagination. Full details of individual

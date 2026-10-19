@@ -1,0 +1,12 @@
+{{- /* One shared list per language, independent of collection and search visibility.
+     Native page membership handles publication/list policy; link-only and non-HTML
+     pages have no local article to open. No body rendering or per-page list copies. */ -}}
+{{- $urls := slice -}}
+{{- range .RegularPages -}}
+  {{- if and (.OutputFormats.Get "html") .RelPermalink (not (in (slice "link" "never" false) .Params.build.render)) -}}
+    {{- $urls = $urls | append .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- $urls = $urls | uniq | sort -}}
+{{- $resource := resources.FromString (printf "random/%s.json" .Language.Lang) ($urls | jsonify) | fingerprint -}}
+{{- return (dict "urls" $urls "resource" $resource) -}}

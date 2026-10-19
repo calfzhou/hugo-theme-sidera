@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-19T21:45:25+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -65,6 +65,7 @@ params:
   left:
     - menu
     - welcome
+    - random
     - widget: recent-updates
       config: {count: 5, scope: global}
   right: [toc]
@@ -83,6 +84,27 @@ values clear, and `{}` means defaults rather than disable. Widgets cannot shadow
 built-in names or derive from widgets. Unknown/unused malformed definitions fail.
 See the single [component option table](../publishing/parameters.md#component-options)
 for allowed regions/options instead of guessing a renderer's internal fields.
+
+## Random article
+
+The `random` component opens another article in the same tab, chosen uniformly
+from the current language across all collections, including docs and standalone
+pages. It is included in the general, blog, notes and docs default left sidebars.
+Explicit region arrays still replace defaults; add `random` to your own list to
+show it, or omit it to remove it.
+
+```toml
+[params]
+left = ['menu', 'random', 'recent-updates']
+```
+
+Only published, listed regular pages with a rendered HTML destination participate;
+section/taxonomy indexes and link-only pages do not. Search visibility does not
+control participation. The current page is skipped at selection time using one
+shared, fingerprinted URL list per language—not a different list per article.
+The action stays hidden without JavaScript, when its list cannot load, or when
+there is no other destination. With one eligible destination, it opens that page.
+Per-instance `config.icons = false` hides the arrow but keeps the label.
 
 ## Footer choices
 

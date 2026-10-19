@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-19T21:45:25+08:00
 title: "Reader features"
 params:
   ai_label: generated
@@ -28,6 +28,15 @@ focus. Its fingerprint changes with the build; reload an old page to discover a
 new deployment's index. It contains published normalized body text, not source
 paths or hidden copy payloads. Formulas/diagram internals/control text are excluded;
 prose descriptions, captions and displayed code/snippet selections are searchable.
+
+## Discover a random article
+
+**Random article** opens another published article in the current language, in
+this tab. It explores the whole site—including docs—rather than staying in the
+collection you just entered. The current article is never selected; older articles
+have the same chance as newer ones. The action is hidden when there is no other
+article, JavaScript is unavailable, or the shared URL list cannot load.
+See [sidebar configuration](../customize/navigation.md#random-article) for placement.
 
 ## References connect real content
 

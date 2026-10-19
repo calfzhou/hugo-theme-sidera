@@ -1,0 +1,9 @@
+{{- $pool := partialCached "random/resource.html" .Page.Site .Page.Language.Lang -}}
+{{- $count := len $pool.urls -}}
+{{- if or (gt $count 1) (and (eq $count 1) (ne (index $pool.urls 0) .Page.RelPermalink)) -}}
+  {{- .Page.Store.Set "sidera-random" true -}}
+  <button type="button" class="random-article" data-sidera-random hidden>
+    <span class="random-article-label"><span>{{ T "random_article" }}</span><small>{{ T "random_article_hint" }}</small></span>
+    {{- if .Settings.icons -}}{{ partial "sidera/icon.html" "arrow-right" }}{{- end -}}
+  </button>
+{{- end -}}
