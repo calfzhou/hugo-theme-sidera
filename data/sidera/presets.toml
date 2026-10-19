@@ -31,12 +31,12 @@ show_updated = true
 list_mode = 'recursive'
 list_order = 'modification'
 taxonomy_hierarchy = ['tags']
-left = ['menu', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'random', 'recent-published']
+left = ['menu', 'random', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'recent-published']
 icon = 'notebook'
 recent_sections = false
 [notes.defaults.cascade.params]
 primary_date = "updated"
-left = ['menu', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'random', 'recent-published']
+left = ['menu', 'random', {component = 'taxonomies', config = {taxonomies = ['tags']}}, 'recent-published']
 right = ['toc']
 show_updated = true
 recent_sections = false
@@ -50,12 +50,12 @@ show_updated = true
 list_mode = 'children'
 list_order = 'title'
 taxonomy_hierarchy = []
-left = ['menu', 'page-tree', 'random', 'recent-updates', 'recent-published']
+left = ['menu', 'random', 'page-tree', 'recent-updates', 'recent-published']
 icon = 'docs'
 recent_sections = true
 [docs.defaults.cascade.params]
 primary_date = "updated"
-left = ['menu', 'page-tree', 'random', 'recent-updates', 'recent-published']
+left = ['menu', 'random', 'page-tree', 'recent-updates', 'recent-published']
 right = ['toc']
 show_updated = true
 recent_sections = true

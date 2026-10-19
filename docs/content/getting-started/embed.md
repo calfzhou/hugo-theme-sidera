@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-19T21:45:25+08:00
+lastmod: 2026-10-19T22:11:50+08:00
 title: "Embed the manual"
 params:
   ai_label: generated
@@ -74,6 +74,6 @@ The manual keeps explicit native `date` and `lastmod` values in each page's fron
 matter. They travel with the source when mounted; copying a checkout or rebuilding
 does not reset them. No runtime Git history or filesystem timestamp is required.
 
-The manual inherits the normal docs preset leftbar: menu, page tree, random
-article, recently updated and recently published. It does not replace the preset's region selection;
+The manual inherits the normal docs preset leftbar: menu, random article, page
+tree, recently updated and recently published. It does not replace the preset's region selection;
 normal native consumer cascade/override rules still apply.

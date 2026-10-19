@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-19T21:45:25+08:00
+lastmod: 2026-10-19T22:11:50+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -64,8 +64,8 @@ text = 'You are reading **{site.title}**.'
 params:
   left:
     - menu
-    - welcome
     - random
+    - welcome
     - widget: recent-updates
       config: {count: 5, scope: global}
   right: [toc]
@@ -89,7 +89,8 @@ for allowed regions/options instead of guessing a renderer's internal fields.
 
 The `random` component opens another article in the same tab, chosen uniformly
 from the current language across all collections, including docs and standalone
-pages. It is included in the general, blog, notes and docs default left sidebars.
+pages. It appears immediately after the main menu in the general, blog, notes and docs
+default left sidebars, before any tag tree or page tree.
 Explicit region arrays still replace defaults; add `random` to your own list to
 show it, or omit it to remove it.
 

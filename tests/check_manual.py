@@ -69,7 +69,7 @@ def main():
     for p in off.rglob('*.json'):
         assert 'Sidera user manual' not in p.read_text()
     def verify(out, prefix, base='', language='', label='AI-generated', left=None):
-        if left is None:left=['menu','page-tree','random','recent-updates','recent-published']
+        if left is None:left=['menu','random','page-tree','recent-updates','recent-published']
         urls=[]; sections=0
         for source,suffix in zip(sources,expected):
             route='/'+('/'.join(x for x in [language,prefix] if x))+suffix

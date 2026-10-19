@@ -30,6 +30,7 @@ class HTML(HTMLParser):
         self.buttons = []
         self.scripts = []
         self.components = []
+        self.left_components = []
         self.feed(path.read_text())
 
     def handle_starttag(self, tag, attrs):
@@ -40,6 +41,8 @@ class HTML(HTMLParser):
             self.scripts.append(attrs)
         if 'data-component' in attrs:
             self.components.append(attrs['data-component'])
+            if attrs.get('data-instance', '').startswith('left-'):
+                self.left_components.append(attrs['data-component'])
 
 
 base = {
@@ -53,7 +56,7 @@ base = {
 for lang in ['', '.zh']:
     for name, preset in [('journal', 'blog'), ('notes', 'notes'), ('docs', 'docs')]:
         page(f'{name}/_index{lang}', preset=preset)
-        page(f'{name}/article{lang}')
+        page(f'{name}/article{lang}', tags=['example'])
     page(f'standalone{lang}')
     page(f'notes/nested/_index{lang}', params={'scope_root': True})
     page(f'notes/nested/article{lang}')
@@ -108,6 +111,8 @@ for name, prefix, icons in [('baseline', '/preview', True), ('root', '', True), 
         for route in ['', 'journal/', 'journal/article/', 'notes/', 'notes/article/', 'docs/', 'docs/article/', 'standalone/', 'repeats/']:
             html = HTML(out / lang / route / 'index.html')
             assert len(html.buttons) == (5 if route == 'repeats/' else 1), (name, lang, route)
+            if route != 'repeats/':
+                assert html.left_components[:2] == ['menu', 'random'], (name, lang, route, html.left_components)
             assert all(b['type'] == 'button' and 'hidden' in b for b in html.buttons)
             assert len(html.scripts) == 1
             script = html.scripts[0]
