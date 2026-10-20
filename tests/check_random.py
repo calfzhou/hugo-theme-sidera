@@ -113,7 +113,7 @@ for name, prefix, icons in [('baseline', '/preview', True), ('root', '', True), 
             assert len(html.buttons) == (5 if route == 'repeats/' else 1), (name, lang, route)
             if route != 'repeats/':
                 assert html.left_components[:2] == ['menu', 'random'], (name, lang, route, html.left_components)
-            assert all(b['type'] == 'button' and 'hidden' in b for b in html.buttons)
+            assert all(b['type'] == 'button' and 'hidden' not in b and 'disabled' in b and b.get('aria-busy') == 'true' for b in html.buttons)
             assert len(html.scripts) == 1
             script = html.scripts[0]
             assert script['data-current'] == prefix + '/' + lang + route
@@ -126,12 +126,20 @@ for name, prefix, icons in [('baseline', '/preview', True), ('root', '', True), 
                 assert script['data-current'] in pool
             raw = (out / lang / route / 'index.html').read_text()
             assert ('随机文章' if lang else 'Random article') in raw
+            assert '<noscript><style>' in raw and '[data-sidera-random]' in raw
             if not icons:
                 assert '<svg' not in raw
         assert len(shared) == 1, shared
         custom = HTML(out / lang / 'custom/index.html')
         assert not custom.buttons and not custom.scripts
     assert len(list((out / 'random').glob('*.json'))) == 2
+
+# The loading state must work even when page-entry motion is explicitly disabled.
+cfg = copy.deepcopy(base)
+cfg['params']['page_reveal'] = False
+cfg['baseURL'] = 'https://example.invalid/no-reveal/'
+out = build('reveal-off', cfg)
+assert 'data-sidera-page-reveal' not in (out / 'docs/article/index.html').read_text()
 
 # Explicit site-level composition replaces the general default; presets still own
 # their configured defaults, as before. A disabled region must remain disabled.

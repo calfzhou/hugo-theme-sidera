@@ -34,6 +34,7 @@
   <script data-sidera-search data-index="{{ $index }}" data-rules="{{ hugo.Data.sidera_discovery | jsonify }}" src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 {{ end }}
 {{ if .page.Store.Get "sidera-random" }}
+  <noscript><style>.region-component:has(> [data-sidera-random]) { display: none; }</style></noscript>
   {{ $pool := partialCached "random/resource.html" .page.Site .page.Language.Lang }}
   {{ $random := resources.Get "js/random.js" | minify | fingerprint }}
   <script data-sidera-random-script data-index="{{ $pool.resource.RelPermalink }}" data-current="{{ .page.RelPermalink }}" src="{{ $random.RelPermalink }}" integrity="{{ $random.Data.Integrity }}" defer></script>

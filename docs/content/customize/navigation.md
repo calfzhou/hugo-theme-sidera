@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-19T22:11:50+08:00
+lastmod: 2026-10-20T21:29:50+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -103,7 +103,10 @@ Only published, listed regular pages with a rendered HTML destination participat
 section/taxonomy indexes and link-only pages do not. Search visibility does not
 control participation. The current page is skipped at selection time using one
 shared, fingerprinted URL list per language—not a different list per article.
-The action stays hidden without JavaScript, when its list cannot load, or when
+The action is rendered disabled in the initial HTML, keeping sidebar spacing
+stable before scripts run and while its URL list loads. It participates in normal
+page-entry reveal and becomes usable when the list is ready. A no-script fallback
+hides it when JavaScript is disabled; it is also hidden if the list request fails or
 there is no other destination. With one eligible destination, it opens that page.
 Per-instance `config.icons = false` hides the arrow but keeps the label.
 

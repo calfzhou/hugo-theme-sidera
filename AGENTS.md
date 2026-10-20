@@ -92,7 +92,13 @@ Run `tests/check_random.py <fresh-absolute-output>` with uv/Python and
 `node tests/check_random.mjs` with the showcase's nvm-selected Node. The showcase's
 `tests/check_random_browser.mjs <same-output>` covers real keyboard navigation,
 light/dark/mobile, EN/ZH, no-JS/failure and empty/singleton behavior using its owned
-browser harness.
+browser harness. `tests/check_random_reveal_browser.mjs <same-output>` in the
+showcase holds both the controller and URL responses to verify first-paint layout,
+loading-time participation in the shared reveal sequence, no replay/layout shift
+on readiness, and motion/focus opt-outs. Render random disabled/busy in initial
+HTML with a no-script fallback; unhiding it in a deferred script is too late for
+first paint. Enable on success and hide on index failure. Do not add a second
+animation path or block page reveal on the URL request.
 
 Run the relevant existing check_*.py files for affected images, links, taxonomy,
 archive, collection, motion or other behavior. Read a test's entry point before
