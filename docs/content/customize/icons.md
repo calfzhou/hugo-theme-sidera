@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-20T20:21:11+08:00
 title: "Named icons and logo styles"
 params:
   ai_label: generated
@@ -34,13 +34,50 @@ icon = 'sidera-bold-duotone'
 
 This page's comparison links below render the actual four named registry entries.
 
+## Brand icons
+
+The following keys use **Font Awesome Free 7.3.1** artwork from `svgs/brands/`:
+
+`github`, `facebook`, `linkedin`, `slack`, `instagram`, `tiktok`, `wordpress`,
+`whatsapp`, `telegram`, `skype`, `bilibili`, `x-twitter`, `weixin`, `weibo`.
+
+Use the exact name, such as `github`, not `github-bold` or `github-linear`.
+Brand icons do not have Solar-style variants; separately named upstream designs
+are separate icons, not variants selected by a style setting. Only the listed
+icons are bundled, not the entire Font Awesome catalog. Non-brand UI icons use Solar.
+
+```text
+{{</* link href="https://github.com/" text="GitHub" icon="github" */>}}
+```
+
+Brand icons use the same menu, social-entry and shortcode keys as other icons.
+Their original paths are fitted proportionally and centered in the existing
+24 × 24 icon space. They inherit parent color and size, without hardcoded brand
+colors, Font Awesome CSS, fonts or JavaScript. Use them to represent the named
+company, product or service; the artwork license does not grant trademark rights.
+
+{{< link href="https://github.com/" text="GitHub" icon="github" >}}
+{{< link href="https://www.facebook.com/" text="Facebook" icon="facebook" >}}
+{{< link href="https://www.linkedin.com/" text="LinkedIn" icon="linkedin" >}}
+{{< link href="https://slack.com/" text="Slack" icon="slack" >}}
+{{< link href="https://www.instagram.com/" text="Instagram" icon="instagram" >}}
+{{< link href="https://www.tiktok.com/" text="TikTok" icon="tiktok" >}}
+{{< link href="https://wordpress.org/" text="WordPress" icon="wordpress" >}}
+{{< link href="https://www.whatsapp.com/" text="WhatsApp" icon="whatsapp" >}}
+{{< link href="https://telegram.org/" text="Telegram" icon="telegram" >}}
+{{< link href="https://www.skype.com/" text="Skype" icon="skype" >}}
+{{< link href="https://www.bilibili.com/" text="Bilibili" icon="bilibili" >}}
+{{< link href="https://x.com/" text="X / Twitter" icon="x-twitter" >}}
+{{< link href="https://weixin.qq.com/" text="Weixin" icon="weixin" >}}
+{{< link href="https://weibo.com/" text="Weibo" icon="weibo" >}}
+
 ## Built-ins and site overrides
 
 Common keys include `home`, `about`, `blog`, `notebook`, `docs`, `page`, `tag`,
 `category`, `authors`, `series`, `star`, `planet`, `link`, `code`, `email`,
 `color-mode`, `search` and `download`. The authoritative full registry/provenance
 lives in repository `data/sidera/icons.yaml` and `icon_sources.yaml`, including
-Solar source names/styles/licenses. Unknown nonempty keys diagnose; `''` means none.
+Solar and Font Awesome source names/revisions/licenses. Unknown nonempty keys diagnose; `''` means none.
 
 Add or replace **one whole entry** in site `data/icons.yaml`:
 
@@ -77,7 +114,7 @@ for icon-only actions. Empty selection removes one icon. A supported instance's
 `icons: true` can intentionally override inherited false. Brand/content images and
 alt text remain; nearby collection titles allow decorative logo `alt=""`.
 
-See [credits](../publishing/credits.md) for retained Solar CC BY attribution and
+See [credits](../publishing/credits.md) for retained Solar/Font Awesome CC BY attribution and
 original Sidera MIT terms. No trademark clearance is claimed.
 
 {{< link href="../_index.md" text="Sidera Bold" icon="sidera-bold" >}}

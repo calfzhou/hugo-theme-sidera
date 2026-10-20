@@ -151,7 +151,7 @@ AI generation and keep comments off. Theme UI languages do not auto-translate bo
 
 Original Sidera material is [MIT licensed](LICENSE), copyright 2026 Calf.
 [Third-party notices](THIRD-PARTY-NOTICES.md) retain [Stellar][stellar]'s MIT credit to [xaoxuu][xaoxuu],
-Solar CC BY attribution and bundled renderer/font terms; they are also published
+Solar and Font Awesome CC BY attribution and bundled renderer/font terms; they are also published
 with generated pages. This does not license your site content or imply endorsement.
 
 [stellar]: https://xaoxuu.com/wiki/stellar/

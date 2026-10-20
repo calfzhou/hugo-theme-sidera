@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-09T22:10:00+08:00
+lastmod: 2026-10-20T20:21:11+08:00
 title: "Credits and licenses"
 params:
   ai_label: generated
@@ -25,6 +25,12 @@ official port and does not promise configuration or feature parity.
 
 - Solar UI artwork: 480 Design; maintained extensions by Hakim Saoudi; **CC BY 4.0**.
   Per-key source/style/revision/hash provenance stays in the registry metadata.
+- [Font Awesome Free 7.3.1](https://github.com/FortAwesome/Font-Awesome/tree/14c65a3747d0f3b751f15831fc719236aea8729d/svgs/brands)
+  brand artwork: Fonticons, Inc.; **CC BY 4.0**. Selected SVG paths are fitted to
+  Sidera's icon space with parent-controlled color/size; per-key source and normalized
+  hashes and original attribution are retained. Brand trademarks belong to their
+  respective owners; use these icons only to represent the corresponding company,
+  product or service. No endorsement or trademark clearance is implied.
 - React Bits-derived card spotlight: retained upstream MIT notice.
 - KaTeX 0.18.4 CSS/fonts: retained MIT notice and unmodified bundled assets matching
   the verified Hugo renderer. No ordinary UI font download is implied.

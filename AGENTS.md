@@ -117,9 +117,21 @@ Keep THIRD-PARTY-NOTICES.md and assets/licenses/sidera-third-party.txt identical
 LICENSE and assets/licenses/sidera-mit.txt must also match. Preserve conditional
 vendor/font notices and byte hashes; no unnecessary dependency/font downloads.
 
-Icons are trusted bounded geometry with currentColor/parent sizing. Solar entries
-retain pinned source/name/style/author/CC BY records; original Sidera derivatives
-use explicit original-design records, not fabricated Solar paths. Fixed-color
+Icons are trusted bounded geometry with currentColor/parent sizing. Select non-brand
+UI icons from Solar unless a specific exception is justified and recorded. Select
+brand icons from Font Awesome Free `svgs/brands/`, importing only needed names, not
+the catalog. Brand keys use exact upstream names without Solar-style variants;
+distinct upstream designs remain separate names. Fit/center source viewBoxes in
+24 × 24 with uniform geometry transforms, preserving aspect ratio and path data;
+never embed brand colors or intrinsic SVG size. No new renderer or runtime loader.
+Solar entries retain pinned source/name/style/author/CC BY records; Font Awesome
+brand entries retain name/repository/revision/path/author/CC BY, source viewBox,
+original attribution and source/normalized hashes in icon_sources.yaml. Keep the
+upstream license and trademark restrictions in both notice mirrors. Reference
+checkouts are optional/read-only, never test/build dependencies. Run check_icons.py
+for geometry/provenance, named rendering, overrides and icons-off regressions.
+Original Sidera derivatives use explicit original-design records, not fabricated
+Solar paths. Fixed-color
 Parallax circle/square/favicon bytes are independent and must remain unchanged.
 
 Ongoing theme development uses `main`; ordinary refinements do not require a

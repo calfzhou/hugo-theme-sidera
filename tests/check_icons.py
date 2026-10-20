@@ -1,4 +1,4 @@
-"""Native registry/provenance, original Parallax variants and strict geometry safety.
+"""Native registry/provenance, brand icons, original Parallax variants and strict geometry safety.
 Run: python3 tests/check_icons.py /absolute/fresh-output-directory
 """
 from pathlib import Path
@@ -21,8 +21,9 @@ pageRef='/manual'
 [menus.primary.params]
 icon='sidera-bold-duotone'
 ''')
+brands='github facebook linkedin slack instagram tiktok wordpress whatsapp telegram skype bilibili x-twitter weixin weibo'.split()
 keys=['sidera-bold','sidera-bold-duotone','sidera-linear','sidera-line-duotone']
-write('content/manual/_index.md','---\ntitle: Icon manual\npreset: docs\nparams:\n  logo: images/sidera-parallax-circle.svg\n---\n'+ '\n'.join('{{< link href="/manual/" text="'+key+'" icon="'+key+'" >}}' for key in keys))
+write('content/manual/_index.md','---\ntitle: Icon manual\npreset: docs\nparams:\n  logo: images/sidera-parallax-circle.svg\n---\n'+ '\n'.join('{{< link href="/manual/" text="'+key+'" icon="'+key+'" >}}' for key in keys+brands))
 write('layouts/_partials/sidera/head-extra.html','''{{ $icons := partialCached "sidera/icons.html" site "icons" }}{{ $rendered := collections.NewScratch }}
 {{ range $key, $_ := $icons }}{{ $rendered.Set $key (partial "sidera/icon.html" $key) }}{{ end }}
 <script type="application/json" id="icons-probe">{{ dict "icons" $icons "sources" hugo.Data.sidera.icon_sources "rendered" $rendered.Values "empty" (partial "sidera/icon.html" "") | jsonify | safeJS }}</script>''')
@@ -40,7 +41,7 @@ assert data['empty']==''
 for key,svg in data['icons'].items():
  expected=re.sub(r'^<svg\s','<svg class="icon" aria-hidden="true" focusable="false" ',re.sub(r'>\s+<','><',svg.strip()))
  assert data['rendered'][key]==expected,key
-originals=[];solars=[]
+originals=[];solars=[];brand_keys=[]
 for key,meta in data['sources'].items():
  svg=data['icons'][key].strip();root=ET.fromstring(svg)
  assert hashlib.sha256(svg.encode()).hexdigest()==meta['normalized_sha256'],key
@@ -51,12 +52,28 @@ for key,meta in data['sources'].items():
   assert meta['style']==key.removeprefix('sidera-')
   assert not {'solar_name','repository','revision','path'}&meta.keys(),key
   assert hashlib.sha256((THEME/meta['source']).read_bytes()).hexdigest()==meta['source_sha256']
+ elif meta.get('kind')=='brand':
+  brand_keys.append(key)
+  assert meta['name']==key and meta['repository']=='FortAwesome/Font-Awesome'
+  assert meta['revision']=='14c65a3747d0f3b751f15831fc719236aea8729d'
+  assert meta['path']==f'svgs/brands/{key}.svg' and meta['author']=='Fonticons, Inc.'
+  assert meta['license']=='CC-BY-4.0' and not {'style','solar_name'}&meta.keys()
+  assert re.fullmatch(r'[0-9a-f]{64}',meta['source_sha256'])
+  assert meta['attribution'].startswith('Font Awesome Free 7.3.1 by @fontawesome')
+  assert 'Copyright 2026 Fonticons, Inc.' in meta['attribution']
+  x,y,w,h=map(float,meta['source_viewbox'].split()); assert x==y==0 and w>0 and h>0
+  group,=root; assert group.tag=='g' and group.attrib['fill']=='currentColor'
+  match=re.fullmatch(r'translate\(([^ ]+) ([^)]+)\) scale\(([^)]+)\)',group.attrib['transform']); assert match,key
+  dx,dy,scale=map(float,match.groups())
+  assert abs(scale-24/max(w,h))<1e-12 and abs(dx-(24-w*scale)/2)<1e-12 and abs(dy-(24-h*scale)/2)<1e-12,key
+  assert len(group)>0 and all(child.tag=='path' and set(child.attrib)=={'d'} for child in group)
+  assert set(root.attrib)=={'viewBox','fill'} and root.attrib['fill']=='none'
  else:
   solars.append(key)
   assert meta['solar_name'] and meta['style'] in ('BoldDuotone','Linear') and meta['revision'] and meta['license']=='CC-BY-4.0'
   assert meta['repository'] in ('saoudi-h/solar-icons','hexo-theme-stellar')
   assert meta['path'] and meta['author'] in ('480 Design','Hakim Saoudi')
-assert set(originals)==set(keys) and len(solars)==45
+assert set(originals)==set(keys) and len(solars)==45 and set(brand_keys)==set(brands)
 assert len({data['icons'][key] for key in keys})==4
 for key in keys:
  svg=data['icons'][key];assert svg in (THEME/'data/sidera/icons.yaml').read_text()
@@ -64,12 +81,19 @@ for key in keys:
  assert ('stroke-width="6.25"' in svg)==('line' in key) # transformed to 1.5 viewBox units
 assert 'class="icon" aria-hidden="true" focusable="false"' in text
 assert '<a class="menu' in text or 'native-menu' in text
+# Every brand is available through the normal public shortcode, with accessible text.
+visible=re.sub('<script.*?</script>','',text,flags=re.S)
+for key in brands:
+ assert data['rendered'][key] in visible and '>'+key+'<' in visible,key
+# Existing source-coordinate conventions remain strict; imports need normalization.
+assert 'viewBox="0 0 24 24"' in data['rendered']['weixin']
 # Site data replacement affects the same named menu/card key, never brand images.
 custom='<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5"/></svg>'
-write('data/icons.yaml','sidera-bold-duotone: '+json.dumps(custom)+'\ncustom-example: '+json.dumps(custom)+'\n')
+write('data/icons.yaml','sidera-bold-duotone: '+json.dumps(custom)+'\ngithub: '+json.dumps(custom)+'\ncustom-example: '+json.dumps(custom)+'\n')
 out=build('override');text=(out/'manual/index.html').read_text();assert text.count('r="7"')>=2
 probe=json.loads(re.search(r'id="icons-probe">(.*?)</script>',text,re.S)[1])
 assert probe['icons']['custom-example']==custom
+assert probe['icons']['github']==custom and probe['rendered']['github']==probe['rendered']['custom-example']
 assert 'r="7"' in probe['rendered']['custom-example']
 assert probe['rendered']['custom-example']==probe['rendered']['sidera-bold-duotone']
 for name,cfg in [('icons-off','[params]\nicons=false\n'),('chinese-off',"defaultContentLanguage='zh'\nlocale='zh-CN'\n[params]\nicons=false\n")]:
@@ -77,10 +101,12 @@ for name,cfg in [('icons-off','[params]\nicons=false\n'),('chinese-off',"default
  for route in ['index.html','manual/index.html']:
   text=(out/route).read_text();visible=re.sub('<script.*?</script>','',text,flags=re.S)
   assert '<svg' not in visible and 'Parallax manual' in visible
+ for key in brands:assert '>'+key+'<' in visible,key
  assert 'sidera-parallax-circle.svg' in (out/'index.html').read_text()
  assert 'alt=""' in (out/'index.html').read_text()
-# Format guards are identical for originals and Solar: invalid unused overrides fail even off.
+# Format guards are identical for originals, Solar and brands: invalid unused overrides fail even off.
 bad={
+ 'source-viewbox':'<svg viewBox="0 0 512 512"><path d="M1 1"/></svg>',
  'script':'<svg viewBox="0 0 24 24"><script>alert(1)</script></svg>',
  'event':'<svg viewBox="0 0 24 24" onload="bad"><path d="M1 1"/></svg>',
  'foreign':'<svg viewBox="0 0 24 24"><foreignObject/></svg>',
@@ -95,6 +121,8 @@ bad={
 for name,value in bad.items():
  write('data/icons.yaml','unused-unsafe: '+json.dumps(value)+'\n');build('reject-'+name,'[params]\nicons=false\n','Sidera icon')
 write('data/icons.yaml','{}\n');write('content/invalid.md','---\ntitle: Invalid\n---\n{{< link href="/" text="Bad" icon="unknown.svg" >}}');build('reject-key',diagnostic='unknown icon')
+write('content/invalid.md','---\ntitle: Invalid brand variant\n---\n{{< link href="/" text="GitHub" icon="github-linear" >}}')
+build('reject-brand-variant',diagnostic='unknown icon')
 # Validate the public renderer even when selecting no icon, and keep native
 # registry/renderer template overrides ahead of the theme's cached implementation.
 write('content/invalid.md','---\ntitle: Renderer checks\n---\n')
@@ -126,4 +154,4 @@ for name in [*expected,'sidera-parallax-32.png']:
  assert (THEME/'assets/images'/name).read_bytes()==subprocess.check_output(['git','-C',str(THEME),'show','HEAD:assets/images/'+name])
 assert (THEME/'LICENSE').read_bytes()==(THEME/'assets/licenses/sidera-mit.txt').read_bytes()
 assert (THEME/'THIRD-PARTY-NOTICES.md').read_bytes()==(THEME/'assets/licenses/sidera-third-party.txt').read_bytes()
-(RUN/'results.json').write_text(json.dumps({'passed':passed,'rejected':rejected,'Solar':len(solars),'original':originals},indent=2)+'\n');print('PASS',len(passed),'builds;',len(rejected),'expected rejections; 45 Solar + 4 original entries')
+(RUN/'results.json').write_text(json.dumps({'passed':passed,'rejected':rejected,'Solar':len(solars),'original':originals,'brands':brand_keys},indent=2)+'\n');print('PASS',len(passed),'builds;',len(rejected),'expected rejections; 45 Solar + 4 original + 14 brand entries')
