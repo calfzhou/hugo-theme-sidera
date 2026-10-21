@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-20T20:21:11+08:00
+lastmod: 2026-10-21T20:36:49+08:00
 title: "Credits and licenses"
 params:
   ai_label: generated
@@ -20,8 +20,7 @@ clearance or endorsement is asserted.
 [Stellar user documentation][stellar] · [Stellar 1.44.0 source][stellar-144] · [xaoxuu][xaoxuu]
 
 Sidera is independently implemented for Hugo, inspired by **[Hexo Stellar 1.44.0][stellar-144]**
-by **[xaoxuu][xaoxuu]**. Adapted styles/interactions retain [Stellar][stellar]'s MIT notice. It is not an
-official port and does not promise configuration or feature parity.
+by **[xaoxuu][xaoxuu]**. Adapted styles/interactions retain [Stellar][stellar]'s MIT notice.
 
 - Solar UI artwork: 480 Design; maintained extensions by Hakim Saoudi; **CC BY 4.0**.
   Per-key source/style/revision/hash provenance stays in the registry metadata.

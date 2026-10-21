@@ -1,7 +1,9 @@
 # Sidera
 
+**Sidera** /ˈsiː.de.ra/ — “SEE-deh-rah”. Named after the Latin *sīdera*, meaning “stars”.
+
 An independent **Hugo theme for blogs, notebooks and documentation**, inspired by
-**[Hexo Stellar 1.44.0][stellar-144]** by **[xaoxuu][xaoxuu]** — not an official port or its configuration API.
+**[Hexo Stellar 1.44.0][stellar-144]** by **[xaoxuu][xaoxuu]**.
 
 - Native sections/bundles, optional presets, tags, authors and chronological series.
 - Ordered body-bearing docs trees; source-relative Markdown links and local resources.

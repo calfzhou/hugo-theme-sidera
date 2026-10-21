@@ -1,6 +1,6 @@
 ---
 date: 2026-10-06T10:22:39+08:00
-lastmod: 2026-10-06T10:22:39+08:00
+lastmod: 2026-10-21T20:36:49+08:00
 title: "Releases and upgrades"
 params:
   ai_label: generated
@@ -27,7 +27,7 @@ for both command sequences, and [troubleshooting](troubleshooting.md) for checks
 ## v1.0.0
 
 First Sidera release: an independent Hugo theme for blogs, notebooks and documentation,
-inspired by Hexo Stellar 1.44.0 rather than compatible with its configuration API.
+inspired by Hexo Stellar 1.44.0.
 
 - Native sections and page bundles, optional blog/notes/docs presets, tags and
   categories, authors, chronological series and ordered documentation trees.

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-07T22:19:57+08:00
+lastmod: 2026-10-21T20:36:49+08:00
 title: "Sidera user manual"
 preset: docs
 authors: []
@@ -19,6 +19,8 @@ cascade:
     comments: false
     license: "Original Sidera documentation: [MIT](https://github.com/calfzhou/hugo-theme-sidera/blob/main/LICENSE). Third-party material retains its own terms."
 ---
+
+**Sidera** /ˈsiː.de.ra/ — “SEE-deh-rah”. Named after the Latin *sīdera*, meaning “stars”.
 
 Sidera is an independent Hugo theme for blogs, notebooks and documentation. Native
 sections organize your content; optional presets supply convenient defaults without
@@ -39,8 +41,8 @@ translated automatically. [Embed this manual](getting-started/embed.md) only whe
 want it on your site; activating Sidera alone does not publish it.
 
 Sidera takes layout and interaction inspiration from **[Hexo Stellar 1.44.0][stellar-144]** by
-**[xaoxuu][xaoxuu]**. It is not an official port and does not use [Stellar][stellar]'s configuration API.
-See [credits and licenses](publishing/credits.md).
+**[xaoxuu][xaoxuu]**. See the [Stellar documentation][stellar] and
+[credits and licenses](publishing/credits.md).
 
 [stellar]: https://xaoxuu.com/wiki/stellar/
 [stellar-144]: https://github.com/xaoxuu/hexo-theme-stellar/tree/1.44.0
