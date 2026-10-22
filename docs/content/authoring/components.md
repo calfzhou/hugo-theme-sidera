@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-09T22:10:00+08:00
+lastmod: 2026-10-22T22:48:34+08:00
 title: "Compose content"
 params:
   ai_label: generated
@@ -32,6 +32,43 @@ Use `folding` for native disclosure, `box` for a titled/color presentation,
 only direct cells and whitespace; cell needs an immediate grid parent. Container
 titles support inline Markdown, links and math, not blocks or trusted author HTML.
 Native headings remain in the page's TOC; a fold title itself is not a heading.
+
+## Content colors
+
+`mark`, `box` and `folding` share these names: **red, orange, yellow, green, cyan,
+blue, purple, pink, neutral**. Names are lowercase Sidera color families, not fixed
+CSS keyword colors. Omitting `color` keeps the defaults: yellow for `mark`, neutral
+for `box` and `folding`.
+
+```text
+{{</* mark text="A detail to remember" color="purple" */>}}
+
+{{%/* box title="A useful connection" color="cyan" */%}}
+Body text stays neutral. {{</* mark text="A separate highlight" color="pink" */>}}
+{{%/* /box */%}}
+```
+
+Each family has text, accent, border, surface and highlight variants. Boxes and
+folds use quiet surfaces and borders; their titles use the text variant. Marks
+use a stronger highlight with neutral text. Each nested component selects its own
+family, including a default neutral container inside a colored one.
+
+Native Markdown alerts share the palette: note → blue, tip → green,
+important → purple, warning → yellow, caution → red. Their bars use the accent
+variant and their visible labels use the text variant. Keep meaningful words:
+color alone should not carry a warning, status or category distinction.
+
+Colors follow light/dark/auto mode without component JavaScript. Printed components
+use light colors even from dark mode; marks also receive an underline so emphasis
+survives when background printing is disabled. This does not expand closed folds
+or provide a separate page-wide print layout. Forced-colors mode uses system colors
+and keeps mark outlines.
+
+For site CSS customization, `--palette-<name>-text`, `-accent`, `-border`, `-surface`
+and `-highlight` are shared family tokens. Define overrides at `:root`; adaptive
+values can use CSS `light-dark(light-value,dark-value)`. Check contrast in both modes
+and print after overriding them. Ordinary site accents, chart colors and image
+artwork have independent styling.
 
 ## Timeline and small leaves
 

@@ -22,8 +22,7 @@
 {{- if in (slice "folding" "box") .Name -}}
   {{- $title := .Get "title" | default "" -}}
   {{- if and (eq .Name "folding") (not (strings.ContainsNonSpace $title)) -}}{{- errorf "Sidera folding requires a nonblank title (%s)" .Position -}}{{- end -}}
-  {{- $color := .Get "color" | default "neutral" -}}
-  {{- if not (in (slice "neutral" "red" "yellow" "green") $color) -}}{{- errorf "Sidera %s: color must be neutral, red, yellow or green (%s)" .Name .Position -}}{{- end -}}
+  {{- $color := partial "components/color.html" (dict "shortcode" . "default" "neutral") -}}
   {{- $child := .Get "child" | default "" -}}
   {{- if not (in (slice "" "codeblock") $child) -}}{{- errorf "Sidera %s: child must be codeblock or omitted (%s)" .Name .Position -}}{{- end -}}
   {{- $open := false -}}

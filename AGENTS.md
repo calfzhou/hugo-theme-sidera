@@ -147,6 +147,22 @@ release and consumer dependency updates need their own authorization. Update man
 validation and focused regression together for any public contract change.
 
 
+## Content palette
+
+`components/color.html` validates the nine named families for mark/box/folding.
+`assets/css/sidera.css` owns their shared `--palette-<family>-<role>` tokens;
+components bind all five local roles independently so nested colors cannot leak.
+Keep explicit sRGB values and the adjacent OKLCH derivation notes synchronized.
+Native `color-scheme` / `light-dark()` handles light, dark, auto and component print
+styles without a new asset pipeline or palette controller. Site accents, artwork
+and vendor palettes are separate; do not broadly recolor them as incidental cleanup.
+
+Run `tests/check_palette.py <fresh-absolute-output>` with uv/Python. In the showcase,
+`tests/check_palette_browser.mjs <same-output>` verifies nested colors, contrast,
+alerts, mode changes, mobile, native focus/disclosure, print without backgrounds,
+forced colors, no-JS and site overrides through the owned browser harness. Existing
+showcase content-component, composition and advanced-Markdown suites still apply.
+
 ## Native release checklist
 
 Release identity is an immutable annotated Git tag; do not add a parallel version

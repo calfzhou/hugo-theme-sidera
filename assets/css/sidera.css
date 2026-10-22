@@ -41,6 +41,125 @@
   --text: #17191b; --muted: #000000b3; --quiet: #00000080; --accent: #007f9e; --link: #087cb9; --pin: #bd352b;
 }
 }
+/* Content palette: eight hue families plus a quiet neutral. Explicit sRGB values
+   avoid runtime gamut differences. OKLCH hue anchors: 25/55/95/145/205/255/300/345.
+   Light/dark (L,C) targets: text (.44,.10)/(.82,.10), accent (.58,.11)/(.67,.11),
+   surface (.96,.018)/(.26,.028), highlight (.90,.06)/(.34,.045).
+   Reduce chroma at fixed L/H to fit sRGB; round to 8-bit channels. Neutral is
+   independently tuned. Borders mix 30% accent into surface; they are decorative,
+   not the sole indication of an interactive control or semantic state.
+   light-dark() follows the existing color-scheme, including auto and print.
+   Keep family tokens global; bind roles on EACH component to isolate nesting. */
+:root {
+  --palette-red-text: light-dark(#813935,#ffaba3);
+  --palette-red-accent: light-dark(#b25e59,#d07973);
+  --palette-red-surface: light-dark(#feedec,#301f1d);
+  --palette-red-highlight: light-dark(#ffd1cd,#4d2f2c);
+  --palette-red-border: color-mix(in srgb,var(--palette-red-accent) 30%,var(--palette-red-surface));
+  --palette-orange-text: light-dark(#7b410f,#f7b385);
+  --palette-orange-accent: light-dark(#ac6734,#c98250);
+  --palette-orange-surface: light-dark(#fcefe7,#2f2017);
+  --palette-orange-highlight: light-dark(#fed4b9,#4a3221);
+  --palette-orange-border: color-mix(in srgb,var(--palette-orange-accent) 30%,var(--palette-orange-surface));
+  --palette-yellow-text: light-dark(#625100,#d8c477);
+  --palette-yellow-accent: light-dark(#8f791b,#aa943d);
+  --palette-yellow-surface: light-dark(#f5f2e5,#282414);
+  --palette-yellow-highlight: light-dark(#eadeb2,#3f381b);
+  --palette-yellow-border: color-mix(in srgb,var(--palette-yellow-accent) 30%,var(--palette-yellow-surface));
+  --palette-green-text: light-dark(#29612d,#9bd69c);
+  --palette-green-accent: light-dark(#4d8b50,#68a76a);
+  --palette-green-surface: light-dark(#ebf5eb,#1b281c);
+  --palette-green-highlight: light-dark(#c6e9c6,#293e29);
+  --palette-green-border: color-mix(in srgb,var(--palette-green-accent) 30%,var(--palette-green-surface));
+  --palette-cyan-text: light-dark(#005e66,#6cd7e3);
+  --palette-cyan-accent: light-dark(#008b96,#1ba8b5);
+  --palette-cyan-surface: light-dark(#e5f6f8,#12282a);
+  --palette-cyan-highlight: light-dark(#b0eaf1,#173f43);
+  --palette-cyan-border: color-mix(in srgb,var(--palette-cyan-accent) 30%,var(--palette-cyan-surface));
+  --palette-blue-text: light-dark(#285388,#9cc7ff);
+  --palette-blue-accent: light-dark(#4b7cba,#6598d8);
+  --palette-blue-surface: light-dark(#eaf3fe,#1b2532);
+  --palette-blue-highlight: light-dark(#c9e0ff,#28394f);
+  --palette-blue-border: color-mix(in srgb,var(--palette-blue-accent) 30%,var(--palette-blue-surface));
+  --palette-purple-text: light-dark(#5b4481,#ceb6fc);
+  --palette-purple-accent: light-dark(#856ab2,#a085cf);
+  --palette-purple-surface: light-dark(#f3effc,#262130);
+  --palette-purple-highlight: light-dark(#e3d6ff,#3b334c);
+  --palette-purple-border: color-mix(in srgb,var(--palette-purple-accent) 30%,var(--palette-purple-surface));
+  --palette-pink-text: light-dark(#78395f,#f3aad3);
+  --palette-pink-accent: light-dark(#a85e89,#c579a5);
+  --palette-pink-surface: light-dark(#fbedf4,#2e1f27);
+  --palette-pink-highlight: light-dark(#fccfe7,#492e3d);
+  --palette-pink-border: color-mix(in srgb,var(--palette-pink-accent) 30%,var(--palette-pink-surface));
+  --palette-neutral-text: light-dark(#4b535c,#ccd1d7);
+  --palette-neutral-accent: light-dark(#727c87,#9aa5b1);
+  --palette-neutral-surface: light-dark(#f1f3f5,#252b31);
+  --palette-neutral-highlight: light-dark(#dfe4ea,#3a444f);
+  --palette-neutral-border: color-mix(in srgb,var(--palette-neutral-accent) 30%,var(--palette-neutral-surface));
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="red"],.markdown-alert-caution {
+  --color-text: var(--palette-red-text);
+  --color-accent: var(--palette-red-accent);
+  --color-surface: var(--palette-red-surface);
+  --color-highlight: var(--palette-red-highlight);
+  --color-border: var(--palette-red-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="orange"] {
+  --color-text: var(--palette-orange-text);
+  --color-accent: var(--palette-orange-accent);
+  --color-surface: var(--palette-orange-surface);
+  --color-highlight: var(--palette-orange-highlight);
+  --color-border: var(--palette-orange-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="yellow"],.markdown-alert-warning {
+  --color-text: var(--palette-yellow-text);
+  --color-accent: var(--palette-yellow-accent);
+  --color-surface: var(--palette-yellow-surface);
+  --color-highlight: var(--palette-yellow-highlight);
+  --color-border: var(--palette-yellow-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="green"],.markdown-alert-tip {
+  --color-text: var(--palette-green-text);
+  --color-accent: var(--palette-green-accent);
+  --color-surface: var(--palette-green-surface);
+  --color-highlight: var(--palette-green-highlight);
+  --color-border: var(--palette-green-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="cyan"] {
+  --color-text: var(--palette-cyan-text);
+  --color-accent: var(--palette-cyan-accent);
+  --color-surface: var(--palette-cyan-surface);
+  --color-highlight: var(--palette-cyan-highlight);
+  --color-border: var(--palette-cyan-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="blue"],.markdown-alert-note {
+  --color-text: var(--palette-blue-text);
+  --color-accent: var(--palette-blue-accent);
+  --color-surface: var(--palette-blue-surface);
+  --color-highlight: var(--palette-blue-highlight);
+  --color-border: var(--palette-blue-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="purple"],.markdown-alert-important {
+  --color-text: var(--palette-purple-text);
+  --color-accent: var(--palette-purple-accent);
+  --color-surface: var(--palette-purple-surface);
+  --color-highlight: var(--palette-purple-highlight);
+  --color-border: var(--palette-purple-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="pink"] {
+  --color-text: var(--palette-pink-text);
+  --color-accent: var(--palette-pink-accent);
+  --color-surface: var(--palette-pink-surface);
+  --color-highlight: var(--palette-pink-highlight);
+  --color-border: var(--palette-pink-border);
+}
+:is(.content-mark,.content-box,.content-folding)[data-color="neutral"] {
+  --color-text: var(--palette-neutral-text);
+  --color-accent: var(--palette-neutral-accent);
+  --color-surface: var(--palette-neutral-surface);
+  --color-highlight: var(--palette-neutral-highlight);
+  --color-border: var(--palette-neutral-border);
+}
 [hidden] { display: none !important; }
 * { box-sizing: border-box; }
 body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
@@ -717,14 +836,10 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 
 /* B: source-led callout spacing/bar, not a restyle of ordinary quotations.
    Labels carry meaning without color; no copied icon assets or live-region noise. */
-.prose .markdown-alert { margin-block: 1rem; padding: 8px 16px; border-inline-start: .25em solid var(--alert-color); }
+.prose .markdown-alert { --alert-color: var(--color-accent); margin-block: 1rem; padding: 8px 16px; border-inline-start: .25em solid var(--alert-color); }
 .prose .markdown-alert > :first-child { margin-top: 0; }
 .prose .markdown-alert > :last-child { margin-bottom: 0; }
-.markdown-alert-note { --alert-color: #2f81f7; }
-.markdown-alert-tip { --alert-color: #3fb950; }
-.markdown-alert-important { --alert-color: #a371f7; }
-.markdown-alert-warning { --alert-color: #d29922; }
-.markdown-alert-caution { --alert-color: #f85149; }
+.prose .markdown-alert > .markdown-alert-title > strong { color: var(--color-text); }
 /* Native MathML owns glyph layout/baselines. Auto margins center short blocks,
    but collapse for long formulas so their left edge remains scroll-accessible. */
 /* Leave room for tall KaTeX delimiter glyphs beyond their nominal line box. */
@@ -754,10 +869,7 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
    Native semantics, readable palette tokens and visible keyboard/touch controls. */
 .prose .content-kbd { padding: 2px 4px 1px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--surface); font: 700 .85em var(--code); }
 .prose .content-u { text-decoration: none; border-bottom: 2px solid var(--accent); }
-.prose .content-mark { border-radius: 4px; padding: 1px 3px; color: var(--text); background: color-mix(in srgb,var(--mark-color) 24%,var(--canvas)); }
-.content-mark[data-color="green"] { --mark-color: #3fb950; }
-.content-mark[data-color="red"] { --mark-color: #f85149; }
-.content-mark[data-color="yellow"] { --mark-color: #d29922; }
+.prose .content-mark { border-radius: 4px; padding: 1px 3px; color: var(--text); background: var(--color-highlight); }
 .prose .content-quot { margin: 2rem 1rem; text-align: center; }
 .prose .content-quot > p { display: flex; justify-content: center; align-items: center; gap: .5rem; font-size: 1.1em; font-weight: 700; line-height: 1.3; text-wrap: balance; }
 .content-quot .quot-text { min-width: 0; position: relative; }
@@ -798,13 +910,10 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 
 /* Stellar folding/note/grid: native disclosure, compact colored blocks and cells.
    The only authored styles are validated numeric grid properties and safe classes. */
-.prose :is(.content-folding,.content-box) { margin-block: 1rem; border: 1px solid var(--container-line,var(--line)); border-radius: 12px; background: var(--container-bg,var(--panel)); color: var(--text); }
-:is(.content-folding,.content-box)[data-color="red"] { --container-bg: color-mix(in srgb,#f85149 10%,var(--canvas)); --container-line: color-mix(in srgb,#f85149 25%,var(--canvas)); }
-:is(.content-folding,.content-box)[data-color="yellow"] { --container-bg: color-mix(in srgb,#d29922 10%,var(--canvas)); --container-line: color-mix(in srgb,#d29922 25%,var(--canvas)); }
-:is(.content-folding,.content-box)[data-color="green"] { --container-bg: color-mix(in srgb,#3fb950 10%,var(--canvas)); --container-line: color-mix(in srgb,#3fb950 25%,var(--canvas)); }
-.content-folding > summary { position: relative; list-style: none; padding: 16px 44px 16px 16px; color: var(--muted); font-size: .94em; font-weight: 500; line-height: 1.4; border-radius: inherit; min-height: 52px; }
+.prose :is(.content-folding,.content-box) { margin-block: 1rem; border: 1px solid var(--container-line,var(--color-border)); border-radius: 12px; background: var(--container-bg,var(--color-surface)); color: var(--text); }
+.content-folding > summary { position: relative; list-style: none; padding: 16px 44px 16px 16px; color: var(--color-text); font-size: .94em; font-weight: 500; line-height: 1.4; border-radius: inherit; min-height: 52px; }
 .content-folding > summary::-webkit-details-marker { display: none; }
-.content-folding > summary:is(:hover,:focus-visible),.content-folding[open] > summary { color: var(--text); }
+.content-folding > summary:is(:hover,:focus-visible) { background: color-mix(in srgb,var(--color-highlight) 40%,var(--color-surface)); }
 .content-folding[open] > summary { font-weight: 700; }
 .content-folding > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-right: 16px; }
 .folding-toggle { --icon-size: 12px; flex: none; font-size: 11px; }
@@ -813,6 +922,8 @@ details[open] > summary :where(.folding-toggle,.disclosure-text) > .when-closed 
 details[open] > summary :where(.folding-toggle,.disclosure-text) > .when-open { display: inline; }
 .content-folding > .container-body { padding: 0 16px 16px; }
 .content-box { padding: 4px 16px; }
+.prose .content-box > .container-title > strong { color: var(--color-text); }
+.prose .content-folding > summary strong { color: inherit; }
 .content-box > .container-title { margin-block: .75rem .5rem; }
 .content-box > .container-body { margin-block: .75rem; font-size: .94em; line-height: 1.5; }
 .prose .container-body > :first-child { margin-top: 0; }
@@ -1065,3 +1176,20 @@ article[data-story] > .prose > :last-child { margin-bottom: 0; }
 .chart-source[data-enhanced]:not([open]) { display:none; }
 .chart-source > summary { cursor:pointer; min-height:44px; padding-block:10px; font-size:.85em; color:var(--link); }
 .chart-source pre { max-height:320px; overflow:auto; }
+
+/* Printed callouts keep their labels and borders without background printing.
+   Only these content components opt into paper colors; this is not a site print
+   layout. A mark also gets an underline because its fill may be omitted. */
+@media print {
+  .prose :is(.content-mark,.content-box,.content-folding,.markdown-alert) {
+    color-scheme: light; --text: #17191b; --muted: #50565e; --quiet: #50565e;
+    --canvas: #fff; --surface: #fff; --panel: #f1f3f5; --line: #d4d9df;
+    --link: var(--palette-blue-text); --accent: var(--palette-cyan-text); --pin: var(--palette-red-text);
+    color: var(--text);
+  }
+  .prose .content-mark { text-decoration: underline; text-decoration-color: var(--color-accent); text-underline-offset: .15em; }
+}
+@media (forced-colors: active) {
+  .prose .content-mark { background: Mark; color: MarkText; outline: 1px solid MarkText; }
+  .prose :is(.content-box,.content-folding,.markdown-alert) { border-color: CanvasText; }
+}

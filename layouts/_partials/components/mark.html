@@ -1,4 +1,3 @@
 {{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text" "color") "required" (slice "text")) -}}
-{{- $color := .Get "color" | default "yellow" -}}
-{{- if not (in (slice "red" "green" "yellow") $color) -}}{{- errorf "Sidera mark: color must be red, green or yellow (%s)" .Position -}}{{- end -}}
+{{- $color := partial "components/color.html" (dict "shortcode" . "default" "yellow") -}}
 <mark class="content-mark" data-color="{{ $color }}">{{ .Get "text" }}</mark>{{- /* Inline output must not add whitespace after the closing tag. */ -}}

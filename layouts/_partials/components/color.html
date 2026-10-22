@@ -1,0 +1,7 @@
+{{- /* One named-color contract for theme-owned content components. */ -}}
+{{- $names := slice "red" "orange" "yellow" "green" "cyan" "blue" "purple" "pink" "neutral" -}}
+{{- $color := .shortcode.Get "color" | default .default -}}
+{{- if not (in $names $color) -}}
+  {{- errorf "Sidera %s: color must be %s (%s)" .shortcode.Name (delimit $names ", ") .shortcode.Position -}}
+{{- end -}}
+{{- return $color -}}

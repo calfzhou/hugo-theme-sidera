@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-15T22:49:50+08:00
+lastmod: 2026-10-22T22:48:34+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -16,7 +16,9 @@ Escaped examples below are text, not live provider calls.
 
 Common optional `class` / `id` strings use safe ASCII tokens (letter/underscore,
 then letters/digits/underscore/hyphen; classes may be space separated). No style,
-HTML, event handler, SVG or executable argument. Colors: neutral/red/yellow/green.
+HTML, event handler, SVG or executable argument. Colors: red, orange, yellow, green,
+cyan, blue, purple, pink and neutral. These are adaptive Sidera families, not CSS
+keyword values; see [content colors](../authoring/components.md#content-colors).
 `child` permits empty or codeblock; it adjusts presentation, not inclusion behavior.
 
 | Shortcode | Arguments and defaults |
@@ -38,7 +40,7 @@ No arbitrary plugin nesting or automatic fold-heading behavior is promised.
 | Shortcode | Arguments and defaults |
 |---|---|
 | kbd | required nonblank literal text |
-| mark | required literal text; color=yellow (red/green/yellow) |
+| mark | required literal text; color=yellow (the same nine named families as containers) |
 | u | required literal text; no whitespace is inserted around output |
 | quot | required literal text; ornament=true |
 | copy | required literal text; prefix='' (not copied) |
