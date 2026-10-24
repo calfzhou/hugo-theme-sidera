@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-15T22:49:50+08:00
+lastmod: 2026-10-23T23:08:07+08:00
 title: "Write content"
 params:
   ai_label: generated
@@ -35,7 +35,9 @@ identity and license. Supported strings are `manual`, `reviewed`, `polished`,
 `generated`; empty clears. Labels are localized as Written entirely by a human,
 AI-reviewed, AI-polished, AI-generated. Do not write `ai-generated` as the enum or
 apply a default unless it is true for that content. Icons-off retains disclosure text.
-The inherited [Stellar][stellar] label colors do not meet small-text AA contrast everywhere.
+Disclosure labels use adaptive palette text colors: blue for human-written, green
+for AI-reviewed/AI-polished, and orange for AI-generated. Their words carry the
+disclosure independently of color.
 
 ## Source-relative links
 

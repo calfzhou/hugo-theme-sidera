@@ -3,7 +3,7 @@
 other = "跳至正文"
 
 [built_with]
-other = "由 Hugo · Sidera 构建"
+other = "由 [Hugo](https://gohugo.io/) 和 [Sidera](https://github.com/calfzhou/hugo-theme-sidera) 构建。"
 
 [collection_overview]
 other = "合集概览"

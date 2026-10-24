@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-20T21:29:50+08:00
+lastmod: 2026-10-24T11:58:50+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -133,6 +133,12 @@ Site footer `links` uses a native two-level sitemap menu; `credit` uses the nati
 for portraits and an authored `edit_url`; header names remain the default attribution.
 `show_authors: false` also hides this edit section. `article_end_text` is independent
 final Markdown after navigation/children/comments, not footer `article_text`.
+
+Text links in footer references, license notices, authored text and build credits
+use the same blue foreground, subtle underline and hover/focus highlight as body
+links. Footer typography remains compact. Navigation menus, author cards, tag chips
+and share controls keep their own interaction styles; linked images are not given
+text underlines or highlight backgrounds.
 
 Share targets are link (copy with manual fallback), wechat (local build-time QR),
 weibo (explicit outbound share link) and email (mailto). No remote QR service or

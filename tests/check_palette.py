@@ -112,6 +112,34 @@ text = '\n\n'.join(parts) + '\n'
 write('content/palette.md', text)
 write('content/palette.zh.md', text.replace('title: Content palette', 'title: Palette — Chinese controls'))
 
+# Trusted fixture markup exercises actual UI selectors on each existing shell surface.
+write('content/ui-palette.md', """---
+title: Interface palette
+layout: ui-palette
+---
+## Interface colors
+
+```javascript
+const label = "Color families, independent roles";
+```
+""")
+write('layouts/ui-palette.html', '''{{ define "main" }}
+{{ $ui := resources.Get "css/jsx.css" | minify | fingerprint }}<link rel="stylesheet" href="{{ $ui.RelPermalink }}">
+<main id="main" class="prose" style="max-width:740px;margin:2rem auto;padding:1rem">
+<h1>Interface palette</h1>{{ .Content }}
+{{ range slice "canvas" "surface" "panel" "surface-hover" }}
+<section class="ui-plane" data-plane="{{ . }}" style="background:var(--{{ . }});padding:20px;margin:12px 0;border-radius:12px">
+<h3>{{ . }}</h3>
+<div style="display:flex;gap:12px;flex-wrap:wrap">{{ range slice "manual" "reviewed" "polished" "generated" }}<span class="ai-label" data-ai-label="{{ . }}">{{ T (printf "ai_label_%s" .) }}</span>{{ end }}</div>
+<p><a class="ui-link" href="#interface-colors">A useful link</a> · <span class="pin-label">Pinned</span> · <span class="jsx-root"><span class="jsx-error">Error message</span></span></p>
+<p><span class="search-keyword">Search keyword</span> · <mark class="search-body-mark">Matched body text</mark></p>
+<p><span class="search-wrapper is-loading" style="display:inline"><span class="search-button" style="position:static;display:inline;width:auto;height:auto;transform:none">Loading</span></span> · <span class="search-wrapper search-error" style="display:inline"><span class="search-button" style="position:static;display:inline;width:auto;height:auto;transform:none">Search error</span></span></p>
+<p><a href="#interface-colors" class="heading-anchor" aria-label="Heading link">#</a> <span class="sidebar-footer" style="display:inline"><a class="social-link" href="#interface-colors" aria-label="Social link">{{ partial "sidera/icon.html" "link" }}</a></span></p>
+<pre class="chroma"><code><span class="k">const</span> label = <span class="s">"Independent syntax colors"</span>;</code></pre>
+</section>{{ end }}
+<div class="content-diagram invert-when-dark" id="fixed-light-probe"><a href="#interface-colors">Fixed-light toolbar link</a></div>
+</main>{{ end }}''')
+
 for name, flags, prefix in [('baseline', (), '/preview'), ('root', ('--baseURL', 'https://example.invalid/'), '')]:
     out = build(name, extra=flags)
     for lang in ['', 'zh/']:

@@ -152,15 +152,21 @@ validation and focused regression together for any public contract change.
 `components/color.html` validates the nine named families for mark/box/folding.
 `assets/css/sidera.css` owns their shared `--palette-<family>-<role>` tokens;
 components bind all five local roles independently so nested colors cannot leak.
-Keep explicit sRGB values and the adjacent OKLCH derivation notes synchronized.
+Keep explicit sRGB values and the adjacent final OKLCH role coordinates synchronized.
 Native `color-scheme` / `light-dark()` handles light, dark, auto and component print
-styles without a new asset pipeline or palette controller. Site accents, artwork
-and vendor palettes are separate; do not broadly recolor them as incidental cleanup.
+styles without a new asset pipeline or palette controller. Interface roles alias the families; keep errors/pins/syntax independent and pair
+filled controls with their foregrounds. The small Giscus CSS mirror must match
+default host roles without importing the entire stylesheet into its data URL.
+Forward supported new control tokens through both JSX bridge allowlists. Artwork
+and vendor palettes remain separate; do not recolor them as incidental cleanup.
 
 Run `tests/check_palette.py <fresh-absolute-output>` with uv/Python. In the showcase,
 `tests/check_palette_browser.mjs <same-output>` verifies nested colors, contrast,
 alerts, mode changes, mobile, native focus/disclosure, print without backgrounds,
-forced colors, no-JS and site overrides through the owned browser harness. Existing
+forced colors, no-JS and site overrides through the owned browser harness. Run
+`tests/check_ui_palette_browser.mjs <same-output>` for UI-role mappings, contrast
+on shell surfaces, hover, auto/no-JS and fixed-light inversion chrome. The existing
+mocked-comments and JSX browser suites verify cross-frame parity and overrides. Existing
 showcase content-component, composition and advanced-Markdown suites still apply.
 
 ## Native release checklist

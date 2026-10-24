@@ -12,7 +12,7 @@ function loadStyle(url) {
   }));
   return styles.get(url);
 }
-const tokens = ['--text', '--muted', '--quiet', '--accent', '--link', '--pin', '--line', '--panel', '--surface', '--accent-soft', '--ui', '--code'];
+const tokens = ['--text', '--muted', '--quiet', '--accent', '--link', '--pin', '--danger', '--line', '--panel', '--surface', '--accent-soft', '--accent-fill', '--accent-on-fill', '--accent-fill-hover', '--ui', '--code'];
 const environments = [];
 for (const figure of document.querySelectorAll('[data-sidera-jsx]')) {
   const container = figure.querySelector('.jsx-root');

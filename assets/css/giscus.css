@@ -1,5 +1,7 @@
 /* Giscus owns layout, controls, syntax and semantic status colors. Override only
-   Sidera's baseline font/palette. Fixed light/dark input, not executable config. */
+   Sidera's baseline font/palette. Fixed light/dark input, not executable config.
+   This small mirror avoids shipping the whole site stylesheet in a data URL;
+   palette browser checks compare its roles against the host in both modes. */
 @import url("https://giscus.app/themes/{{ . }}.css");
 body {
   font-family: "LXGW WenKai", "Helvetica Neue", Helvetica, "Lucida Grande", Lucida, Tahoma, Arial, "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", STXiHei, SimHei, sans-serif;
@@ -16,9 +18,9 @@ main {
   --color-canvas-subtle: hsl(210 50% 12% / .04);
   --color-border-default: hsl(210 50% 12% / .12);
   --color-border-muted: hsl(210 50% 12% / .12);
-  --color-accent-fg: #087cb9;
-  --color-accent-emphasis: #007f9e;
-  --color-accent-subtle: #00697e12;
+  --color-accent-fg: #1b5292;
+  --color-accent-emphasis: #005e66;
+  --color-accent-subtle: color-mix(in srgb,#005e66 10%,transparent);
   --color-btn-primary-text: #fff;
   {{ else }}
   --color-fg-default: #fff;
@@ -30,9 +32,9 @@ main {
   --color-canvas-subtle: hsl(210 24% 72% / .08);
   --color-border-default: hsl(210 24% 72% / .16);
   --color-border-muted: hsl(210 24% 72% / .16);
-  --color-accent-fg: #38a8ff;
-  --color-accent-emphasis: #1bcdfc;
-  --color-accent-subtle: #67d9ef18;
+  --color-accent-fg: #9cc7ff;
+  --color-accent-emphasis: #4ddae9;
+  --color-accent-subtle: color-mix(in srgb,#4ddae9 10%,transparent);
   --color-btn-primary-text: #17191b;
   {{ end }}
   --color-btn-text: var(--color-fg-default);
@@ -41,8 +43,8 @@ main {
   --color-btn-hover-bg: var(--color-accent-subtle);
   --color-btn-hover-border: var(--color-accent-emphasis);
   --color-btn-primary-bg: var(--color-accent-emphasis);
-  --color-btn-primary-hover-bg: var(--color-accent-fg);
-  --color-btn-primary-selected-bg: var(--color-accent-fg);
+  --color-btn-primary-hover-bg: color-mix(in srgb,var(--color-accent-emphasis) 85%,var(--color-fg-default));
+  --color-btn-primary-selected-bg: var(--color-btn-primary-hover-bg);
   --color-btn-primary-border: transparent;
   --color-btn-primary-hover-border: transparent;
   --color-btn-primary-disabled-bg: var(--color-canvas-subtle);

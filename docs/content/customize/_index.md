@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-24T11:58:50+08:00
 title: "Customize your site"
 params:
   ai_label: generated
@@ -66,6 +66,40 @@ those fonts does not download them. Loading or licensing additional fonts is the
 site's choice. Bundled conditional KaTeX math fonts are separate. Giscus matches
 the baseline stack, not arbitrary site CSS overrides automatically.
 
+### Interface color roles
+
+The interface shares the [content palette](../authoring/components.md#content-colors):
+cyan for interaction accents, blue for links, red for pinned labels and errors,
+and yellow for search matches. Disclosure labels use blue, green and orange text
+variants. Existing neutral canvas, panels and elevated surfaces retain their own
+hierarchy.
+
+Override semantic CSS tokens after theme CSS when a site needs different styling:
+
+| Token | Purpose |
+|---|---|
+| `--accent` / `--accent-soft` | Interaction foreground/focus and subtle background |
+| `--link` | Link foreground, including prose links |
+| `--accent-fill` / `--accent-on-fill` / `--accent-fill-hover` | Filled interaction background, its foreground and hover background |
+| `--pin` | Pinned-content label |
+| `--danger` | Error text and invalid JSX control borders |
+| `--code-keyword` / `--code-literal` | Syntax keyword and string/number foregrounds |
+| `--decorative-spectrum` | Shared comma-separated color stops for the avatar ring and search underline |
+
+These roles are independent even when their default family is the same. Set a
+filled background and its foreground together and check normal, hover, focus and
+light/dark states. In particular, changing `--pin` does not change errors or syntax
+highlighting. Palette family overrides belong at `:root`; use adaptive values such
+as `light-dark(light-value,dark-value)` where appropriate.
+
+The built-in Giscus stylesheet mirrors Sidera's default text, link, accent and
+filled-control colors. It does not automatically inherit arbitrary site CSS
+customizations; a site can override `assets/css/giscus.css` separately. Artwork,
+authored menu accents, renderer palettes and decorative rainbow effects retain
+their separate color policies. The two rainbow effects share a light/dark-aware
+spectrum with even lightness; their animation, dimensions and reduced-motion
+behavior are independent of that color list.
+
 ## English and Chinese UI
 
 For Chinese controls around unsuffixed content:
@@ -92,11 +126,14 @@ Author `_index.zh.md` / `index.zh.md` for real Chinese counterparts, including t
 own root policies/cascades. Unsuffixed pages belong to the default language; no
 body is auto-translated and no links to absent translations are invented.
 
-Override only desired messages in site `i18n/en.toml` or `i18n/zh-CN.toml`:
+The default build credit links to [Hugo](https://gohugo.io/) and
+[Sidera](https://github.com/calfzhou/hugo-theme-sidera) in both languages.
+For custom wording, override only desired messages in site `i18n/en.toml` or
+`i18n/zh-CN.toml`:
 
 ```toml
 [built_with]
-other = 'Built with [Hugo](https://gohugo.io/) · **Sidera**'
+other = 'Powered by [Hugo](https://gohugo.io/) and [Sidera](https://github.com/calfzhou/hugo-theme-sidera).'
 ```
 
 `built_with` and the neutral content `license_default` are Markdown; other catalogs

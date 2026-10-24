@@ -3,7 +3,7 @@
 other = "Skip to content"
 
 [built_with]
-other = "Built with Hugo · Sidera"
+other = "Built with [Hugo](https://gohugo.io/) and [Sidera](https://github.com/calfzhou/hugo-theme-sidera)."
 
 [collection_overview]
 other = "Collection overview"

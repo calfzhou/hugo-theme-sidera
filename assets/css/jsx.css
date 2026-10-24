@@ -11,7 +11,7 @@
 .jsx-root :where(button) { border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: .5rem .85rem; cursor: pointer; overflow-wrap: anywhere; }
 .jsx-root :where(button:hover,button[aria-pressed="true"]) { background: var(--accent-soft); border-color: var(--accent); }
 .jsx-root :where(button:disabled) { opacity: .5; cursor: not-allowed; }
-.jsx-root :where(input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]) { border-color: var(--pin); }
+.jsx-root :where(input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]) { border-color: var(--danger); }
 .jsx-root :where(:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }
 .jsx-root :where(input[type="range"],input[type="checkbox"],input[type="radio"]) { accent-color: var(--accent); }
 .jsx-root :where(label) { display: block; font-size: .85rem; color: var(--muted); }
@@ -29,7 +29,7 @@
 .jsx-root :where(.jsx-metric) { font-size: 2.6rem; font-weight: 650; line-height: 1.1; font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
 .jsx-root :where(.jsx-result) { gap: .5rem; padding: .85rem; border-inline-start: 3px solid var(--accent); background: var(--accent-soft); overflow-wrap: anywhere; }
 .jsx-root :where(.jsx-note) { font-size: .8rem; color: var(--muted); }
-.jsx-root :where(.jsx-error) { font-size: .85rem; color: var(--pin); }
+.jsx-root :where(.jsx-error) { font-size: .85rem; color: var(--danger); }
 .jsx-root :where(.jsx-error:empty) { display: none; }
 .jsx-status,.jsx-fallback { font-size: .85rem; color: var(--muted); }
 .jsx-frame { display: block; width: 100%; border: 0; }

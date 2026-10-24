@@ -1,6 +1,6 @@
 ---
 date: 2026-10-14T23:05:00+08:00
-lastmod: 2026-10-15T22:49:50+08:00
+lastmod: 2026-10-23T23:08:07+08:00
 title: "Interactive JSX"
 params:
   ai_label: generated
@@ -231,7 +231,8 @@ Start without a component stylesheet. Native buttons, labels, inputs, selects an
 textareas inherit Sidera's typography, palette, focus and disabled treatment.
 `aria-invalid="true"` marks invalid controls; `aria-pressed` gives toggle buttons
 a selected appearance. These defaults are scoped to JSX roots, not ordinary article
-content, and are also available in sandbox mode.
+content, and are also available in sandbox mode. Errors and invalid-control borders
+use `--danger`, independently of pinned-label styling.
 
 ### Author-facing CSS classes
 
@@ -291,9 +292,11 @@ Custom styles remain useful for unusual geometry, visualizations or deliberate
 presentation choices: a connected calendar table, a larger reading output, or a
 fixed-height encoded result. Keep those rules with the component via the optional
 `css` resource. Prefer theme tokens such as `--text`, `--muted`, `--accent`,
-`--surface` and `--code` over redefining ordinary controls or writing separate
+`--surface`, `--danger` and `--code` over redefining ordinary controls or writing separate
 light/dark palettes. Defaults have low specificity so scoped custom classes can
-override them without `!important`.
+override them without `!important`. For filled custom controls, pair `--accent-fill`
+with `--accent-on-fill` and use `--accent-fill-hover` for the hover background.
+These three roles and `--danger` are included in the sandbox theme-token bridge.
 
 ### Page integration
 

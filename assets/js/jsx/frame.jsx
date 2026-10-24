@@ -1,6 +1,6 @@
 import { mount } from 'js/jsx/mount.jsx';
 const hostOrigin = new URL(location.href).origin;
-const tokens = ['--text', '--muted', '--quiet', '--accent', '--link', '--pin', '--line', '--panel', '--surface', '--accent-soft', '--ui', '--code'];
+const tokens = ['--text', '--muted', '--quiet', '--accent', '--link', '--pin', '--danger', '--line', '--panel', '--surface', '--accent-soft', '--accent-fill', '--accent-on-fill', '--accent-fill-hover', '--ui', '--code'];
 addEventListener('message', event => {
   if (event.source !== parent || event.origin !== hostOrigin || event.data?.type !== 'sidera-jsx-environment') return;
   const { scheme, tokens: values } = event.data;

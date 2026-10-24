@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-22T22:48:34+08:00
+lastmod: 2026-10-23T23:08:07+08:00
 title: "Compose content"
 params:
   ai_label: generated
@@ -67,8 +67,8 @@ and keeps mark outlines.
 For site CSS customization, `--palette-<name>-text`, `-accent`, `-border`, `-surface`
 and `-highlight` are shared family tokens. Define overrides at `:root`; adaptive
 values can use CSS `light-dark(light-value,dark-value)`. Check contrast in both modes
-and print after overriding them. Ordinary site accents, chart colors and image
-artwork have independent styling.
+and print after overriding them. Site interaction accents and links reuse the cyan and blue families with their own
+interface roles. Chart palettes and image artwork have independent styling.
 
 ## Timeline and small leaves
 
