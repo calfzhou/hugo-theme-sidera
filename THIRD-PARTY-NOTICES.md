@@ -25,6 +25,9 @@ Code-toolbar presentation also follows _plugins/copycode.styl; temporary copy fe
 source/js/plugins/copycode.js, with native buttons, localized failure text and manual-copy fallback. Native
 Goldmark/Chroma structure replaces Hexo markup; readable palette tokens and keyboard
 scrollbars are retained rather than copying hidden scrollbars or low-contrast colors.
+Inline content and tab presentation also follow Stellar tag-plugin icon, hashtag,
+tip, tabs and inline-labels styles. Sidera uses original native Hugo composition
+and progressive keyboard/touch controllers, not Stellar/NexT tab parsing or code.
 Sidera uses native Hugo templates/JavaScript, not the Hexo or Stylus runtime.
 This upstream notice applies to those adaptations; original Sidera material is
 covered separately by LICENSE, and site content retains its own rights. No reading/UI fonts are bundled; matched KaTeX math fonts are documented below. The small local icon subset below has a separate license.

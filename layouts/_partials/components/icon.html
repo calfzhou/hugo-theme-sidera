@@ -1,0 +1,5 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "name" "color" "label") "required" (slice "name")) -}}
+{{- $color := "" -}}
+{{- if isset .Params "color" -}}{{- $color = partial "components/color.html" (dict "shortcode" . "default" "neutral") -}}{{- end -}}
+{{- $icon := partial "sidera/icon.html" (.Get "name") -}}
+<span class="content-icon"{{ with $color }} data-color="{{ . }}"{{ end }}{{ with .Get "label" }} role="img" aria-label="{{ . }}"{{ else }} aria-hidden="true"{{ end }}>{{ $icon }}</span>{{- /* Authored artwork is independent of the UI icons setting. */ -}}

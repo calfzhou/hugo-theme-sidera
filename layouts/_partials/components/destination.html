@@ -1,0 +1,6 @@
+{{- $href := partial "sidera/url.html" (dict "url" .href "source" .shortcode.Position) -}}
+{{- $resolved := partial "links/resolve.html" (dict "PageInner" .shortcode.Page "Destination" $href "Position" .shortcode.Position) -}}
+{{- $identity := partial "links/content-target.html" (dict "result" $resolved "page" .shortcode.Page) -}}
+{{- $href = $resolved.href -}}
+{{- if and (eq .href $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
+{{- return (dict "href" $href "identity" $identity) -}}

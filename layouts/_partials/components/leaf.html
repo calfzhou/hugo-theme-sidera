@@ -8,7 +8,9 @@
   {{- if .inline -}}
     {{- /* Escape a literal label, not raw Markdown. Keeps native heading/plain text
          meaningful, without treating math/HTML/punctuation in a text arg as syntax. */ -}}
-    {{- $label := replaceRE "([\\\\`*_{}\\[\\]()#+.!<>|$&~-])" "\\$1" ($sc.Get "text") -}}
+    {{- $plain := $sc.Get "text" | default "" -}}
+    {{- if isset . "text" -}}{{- $plain = .text -}}{{- end -}}
+    {{- $label := replaceRE "([\\\\`*_{}\\[\\]()#+.!<>|$&~-])" "\\$1" $plain -}}
     {{- $result = printf "[%s](sidera-inline:%s)" $label $key -}}
   {{- else -}}
     {{- $result = printf "\n\n> component\n{data-sidera-leaf=%q}\n\n" $key -}}

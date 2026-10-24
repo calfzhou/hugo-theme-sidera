@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T15:22:45+08:00
+lastmod: 2026-10-24T20:06:00+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -30,8 +30,12 @@ keyword values; see [content colors](../authoring/components.md#content-colors).
 | cell | common class/id only; immediate grid parent required |
 | timeline | common class/id only; one or more direct events, whitespace only between |
 | event | required nonblank literal string title; common class/id; immediate timeline parent |
+| tabs | active=1 (one-based integer within tab count); align=start/center/end; label=localized “Content tabs”; common class/id |
+| tab | required nonblank literal title; common class/id; immediate tabs parent |
 
-Grid takes only cells/whitespace, at least one cell. Blocks in labels fail. Container
+Grid takes only cells/whitespace, at least one cell. Tabs takes only direct tabs and
+whitespace, at least one tab. Tab bodies use the same single Markdown pass as other
+containers; nesting tabs inside a tab, box, fold or grid cell is supported. Blocks in labels fail. Container
 bodies retain native headings, links, alerts, math and fences in one Markdown pass.
 No arbitrary plugin nesting or automatic fold-heading behavior is promised.
 
@@ -42,16 +46,60 @@ No arbitrary plugin nesting or automatic fold-heading behavior is promised.
 | kbd | required nonblank literal text |
 | mark | required literal text; color=yellow (the same nine named families as containers) |
 | u | required literal text; no whitespace is inserted around output |
+| icon | required name from the built-in/site icons registry; optional palette color; label='' (decorative) |
+| hashtag | required literal text; href='' (non-link chip); color=blue |
+| blur / psw | required literal text; cosmetic blur or concealment, revealable by hover/focus/touch |
+| emp / wavy / del / sup / sub | required literal text; emphasis dots, wave underline, deletion, superscript, subscript |
+| tip | required literal text for the annotation; paired body for noninteractive inline Markdown |
+| download | required current-page bundle src; name=source basename; text=download filename |
+| code-inline | paired nonblank single-line code body; lang=text; unknown lexer falls back to plain text |
 | quot | required literal text; ornament=true |
 | copy | required literal text; prefix='' (not copied) |
 | link | required href/text; icon=link (empty hides); image='', alt='' |
 
-`kbd`, `mark`, `u` are inline. Other leaves are block calls on their own lines.
+`kbd`, `mark`, `u`, `icon`, `hashtag`, all text decorations, `tip`, `download` and
+`code-inline` are inline. Other leaves are block calls on their own lines.
 Text is escaped, not interpreted Markdown. Link destinations reuse exact source
 Page/resource resolution or safe local/HTTP(S)/mailto URLs; no remote metadata
 fetch. `image` takes visual priority over a named icon; alt defaults to decorative
 empty and is invalid without an image. Local/HTTP(S) images are browser-loaded,
 not rehosted/fetched at build time. Icons=false does not hide content artwork.
+
+## Inline controls and attachments
+
+`icon` uses the same validated SVG registry as theme UI: built-in names or site
+`data/icons.yaml` entries. No image URLs, raw SVG or style argument. Omitted color
+inherits surrounding text; explicit color uses a Sidera family. Use `label` when the
+icon conveys meaning on its own. Authored icons remain visible with `icons=false`;
+the decorative icon on a download link does not.
+
+`hashtag` accepts the same safe destinations as `link`, using `href` consistently.
+Omitting `href` produces a noninteractive chip, not an empty anchor. Colors do not
+cycle across builds. `sup` and `sub` always inherit the surrounding text color.
+
+`tip` is an annotation, not a callout. Write `text="Explanation"` and put the term
+between opening/closing shortcodes; its body may contain emphasis, inline code or
+math, but not links, controls, images or blocks. Hover/focus/click shows the bubble;
+Escape dismisses it when enhanced. Without JavaScript, hover/focus still shows it.
+
+`blur` and `psw` are **not password protection or redaction**. Their source text is
+public and available to assistive technology. Hover previews; click/Enter/Space
+reveals or conceals. Without JavaScript, focus reveals. Printing reveals the text,
+tab panels and annotations. Never put a real password or secret in these components.
+
+`download` only publishes an existing native page-bundle attachment. `src` may
+contain subdirectories, spaces and Unicode; traversal, encoded paths, globs,
+absolute paths and URLs reject. A content Page is not an attachment. Optional
+`name` is a single filename (not a path); labels are literal escaped text. Bytes
+are unchanged; no remote fetching, file execution or platform-specific MIME logic.
+The browser controls whether the native `download` hint opens or saves the file.
+
+`code-inline` trims surrounding whitespace and rejects line breaks. Interior spaces
+are retained through HTML minification, including in string literals. It reuses
+native Chroma and Sidera's adaptive syntax colors, without block wrappers, line
+numbers, copy controls or configurable highlighter options. Use named `lang`, not
+the positional argument of older site-owned implementations. Site shortcodes still
+override theme shortcodes until the site owner deliberately removes the overrides.
 
 ## Images
 

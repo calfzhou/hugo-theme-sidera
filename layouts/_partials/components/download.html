@@ -1,0 +1,18 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "src" "name" "text") "required" (slice "src")) -}}
+{{- $src := .Get "src" -}}
+{{- if findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $src -}}
+  {{- errorf "Sidera download: invalid resource path %q (%s)" $src .Position -}}
+{{- else -}}
+  {{- $name := path.Base $src -}}{{- if isset .Params "name" -}}{{- $name = .Get "name" -}}{{- end -}}
+  {{- if or (not (strings.ContainsNonSpace $name)) (in (slice "." "..") $name) (findRE `[/\\:%?*<>|"\x00-\x1f\x7f]` $name) -}}
+    {{- errorf "Sidera download: name must be a filename, not a path (%s)" .Position -}}
+  {{- end -}}
+  {{- $text := $name -}}{{- if isset .Params "text" -}}{{- $text = .Get "text" -}}{{- end -}}
+  {{- if not (strings.ContainsNonSpace $text) -}}{{- errorf "Sidera download: text must be nonblank (%s)" .Position -}}{{- end -}}
+  {{- $file := .Page.Resources.Get $src -}}
+  {{- if not $file -}}{{- errorf "Sidera download: missing bundle attachment %q (%s)" $src .Position -}}
+  {{- else if eq $file.ResourceType "page" -}}{{- errorf "Sidera download: attachment must not be a content Page (%s)" .Position -}}
+  {{- else -}}
+<a class="content-download" href="{{ $file.RelPermalink }}" download="{{ $name }}">{{ if (partialCached "sidera/settings.html" .Page .Page.Language.Lang .Page.Path).icons }}{{ partial "sidera/icon.html" "download" }}{{ end }}<span>{{ $text }}</span></a>
+  {{- end -}}
+{{- end -}}

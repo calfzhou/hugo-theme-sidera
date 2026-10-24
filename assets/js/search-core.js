@@ -77,7 +77,9 @@ const SideraSearch = (() => {
       if (node.nodeType === 3) { add(node.nodeValue, node); return; }
       if (node.nodeType !== 1) return;
       const tag = node.localName;
-      if ((tag === 'figcaption' && node.closest('.no-caption')) || rules.skipTags.includes(tag) || rules.skipClasses.some(c => node.classList.contains(c)) || node.hidden || node.getAttribute('aria-hidden') === 'true' || node.hasAttribute('data-search-exclude')) return;
+      // Inactive tabs are published article content, unlike hidden controls.
+      const inactiveTab = node.classList.contains('content-tab') && node.getAttribute('role') === 'tabpanel';
+      if ((tag === 'figcaption' && node.closest('.no-caption')) || rules.skipTags.includes(tag) || rules.skipClasses.some(c => node.classList.contains(c)) || (node.hidden && !inactiveTab) || node.getAttribute('aria-hidden') === 'true' || node.hasAttribute('data-search-exclude')) return;
       const isHeading = /^h[1-6]$/.test(tag);
       if (isHeading) { finish(); id = node.id; heading = true; }
       if (rules.blocks.includes(tag)) add('\n');

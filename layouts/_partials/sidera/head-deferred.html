@@ -8,6 +8,10 @@
   {{ $controller := resources.Get "js/diagrams.js" | minify | fingerprint }}
   <script data-sidera-diagrams-script data-close="{{ T "diagram_close" }}" data-mermaid="{{ $mermaid }}" data-drawio="{{ $drawio }}" src="{{ $controller.RelPermalink }}" integrity="{{ $controller.Data.Integrity }}" defer></script>
 {{ end }}
+{{ if .page.Store.Get "sidera-content-controls" }}
+  {{ $controls := resources.Get "js/content-controls.js" | minify | fingerprint }}
+  <script data-sidera-content-controls src="{{ $controls.RelPermalink }}" integrity="{{ $controls.Data.Integrity }}" defer></script>
+{{ end }}
 {{ if .page.Store.Get "sidera-jsx" }}{{ partial "jsx/head.html" .page }}{{ end }}
 {{ if .page.Store.Get "sidera-charts" }}
   {{ $frame := partialCached "charts/resources.html" .page "echarts-6.1.0" }}

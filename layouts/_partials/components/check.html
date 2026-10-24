@@ -1,6 +1,6 @@
 {{- /* Small common argument check, not a component registry/renderer. */ -}}
 {{- $sc := .shortcode -}}
-{{- if not $sc.IsNamedParams -}}{{- errorf "Sidera %s requires named parameters (%s)" $sc.Name $sc.Position -}}{{- end -}}
+{{- if and $sc.Params (not $sc.IsNamedParams) -}}{{- errorf "Sidera %s requires named parameters (%s)" $sc.Name $sc.Position -}}{{- end -}}
 {{- partial "components/parent.html" $sc -}}
 {{- range $key, $value := $sc.Params -}}
   {{- if not (in $.allowed $key) -}}{{- errorf "Sidera %s: unsupported parameter %q (%s)" $sc.Name $key $sc.Position -}}{{- end -}}

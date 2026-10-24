@@ -288,3 +288,21 @@ with the documented owned harness and free ports. `tests/check_jsx_preview.py
 <fresh-absolute-output>` validates native watch rebuilds with an owned Hugo server. Cover native imports, repeats,
 folds, Unicode, page API, Stack/Row parity/props/gaps, plain/card and title/caption placement,
 light/dark/mobile, frame isolation, no-JS and failures.
+
+## Inline controls and tabs
+
+Run `tests/check_shortcodes.py <fresh-absolute-output>` and the showcase peer
+`tests/check_shortcodes_browser.mjs <same-output>` for icons/hashtags/annotations,
+text decorations, code-inline, bundle downloads and tabs. The browser check uses
+the owned harness and covers EN/ZH, nested/repeated output, no-JS/script failure,
+keyboard/touch-sized layouts, print/forced colors and inherited sup/sub colors.
+Run existing composition/content-component, palette, icons and search suites when
+changing their shared helpers. Keep `components/leaf.html`'s literal fallback label
+and hyphenated shortcode keys; no parsing of Markdown or private author HTML.
+
+`content-controls.js` creates ARIA tab controls and IDs per DOM instance, not per
+cached source Page. Source panels stay visible without JS. `sidera:reveal` bridges
+search to tab disclosure without exposing a global controller. Search may traverse
+inactive native tabpanels but must still skip other hidden/private control nodes.
+Sup/sub inherit text color, including print. Code-inline encodes generated text-node
+whitespace before native minification; never trust author code as HTML or execute it.

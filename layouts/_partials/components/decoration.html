@@ -1,0 +1,8 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text") "required" (slice "text")) -}}
+{{- if in (slice "blur" "psw") .Name -}}
+<button type="button" class="content-{{ .Name }} content-reveal" title="{{ T "content_reveal" }}"><span>{{ .Get "text" }}</span></button>
+{{- else if eq .Name "del" -}}<del class="content-del">{{ .Get "text" }}</del>
+{{- else if eq .Name "sup" -}}<sup class="content-sup">{{ .Get "text" }}</sup>
+{{- else if eq .Name "sub" -}}<sub class="content-sub">{{ .Get "text" }}</sub>
+{{- else -}}<span class="content-{{ .Name }}">{{ .Get "text" }}</span>
+{{- end -}}

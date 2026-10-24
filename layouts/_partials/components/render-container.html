@@ -3,6 +3,10 @@
 <details class="content-folding {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ if $o.open }} open{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}><summary><span class="folding-title">{{ $o.title }}</span><span class="folding-toggle" aria-hidden="true">{{ $icons := (partialCached "sidera/settings.html" .context.PageInner .context.PageInner.Path).icons }}<span class="when-closed">{{ if $icons }}{{ partial "sidera/icon.html" "plus" }}{{ else }}{{ T "icon_expand" }}{{ end }}</span><span class="when-open">{{ if $icons }}{{ partial "sidera/icon.html" "minus" }}{{ else }}{{ T "icon_collapse" }}{{ end }}</span></span></summary><div class="container-body">{{ $text }}</div></details>
 {{- else if eq $o.kind "box" -}}
 <div class="content-box {{ $o.class }}" data-color="{{ $o.color }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ with $o.child }} data-child="{{ . }}"{{ end }}>{{ with $o.title }}<div class="container-title"><strong>{{ . }}</strong></div>{{ end }}<div class="container-body">{{ $text }}</div></div>
+{{- else if eq $o.kind "tabs" -}}
+<div class="content-tabs {{ $o.class }}" data-active="{{ $o.active }}" data-align="{{ $o.align }}" data-label="{{ $o.label }}"{{ with $o.id }} id="{{ . }}"{{ end }}>{{ $text }}</div>
+{{- else if eq $o.kind "tab" -}}
+<section class="content-tab {{ $o.class }}"{{ with $o.id }} id="{{ . }}"{{ end }}><div class="tab-title">{{ $o.title }}</div><div class="tab-body">{{ $text }}</div></section>
 {{- else if eq $o.kind "timeline" -}}
 <ol class="content-timeline {{ $o.class }}" role="list"{{ with $o.id }} id="{{ . }}"{{ end }}>{{ $text }}</ol>
 {{- else if eq $o.kind "event" -}}

@@ -1,0 +1,18 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "lang") "required" slice) -}}
+{{- $lang := .Get "lang" | default "text" -}}
+{{- if not (findRE `^[A-Za-z0-9_+-]+$` $lang) -}}{{- errorf "Sidera code-inline: invalid language (%s)" .Position -}}{{- end -}}
+{{- $code := strings.TrimSpace .Inner -}}
+{{- if or (not (strings.ContainsNonSpace $code)) (findRE `[\r\n]` .Inner) -}}{{- errorf "Sidera code-inline: body must be nonblank single-line code (%s)" .Position -}}{{- end -}}
+{{- $lexer := $lang -}}{{- if not (transform.CanHighlight $lang) -}}{{- $lexer = "text" -}}{{- end -}}
+{{- /* Site block/line-number settings must not leak into inline markup. */ -}}
+{{- $highlight := transform.Highlight $code $lexer (dict "hl_inline" true "noClasses" false "lineNos" false "anchorLineNos" false "hl_lines" "" "guessSyntax" false) -}}
+{{- /* Single-line input means every LF here is synthesized by the lexer.
+     Encode text-node whitespace so native HTML minification cannot collapse code
+     (including significant repeated spaces inside string literals). */ -}}
+{{- $highlight = replace $highlight "\n" "" -}}
+{{- range findRE `>[^<]+` $highlight -}}
+  {{- $encoded := replace (replace . " " "&#32;") "\t" "&#9;" -}}
+  {{- $highlight = replace $highlight . $encoded -}}
+{{- end -}}
+{{- $html := printf `<span class="content-code-inline chroma">%s</span>` $highlight | safeHTML -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" true "text" $code) | safeHTML -}}

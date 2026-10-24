@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T13:57:29+08:00
+lastmod: 2026-10-24T20:06:00+08:00
 title: "Compose content"
 params:
   ai_label: generated
@@ -37,10 +37,11 @@ itself is not a heading.
 
 ## Content colors
 
-`mark`, `box` and `folding` share these names: **red, orange, yellow, green, cyan,
+`mark`, `box`, `folding`, `icon` and `hashtag` share these names: **red, orange, yellow, green, cyan,
 blue, purple, pink, neutral**. Names are lowercase Sidera color families, not fixed
 CSS keyword colors. Omitting `color` keeps the defaults: yellow for `mark`, neutral
-for `box` and `folding`.
+for `box` and `folding`, blue for `hashtag`. Icons inherit text color unless
+a family is explicitly selected.
 
 ```text
 {{</* mark text="A detail to remember" color="purple" */>}}
@@ -72,6 +73,57 @@ values can use CSS `light-dark(light-value,dark-value)`. Check contrast in both 
 and print after overriding them. Site interaction accents and links reuse the cyan and blue families with their own
 interface roles. Chart palettes and image artwork have independent styling.
 
+## Tabs
+
+Use tabs for alternative instructions, not to hide required reading:
+
+```text
+{{%/* tabs label="Installation method" active=1 */%}}
+{{</* tab title="Download" */>}}
+Ordinary **Markdown**, lists, links and fences.
+{{</* /tab */>}}
+{{</* tab title="Build locally" */>}}
+## Local build
+
+Another method, optionally containing boxes, grids or nested tabs.
+{{</* /tab */>}}
+{{%/* /tabs */%}}
+```
+
+The first tab is initially selected unless `active` specifies another one-based
+index. Optional `align` is start, center or end; long strips scroll horizontally
+without widening the page. Give multiple groups distinct `label` values. Titles
+are literal text. Arrow keys move between tabs; Home/End selects the first/last.
+Tab moves from the selected tab into its panel. Heading links and Sidera search
+results reveal the enclosing panels and folds. Without the controller all panels
+remain readable with their titles; printing also shows every panel.
+
+## Inline details
+
+```text
+{{</* icon name="star" color="yellow" label="Favorite" */>}}
+{{</* hashtag text="Research" */>}}
+{{</* hashtag text="Source" href="https://example.org/" color="purple" */>}}
+{{</* tip text="An explanation, not a warning box." */>}}this **term**{{</* /tip */>}}
+{{</* blur text="An optional answer" */>}}
+{{</* psw text="A fictional spoiler" */>}}
+{{</* emp text="Emphasis dots" */>}}
+{{</* wavy text="A wavy underline" */>}}
+{{</* del text="Deleted text" */>}}
+x{{</* sup text="2" */>}} and H{{</* sub text="2" */>}}O
+{{</* code-inline lang="python" */>}}print("hello"){{</* /code-inline */>}}
+{{</* download src="attachments/report.pdf" name="Report.pdf" text="Download report" */>}}
+```
+
+Text decorations use literal escaped text; superscripts and subscripts retain the
+surrounding color. `tip` and `code-inline` are paired inline leaves, not Markdown
+containers. Use `<` notation for them even inside a container. `blur`/`psw` conceal
+only visually, never securely; do not put secrets in article source.
+
+The attachment must exist in the current page bundle. A download can sit inline or
+on its own line. Icons use only the built-in or site `data/icons.yaml` registry;
+a meaningful standalone icon needs `label`. See [icon customization](../customize/icons.md).
+
 ## Timeline and small leaves
 
 ```text
@@ -88,7 +140,7 @@ More detail, a grid or a supported leaf component.
 Timeline requires direct event children; event titles are literal strings, not parsed
 dates/Markdown. It is authored content, not a sidebar feed or data service.
 
-Use `kbd`, `mark` and `u` inline for escaped text. Standalone `quot`, `copy`, `link`,
+Use `kbd`, `mark`, `u` and the inline details above for escaped text. Standalone `quot`, `copy`, `link`,
 `snippet`, `image`, `video`, `diagramsnet`, `echarts`, `badge_github` belong on their own lines.
 Attribution is ordinary Markdown. Link cards use an authored destination/label;
 optional content image/alt is separate from the named icon. Nothing fetches remote

@@ -68,6 +68,7 @@
     // Reveal the first match in the selected section too: its heading can be
     // outside a closed fold. Do not open every matching disclosure on the page.
     for (const item of [target, (!location.hash || selected) && usefulMark].filter(Boolean)) {
+      item.dispatchEvent(new Event('sidera:reveal', {bubbles:true}));
       for (let el=item.parentElement; el && el!==root; el=el.parentElement) if (el.localName==='details') el.open=true;
     }
     if (target) {

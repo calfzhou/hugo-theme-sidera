@@ -1,12 +1,6 @@
 {{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "href" "text" "icon" "image" "alt") "required" (slice "href" "text")) -}}
-{{- $href := partial "sidera/url.html" (dict "url" (.Get "href") "source" .Position) -}}
-{{- $resolved := partial "links/resolve.html" (dict "PageInner" .Page "Destination" $href "Position" .Position) -}}
-{{- $identity := partial "links/content-target.html" (dict "result" $resolved "page" .Page) -}}
-{{- $href = $resolved.href -}}
-{{- /* Native static URLs need the deployment prefix too. Resource/Page URLs above
-     already contain it and must never be prefixed twice. */ -}}
-{{- $original := .Get "href" -}}
-{{- if and (eq $original $href) (hasPrefix $href "/") -}}{{- $href = relURL (strings.TrimPrefix "/" $href) -}}{{- end -}}
+{{- $destination := partial "components/destination.html" (dict "shortcode" . "href" (.Get "href")) -}}
+{{- $href := $destination.href -}}{{- $identity := $destination.identity -}}
 {{- $name := "link" -}}{{- if isset .Params "icon" -}}{{- $name = .Get "icon" -}}{{- end -}}
 {{- $icon := partial "sidera/icon.html" $name -}}
 {{- $image := "" -}}

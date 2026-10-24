@@ -610,3 +610,9 @@ other = "随机文章"
 
 [random_article_hint]
 other = "探索全站文章"
+
+[content_tabs]
+other = "内容选项卡"
+
+[content_reveal]
+other = "显示遮盖的文字（非安全保护）"

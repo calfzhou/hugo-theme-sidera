@@ -613,3 +613,9 @@ other = "Random article"
 
 [random_article_hint]
 other = "From across the site"
+
+[content_tabs]
+other = "Content tabs"
+
+[content_reveal]
+other = "Reveal concealed text (not secure)"

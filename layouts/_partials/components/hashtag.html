@@ -1,0 +1,8 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text" "href" "color") "required" (slice "text")) -}}
+{{- $color := partial "components/color.html" (dict "shortcode" . "default" "blue") -}}
+{{- if .Get "href" -}}
+  {{- $destination := partial "components/destination.html" (dict "shortcode" . "href" (.Get "href")) -}}
+<a class="content-hashtag" data-color="{{ $color }}" href="{{ $destination.href }}"{{ partial "links/target.html" $destination.href }}{{ with $destination.identity }} data-content-page="{{ . }}"{{ end }}><span aria-hidden="true">#</span>{{ .Get "text" }}</a>
+{{- else -}}
+<span class="content-hashtag" data-color="{{ $color }}"><span aria-hidden="true">#</span>{{ .Get "text" }}</span>
+{{- end -}}

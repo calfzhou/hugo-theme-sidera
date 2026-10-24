@@ -1,13 +1,14 @@
 {{- $body := .inner -}}{{- $sc := .shortcode -}}{{- with .shortcode -}}
 {{- $allowed := slice "class" "id" -}}
 {{- if in (slice "folding" "box") .Name -}}{{- $allowed = $allowed | append "title" "color" "child" -}}{{- end -}}
-{{- if eq .Name "event" -}}{{- $allowed = $allowed | append "title" -}}{{- end -}}
+{{- if in (slice "event" "tab") .Name -}}{{- $allowed = $allowed | append "title" -}}{{- end -}}
 {{- if eq .Name "folding" -}}{{- $allowed = $allowed | append "open" -}}{{- end -}}
+{{- if eq .Name "tabs" -}}{{- $allowed = $allowed | append "active" "align" "label" -}}{{- end -}}
 {{- if eq .Name "grid" -}}{{- $allowed = $allowed | append "columns" "min_width" -}}{{- end -}}
 {{- if and .Params (not .IsNamedParams) -}}{{- errorf "Sidera %s accepts named parameters only (%s)" .Name .Position -}}{{- end -}}
 {{- range $k, $v := .Params -}}
   {{- if not (in $allowed $k) -}}{{- errorf "Sidera %s: unsupported parameter %q (%s)" $sc.Name $k $sc.Position -}}{{- end -}}
-  {{- if in (slice "class" "id" "title" "color" "child") $k -}}
+  {{- if in (slice "class" "id" "title" "color" "child" "align" "label") $k -}}
     {{- if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera %s: %s must be a string (%s)" $sc.Name $k $sc.Position -}}{{- end -}}
   {{- end -}}
 {{- end -}}
@@ -42,6 +43,22 @@
   {{- if not (strings.ContainsNonSpace $title) -}}{{- errorf "Sidera event requires a nonblank title (%s)" .Position -}}{{- end -}}
   {{- /* Labels can be approximate years or prose, not necessarily ISO dates. */ -}}
   {{- $options = merge $options (dict "title" $title) -}}
+{{- else if eq .Name "tab" -}}
+  {{- if not .Parent -}}{{- errorf "Sidera tab requires a tabs parent (%s)" .Position -}}
+  {{- else if ne .Parent.Name "tabs" -}}{{- errorf "Sidera tab requires a tabs parent (%s)" .Position -}}{{- end -}}
+  {{- if not (strings.ContainsNonSpace (.Get "title")) -}}{{- errorf "Sidera tab requires a nonblank title (%s)" .Position -}}{{- end -}}
+  {{- $options = merge $options (dict "title" (.Get "title")) -}}
+{{- else if eq .Name "tabs" -}}
+  {{- $active := 1 -}}
+  {{- if and .IsNamedParams (isset .Params "active") -}}
+    {{- if or (ne (printf "%T" (.Get "active")) "int") (lt (.Get "active") 1) -}}{{- errorf "Sidera tabs: active must be a positive integer (%s)" .Position -}}
+    {{- else -}}{{- $active = .Get "active" -}}{{- end -}}
+  {{- end -}}
+  {{- $align := .Get "align" | default "start" -}}
+  {{- if not (in (slice "start" "center" "end") $align) -}}{{- errorf "Sidera tabs: align must be start, center or end (%s)" .Position -}}{{- end -}}
+  {{- $label := .Get "label" | default (T "content_tabs") -}}
+  {{- if not (strings.ContainsNonSpace $label) -}}{{- errorf "Sidera tabs: label must be nonblank (%s)" .Position -}}{{- end -}}
+  {{- $options = merge $options (dict "active" $active "align" $align "label" $label) -}}
 {{- else if eq .Name "grid" -}}
   {{- if and .IsNamedParams (isset .Params "columns") (isset .Params "min_width") -}}{{- errorf "Sidera grid: choose columns or min_width, not both (%s)" .Position -}}{{- end -}}
   {{- $columns := "" -}}{{- $width := 240 -}}
@@ -78,6 +95,14 @@
   {{- range $events -}}{{- $rest = replace $rest (strings.TrimSpace .) "" -}}{{- end -}}
   {{- if strings.ContainsNonSpace $rest -}}{{- errorf "Sidera timeline accepts only event children and whitespace (%s)" .Position -}}{{- end -}}
 {{- end -}}
+{{- if eq .Name "tabs" -}}
+  {{- $tabs := .Store.Get "sidera-tabs" -}}
+  {{- if not $tabs -}}{{- errorf "Sidera tabs requires at least one tab (%s)" .Position -}}{{- end -}}
+  {{- if gt $options.active (len $tabs) -}}{{- errorf "Sidera tabs: active exceeds tab count (%s)" .Position -}}{{- end -}}
+  {{- $rest := $inner -}}
+  {{- range $tabs -}}{{- $rest = replace $rest (strings.TrimSpace .) "" -}}{{- end -}}
+  {{- if strings.ContainsNonSpace $rest -}}{{- errorf "Sidera tabs accepts only tab children and whitespace (%s)" .Position -}}{{- end -}}
+{{- end -}}
 {{- $key := printf "sidera-container-%s" (partial "components/key.html" .) -}}
 {{- .Page.Store.Set $key $options -}}
 {{- .Page.Store.SetInMap "sidera-pending-nodes" $key .Position -}}
@@ -85,6 +110,7 @@
 {{- $node := printf "\n\n> %s\n{data-sidera-container=%q}\n\n" (replace $inner "\n" "\n> ") $key -}}
 {{- if eq .Name "cell" -}}{{- with .Parent -}}{{- .Store.Add "sidera-cells" (slice $node) -}}{{- end -}}{{- end -}}
 {{- if eq .Name "event" -}}{{- with .Parent -}}{{- .Store.Add "sidera-events" (slice $node) -}}{{- end -}}{{- end -}}
+{{- if eq .Name "tab" -}}{{- with .Parent -}}{{- .Store.Add "sidera-tabs" (slice $node) -}}{{- end -}}{{- end -}}
 {{- return $node -}}
 
 {{- end -}}

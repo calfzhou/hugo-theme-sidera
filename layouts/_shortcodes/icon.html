@@ -1,0 +1,2 @@
+{{- $html := partial "components/icon.html" . -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" true "text" (.Get "label" | default (.Get "name"))) | safeHTML -}}

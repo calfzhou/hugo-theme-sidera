@@ -1,0 +1,5 @@
+{{- partial "components/check.html" (dict "shortcode" . "allowed" (slice "text") "required" (slice "text")) -}}
+{{- $label := .Page.RenderString (dict "display" "inline") .Inner -}}
+{{- if or (not (strings.ContainsNonSpace .Inner)) (findRE `<(?:a|button|input|select|textarea|img|h[1-6]|p|div|pre|ul|ol|blockquote|figure|table)(?:[ >])` (string $label)) -}}{{- errorf "Sidera tip: body must contain noninteractive inline Markdown only (%s)" .Position -}}{{- end -}}
+{{- $html := partial "components/tip.html" (dict "label" $label "text" (.Get "text")) -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" true "text" ($label | plainify)) | safeHTML -}}
