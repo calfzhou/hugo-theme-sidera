@@ -265,11 +265,11 @@ summary { cursor: pointer; }
 .navigation-content a:is(:hover,:focus-visible) { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
 .navigation-content a:active { background: var(--accent-soft); }
 .navigation-content a:is(:hover,:focus-visible) { --icon-color: var(--accent); }
-.navigation-content a[aria-current="page"] { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
+.navigation-content a[aria-current="page"] { background: var(--item-selected,var(--item-hover)); box-shadow: var(--item-selected-shadow,var(--item-shadow)); color: var(--text); }
 .navigation-content a[aria-current="location"],.menu-group[data-active-ancestor] { color: var(--accent); }
 .navigation-content a[aria-current="location"] { color: var(--text); font-weight: 500; }
 .navigation-content a[aria-current] { --icon-color: var(--accent); }
-:root[data-color-scheme="light"] .navigation-content a[aria-current="page"] { background: var(--item-hover); box-shadow: var(--item-shadow); }
+:root[data-color-scheme="light"] .navigation-content a[aria-current="page"] { background: var(--item-selected,var(--item-hover)); box-shadow: var(--item-selected-shadow,var(--item-shadow)); }
 .native-menu ul ul { margin-left: 20px; padding-left: 8px; border-left: 1px solid var(--line); font-size: 15px; }
 .menu-group { display: block; padding: 8px 12px; font-size: 14px; color: var(--muted); }
 .tag-navigation { font-size: 16px; }
@@ -715,7 +715,7 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 @media (max-width: 667px) { .left-region .site-menu { mask-image: none; } }
 
 /* The current section stays selected while reading a descendant. */
-.navigation-content .native-menu a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); color: var(--text); }
+.navigation-content .native-menu a[aria-current="location"] { background: var(--item-selected,var(--item-hover)); box-shadow: var(--item-selected-shadow,var(--item-shadow)); color: var(--text); }
 .collection-emblem { float: right; padding: 6px; border-radius: 8px; background: var(--panel); }
 .collection-emblem:empty { display: none; }
 .collection-emblem { --icon-size: 28px; --icon-color: var(--muted); }
@@ -739,6 +739,38 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
+
+/* Left-rail surfaces: quiet lists, a slight menu edge and persistent selection.
+   Selection has its own fill instead of borrowing the transient hover treatment.
+   All state changes are paint-only; native focus outlines remain independent. */
+.left-region {
+  --item-hover: light-dark(#00000007,#ffffff0a);
+  --item-shadow: none;
+  --item-selected: var(--accent-soft);
+  --item-selected-shadow: none;
+  --sidebar-selected-hover: color-mix(in srgb,var(--accent) 15%,transparent);
+  --sidebar-pressed: color-mix(in srgb,var(--accent) 20%,transparent);
+}
+.left-region [data-component="menu"] {
+  --item-hover: linear-gradient(180deg,light-dark(#ffffff40,#ffffff04),transparent),light-dark(#ffffff66,#ffffff0a);
+  --item-shadow: inset 0 1px light-dark(#ffffff66,#ffffff0a);
+}
+.left-region [data-component="menu"] a {
+  --item-selected: color-mix(in srgb,var(--menu-accent,var(--accent)) 10%,transparent);
+  --sidebar-selected-hover: color-mix(in srgb,var(--menu-accent,var(--accent)) 15%,transparent);
+  --sidebar-pressed: color-mix(in srgb,var(--menu-accent,var(--accent)) 20%,transparent);
+}
+.left-region .navigation-content a[aria-current]:is(:hover,:focus-visible) {
+  --item-selected: var(--sidebar-selected-hover);
+}
+.left-region .navigation-content a:active,
+.left-region .navigation-content a[aria-current]:active {
+  --item-selected: var(--sidebar-pressed);
+  background: var(--sidebar-pressed); box-shadow: none;
+}
+.left-region .random-article:enabled:is(:hover,:focus-visible) { background: var(--surface-hover); }
+.left-region :is(.tree-branch > summary,.social-link):active,
+.left-region .random-article:enabled:active { background: var(--sidebar-pressed); box-shadow: none; }
 
 /* Stellar tags/cats indexes: compact chips and directory rows, not article-sized boxes. */
 .taxonomy-cloud { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px 18px; }
@@ -767,7 +799,7 @@ html::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
 [data-component="menu"] .native-menu ul ul { margin-top: 4px; }
 [data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) { gap: 12px; min-height: 44px; }
 [data-component="menu"] :is(.native-menu > ul > li > a,.fallback-menu > .home-link,.fallback-menu > .collection-nav > li > a,.fallback-menu > .page-nav > li > a) { --icon-size: 1.5rem; }
-[data-component="menu"] .collection-nav a[aria-current="location"] { background: var(--item-hover); box-shadow: var(--item-shadow); }
+[data-component="menu"] .collection-nav a[aria-current="location"] { background: var(--item-selected,var(--item-hover)); box-shadow: var(--item-selected-shadow,var(--item-shadow)); }
 .native-menu a:is(:hover,:focus-visible,[aria-current]) { --icon-color: var(--menu-accent,var(--accent)); }
 
 /* Selection dots belong only to actual main-menu links, not every current sidebar link.

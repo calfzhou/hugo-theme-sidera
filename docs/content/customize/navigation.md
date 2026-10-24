@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T11:58:50+08:00
+lastmod: 2026-10-24T12:57:36+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -25,6 +25,14 @@ leaf is an error. Labels are authored content, not automatically translated keys
 `params.color` is an optional hex hover/current accent, not arbitrary CSS. Empty
 `icon` hides decoration. External HTTP(S) opens a new tab with noopener/noreferrer;
 use explicit HTTPS, not protocol-relative URLs. No config HTML or arbitrary callbacks.
+
+Left-sidebar menu rows use a subtle hover surface. The current page or section has
+a persistent accent-tinted background and its normal icon/selection indicator;
+hovering that selected row strengthens the tint. An entry's `params.color` also
+controls its selected tint. Keyboard focus has a separate visible outline.
+Dense widget links and bottom social icons use flat hover fills, while the random
+article action retains a quiet resting panel. These states do not move or resize
+items. The right sidebar retains its own quiet surface treatment.
 
 Optional flat social menu (up to six entries):
 
