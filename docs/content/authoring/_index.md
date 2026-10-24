@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-23T23:08:07+08:00
+lastmod: 2026-10-24T15:22:45+08:00
 title: "Write content"
 params:
   ai_label: generated
@@ -83,7 +83,22 @@ not attach. This is Hugo syntax, not every inline-attribute dialect.
 
 `invert-when-dark` / `invert-when-light` filter the marked element itself. Image
 classes do not invert captions; a marked container filters the whole group. Nested
-filters compound. Use the [image shortcode](../publishing/shortcodes.md#images) for
+filters compound. Add `invert-soft` **on the same element** to use 93% inversion
+with a 180° hue rotation instead of the default 100%:
+
+```markdown
+![Light-authored diagram](diagram.svg)
+{.invert-when-dark .invert-soft}
+```
+
+`invert-soft` alone has no effect and does not change a descendant's inversion
+strength. Paired with `invert-when-light`, it applies only in light mode. Both
+direction classes together always invert; adding `invert-soft` makes that always-on
+conversion 93%. Image and diagram viewers preserve the chosen effect when expanded
+and when the site mode changes. The effect is visual only; original downloads retain
+their source bytes.
+
+Use the [image shortcode](../publishing/shortcodes.md#images) for
 explicit background, reliable nested attributes, caption or original-image access.
 No automatic gallery/lightbox is added to ordinary Markdown images.
 

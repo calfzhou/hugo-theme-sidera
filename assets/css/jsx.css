@@ -6,10 +6,10 @@
 /* Bottom captions use the same figure styling as article images and diagrams. */
 .jsx-root { color: var(--text); font-family: var(--ui); min-width: 0; }
 .jsx-root :where(button,input,textarea,select) { font: inherit; color: inherit; }
-.jsx-root :where(input:not([type="range"],[type="checkbox"],[type="radio"],[type="hidden"]),textarea,select) { display: block; width: 100%; max-width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: .6rem .75rem; }
+.jsx-root :where(input:not([type="range"],[type="checkbox"],[type="radio"],[type="hidden"]),textarea,select) { display: block; width: 100%; max-width: 100%; min-width: 0; border: 1px solid var(--control-border); border-radius: 7px; background: var(--surface); padding: .6rem .75rem; }
 .jsx-root :where(textarea) { resize: vertical; min-height: 5rem; }
-.jsx-root :where(button) { border: 1px solid var(--line); border-radius: 7px; background: var(--surface); padding: .5rem .85rem; cursor: pointer; overflow-wrap: anywhere; }
-.jsx-root :where(button:hover,button[aria-pressed="true"]) { background: var(--accent-soft); border-color: var(--accent); }
+.jsx-root :where(button) { border: 1px solid var(--control-border); border-radius: 7px; background: var(--surface); padding: .5rem .85rem; cursor: pointer; overflow-wrap: anywhere; }
+.jsx-root :where(button:enabled:is(:hover,:focus-visible),button[aria-pressed="true"]) { background: var(--accent-soft); border-color: var(--accent); }
 .jsx-root :where(button:disabled) { opacity: .5; cursor: not-allowed; }
 .jsx-root :where(input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]) { border-color: var(--danger); }
 .jsx-root :where(:focus-visible) { outline: 3px solid var(--accent); outline-offset: 3px; }

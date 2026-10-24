@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-05T22:48:24+08:00
+lastmod: 2026-10-24T15:22:45+08:00
 title: "Diagrams, video and badges"
 params:
   ai_label: generated
@@ -43,7 +43,19 @@ message checks. Returned SVG is an inert Blob-backed image, not host-page HTML.
 Captions/prose provide meaning for assistive technology; SVG text is not selectable.
 Unmarked diagrams adapt palettes; explicitly inverted parents use a fixed light
 renderer palette to avoid double inversion. Native zoom/fit/pan and modal controls
-preserve keyboard/focus behavior. No-JS/error keeps Mermaid source or drawio download,
+preserve keyboard/focus behavior. The optional `invert-soft` modifier on the same
+inverted element selects 93% inversion, including in the expanded view. For drawio,
+use a native container when an explicit conversion is wanted:
+
+```text
+{{%/* block class="invert-when-dark invert-soft" */%}}
+{{</* diagramsnet src="flow.drawio" */>}}
+{{%/* /block */%}}
+```
+
+`invert-soft` alone does not disable native palette adaptation. Diagrams with
+explicit light/dark color pairs normally need no inversion wrapper.
+No-JS/error keeps Mermaid source or drawio download,
 not equivalent visual rendering. Custom CSP must allow local frames and Blob images.
 
 ## MP4

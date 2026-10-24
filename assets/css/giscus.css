@@ -11,7 +11,7 @@ main {
   {{ if eq . "light" }}
   --color-fg-default: #17191b;
   --color-fg-muted: #000000b3;
-  --color-fg-subtle: #00000080;
+  --color-fg-subtle: #626b73;
   --color-canvas-default: hsl(210 20% 98%);
   --color-canvas-inset: hsl(210 20% 98%);
   --color-canvas-overlay: #fff;
@@ -25,7 +25,7 @@ main {
   {{ else }}
   --color-fg-default: #fff;
   --color-fg-muted: #ffffffb3;
-  --color-fg-subtle: #ffffff80;
+  --color-fg-subtle: #aeb6be;
   --color-canvas-default: hsl(210 8% 12%);
   --color-canvas-inset: hsl(210 8% 12%);
   --color-canvas-overlay: hsl(210 10% 24%);

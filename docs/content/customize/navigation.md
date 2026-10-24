@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T12:57:36+08:00
+lastmod: 2026-10-24T14:17:41+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -142,9 +142,9 @@ for portraits and an authored `edit_url`; header names remain the default attrib
 `show_authors: false` also hides this edit section. `article_end_text` is independent
 final Markdown after navigation/children/comments, not footer `article_text`.
 
-Text links in footer references, license notices, authored text and build credits
-use the same blue foreground, subtle underline and hover/focus highlight as body
-links. Footer typography remains compact. Navigation menus, author cards, tag chips
+Homepage standalone-page links and text links in footer references, license notices,
+authored text, build credits and the final `article_end_text` region use the same
+blue foreground, subtle underline and hover/focus highlight as body links. Footer typography remains compact. Navigation menus, author cards, tag chips
 and share controls keep their own interaction styles; linked images are not given
 text underlines or highlight backgrounds.
 

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-22T22:48:34+08:00
+lastmod: 2026-10-24T15:22:45+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -71,6 +71,10 @@ Original enables a native-link thumbnail plus progressive modal zoom/pan/downloa
 no request for a distinct original until opened, no gallery/editor/automatic retry.
 No-JS opens original directly. Download is a native anchor: cross-origin policies
 may open rather than save. Alt/caption remain independent and escaped.
+
+`class="invert-when-dark invert-soft"` applies the optional soft visual conversion
+to the image, not its caption; the expanded original preserves that effect.
+See [image inversion classes](../authoring/_index.md#images-captions-and-attributes).
 
 ## Code resources
 

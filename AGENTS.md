@@ -169,6 +169,25 @@ on shell surfaces, hover, auto/no-JS and fixed-light inversion chrome. The exist
 mocked-comments and JSX browser suites verify cross-frame parity and overrides. Existing
 showcase content-component, composition and advanced-Markdown suites still apply.
 
+Use `--secondary-text` for readable low-emphasis labels and `--quiet` for decorative
+faint details. Form boundaries use `--control-border`, not the panel separator.
+Keep one shrinkable `folding-title` label beside the native disclosure toggle;
+inline Markdown must never become separate summary flex items. Generic text-link
+rules cover authored article-end content but must not override control/card states.
+Keep compact and sidebar social controls equivalent, disabled controls inert, and
+mobile toolbar clearance present before controller readiness.
+Run `tests/check_style_consistency.py <fresh-output>` and the showcase's
+`tests/check_style_consistency_browser.mjs <same-output>` for these cross-component
+invariants. The existing Markdown/composition, topbar, JSX and mocked-comments
+suites cover native behavior and source/iframe boundaries.
+
+`invert-soft` modifies an inversion direction on the same element only; by itself
+it neither filters descendants nor opts diagrams out of native palette adaptation.
+Keep full inversion as the default, both-direction behavior explicit, and nested
+filters compositional. Viewers copy computed filters rather than inferring strength
+from class names. Run `tests/check_inversion.py <fresh-output>` and the showcase's
+`tests/check_inversion_browser.mjs <same-output>` for CSS modes and modal parity.
+
 ## Native release checklist
 
 Release identity is an immutable annotated Git tag; do not add a parallel version

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T11:58:50+08:00
+lastmod: 2026-10-24T13:57:29+08:00
 title: "Customize your site"
 params:
   ai_label: generated
@@ -78,6 +78,10 @@ Override semantic CSS tokens after theme CSS when a site needs different styling
 
 | Token | Purpose |
 |---|---|
+| `--secondary-text` | Readable secondary labels, counts and link destinations |
+| `--quiet` | Low-emphasis decorative details |
+| `--control-border` | Native form-control boundaries, separate from decorative `--line` separators |
+| `--card-hover-shadow` | Shared neutral elevation for interactive cards and the pinned collection bar |
 | `--accent` / `--accent-soft` | Interaction foreground/focus and subtle background |
 | `--link` | Link foreground, including prose links |
 | `--accent-fill` / `--accent-on-fill` / `--accent-fill-hover` | Filled interaction background, its foreground and hover background |
@@ -99,6 +103,12 @@ authored menu accents, renderer palettes and decorative rainbow effects retain
 their separate color policies. The two rainbow effects share a light/dark-aware
 spectrum with even lightness; their animation, dimensions and reduced-motion
 behavior are independent of that color list.
+
+Article titles use a root-relative size above ordinary body H2 headings. Readable
+secondary labels use `--secondary-text` without additional opacity. Interactive
+cards share a neutral hover shadow; pinned collection navigation uses a single
+translucent blurred surface with no text glow. Social controls use the same flat
+interaction treatment in sidebars and compact headers.
 
 ## English and Chinese UI
 

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-23T23:08:07+08:00
+lastmod: 2026-10-24T13:57:29+08:00
 title: "Compose content"
 params:
   ai_label: generated
@@ -31,7 +31,9 @@ Use `folding` for native disclosure, `box` for a titled/color presentation,
 `grid`/`cell` for responsive columns, and `block` for safe classes/IDs. Grid accepts
 only direct cells and whitespace; cell needs an immediate grid parent. Container
 titles support inline Markdown, links and math, not blocks or trusted author HTML.
-Native headings remain in the page's TOC; a fold title itself is not a heading.
+Formatted fold titles wrap as one label beside the toggle, including inline
+emphasis, links and math. Native headings remain in the page's TOC; a fold title
+itself is not a heading.
 
 ## Content colors
 
