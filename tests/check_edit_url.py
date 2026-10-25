@@ -113,9 +113,12 @@ def build(label, cfg, diagnostic=None):
     return out
 
 
-for label, icons in [('baseline', True), ('icons-off', False), ('root-reordered', True)]:
+for label, icons in [('baseline', True), ('icons-off', False), ('root-reordered', True), ('drawers', True)]:
     cfg = deepcopy(base)
     cfg['params']['icons'] = icons
+    if label in ('drawers', 'icons-off'):
+        cfg['params']['left'] = ['menu']
+        cfg['menus'] = {'primary': [{'name': 'Home', 'pageRef': '/'}]}
     if label == 'root-reordered':
         cfg['baseURL'] = 'https://example.invalid/'
         cfg['params']['edit_url'].reverse()

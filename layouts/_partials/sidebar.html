@@ -1,5 +1,5 @@
     <aside id="left-region" class="sidebar left-region region-drawer" aria-label="{{ T "site_navigation" }}">
-      <button class="drawer-close" type="button" popovertarget="left-region" popovertargetaction="hide">{{ T "close_navigation" }}</button>
+      <button class="drawer-close" type="button" popovertarget="left-region" popovertargetaction="hide" aria-label="{{ T "close_navigation" }}" title="{{ T "close_navigation" }}">{{ if .Context.Settings.icons }}{{ partial "sidera/icon.html" "close" }}{{ else }}{{ T "close_navigation" }}{{ end }}</button>
       {{ partial "sidera/identity.html" .Context }}
       {{ partial "sidera/search.html" .Context }}
       <details class="site-menu" open>
