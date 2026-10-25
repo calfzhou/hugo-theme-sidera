@@ -14,7 +14,6 @@
     {{- $seen = $seen | append . -}}
   {{- end -}}{{- end -}}
 {{- else if eq $key "edit_url" -}}
-  {{- if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera %s: edit_url must be a URL string or empty" $where -}}
-  {{- else if $value -}}{{- $valid := partial "sidera/url.html" (dict "url" $value "source" $where) -}}{{- end -}}
+  {{- $valid := partial "model/edit-url.html" (dict "Value" $value "Source" $where) -}}
 {{- end -}}
 {{- return true -}}

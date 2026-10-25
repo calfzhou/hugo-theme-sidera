@@ -1,0 +1,22 @@
+{{- /* Stellar-style source-prefix replacement, using native virtual content paths.
+      Do not infer repository/branch, physical mount paths or published slugs. */ -}}
+{{- $url := "" -}}{{- $value := .Settings.edit_url -}}
+{{- if eq (printf "%T" $value) "string" -}}
+  {{- $url = $value -}}
+{{- else if and (reflect.IsSlice $value) .Page.File (not .Page.File.IsContentAdapter) -}}
+  {{- $path := .Page.File.Path -}}{{- $length := -1 -}}
+  {{- range $value -}}
+    {{- if and (hasPrefix $path .path) (gt (len .path) $length) -}}
+      {{- $length = len .path -}}{{- $url = "" -}}
+      {{- if .url -}}
+        {{- $segments := slice -}}
+        {{- range split (strings.TrimPrefix .path $path) "/" -}}
+          {{- $segments = $segments | append (replace (urlquery .) "+" "%20") -}}
+        {{- end -}}
+        {{- $url = printf "%s%s" .url (delimit $segments "/") -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $url -}}{{- $url = partial "sidera/url.html" (dict "url" . "source" $.Page.Path) -}}{{- end -}}
+{{- return $url -}}

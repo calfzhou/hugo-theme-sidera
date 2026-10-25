@@ -1,8 +1,6 @@
 {{- $s := .Settings -}}{{- $page := .Page -}}{{- $article := eq .Region "article-footer" -}}
 {{- if eq .Name "terms" -}}
   {{- partial "sidera/article-terms.html" (merge . (dict "Prefix" .InstancePrefix)) -}}
-{{- else if eq .Name "authors" -}}
-  {{- partial "sidera/footer-authors.html" . -}}
 {{- else if in (slice "references" "license" "share") .Name -}}
   {{- partial (printf "sidera/footer-%s.html" .Name) . -}}
 {{- else if eq .Name "series" -}}

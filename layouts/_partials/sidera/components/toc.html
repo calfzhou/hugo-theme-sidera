@@ -1,4 +1,5 @@
 {{- $s := .Settings -}}
+{{- $editURL := partial "sidera/edit-url.html" . -}}
 {{- $toc := "" -}}
 {{- if .Page.Store.Get "sidera-body" -}}{{- $toc = partial "sidera/toc-markup.html" .Page -}}{{- end -}}
 {{- $hasToc := strings.Contains $toc "<a " -}}
@@ -7,9 +8,10 @@
   <div class="toc-body">{{ $toc | replaceRE `<nav id="TableOfContents">` (printf `<nav id="TableOfContents-%s" data-toc aria-labelledby="toc-heading-%s">` .IDScope .IDScope) | safeHTML }}</div>
 </details>
 {{- end -}}
-{{- if or $hasToc .HasComments -}}
+{{- if or $hasToc $editURL .HasComments -}}
 <div class="toc-footer">
   <a class="toc-top" href="#main">{{ if $s.icons }}{{ partial "sidera/icon.html" "up" }}{{ end }}{{ T "back_to_top" }}</a>
+  {{ with $editURL }}<a class="toc-edit" href="{{ . }}"{{ partial "links/target.html" . }}>{{ if $s.icons }}{{ partial "sidera/icon.html" "edit" }}{{ end }}{{ T "edit_article" }}</a>{{ end }}
   {{- if .HasComments }}
   <a class="toc-comments" href="#sidera-comments">{{ if $s.icons }}{{ partial "sidera/icon.html" "comments" }}{{ end }}{{ T "comments_join" }}</a>
   {{- end }}

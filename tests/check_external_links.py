@@ -22,7 +22,7 @@ _merge='deep'
 footer_menu='footer'
 footer_text='[Footer text](https://outside.invalid/text)'
 license='[License](https://outside.invalid/license)'
-article_footer=['references','license','authors']
+article_footer=['references','license','share']
 edit_url='https://outside.invalid/edit'
 references=['[Reference](https://outside.invalid/reference)']
 [[menus.footer]]

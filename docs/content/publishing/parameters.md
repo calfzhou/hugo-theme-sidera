@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-19T21:45:25+08:00
+lastmod: 2026-10-25T15:50:57+08:00
 title: "Public parameter reference"
 params:
   ai_label: generated
@@ -30,7 +30,7 @@ Structural/root/local and site-only exceptions are stated explicitly below.
 | ai_label | Optional disclosure string: manual/reviewed/polished/generated; empty default/explicit clear. Native page/cascade/preset/site resolution; localized article-header text only, not body/index/author identity. See [writing](../authoring/_index.md). |
 | navigation_mode | Collection-root policy: list (minimal/blog/notes), siblings (docs), or sequential. Root params override root preset then site/language default; not cascaded or set on member pages. Previous/Next stay within the complete collection sequence; Parent is the actual in-scope parent in siblings/sequential only; omitted in list mode. |
 | primary_date | published (minimal/blog) or updated (notes/docs). Per-article date priority shared by cards/headers, independent of sorting; collection cards instead show member activity; normal params/cascade/preset/site precedence. |
-| show_authors / show_updated | Native author visibility (true): compact linked names in the header; optional explicit footer authors / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
+| show_authors / show_updated | Native author visibility (true): compact linked names in the header / Lastmod visibility (minimal false; blog/notes/docs section and descendant presets true). |
 | pinned | Page-local effective boolean, default false. Ordinary lists partition pins once before paging; no preset pin inheritance or numeric ranks. |
 | list_header | Boolean, default true. Show the recursive section title/intro/tools. false keeps an accessible title and full counts/pagination, but emits no hidden-body TOC. Does not hide taxonomy result titles or docs bodies. |
 | list_mode | recursive (regular descendants filtered to owner) or children (immediate document list). Minimal recursive. |
@@ -51,12 +51,12 @@ Structural/root/local and site-only exceptions are stated explicitly below.
 | widgets | Site/language-only map of named component/config definitions; theme supplies recent-updates/recent-published. Select names or widget/config uses in regions. See component options below. |
 | identity | Site/language-only whole map: title/subtitle/image strings; native Site.Title fallback. subtitle supports resting text \| hover text (see [identity](../customize/_index.md#identity-and-appearance)). |
 | icons / icon / tag_icons | Decorative visibility (true), named inline registry key (default page) or empty, classification-key icon map ({}). Native menu entries use params.icon and optional params.color (validated hex hover/current accent; see [menus](../customize/navigation.md)). |
-| article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,references,outgoing,backlinks,license,share,series,text,links]. Contiguous references/outgoing/backlinks/license/authors/share items form a box. []/false hides the region and its hook. |
+| article_footer | Ordered component/widget names or inline component/config and widget/config maps, or false; default [terms,references,outgoing,backlinks,license,share,series,text,links]. Contiguous references/outgoing/backlinks/license/share items form a box. []/false hides the region and its hook. |
 | site_footer | Ordered link/text/credit component or derived-widget references, or false; default [links,text,credit]. []/false hides the region and hook. |
 | references | Array of Markdown strings, default []; blank entries omitted. Authored references only, not automatic backlinks. |
 | license | Markdown string, true (localized neutral default), or false. Default true; empty string also hides. Content notice, not a theme software license. |
-| share | Ordered unique array of link/wechat/weibo/email or false; default [link,wechat,email]. []/false hides. Local Hugo QR, no QR service. |
-| edit_url | Explicit safe URL string, default empty; shown when the optional footer Authors component is explicitly selected; no automatic repository mapping/API. show_authors=false hides that section including edit link. |
+| share | Ordered unique array of link/wechat/weibo/email or false; default [link,wechat,email]. []/false hides sharing controls. Local Hugo QR, no QR service. |
+| edit_url | Safe URL string or array of source-directory mappings (`path`, `url`), default empty. Longest matching prefix wins; empty string/array clears. Shown in the toc sidebar action group, independently of authors, comments, headings and footer visibility. See [edit links](../customize/navigation.md#edit-this-page). |
 | article_end_text | Optional final Markdown after navigation and any docs child list, default empty. Native site/cascade/page overrides; independent of footer text/visibility. Empty clears. |
 | article_text / article_links_menu | Native Markdown closing text / native menu name; both default ''. Empty clears. |
 | footer_text / footer_menu | Native Markdown site-footer text / two-level native sitemap menu; both default ''. Empty clears. |
@@ -104,7 +104,7 @@ defaults. Native widget definitions belong only in site/language params.widgets.
 | taxonomies | taxonomies (array/false), icons, tag_icons | taxonomy_navigation, icons, tag_icons |
 | site-taxonomies | taxonomies (array/false), icons | taxonomy_navigation, icons |
 | page-tree | none | Native owner/tree/local order |
-| toc | icons | icons |
+| toc | icons, edit_url | icons, edit_url |
 | random | icons | icons; site-wide current-language articles, excluding the current page |
 | recent | order (publication/modification), count (positive integer), sections (boolean), scope (owner/global) | modification, recent_count, recent_sections, owner |
 | profile | title, text, image, menu (strings), icons | profile fields, icons |
@@ -122,7 +122,6 @@ Article footer allows text/links plus these components:
 |---|---|
 | terms, series, outgoing, backlinks | none |
 | meta | show / show_updated |
-| authors | show, edit_url / show_authors, edit_url |
 | references | entries / references |
 | license | text / license |
 | share | targets, icons / share, icons |

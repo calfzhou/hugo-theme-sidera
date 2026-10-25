@@ -339,3 +339,22 @@ native figcaption below and outside `.rich-table-scroll`, and name the table via
 its rebased caption ID. Only sticky surfaces need opaque backing. The browser
 suite compares ordinary/rich cells and standard/rich figure captions in both modes
 and checks that captions remain visible and centered during inner scrolling.
+
+## Source-edit links
+
+`model/edit-url.html` validates literal URLs or path/url mapping records;
+`sidera/edit-url.html` resolves the longest virtual `.File.Path` directory prefix.
+Preserve literal URL compatibility and whole-value settings overrides.
+The toc component owns the edit link, between Back to top and Join the discussion.
+Match their shared row/icon styles. Edit visibility is independent of headings,
+comments, authors and footer settings; an entirely empty TOC component emits no
+sidebar. Keep native anchors, repeated-instance overrides and mobile drawer/no-JS
+behavior without a duplicate footer action. Do not derive source filenames from
+permalinks, expose physical filesystem paths, or fetch contributor APIs. Mapped links
+must skip native File.IsContentAdapter sources as well as fileless pages; adapter
+files are generators, not the displayed article source.
+Mapping records retain path case that Hugo would lose in parameter map keys.
+Use the shared toc-top/toc-edit/toc-comments rules and locale/icon behavior, not a
+separate button system. Run `tests/check_edit_url.py <fresh-output>` here and the showcase's
+`tests/check_edit_url_browser.mjs <same-output>` through its owned browser harness;
+rerun the existing article-footer suite after changes to the shared footer.

@@ -1,0 +1,32 @@
+{{- /* Literal destinations retain their original contract. Mapping records keep
+      case-sensitive source prefixes in values (Hugo normalizes map keys). */ -}}
+{{- $value := .Value -}}{{- $where := .Source -}}
+{{- if eq (printf "%T" $value) "string" -}}
+  {{- with $value -}}{{- $valid := partial "sidera/url.html" (dict "url" . "source" $where) -}}{{- end -}}
+{{- else if reflect.IsSlice $value -}}
+  {{- $seen := slice -}}
+  {{- range $value -}}
+    {{- if not (reflect.IsMap .) -}}{{- errorf "Sidera %s: edit_url mappings must be path/url records" $where -}}
+    {{- else -}}
+      {{- range $key, $_ := . -}}{{- if not (in (slice "path" "url") $key) -}}{{- errorf "Sidera %s: unknown edit_url mapping field %s" $where $key -}}{{- end -}}{{- end -}}
+      {{- if or (ne (printf "%T" .path) "string") (ne (printf "%T" .url) "string") -}}
+        {{- errorf "Sidera %s: edit_url mappings require path and url strings" $where -}}
+      {{- else -}}
+        {{- $path := .path -}}
+        {{- if and $path (or (hasPrefix $path "/") (findRE `[\\\x00-\x1f\x7f]` $path) (not (hasSuffix $path "/")) (findRE `(^|/)(\.\.?|)(/|$)` (strings.TrimSuffix "/" $path))) -}}
+          {{- errorf "Sidera %s: edit_url path must be a content-relative directory prefix ending in /, or empty" $where -}}
+        {{- end -}}
+        {{- if in $seen $path -}}{{- errorf "Sidera %s: duplicate edit_url path %q" $where $path -}}{{- end -}}
+        {{- $seen = $seen | append $path -}}
+        {{- with .url -}}
+          {{- $valid := partial "sidera/url.html" (dict "url" . "source" $where) -}}
+          {{- if or (not (findRE `(?i)^https?://[^/]+/` .)) (not (hasSuffix . "/")) (findRE `[?#]` .) -}}
+            {{- errorf "Sidera %s: edit_url mapping URL must be an absolute HTTP(S) directory URL ending in /, without query or fragment; empty disables the prefix" $where -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}{{- errorf "Sidera %s: edit_url must be a URL string or an array of path/url mappings" $where -}}
+{{- end -}}
+{{- return true -}}

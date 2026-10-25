@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T14:17:41+08:00
+lastmod: 2026-10-25T16:00:35+08:00
 title: "Menus, regions and footers"
 params:
   ai_label: generated
@@ -137,14 +137,14 @@ params:
 ```
 
 Site footer `links` uses a native two-level sitemap menu; `credit` uses the native
-`built_with` translation. `authors` is an explicit optional article-footer component
-for portraits and an authored `edit_url`; header names remain the default attribution.
-`show_authors: false` also hides this edit section. `article_end_text` is independent
-final Markdown after navigation/children/comments, not footer `article_text`.
+`built_with` translation. Author names appear only in the article header.
+The `toc` sidebar component holds the optional [edit link](#edit-this-page),
+independently of author visibility and footer configuration. `article_end_text` is independent final
+Markdown after navigation/children/comments, not footer `article_text`.
 
 Homepage standalone-page links and text links in footer references, license notices,
 authored text, build credits and the final `article_end_text` region use the same
-blue foreground, subtle underline and hover/focus highlight as body links. Footer typography remains compact. Navigation menus, author cards, tag chips
+blue foreground, subtle underline and hover/focus highlight as body links. Footer typography remains compact. Navigation menus, tag chips, edit links
 and share controls keep their own interaction styles; linked images are not given
 text underlines or highlight backgrounds.
 
@@ -162,3 +162,69 @@ Use site `layouts/_partials/sidera/head-extra.html`, `top-extra.html`,
 `Instance`, `IDScope` and `IDSuffix`; use them for unique IDs in repeated instances.
 Trusted templates own escaping and lifecycle. Routine menu/widget edits need no
 whole-layout copies or arbitrary template paths in configuration.
+
+## Edit this page
+
+Set `params.edit_url` to show **Edit this article** in the `toc` component's
+sidebar actions, between **Back to top** and **Join the discussion**. The default
+right sidebar includes `toc`; keep that component when customizing `params.right`.
+The edit link uses the same full-width row, 16px icon, typography and hover/focus
+styles as its neighboring actions. `icons = false` keeps the text label.
+
+An edit URL can show the action even without body headings or comments.
+`show_authors`, sharing targets and article-footer visibility do not affect it.
+An empty edit URL hides only editing; existing TOC and discussion actions remain.
+With no headings, edit URL or comments, the component emits nothing.
+
+On smaller screens the link is inside the page-context drawer. Without JavaScript,
+it remains a native link in the unenhanced sidebar. Omitting the `toc` component
+hides the edit action; there is no duplicate footer control.
+
+For one page, set a complete destination in front matter:
+
+```yaml
+params:
+  edit_url: 'https://github.com/example/site/blob/main/content/notes/hello.md'
+```
+
+To generate links for many files, configure source-directory mappings instead:
+
+```toml
+[params]
+edit_url = [
+  { path = '', url = 'https://github.com/example/site/blob/main/content/' },
+  { path = 'manual/', url = 'https://github.com/example/theme/blob/main/docs/content/' },
+  { path = 'notes/no-edit/', url = '' },
+]
+```
+
+- `path` matches Hugo's **source file path relative to the virtual content root**,
+  not the published URL. Use `''` for all content or a directory ending in `/`.
+  For example, `notes/hello/index.md` keeps `index.md`, even when its permalink is
+  `/welcome/`. A translated file keeps its actual filename, such as `hello.zh.md`.
+- The longest matching prefix is replaced by `url`, regardless of mapping order.
+  Matching is case-sensitive and directory-bounded; `notes/` does not match
+  `notes-other/`. Records keep paths as values because Hugo normalizes map keys.
+- Each nonempty mapping URL must be an absolute HTTP(S) directory URL ending in
+  `/`, without a query or fragment. Sidera appends the remaining source path,
+  escaping each filename segment (including spaces, Unicode, `%`, `#` and `+`).
+  Repository, branch and destination are explicitly yours to choose. The GitHub
+  examples use `/blob/` to open the source file first, rather than jumping directly
+  into the editor.
+- Mounts use their **target** path: a mount targeting `content/manual` matches
+  `manual/`, regardless of the physical source directory. The example maps it
+  to a different repository; it does not infer repository ownership from mounts.
+- A matching `url = ''` disables that subtree, even with a broader mapping.
+  Unmatched files and generated pages (including content-adapter pages) get no
+  mapped link.
+- Page/native cascade/preset/site precedence applies to the whole `edit_url`
+  value. A page-local literal URL overrides the mapping list; `''` or `[]`
+  clears inherited links. The `toc` component/widget accepts
+  `config.edit_url` with the same values, alongside `config.icons`; each override
+  affects only that instance.
+
+Literal URLs retain their existing behavior: they are used as supplied, with no
+path appended. Nothing fetches contributor data or calls a repository API; an
+edit link opens the configured destination using normal external-link behavior.
+Readers still need whatever access the repository requires. Disabling an edit
+link is presentation only, not access control.

@@ -71,7 +71,7 @@ themesDir={json.dumps(str(THEME.parent))}
 disableKinds=['RSS']
 [params]
 jsx=true
-article_footer=['terms','authors','references','outgoing','backlinks','license','share','series','text','links','meta']
+article_footer=['terms','references','outgoing','backlinks','license','share','series','text','links','meta']
 share=['link','wechat','weibo','email']
 show_updated=true
 edit_url='/preview/'
@@ -157,7 +157,7 @@ ordinary = (mini / 'ordinary/index.html').read_text()
 assert code.rstrip('\n') in HTML(ordinary).pre, 'Preserve code indentation and empty lines'
 assert 'Words <strong>stay</strong> separate.' in ordinary
 assert 'data-sidera-search' in ordinary
-for component in ('terms', 'authors', 'references', 'outgoing', 'license', 'share', 'series', 'text', 'links', 'meta'):
+for component in ('terms', 'references', 'outgoing', 'license', 'share', 'series', 'text', 'links', 'meta'):
     assert any(a.get("data-footer-item") == component for _, a in HTML(ordinary).nodes), component
 assert 'Footer <strong>words</strong> stay separate.' in ordinary
 assert '<span>one</span> <span>two</span>' in ordinary
