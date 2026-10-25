@@ -1,19 +1,20 @@
 {{- $page := .Page -}}
-{{- $page.Store.Set "sidera-content-controls" (ne (len (findRE `class="(?:content-tabs |content-tip"|content-(?:blur|psw) content-reveal")` (string .Content))) 0) -}}
-{{- $page.Store.Set "sidera-jsx" (strings.Contains (string .Content) `<figure class="content-jsx" data-sidera-jsx`) -}}
-{{- $page.Store.Set "sidera-charts" (ne (len (findRE `<figure class="content-chart[^">]*"[^>]* data-sidera-chart` (string .Content))) 0) -}}
-{{- $page.Store.Set "sidera-badges" (strings.Contains (string .Content) `<div class="github-badges" data-sidera-badges`) -}}
+{{- $content := partial "tables/instances.html" (dict "html" .Content "page" $page) -}}
+{{- $page.Store.Set "sidera-content-controls" (ne (len (findRE `class="(?:content-tabs |content-tip"|content-(?:blur|psw) content-reveal")` (string $content))) 0) -}}
+{{- $page.Store.Set "sidera-jsx" (strings.Contains (string $content) `<figure class="content-jsx" data-sidera-jsx`) -}}
+{{- $page.Store.Set "sidera-charts" (ne (len (findRE `<figure class="content-chart[^">]*"[^>]* data-sidera-chart` (string $content))) 0) -}}
+{{- $page.Store.Set "sidera-badges" (strings.Contains (string $content) `<div class="github-badges" data-sidera-badges`) -}}
 {{- range $kind := slice "mermaid" "drawio" -}}
   {{- $page.Store.Set (printf "sidera-%s" $kind) (ne (len (findRE (printf `<figure class="content-diagram[^">]*"[^>]* data-sidera-diagram="%s"` $kind) (string $.Content))) 0) -}}
 {{- end -}}
 {{- /* Inspect actual rendered Content/Summary, not source fences, HasShortcode or
      a child Page's flags. Plainified list excerpts never load a player controller. */ -}}
-{{- $page.Store.Set "sidera-video" (strings.Contains (string .Content) `<figure class="content-video" data-sidera-video`) -}}
+{{- $page.Store.Set "sidera-video" (strings.Contains (string $content) `<figure class="content-video" data-sidera-video`) -}}
 {{- /* Rendered summaries/content may contain math from other Pages. Detect only
      native rendered math markup, never raw Markdown or arbitrary source grammar. */ -}}
-{{- if strings.Contains (string .Content) `class="katex"` -}}{{- $page.Store.Set "sidera-math" true -}}{{- end -}}
+{{- if strings.Contains (string $content) `class="katex"` -}}{{- $page.Store.Set "sidera-math" true -}}{{- end -}}
 {{- $settings := partialCached "sidera/settings.html" $page $page.Language.Lang $page.Path -}}
-{{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings "HasComments" (strings.Contains (string .Content) `id="sidera-comments"`) -}}
+{{- $ctx := dict "Page" $page "Owner" (partial "collection-owner.html" $page) "Settings" $settings "HasComments" (strings.Contains (string $content) `id="sidera-comments"`) -}}
 {{- $top := partial "sidera/region.html" (merge $ctx (dict "Region" "top")) -}}
 {{- $left := partial "sidera/region.html" (merge $ctx (dict "Region" "left")) -}}
 {{- $leftFooter := partial "sidera/region.html" (merge $ctx (dict "Region" "left_footer")) -}}
@@ -33,7 +34,7 @@
   {{ end }}
   {{ if $hasLeft }}<div class="mobile-brand">{{ partial "sidera/identity.html" $ctx }}</div>{{ end }}
   <div class="reading-column">
-    <main id="main" tabindex="-1">{{ if strings.TrimSpace $top }}<div class="top-region">{{ $top }}</div>{{ end }}{{ .Content }}</main>
+    <main id="main" tabindex="-1">{{ if strings.TrimSpace $top }}<div class="top-region">{{ $top }}</div>{{ end }}{{ $content }}</main>
     {{ partial "sidera/footer.html" (merge $ctx (dict "Region" "site-footer")) }}
   </div>
 </div>

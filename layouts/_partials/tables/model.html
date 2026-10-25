@@ -1,0 +1,64 @@
+{{- $sc := .shortcode -}}{{- $o := .options -}}{{- $source := .inner -}}{{- $format := "yaml" -}}{{- $ok := true -}}{{- $model := false -}}
+{{- if $o.src -}}
+  {{- if strings.ContainsNonSpace $source -}}{{- errorf "Sidera rich-table: choose src or an inline body, not both (%s)" $sc.Position -}}{{- $ok = false -}}{{- end -}}
+  {{- if or (findRE `(^/|[\\:%?#*\[\]\x00-\x1f\x7f]|(^|/)\.{1,2}(/|$)|//|/$)` $o.src) (not (in (slice ".yaml" ".yml" ".json") (lower (path.Ext $o.src)))) -}}
+    {{- errorf "Sidera rich-table: src must be an exact local YAML/JSON page resource key (%s)" $sc.Position -}}{{- $ok = false -}}
+  {{- else -}}
+    {{- with $sc.Page.Resources.Get $o.src -}}
+      {{- if eq .ResourceType "page" -}}{{- errorf "Sidera rich-table: src must be a data file (%s)" $sc.Position -}}{{- $ok = false -}}
+      {{- else -}}{{- $source = .Content -}}{{- end -}}
+    {{- else -}}{{- errorf "Sidera rich-table: missing page resource %q (%s)" $o.src $sc.Position -}}{{- $ok = false -}}{{- end -}}
+    {{- if eq (lower (path.Ext $o.src)) ".json" -}}{{- $format = "json" -}}{{- end -}}
+  {{- end -}}
+{{- else if hasPrefix (strings.TrimSpace $source) "{" -}}{{- $format = "json" -}}{{- end -}}
+{{- if or (not (strings.ContainsNonSpace $source)) (gt (len $source) 262144) -}}{{- errorf "Sidera rich-table: data must be nonempty and at most 256 KiB (%s)" $sc.Position -}}{{- $ok = false -}}{{- end -}}
+{{- if $ok -}}
+  {{- $parsed := try (transform.Unmarshal (dict "format" $format) $source) -}}
+  {{- if $parsed.Err -}}{{- errorf "Sidera rich-table: invalid %s (%s): %s" $format $sc.Position $parsed.Err -}}
+  {{- else if not (reflect.IsMap $parsed.Value) -}}{{- errorf "Sidera rich-table: data must be an object with headers/rows (%s)" $sc.Position -}}
+  {{- else -}}
+    {{- $data := $parsed.Value -}}
+    {{- range $key, $_ := $data -}}{{- if not (in (slice "headers" "rows" "columns") $key) -}}{{- errorf "Sidera rich-table: unsupported data key %q (%s)" $key $sc.Position -}}{{- $ok = false -}}{{- end -}}{{- end -}}
+    {{- $headers := slice -}}
+    {{- if isset $data "headers" -}}
+      {{- if not (reflect.IsSlice $data.headers) -}}{{- errorf "Sidera rich-table: headers must be an array (%s)" $sc.Position -}}{{- $ok = false -}}
+      {{- else -}}{{- $headers = $data.headers -}}{{- end -}}
+    {{- end -}}
+    {{- /* Legacy flat headers are one row; nested arrays are multiple rows. */ -}}
+    {{- if and $headers (not (reflect.IsSlice (index $headers 0))) -}}{{- $headers = slice $headers -}}{{- end -}}
+    {{- $head := partial "tables/section.html" (dict "rows" $headers "name" "head" "width" 0 "rowHeaders" false "position" $sc.Position) -}}
+    {{- if and $headers (not $head.width) -}}{{- errorf "Sidera rich-table: header rows must define 1..32 columns (%s)" $sc.Position -}}{{- $ok = false -}}{{- end -}}
+    {{- $body := partial "tables/section.html" (dict "rows" $data.rows "name" "body" "width" $head.width "rowHeaders" $o.row_headers "position" $sc.Position) -}}
+    {{- $width := $body.width -}}
+    {{- if or (not $width) (not $body.rows) -}}{{- errorf "Sidera rich-table: requires a nonempty body and 1..32 columns (%s)" $sc.Position -}}{{- $ok = false -}}{{- end -}}
+    {{- $columns := slice -}}
+    {{- if isset $data "columns" -}}
+      {{- if not (reflect.IsSlice $data.columns) -}}{{- errorf "Sidera rich-table: columns must be an array (%s)" $sc.Position -}}{{- $ok = false -}}
+      {{- else if ne (len $data.columns) $width -}}{{- errorf "Sidera rich-table: columns must match table width (%s)" $sc.Position -}}{{- $ok = false -}}
+      {{- else -}}{{- $columns = $data.columns -}}{{- end -}}
+    {{- else if $width -}}{{- range seq $width -}}{{- $columns = $columns | append (dict) -}}{{- end -}}{{- end -}}
+    {{- $normalized := slice -}}
+    {{- range $i, $column := $columns -}}
+      {{- $c := dict "align" "start" "min_width" $o.cellwidth -}}
+      {{- if not (reflect.IsMap $column) -}}{{- errorf "Sidera rich-table: column %d must be an object (%s)" (add $i 1) $sc.Position -}}{{- $ok = false -}}
+      {{- else -}}
+        {{- range $key, $value := $column -}}
+          {{- if eq $key "align" -}}
+            {{- if not (in (slice "start" "center" "end") $value) -}}{{- errorf "Sidera rich-table: column %d align must be start, center or end (%s)" (add $i 1) $sc.Position -}}{{- $ok = false -}}
+            {{- else -}}{{- $c = merge $c (dict "align" $value) -}}{{- end -}}
+          {{- else if eq $key "min_width" -}}
+            {{- if not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $value)) -}}{{- errorf "Sidera rich-table: column %d min_width must be an integer (%s)" (add $i 1) $sc.Position -}}{{- $ok = false -}}
+            {{- else if or (lt $value 32) (gt $value 720) (ne (float $value) (math.Floor $value)) -}}{{- errorf "Sidera rich-table: column %d min_width must be 32..720 integer pixels (%s)" (add $i 1) $sc.Position -}}{{- $ok = false -}}
+            {{- else -}}{{- $c = merge $c (dict "min_width" (int $value)) -}}{{- end -}}
+          {{- else -}}{{- errorf "Sidera rich-table: unsupported column key %q (%s)" $key $sc.Position -}}{{- $ok = false -}}{{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $normalized = $normalized | append $c -}}
+    {{- end -}}
+    {{- if $o.sticky_first_column -}}
+      {{- range append $head.cells $body.cells -}}{{- if and (eq .col 0) (gt .colspan 1) -}}{{- errorf "Sidera rich-table: sticky_first_column requires first-column cells with colspan=1 (%s)" $sc.Position -}}{{- $ok = false -}}{{- end -}}{{- end -}}
+    {{- end -}}
+    {{- if and $ok $head.ok $body.ok -}}{{- $model = dict "head" $head "body" $body "columns" $normalized -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return $model -}}

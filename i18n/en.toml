@@ -619,3 +619,6 @@ other = "Content tabs"
 
 [content_reveal]
 other = "Reveal concealed text (not secure)"
+
+[rich_table_label]
+other = "Scrollable data table"

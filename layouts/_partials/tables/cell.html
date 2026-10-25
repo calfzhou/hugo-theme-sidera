@@ -1,0 +1,22 @@
+{{- $value := .value -}}{{- $cell := dict "text" "" "rowspan" 1 "colspan" 1 "header" "" "align" "" -}}
+{{- $ok := true -}}
+{{- if eq (printf "%T" $value) "string" -}}{{- $cell = merge $cell (dict "text" $value) -}}
+{{- else if reflect.IsMap $value -}}
+  {{- if not (isset $value "text") -}}{{- errorf "Sidera rich-table: %s requires text (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+  {{- range $key, $v := $value -}}
+    {{- if not (isset $cell $key) -}}{{- errorf "Sidera rich-table: %s unsupported cell key %q (%s)" $.where $key $.position -}}{{- $ok = false -}}
+    {{- else if in (slice "rowspan" "colspan") $key -}}
+      {{- $max := 200 -}}{{- if eq $key "colspan" -}}{{- $max = 32 -}}{{- end -}}
+      {{- /* JSON numbers are float64; accept integral numbers, never strings/bools. */ -}}
+      {{- if not (in (slice "int" "int64" "uint64" "float64") (printf "%T" $v)) -}}{{- errorf "Sidera rich-table: %s %s must be an integer, got %T (%s)" $.where $key $v $.position -}}{{- $ok = false -}}
+      {{- else if or (lt $v 1) (gt $v $max) (ne (float $v) (math.Floor $v)) -}}{{- errorf "Sidera rich-table: %s %s must be an integer in 1..%d (%s)" $.where $key $max $.position -}}{{- $ok = false -}}
+      {{- else -}}{{- $cell = merge $cell (dict $key (int $v)) -}}{{- end -}}
+    {{- else if ne (printf "%T" $v) "string" -}}{{- errorf "Sidera rich-table: %s %s must be a string (%s)" $.where $key $.position -}}{{- $ok = false -}}
+    {{- else -}}{{- $cell = merge $cell (dict $key $v) -}}{{- end -}}
+  {{- end -}}
+{{- else -}}{{- errorf "Sidera rich-table: %s must be a string or cell object; quote numeric text (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+{{- if not (in (slice "" "start" "center" "end") $cell.align) -}}{{- errorf "Sidera rich-table: %s align must be start, center or end (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+{{- if not (in (slice "" "row" "data") $cell.header) -}}{{- errorf "Sidera rich-table: %s header must be row or data (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+{{- if and (eq .section "head") $cell.header -}}{{- errorf "Sidera rich-table: %s header is only valid in body cells (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+{{- if gt (len $cell.text) 16384 -}}{{- errorf "Sidera rich-table: %s text exceeds 16 KiB (%s)" .where .position -}}{{- $ok = false -}}{{- end -}}
+{{- return (merge $cell (dict "ok" $ok)) -}}

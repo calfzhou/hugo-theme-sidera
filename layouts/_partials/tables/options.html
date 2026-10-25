@@ -1,0 +1,29 @@
+{{- $sc := . -}}
+{{- if and .Params (not .IsNamedParams) -}}{{- errorf "Sidera rich-table requires named parameters (%s)" .Position -}}{{- end -}}
+{{- $options := dict "borders" "rows" "cellwidth" 140 "row_headers" false "sticky_header" false "sticky_first_column" false "max_height" 0 "caption" "" "label" (T "rich_table_label") "class" "" "id" "" "src" "" -}}
+{{- range $key, $value := .Params -}}
+  {{- if not (isset $options $key) -}}{{- errorf "Sidera rich-table: unsupported parameter %q (%s)" $key $sc.Position -}}
+  {{- else if in (slice "row_headers" "sticky_header" "sticky_first_column") $key -}}
+    {{- if ne (printf "%T" $value) "bool" -}}{{- errorf "Sidera rich-table: %s must be a boolean (%s)" $key $sc.Position -}}
+    {{- else -}}{{- $options = merge $options (dict $key $value) -}}{{- end -}}
+  {{- else if in (slice "cellwidth" "max_height") $key -}}
+    {{- $min := 32 -}}{{- $max := 720 -}}
+    {{- if eq $key "max_height" -}}{{- $min = 160 -}}{{- $max = 1200 -}}{{- end -}}
+    {{- if ne (printf "%T" $value) "int" -}}{{- errorf "Sidera rich-table: %s must be an integer (%s)" $key $sc.Position -}}
+    {{- else if or (lt $value $min) (gt $value $max) -}}{{- errorf "Sidera rich-table: %s must be %d..%d pixels (%s)" $key $min $max $sc.Position -}}
+    {{- else -}}{{- $options = merge $options (dict $key $value) -}}{{- end -}}
+  {{- else if ne (printf "%T" $value) "string" -}}{{- errorf "Sidera rich-table: %s must be a string (%s)" $key $sc.Position -}}
+  {{- else -}}
+    {{- if and (eq $key "borders") (not (in (slice "rows" "grid") $value)) -}}{{- errorf "Sidera rich-table: borders must be rows or grid (%s)" $sc.Position -}}{{- end -}}
+    {{- if and (eq $key "caption") $value (not (strings.ContainsNonSpace $value)) -}}{{- errorf "Sidera rich-table: caption must be nonblank or empty (%s)" $sc.Position -}}{{- end -}}
+    {{- if and (in (slice "src" "label") $key) (not (strings.ContainsNonSpace $value)) -}}{{- errorf "Sidera rich-table: %s must be nonblank (%s)" $key $sc.Position -}}{{- end -}}
+    {{- if and (in (slice "class" "id") $key) $value -}}
+      {{- $pattern := `^[A-Za-z_][A-Za-z0-9_-]*(?: [A-Za-z_][A-Za-z0-9_-]*)*$` -}}
+      {{- if eq $key "id" -}}{{- $pattern = `^[A-Za-z_][A-Za-z0-9_-]*$` -}}{{- end -}}
+      {{- if not (findRE $pattern $value) -}}{{- errorf "Sidera rich-table: invalid %s token(s) (%s)" $key $sc.Position -}}{{- end -}}
+    {{- end -}}
+    {{- $options = merge $options (dict $key $value) -}}
+  {{- end -}}
+{{- end -}}
+{{- if and $options.sticky_header (not $options.max_height) -}}{{- $options = merge $options (dict "max_height" 480) -}}{{- end -}}
+{{- return $options -}}

@@ -306,3 +306,36 @@ search to tab disclosure without exposing a global controller. Search may traver
 inactive native tabpanels but must still skip other hidden/private control nodes.
 Sup/sub inherit text color, including print. Code-inline encodes generated text-node
 whitespace before native minification; never trust author code as HTML or execute it.
+
+## Structured tables
+
+`tables/options.html`, `cell.html`, `section.html` and `model.html` validate bounded
+native data and fill an occupancy grid before `render.html` emits any table. Keep
+YAML/JSON schema and topology validation separate from HTML/Markdown rendering;
+never silently shift a span past an occupied slot. Header/body grids share a width
+but rowspans cannot cross their boundary. All body data cells receive explicit
+column/row header references, including multirow and rectangular groups.
+
+`tables/instances.html` rebases generated ID/headers/aria-labelledby attributes in trusted rendered
+fragments at the shell boundary, before minification. Preserve its paired template
+markers through shortcode/native composition; do not elevate plain strings to safe
+HTML. This avoids cached Content/Summary duplicate IDs without client JavaScript.
+Do not parse Markdown, rewrite author IDs/text or register a second renderer.
+
+Run `tests/check_rich_tables.py <fresh-output>` and the showcase peer
+`tests/check_rich_tables_browser.mjs <same-output>`. Cover native YAML/JSON, rejected
+schema/spans, headers/row associations, nested code line-number tables, folds/grids/
+tabs, repeated Content/Summary, locales/prefixes, no-JS, CSS-only sticky geometry,
+opaque overlays, keyboard scrolling, print/forced colors and site style overrides.
+Rerun minification, composition, discovery and palette suites after shared changes.
+
+Rich-table presentation inherits normal Markdown th/td rules; do not reintroduce
+card frames or independent caption typography. Vertical separators are explicitly
+opt-in via rich-table borders="grid" or native table class="table-grid"; defaults
+remain horizontal-only. Use logical cell boundaries, not rich-row :first-child:
+a carried rowspan can put the first authored cell in a later column. Scope rules
+to direct cells so nested tables and Chroma layouts remain independent. Keep the
+native figcaption below and outside `.rich-table-scroll`, and name the table via
+its rebased caption ID. Only sticky surfaces need opaque backing. The browser
+suite compares ordinary/rich cells and standard/rich figure captions in both modes
+and checks that captions remain visible and centered during inner scrolling.

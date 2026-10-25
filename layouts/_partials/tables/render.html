@@ -1,0 +1,50 @@
+{{- $sc := .shortcode -}}{{- $o := .options -}}{{- $m := .model -}}
+{{- $base := printf "sidera-rt-%s-" (substr (crypto.SHA256 (printf "%s/%s" $sc.Page.RelPermalink (partial "components/key.html" $sc))) 0 16) -}}
+{{- $label := $o.caption | default $o.label -}}
+{{- $rowHeads := where $m.body.cells "header" "row" -}}
+{{- "<!--sidera-rich-table-start-->" | safeHTML -}}
+<figure class="content-rich-table{{ with $o.class }} {{ . }}{{ end }}" data-rich-table data-table-key="{{ $base }}"{{ with $o.id }} id="{{ . }}"{{ end }}{{ if $o.sticky_header }} data-sticky-header{{ end }}{{ if $o.sticky_first_column }} data-sticky-column{{ end }}{{ with $o.max_height }} style="--rich-max-height:{{ . }}px"{{ end }}>
+<div class="rich-table-scroll" role="region" aria-label="{{ $label }}" tabindex="0">
+<table class="rich-table" data-borders="{{ $o.borders }}"{{ if $o.caption }} aria-labelledby="{{ $base }}caption"{{ else }} aria-label="{{ $o.label }}"{{ end }}>
+{{- range $section := slice "head" "body" -}}
+  {{- $rows := index $m $section -}}
+  {{- if $rows.rows -}}
+    {{- if eq $section "head" -}}<thead>{{- else -}}<tbody>{{- end -}}
+    {{- range $rows.rows -}}<tr>
+      {{- range .cells -}}
+        {{- $cell := . -}}{{- $ids := slice -}}
+        {{- /* Explicit associations avoid inaccurate colgroup/rowgroup scopes for
+             partially overlapping groups and body row headers spanning rows. */ -}}
+        {{- range $m.head.cells -}}
+          {{- if and (strings.ContainsNonSpace .text) (or (eq $section "body") (lt .row $cell.row)) (lt .col (add $cell.col $cell.colspan)) (lt $cell.col (add .col .colspan)) -}}
+            {{- $ids = $ids | append (printf "%s%s" $base .key) -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if eq $section "body" -}}
+          {{- range $rowHeads -}}
+            {{- if and (strings.ContainsNonSpace .text) (le (add .col .colspan) $cell.col) (lt .row (add $cell.row $cell.rowspan)) (lt $cell.row (add .row .rowspan)) -}}
+              {{- $ids = $ids | append (printf "%s%s" $base .key) -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $width := 0 -}}
+        {{- range seq .col (sub (add .col .colspan) 1) -}}{{- $width = add $width (index $m.columns .).min_width -}}{{- end -}}
+        {{- $align := .align | default (index $m.columns .col).align -}}
+        {{- $text := $sc.Page.RenderString (dict "display" "block") .text -}}
+        {{- if or (findRE `<(?:h[1-6]|script|style|iframe|object|embed)(?:[\s>])` (string $text)) (findRE `<(?:figure|div)[^>]*\sdata-sidera-(?:jsx|chart|video)(?:[\s=>])` (string $text)) -}}{{- errorf "Sidera rich-table: %s must contain cell Markdown, not headings or active embeds (%s)" .key $sc.Position -}}{{- end -}}
+        {{- $tag := cond (eq .header "data") "td" "th" -}}
+        {{- $attrs := printf ` rowspan="%d" colspan="%d" data-column="%d" data-align="%s" style="--rich-cell-min:%dpx"` .rowspan .colspan .col $align $width -}}
+        {{- if ne .header "data" -}}{{- $attrs = printf `%s id="%s%s"` $attrs $base .key -}}{{- end -}}
+        {{- if $ids -}}{{- $attrs = printf `%s headers="%s"` $attrs (delimit $ids " ") -}}{{- end -}}
+        {{- /* Tag and attributes above contain only validated enums/integers and
+             generated IDs. Markdown output uses native hooks; never trust YAML as HTML. */ -}}
+        {{- printf "<%s%s>" $tag $attrs | safeHTML -}}{{ $text }}{{- printf "</%s>" $tag | safeHTML -}}
+      {{- end -}}
+    </tr>{{- end -}}
+    {{- if eq $section "head" -}}</thead>{{- else -}}</tbody>{{- end -}}
+  {{- end -}}
+{{- end -}}
+</table></div>
+{{- with $o.caption -}}<figcaption id="{{ $base }}caption">{{ . }}</figcaption>{{- end -}}
+</figure>
+{{- "<!--sidera-rich-table-end-->" | safeHTML -}}

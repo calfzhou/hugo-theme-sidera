@@ -1,0 +1,6 @@
+{{- partial "components/parent.html" . -}}
+{{- $options := partial "tables/options.html" . -}}
+{{- $model := partial "tables/model.html" (dict "shortcode" . "options" $options "inner" .Inner) -}}
+{{- $html := "" -}}
+{{- if $model -}}{{- $html = partial "tables/render.html" (dict "shortcode" . "options" $options "model" $model) -}}{{- end -}}
+{{- partial "components/leaf.html" (dict "shortcode" . "html" $html "inline" false) | safeHTML -}}

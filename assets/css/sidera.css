@@ -549,26 +549,61 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
 .prose table:not(.lntable) :is(th,td) { border-bottom: 1px dashed var(--line); padding: .5em 1em; }
 .prose table:not(.lntable) th { background: var(--panel); border-block: 1px solid var(--line); text-align: start; font-weight: 600; color: var(--text); }
 .prose table:not(.lntable) tbody tr:hover { background: var(--panel); }
+/* Author-selected column separators. Logical cell starts respect RTL and spans;
+   the rich-table grid position matters, not :first-child after a carried rowspan.
+   Direct children keep these rules off nested Markdown/Chroma tables. */
+.prose table.table-grid:not(.rich-table):not(.lntable) > :is(thead,tbody) > tr > :is(th,td) + :is(th,td),
+.prose .rich-table[data-borders="grid"] > :is(thead,tbody) > tr > :is(th,td):not([data-column="0"]) { border-inline-start: 1px solid var(--line); }
+/* Rich tables inherit ordinary Markdown table typography, padding and rules.
+   Only layout, merged-cell alignment and optional sticky behavior are specialized.
+   A standard figure caption stays below and outside the scrollport. */
+.prose .content-rich-table { margin-block: 1rem; max-width: 100%; min-width: 0; }
+.rich-table-scroll { max-width: 100%; max-height: var(--rich-max-height,none); overflow: auto; isolation: isolate; }
+.prose .rich-table-scroll > .rich-table { display: table; width: 100%; max-width: none; margin: 0; overflow: visible; border-collapse: separate; border-spacing: 0; }
+.prose .rich-table > :is(thead,tbody) > tr > :is(th,td) { min-width: var(--rich-cell-min); vertical-align: top; text-align: start; overflow-wrap: anywhere; }
+.prose .rich-table > thead > tr > th { vertical-align: middle; }
+.prose .rich-table > thead > tr + tr > th { border-top: 0; }
+.prose .rich-table > tbody > tr > th { border-top: 0; border-bottom: 1px dashed var(--line); background: transparent; }
+.prose .rich-table > :is(thead,tbody) > tr > [data-align="center"] { text-align: center; }
+.prose .rich-table > :is(thead,tbody) > tr > [data-align="end"] { text-align: end; }
+.rich-table > :is(thead,tbody) > tr > :is(th,td) > :first-child { margin-top: 0; }
+.rich-table > :is(thead,tbody) > tr > :is(th,td) > :last-child { margin-bottom: 0; }
+.content-rich-table .code-block { text-align: start; }
+.rich-table > tbody > tr > th :is(p,li) { font-weight: inherit; }
+/* Only pinned areas need an opaque backing. Default canvas matches ordinary
+   article prose; a containing colored surface can override --rich-sticky-bg. */
+.content-rich-table[data-sticky-header] > .rich-table-scroll > .rich-table > thead { position: sticky; top: 0; z-index: 2; background: var(--rich-sticky-bg,var(--canvas)); }
+.content-rich-table[data-sticky-column] > .rich-table-scroll > .rich-table > :is(thead,tbody) > tr > [data-column="0"] { position: sticky; inset-inline-start: 0; z-index: 1; background: var(--rich-sticky-bg,var(--canvas)); }
+.content-rich-table[data-sticky-column] > .rich-table-scroll > .rich-table > thead > tr > [data-column="0"],
+.content-rich-table[data-sticky-column] > .rich-table-scroll > .rich-table > tbody > tr:hover > [data-column="0"] { background: linear-gradient(var(--panel),var(--panel)), var(--rich-sticky-bg,var(--canvas)); }
+@media print {
+  .prose .content-rich-table { color-scheme: light; --text: #17191b; --muted: #50565e; --quiet: #50565e; --secondary-text: #50565e; --canvas: #fff; --surface: #fff; --panel: #f1f3f5; --line: #d4d9df; }
+  .rich-table-scroll { overflow: visible; max-height: none; }
+  .prose .rich-table-scroll > .rich-table { width: 100%; table-layout: fixed; }
+  .prose .rich-table > :is(thead,tbody) > tr > :is(th,td) { min-width: 0; }
+  .content-rich-table[data-sticky-header] > .rich-table-scroll > .rich-table > thead, .content-rich-table[data-sticky-column] > .rich-table-scroll > .rich-table > :is(thead,tbody) > tr > [data-column="0"] { position: static; }
+}
+@media (forced-colors: active) { .prose table.table-grid:not(.lntable) > :is(thead,tbody) > tr > :is(th,td), .prose .rich-table > :is(thead,tbody) > tr > :is(th,td) { border-color: CanvasText; } }
 /* Shared content scrollbars: both axes, including inline/expanded diagram views.
    Stellar scrollbar-codeblock: slim transparent track, rounded thumb on interaction.
    Keep native high-contrast controls; hidden rails and the document scrollbar are separate. */
 @media (forced-colors: none) {
-  .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view) { --scrollbar-thumb: transparent; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
-  .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view):is(:hover,:focus-within),
+  .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view) { --scrollbar-thumb: transparent; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) transparent; }
+  .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view):is(:hover,:focus-within),
   .prose .code-block:is(:hover,:focus-within) :is(pre,.highlight) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
   @media (hover: none), (pointer: coarse) {
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view) { --scrollbar-thumb: color-mix(in srgb,var(--text) 20%,transparent); }
   }
   @supports selector(::-webkit-scrollbar) {
     /* Non-auto standard properties would override the precise WebKit 4px geometry. */
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view) { scrollbar-width: auto; scrollbar-color: auto; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar { width: 4px; height: 4px; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-track,
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-track-piece,
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-corner { background: transparent; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 12px; cursor: pointer; }
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-thumb:hover { background: var(--quiet); }
-    .prose :is(pre,.highlight,table,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-button { display: none; }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view) { scrollbar-width: auto; scrollbar-color: auto; }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar { width: 4px; height: 4px; }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-track,
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-track-piece,
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-corner { background: transparent; }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 12px; cursor: pointer; }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-thumb:hover { background: var(--quiet); }
+    .prose :is(pre,.highlight,table,.rich-table-scroll,.code-copy-fallback,.math-display,.diagram-view)::-webkit-scrollbar-button { display: none; }
   }
 }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2rem 0; }

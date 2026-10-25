@@ -1,6 +1,6 @@
 ---
 date: 2026-10-05T22:48:24+08:00
-lastmod: 2026-10-24T20:06:00+08:00
+lastmod: 2026-10-25T10:06:00+08:00
 title: "Shortcode reference"
 params:
   ai_label: generated
@@ -100,6 +100,32 @@ native Chroma and Sidera's adaptive syntax colors, without block wrappers, line
 numbers, copy controls or configurable highlighter options. Use named `lang`, not
 the positional argument of older site-owned implementations. Site shortcodes still
 override theme shortcodes until the site owner deliberately removes the overrides.
+
+## Structured tables
+
+`rich-table` is a paired `<` leaf with YAML/JSON body, or a bodyless
+`{{</* rich-table src="table.yaml" /*/>}}` call. It supports Markdown cells,
+multi-row headers and rectangular row/column spans within header or body sections.
+
+| Argument | Contract |
+|---|---|
+| src | Optional exact current-page `.yaml` / `.yml` / `.json` resource; excludes inline body |
+| caption | Optional literal caption below the table, centered like other figure captions; empty suppresses it |
+| label | Nonblank scroll-region label; localized default; caption takes precedence |
+| borders | rows (default) or grid; grid adds subtle vertical separators at actual cell boundaries |
+| cellwidth | Default per-column minimum: integer 32–720px, default 140 |
+| row_headers | Boolean, default false; cells starting in the first body column become row headers |
+| sticky_header | Boolean, default false; pins the complete header inside a bounded scroll region |
+| sticky_first_column | Boolean, default false; first-column cells must have colspan=1 |
+| max_height | Optional integer 160–1200px; defaults to 480 with sticky_header, otherwise unbounded |
+| class / id | Common safe tokens |
+
+The data object accepts `headers`, required `rows`, and optional `columns`. Strings
+are Markdown cells; objects add `text`, `rowspan`, `colspan`, `align`, and body-only
+`header: row` / `data`. Omit slots covered by rowspans; empty strings are real cells.
+Header-to-body rowspans, overlapping rectangles and holes diagnose. See
+[structured tables](../authoring/tables.md) for the schema, examples, accessibility,
+print behavior and size limits.
 
 ## Images
 

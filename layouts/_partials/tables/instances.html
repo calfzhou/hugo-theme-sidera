@@ -1,0 +1,32 @@
+{{- /* Content/Summary can be cached and repeated across pages. Rebase only our
+     generated ID/headers attributes at the final shell boundary, before minify.
+     Paired markers surround trusted template output, not source Markdown. This
+     also handles nested Chroma line-number tables without parsing HTML by regex. */ -}}
+{{- $output := .html -}}
+{{- if strings.Contains (string .html) "<!--sidera-rich-table-start-->" -}}
+{{- if ne (printf "%T" .html) "template.HTML" -}}
+  {{- errorf "Sidera rich-table: instance rendering requires trusted rendered HTML on %s" .page.Path -}}
+{{- else -}}
+{{- $parts := split (string .html) "<!--sidera-rich-table-start-->" -}}
+{{- $result := index $parts 0 -}}
+{{- $host := substr (crypto.SHA256 .page.RelPermalink) 0 16 -}}
+{{- range $i, $part := after 1 $parts -}}
+  {{- $pair := split $part "<!--sidera-rich-table-end-->" -}}
+  {{- if ne (len $pair) 2 -}}{{- errorf "Sidera rich-table: incomplete rendered table on %s" $.page.Path -}}
+  {{- else -}}
+    {{- $table := index $pair 0 -}}
+    {{- $keys := findRESubmatch `data-table-key="(sidera-rt-[a-f0-9]+-)"` $table 1 -}}
+    {{- if not $keys -}}{{- errorf "Sidera rich-table: missing generated instance key on %s" $.page.Path -}}
+    {{- else -}}
+      {{- $old := index (index $keys 0) 1 -}}{{- $new := printf "sidera-rt-%s-%d-" $host $i -}}
+      {{- range findRE `\s(?:id|headers|aria-labelledby|data-table-key)="[^"]*"` $table -}}
+        {{- if strings.Contains . $old -}}{{- $table = replace $table . (replace . $old $new) -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $result = printf "%s%s%s" $result $table (index $pair 1) -}}
+  {{- end -}}
+{{- end -}}
+{{- $output = $result | safeHTML -}}
+{{- end -}}
+{{- end -}}
+{{- return $output -}}

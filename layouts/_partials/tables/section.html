@@ -1,0 +1,48 @@
+{{- /* Fill a bounded occupancy grid. Covered slots are omitted by the author;
+     never skip an occupied slot INSIDE a requested rectangle to make it fit. */ -}}
+{{- $rows := .rows -}}{{- $width := .width -}}{{- $ok := true -}}
+{{- $grid := collections.NewScratch -}}{{- $cells := slice -}}{{- $renderRows := slice -}}
+{{- $maxRows := 200 -}}{{- if eq .name "head" -}}{{- $maxRows = 16 -}}{{- end -}}
+{{- if not (reflect.IsSlice $rows) -}}{{- errorf "Sidera rich-table: %s must be an array of rows (%s)" .name .position -}}{{- $ok = false -}}
+{{- else if gt (len $rows) $maxRows -}}{{- errorf "Sidera rich-table: %s exceeds %d rows (%s)" .name $maxRows .position -}}{{- $ok = false -}}
+{{- else -}}
+  {{- range $r, $row := $rows -}}
+    {{- $placed := slice -}}{{- $cursor := 0 -}}
+    {{- if not (reflect.IsSlice $row) -}}{{- errorf "Sidera rich-table: %s row %d must be an array (%s)" $.name (add $r 1) $.position -}}{{- $ok = false -}}
+    {{- else if gt (len $row) 32 -}}{{- errorf "Sidera rich-table: %s row %d exceeds 32 columns (%s)" $.name (add $r 1) $.position -}}{{- $ok = false -}}
+    {{- else -}}
+      {{- range $i, $v := $row -}}
+        {{- $where := printf "%s row %d cell %d" $.name (add $r 1) (add $i 1) -}}
+        {{- $cell := partial "tables/cell.html" (dict "value" $v "section" $.name "where" $where "position" $.position) -}}
+        {{- if not $cell.ok -}}{{- $ok = false -}}
+        {{- else -}}
+          {{- $col := -1 -}}
+          {{- range seq 0 31 -}}{{- if and (ge . $cursor) (lt $col 0) (not ($grid.Get (printf "%d-%d" $r .))) -}}{{- $col = . -}}{{- end -}}{{- end -}}
+          {{- $end := add $col $cell.colspan -}}
+          {{- $fits := true -}}
+          {{- if or (lt $col 0) (gt $end 32) (and $width (gt $end $width)) -}}{{- errorf "Sidera rich-table: %s exceeds table width (%s)" $where $.position -}}{{- $fits = false -}}{{- end -}}
+          {{- if gt (add $r $cell.rowspan) (len $rows) -}}{{- errorf "Sidera rich-table: %s rowspan crosses the %s section boundary (%s)" $where $.name $.position -}}{{- $fits = false -}}{{- end -}}
+          {{- if $fits -}}
+            {{- range $y := seq $r (sub (add $r $cell.rowspan) 1) -}}
+              {{- range $x := seq $col (sub $end 1) -}}{{- if $grid.Get (printf "%d-%d" $y $x) -}}{{- errorf "Sidera rich-table: %s overlaps a previous span (%s)" $where $.position -}}{{- $fits = false -}}{{- end -}}{{- end -}}
+            {{- end -}}
+          {{- end -}}
+          {{- if $fits -}}
+            {{- $header := $cell.header -}}
+            {{- if eq $.name "head" -}}{{- $header = "col" -}}
+            {{- else if not $header -}}{{- $header = cond (and $.rowHeaders (eq $col 0)) "row" "data" -}}{{- end -}}
+            {{- $cell = merge $cell (dict "row" $r "col" $col "key" (printf "%s-%d-%d" $.name $r $col) "header" $header) -}}
+            {{- range $y := seq $r (sub (add $r $cell.rowspan) 1) -}}{{- range $x := seq $col (sub $end 1) -}}{{- $grid.Set (printf "%d-%d" $y $x) $cell -}}{{- end -}}{{- end -}}
+            {{- $cells = $cells | append $cell -}}{{- $placed = $placed | append $cell -}}{{- $cursor = $end -}}
+          {{- else -}}{{- $ok = false -}}{{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if and (eq $r 0) (not $width) -}}{{- $width = $cursor -}}{{- end -}}
+      {{- if $width -}}
+        {{- range seq 0 (sub $width 1) -}}{{- if not ($grid.Get (printf "%d-%d" $r .)) -}}{{- errorf "Sidera rich-table: %s row %d has an unfilled column %d (%s)" $.name (add $r 1) (add . 1) $.position -}}{{- $ok = false -}}{{- end -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $renderRows = $renderRows | append (dict "cells" $placed) -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "ok" $ok "width" $width "rows" $renderRows "cells" $cells) -}}
