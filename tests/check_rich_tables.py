@@ -100,7 +100,7 @@ _merge='shallow'
 lineNos=true
 lineNumbersInTable=true
 ''')
-legacy = {'headers': [{'text': name, 'colspan': 2} for name in ['A series','B series','C series']],
+legacy = {'headers': [{'text': f'[{name}](https://example.org/series)', 'colspan': 2} for name in ['A series','B series','C series']],
           'rows': [['A0','841 × 1189','B0','1000 × 1414','C0','917 × 1297'],
                    ['A4','210 × 297','B4','250 × 353','C4','229 × 324']]}
 merged = {'headers': [[{'text':'Series','rowspan':2}, {'text':'Paper','colspan':2}],

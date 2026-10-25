@@ -558,7 +558,7 @@ article[data-renderer] .prose { padding: 0 18px; margin-inline: auto; }
    Only layout, merged-cell alignment and optional sticky behavior are specialized.
    A standard figure caption stays below and outside the scrollport. */
 .prose .content-rich-table { margin-block: 1rem; max-width: 100%; min-width: 0; }
-.rich-table-scroll { max-width: 100%; max-height: var(--rich-max-height,none); overflow: auto; isolation: isolate; }
+.rich-table-scroll { position: relative; max-width: 100%; max-height: var(--rich-max-height,none); overflow: auto; isolation: isolate; }
 .prose .rich-table-scroll > .rich-table { display: table; width: 100%; max-width: none; margin: 0; overflow: visible; border-collapse: separate; border-spacing: 0; }
 .prose .rich-table > :is(thead,tbody) > tr > :is(th,td) { min-width: var(--rich-cell-min); vertical-align: top; text-align: start; overflow-wrap: anywhere; }
 .prose .rich-table > thead > tr > th { vertical-align: middle; }
