@@ -1053,11 +1053,14 @@ main:has(> .top-region [data-collection-nav]) .taxonomy-hub-header { position: a
 
 /* Stellar folding/note/grid: native disclosure, compact colored blocks and cells.
    The only authored styles are validated numeric grid properties and safe classes. */
-.prose :is(.content-folding,.content-box) { margin-block: 1rem; border: 1px solid var(--container-line,var(--color-border)); border-radius: 12px; background: var(--container-bg,var(--color-surface)); color: var(--text); }
-.content-folding > summary { position: relative; list-style: none; padding: 16px 44px 16px 16px; color: var(--color-text); font-size: .94em; font-weight: 500; line-height: 1.4; border-radius: inherit; min-height: 52px; }
+.prose :is(.content-folding,.content-box) { margin-block: 1rem; border: 1px solid var(--container-line,var(--color-border)); border-radius: var(--container-radius,12px); background: var(--container-bg,var(--color-surface)); color: var(--text); }
+.content-folding > summary { position: relative; list-style: none; padding: 16px 44px 16px 16px; color: var(--color-text); font-size: .94em; font-weight: 500; line-height: 1.4; border-radius: max(0px,calc(var(--container-radius,12px) - 1px)); min-height: 52px; }
 .content-folding > summary::-webkit-details-marker { display: none; }
 .content-folding > summary:is(:hover,:focus-visible) { background: color-mix(in srgb,var(--color-highlight) 40%,var(--color-surface)); }
-.content-folding[open] > summary { font-weight: 700; }
+/* Explicit inner radii cross the native details slot boundary; inheriting the
+   non-inherited border-radius property can resolve to zero on summary. Keep the
+   fold unclipped so nested toolbars and focus outlines can extend outside it. */
+.content-folding[open] > summary { font-weight: 700; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .content-folding > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-right: 16px; }
 .folding-title { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .folding-toggle { --icon-size: 12px; flex: none; font-size: 11px; }
