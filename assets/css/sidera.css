@@ -341,7 +341,7 @@ summary { cursor: pointer; }
 .toc-top, .toc-edit, .toc-comments { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; font-size: 16px; text-decoration: none; }
 .toc-top, .toc-edit, .toc-comments { --icon-size: 16px; }
 @media (min-width: 1441px) { .article-toc [data-toc] { max-height: 70dvh; } }
-@media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } .toc-top, .toc-edit, .toc-comments { background: var(--panel); } }
+@media (max-width: 1180px) { .article-toc [data-toc] { max-height: none; } }
 .view-header { padding: 0 18px 12px; margin-bottom: 12px; }
 .view-header h1 { font-size: 25px; margin: 8px 0; }
 .view-header .intro { font-size: 15px; line-height: 1.6; }
